@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "feli_express",
+            "cwd": "feli_express",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "feli_express (profile mode)",
+            "cwd": "feli_express",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "feli_express (release mode)",
+            "cwd": "feli_express",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

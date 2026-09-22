@@ -1,0 +1,15 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { PageIntro, PublicPage, SectionHeading } from "@/components/public-page";
+
+const roles = ["Trainee", "Intern", "Researcher", "Mentor", "Volunteer", "Partner", "Community member"];
+
+export default function JoinTheCommunityPage() {
+  return (
+    <PublicPage>
+      <PageIntro eyebrow="Join the hub" title="Become part of the innovation ecosystem." description="Choose how you want to learn, contribute, partner, or help more people move forward." actions={[{ label: "Start registration", href: "#registration" }]} />
+      <section className="px-6 py-20 sm:px-10 lg:px-16 lg:py-28"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="Registration options" title="Choose your place in the work." /><div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{roles.map((role, index) => <Link key={role} href="#registration" className="group rounded-[1.5rem] border border-slate-200 bg-white p-6 transition-all hover:-translate-y-1 hover:border-brand-secondary/30 hover:shadow-lg"><span className="text-xs font-black text-brand-secondary">0{index + 1}</span><h3 className="mt-14 text-xl font-black tracking-[-0.03em]">Join as a {role}</h3><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-slate-400 transition-colors group-hover:text-brand-secondary">Continue <ArrowUpRight className="size-3.5" /></span></Link>)}</div></div></section>
+      <section id="registration" className="bg-slate-100 px-6 py-20 sm:px-10 lg:px-16 lg:py-28"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr]"><SectionHeading eyebrow="High-conversion registration" title="Your next chapter starts with a few details." description="The production registration flow will connect to the SAN HUB beneficiary system and track programs, courses, cohorts, and participation." /><form className="grid gap-4 rounded-[2rem] border border-slate-200 bg-white p-7 sm:grid-cols-2 sm:p-10"><input required placeholder="Full name" className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-brand-secondary" /><input required type="email" placeholder="Email address" className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-brand-secondary" /><select className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-brand-secondary"><option>Participation type</option>{roles.map((role) => <option key={role}>{role}</option>)}</select><input placeholder="Country" className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-brand-secondary" /><textarea placeholder="What would you like to build or learn?" rows={5} className="rounded-xl border border-slate-200 bg-slate-50 p-4 outline-none focus:border-brand-secondary sm:col-span-2" /><button type="submit" className="h-12 rounded-full bg-slate-950 px-6 text-sm font-bold text-white hover:bg-brand-secondary sm:col-span-2">Continue registration</button></form></div></section>
+    </PublicPage>
+  );
+}
