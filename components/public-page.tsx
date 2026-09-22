@@ -49,7 +49,7 @@ export function PageIntro({ eyebrow, title, description, actions = [] }: { eyebr
 export function SectionHeading({ eyebrow, title, description, dark = false }: { eyebrow: string; title: string; description?: string; dark?: boolean }) {
   return (
     <div className="max-w-2xl">
-      <p className={`text-[10px] font-bold uppercase tracking-[0.24em] ${dark ? "text-[#5cefcf]" : "text-brand-secondary"}`}>{eyebrow}</p>
+      <p className={`text-[10px] font-bold uppercase tracking-[0.24em] ${dark ? "text-white" : "text-brand-secondary"}`}>{eyebrow}</p>
       <h2 className={`mt-4 text-4xl font-black leading-[0.94] tracking-[-0.06em] sm:text-6xl ${dark ? "text-white" : "text-slate-950"}`}>{title}</h2>
       {description && <p className={`mt-5 text-base leading-7 ${dark ? "text-white/60" : "text-slate-600"}`}>{description}</p>}
     </div>

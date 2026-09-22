@@ -18,7 +18,6 @@
 :root {
   --brand-secondary: #0B0E87;
   --ink: #070b24;
-  --signal: #5cefcf;
   --indigo: #4a5cff;
   --mist: #e8eef0;
   --background: var(--ink);
@@ -31,10 +30,18 @@ body { margin: 0; background: var(--ink); color: var(--foreground); font-family:
 a { text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
 
-.eyebrow { display: flex; align-items: center; gap: 10px; color: var(--signal); font-size: 10px; font-weight: 800; letter-spacing: .24em; line-height: 1; text-transform: uppercase; }
+.eyebrow { display: flex; align-items: center; gap: 10px; color: var(--brand-secondary); font-size: 10px; font-weight: 800; letter-spacing: .24em; line-height: 1; text-transform: uppercase; }
 .eyebrow::before { content: ""; display: block; width: 28px; height: 1px; background: currentColor; opacity: .7; }
 
-::selection { background: var(--signal); color: var(--ink); }
+::selection { background: var(--brand-secondary); color: #ffffff; }
+
+[data-hero-footer] > * {
+  color: var(--brand-secondary) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: .04em;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

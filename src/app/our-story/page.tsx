@@ -42,7 +42,7 @@ export default function OurStoryPage() {
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.7fr_1.3fr]">
           <SectionHeading dark eyebrow="Our journey" title="Built one useful step at a time." description="The story keeps moving through products, programs, partnerships, and people empowered to create more." />
           <div className="divide-y divide-white/15 border-y border-white/15">
-            {journey.map(([year, event]) => <div key={year} className="grid gap-3 py-6 sm:grid-cols-[120px_1fr] sm:items-center"><span className="text-2xl font-black text-[#5cefcf]">{year}</span><span className="text-lg font-semibold text-white/80">{event}</span></div>)}
+            {journey.map(([year, event]) => <div key={year} className="grid gap-3 py-6 sm:grid-cols-[120px_1fr] sm:items-center"><span className="text-2xl font-black text-white">{year}</span><span className="text-lg font-semibold text-white/80">{event}</span></div>)}
           </div>
         </div>
       </section>

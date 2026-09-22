@@ -129,7 +129,7 @@ export function SiteHeader() {
 
             <Link
               href="/join-the-community"
-              className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[11px] font-bold tracking-[0.06em] shadow-sm transition-all hover:shadow-md ${darkHeader ? "bg-white text-brand-secondary hover:bg-[#5cefcf]" : "bg-brand-secondary text-white hover:opacity-90"}`}
+              className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[11px] font-bold tracking-[0.06em] shadow-sm transition-all hover:shadow-md ${darkHeader ? "bg-white text-brand-secondary hover:bg-brand-secondary hover:text-white" : "bg-brand-secondary text-white hover:opacity-90"}`}
             >
               JOIN THE COMMUNITY <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>

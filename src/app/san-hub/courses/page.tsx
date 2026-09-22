@@ -50,7 +50,7 @@ export default function CoursesPage() {
       <section className="bg-slate-950 px-6 py-20 text-white sm:px-10 lg:px-16 lg:py-28">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_auto] lg:items-center">
           <SectionHeading dark eyebrow="Ready when you are" title="Your next opportunity can start with one application." description="Course registration, beneficiary tracking, certification, and communications will connect through the SAN HUB platform." />
-          <Link href="/join-the-community" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#5cefcf] px-6 py-3.5 text-sm font-bold text-slate-950 hover:bg-white">Start your application <ArrowUpRight className="size-4" /></Link>
+          <Link href="/join-the-community" className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-secondary px-6 py-3.5 text-sm font-bold text-white hover:bg-[#1519ad]">Start your application <ArrowUpRight className="size-4" /></Link>
         </div>
       </section>
     </PublicPage>

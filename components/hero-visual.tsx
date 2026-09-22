@@ -14,10 +14,18 @@ import InfiniteSpiral from "@/components/InfiniteSpiral";
 
 gsap.registerPlugin(useGSAP);
 
+type SlideFeature = {
+  title: string;
+  detail: string;
+};
+
 type HeroSlide = {
   eyebrow: string;
   title: string[];
   body: string;
+  featureLabel: string;
+  features: SlideFeature[];
+  stats?: { value: string; label: string; target: number; suffix?: string }[];
   background: string;
   accent: string;
   visual?: "portal" | "languages";
@@ -29,6 +37,17 @@ const slides: HeroSlide[] = [
     eyebrow: "SAN TECH · ENABLE",
     title: ["Ideas into", "impact."],
     body: "We turn ambitious ideas into useful technology, stronger systems, and measurable progress.",
+    featureLabel: "Technology · Innovation · Skills · Impact",
+    features: [
+      { title: "Build", detail: "Digital products that move ideas forward." },
+      { title: "Enable", detail: "People, teams, and systems with clarity." },
+      { title: "Scale", detail: "Progress that can be seen and measured." },
+    ],
+    stats: [
+      { value: "7+", label: "Years building", target: 7, suffix: "+" },
+      { value: "12", label: "Countries reached", target: 12 },
+      { value: "10k+", label: "People empowered", target: 10000, suffix: "k+" },
+    ],
     background: "linear-gradient(135deg, #f0fdfa 0%, #f8fafc 52%, #e0f2fe 100%)",
     accent: "#0d9488",
     video: "/videos4.mp4",
@@ -37,6 +56,12 @@ const slides: HeroSlide[] = [
     eyebrow: "AI · AUGMENT",
     title: ["Make intelligence", "useful."],
     body: "Practical AI that helps teams see more clearly, decide faster, and create with confidence.",
+    featureLabel: "AI solutions",
+    features: [
+      { title: "See clearly", detail: "Turn complex signals into useful insight." },
+      { title: "Decide faster", detail: "Give teams confidence at the right moment." },
+      { title: "Stay human", detail: "Design intelligence around real people." },
+    ],
     background: "linear-gradient(135deg, #faf5ff 0%, #f8fafc 52%, #eef2ff 100%)",
     accent: "#7c3aed",
   },
@@ -44,6 +69,12 @@ const slides: HeroSlide[] = [
     eyebrow: "IOT · CONNECT",
     title: ["Connect the", "real world."],
     body: "Connected devices and data flows that make operations more visible, responsive, and human.",
+    featureLabel: "IoT & embedded systems",
+    features: [
+      { title: "Sense", detail: "Listen to the world through connected devices." },
+      { title: "Connect", detail: "Move live data where it creates value." },
+      { title: "Respond", detail: "Make operations visible and responsive." },
+    ],
     background: "linear-gradient(135deg, #ecfeff 0%, #f8fafc 52%, #f0fdf4 100%)",
     accent: "#0891b2",
   },
@@ -51,6 +82,12 @@ const slides: HeroSlide[] = [
     eyebrow: "CYBERSECURITY · PROTECT",
     title: ["Build trust into", "everything."],
     body: "Security-minded systems that protect the people, information, and momentum behind your work.",
+    featureLabel: "Cybersecurity",
+    features: [
+      { title: "Harden", detail: "Build protection into the foundation." },
+      { title: "Understand", detail: "See risk before it becomes disruption." },
+      { title: "Keep moving", detail: "Protect trust, people, and momentum." },
+    ],
     background: "linear-gradient(135deg, #fff1f2 0%, #f8fafc 52%, #fdf2f8 100%)",
     accent: "#e11d48",
   },
@@ -58,6 +95,12 @@ const slides: HeroSlide[] = [
     eyebrow: "SOFTWARE DEVELOPMENT · SHIP",
     title: ["Build what", "moves people."],
     body: "From a focused prototype to a platform at scale, we make software that is ready for the real world.",
+    featureLabel: "Software development",
+    features: [
+      { title: "Web products", detail: "Fast, focused experiences for the web." },
+      { title: "Mobile apps", detail: "Useful tools that travel with your team." },
+      { title: "Platforms", detail: "Foundations ready for the next release." },
+    ],
     background: "linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #f0fdfa 100%)",
     accent: "#2563eb",
     visual: "languages",
@@ -66,6 +109,12 @@ const slides: HeroSlide[] = [
     eyebrow: "DIGITAL TRANSFORMATION · SCALE",
     title: ["Change the way", "work moves."],
     body: "Clearer processes, connected teams, and digital foundations built for the next chapter.",
+    featureLabel: "Digital transformation",
+    features: [
+      { title: "Integrate", detail: "Bring disconnected systems into one view." },
+      { title: "Simplify", detail: "Replace friction with clear processes." },
+      { title: "Align", detail: "Help teams move in the same direction." },
+    ],
     background: "linear-gradient(135deg, #f5f3ff 0%, #f8fafc 52%, #ecfeff 100%)",
     accent: "#6d28d9",
   },
@@ -73,6 +122,12 @@ const slides: HeroSlide[] = [
     eyebrow: "INNOVATION · EXPLORE",
     title: ["Find the next", "possibility."],
     body: "Research, partnerships, and bold experiments that turn useful questions into new directions.",
+    featureLabel: "Innovation Lab",
+    features: [
+      { title: "Question", detail: "Start with the problem worth solving." },
+      { title: "Prototype", detail: "Make new possibilities tangible early." },
+      { title: "Partner", detail: "Grow ideas through shared expertise." },
+    ],
     background: "linear-gradient(135deg, #f0f9ff 0%, #f8fafc 52%, #e0e7ff 100%)",
     accent: "#0284c7",
   },
@@ -80,6 +135,12 @@ const slides: HeroSlide[] = [
     eyebrow: "SAN HUB · GROW",
     title: ["Learn something.", "Build something."],
     body: "Practical pathways for people ready to turn curiosity into capability.",
+    featureLabel: "SAN HUB ecosystem",
+    features: [
+      { title: "Learn", detail: "Practical pathways into new capability." },
+      { title: "Connect", detail: "A community that turns knowledge outward." },
+      { title: "Contribute", detail: "Track progress from skill to impact." },
+    ],
     background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 52%, #ecfdf5 100%)",
     accent: "#059669",
   },
@@ -87,6 +148,12 @@ const slides: HeroSlide[] = [
     eyebrow: "E-VISITORS · WELCOME",
     title: ["Make every", "arrival count."],
     body: "A calmer, smarter way to understand the people and places you serve.",
+    featureLabel: "Smart visitor operations",
+    features: [
+      { title: "Welcome", detail: "Make every arrival feel considered." },
+      { title: "Guide", detail: "Give people a clear path through the space." },
+      { title: "Remember", detail: "Turn visits into useful operational insight." },
+    ],
     background: "linear-gradient(135deg, #fffbeb 0%, #f8fafc 52%, #f0fdfa 100%)",
     accent: "#d97706",
     video: "/E-VS.mp4",
@@ -162,16 +229,17 @@ function RecognitionSpiral() {
         speed={0.24}
         radius={205}
         cardWidth={156}
-        cardHeight={112}
-        verticalSpacing={48}
+        cardHeight={148}
+        verticalSpacing={58}
         perspective={1000}
         cardRadius={10}
         centerScale={1.2}
-        edgeBlur={2}
+        edgeBlur={0}
         cardsPerTurn={7}
         pauseOnHover
         cardTilt={-1}
         edgeFade={0.25}
+        imageFit="contain"
         className="relative z-10"
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-20 text-center">
@@ -184,22 +252,57 @@ function RecognitionSpiral() {
 
 function HeroCtas({ video }: { video: boolean }) {
   return (
-    <div data-portal-copy={video ? "true" : undefined} data-video-actions={video ? "true" : undefined} className={`flex max-w-[480px] flex-wrap gap-2.5 ${video ? "absolute left-1/2 top-[62%] mx-auto w-max max-w-[calc(100%-2rem)] -translate-x-1/2 justify-center" : "mt-8"}`}>
+    <div data-portal-copy={video ? "true" : undefined} data-video-actions={video ? "true" : undefined} className={`relative z-30 flex w-max max-w-[calc(100vw-2rem)] flex-nowrap gap-2.5 overflow-x-auto pb-1 ${video ? "absolute left-1/2 top-[62%] mx-auto -translate-x-1/2 justify-center" : "mt-8"}`}>
       {ctaLinks.map((cta, ctaIndex) => (
         <Link
           key={cta.label}
           href={cta.href}
-          className={`inline-flex items-center gap-1.5 rounded-full px-4.5 py-2.5 text-[11px] font-bold tracking-wide transition-all ${
+          className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4.5 py-2.5 text-[11px] font-bold tracking-wide transition-all ${
             ctaIndex === 0
               ? video
                 ? "bg-brand-secondary text-white shadow-md hover:bg-[#1519ad] hover:shadow-lg"
-                : "bg-slate-900 text-white shadow-md hover:bg-slate-800 hover:shadow-lg"
+                : "bg-brand-secondary text-white shadow-md hover:bg-[#1519ad] hover:shadow-lg"
               : "border border-slate-200/90 bg-white/80 text-slate-800 shadow-sm backdrop-blur-sm hover:border-slate-300 hover:bg-white hover:shadow"
           }`}
         >
           {cta.label}<ArrowUpRight className="h-3.5 w-3.5" />
         </Link>
       ))}
+    </div>
+  );
+}
+
+function SlideFeatureRail({ slide }: { slide: HeroSlide }) {
+  const video = Boolean(slide.video);
+  const tone = video ? "text-white" : "text-slate-900";
+  const rule = video ? "border-white/25" : "border-slate-900/15";
+  const muted = video ? "text-white/65" : "text-slate-500";
+  const accent = slide.eyebrow.startsWith("E-VISITORS") ? "text-brand-secondary" : video ? "text-white" : "text-brand-secondary";
+
+  return (
+    <div data-portal-copy className={`absolute bottom-16 left-7 z-20 max-w-[min(680px,calc(100%-2rem))] sm:bottom-20 sm:left-12 lg:bottom-24 lg:left-16 ${tone}`}>
+      <div className="flex items-center gap-3">
+        <span className={`h-px w-8 ${video ? "bg-white/70" : "bg-brand-secondary"}`} aria-hidden="true" />
+        <p className={`text-[10px] font-black uppercase tracking-[0.24em] ${accent}`}>{slide.featureLabel}</p>
+        <span className={`hidden text-[10px] font-bold tracking-[0.18em] sm:inline ${muted}`}>/ 03</span>
+      </div>
+      <div className={`mt-4 grid grid-cols-1 border-y ${rule} sm:grid-cols-3`}>
+        {slide.stats ? slide.stats.map((stat) => (
+          <div key={stat.label} className={`min-w-24 py-3 pr-5 sm:py-4 ${rule} sm:border-r sm:last:border-r-0 sm:pl-5 sm:first:pl-0`}>
+            <p data-counter data-counter-target={stat.target} data-counter-suffix={stat.suffix ?? ""} className={`text-3xl font-light leading-none tracking-[-0.06em] sm:text-4xl ${video ? "text-white" : "text-brand-secondary"}`}>{stat.value}</p>
+            <p className={`mt-2 text-[10px] font-bold uppercase tracking-[0.12em] ${muted}`}>{stat.label}</p>
+          </div>
+        )) : slide.features.map((feature) => (
+          <div key={feature.title} className={`group relative py-3 pr-5 sm:py-4 ${rule} sm:border-r sm:last:border-r-0 sm:pl-5 sm:first:pl-0`}>
+            <div className="flex items-center gap-2">
+              <span className={`text-[10px] font-black tracking-[0.16em] ${muted}`}>{String(slide.features.indexOf(feature) + 1).padStart(2, "0")}</span>
+              <span className={`h-1.5 w-1.5 rounded-full ${video ? "bg-white" : "bg-brand-secondary"}`} aria-hidden="true" />
+            </div>
+            <p className={`mt-2 text-sm font-black tracking-[-0.02em] ${accent}`}>{feature.title}</p>
+            <p className={`mt-1 max-w-40 text-[11px] leading-relaxed ${muted}`}>{feature.detail}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -245,6 +348,42 @@ function getVideoMotionTargets(copy: HTMLElement, actions: HTMLElement) {
   };
 }
 
+function formatCounterValue(value: number, suffix: string) {
+  if (suffix === "k+") return `${Math.floor(value / 1000)}k+`;
+  return `${Math.round(value)}${suffix}`;
+}
+
+function createCounterAnimation(counters: NodeListOf<HTMLElement>, reduceMotion: boolean) {
+  const timeline = gsap.timeline();
+
+  counters.forEach((counter, index) => {
+    const target = Number(counter.dataset.counterTarget ?? 0);
+    const suffix = counter.dataset.counterSuffix ?? "";
+    const value = { current: 0 };
+
+    if (reduceMotion) {
+      counter.textContent = formatCounterValue(target, suffix);
+      return;
+    }
+
+    counter.textContent = formatCounterValue(0, suffix);
+    timeline.to(
+      value,
+      {
+        current: target,
+        duration: 1.15,
+        ease: "power2.out",
+        onUpdate: () => {
+          counter.textContent = formatCounterValue(value.current, suffix);
+        },
+      },
+      index * 0.08,
+    );
+  });
+
+  return timeline;
+}
+
 export function HeroVisual() {
   const scope = useRef<HTMLDivElement>(null);
   const previousSlide = useRef(0);
@@ -284,9 +423,17 @@ export function HeroVisual() {
       const outgoing = scope.current?.querySelector<HTMLElement>(`[data-slide="${previousSlide.current}"]`) ?? incoming;
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const incomingCopy = incoming.querySelectorAll<HTMLElement>("[data-portal-copy]");
+      const incomingCounters = incoming.querySelectorAll<HTMLElement>("[data-counter]");
+      const counterTimeline = createCounterAnimation(incomingCounters, reduceMotion);
       const incomingMark = incoming.querySelector<HTMLElement>("[data-portal-mark]") ?? incoming;
       const incomingVideoCopy = incoming.querySelector<HTMLElement>("[data-video-copy]");
       const incomingVideoActions = incoming.querySelector<HTMLElement>("[data-video-actions]");
+
+      // A slide can be reused after it has previously been animated out. Reset
+      // its transform before measuring destinations so stale xPercent/scale
+      // values do not send the copy or CTA row off-screen on the next visit.
+      gsap.set(incoming, { xPercent: 0, yPercent: 0, x: 0, y: 0, scale: 1, rotate: 0 });
+      gsap.set(incomingMark, { x: 0, y: 0, scale: 1, rotate: 0 });
       if (incomingVideoCopy && incomingVideoActions) {
         gsap.set(incomingVideoCopy, { x: 0, y: 0, scale: 1 });
         gsap.set(incomingVideoActions, { x: 0, y: 0, scale: 1 });
@@ -309,10 +456,13 @@ export function HeroVisual() {
           introTimeline
             .to(incomingVideoCopy, { x: videoTargets.copyX, y: videoTargets.copyY, scale: videoTargets.copyScale, duration: 1.1, delay: 1.2, ease: "power3.inOut" })
             .to(incomingVideoActions, { x: videoTargets.actionX, y: videoTargets.actionY, scale: videoTargets.actionScale, duration: 1.1, ease: "power3.inOut" }, "<");
-          return () => introTimeline.kill();
+          return () => {
+            introTimeline.kill();
+            counterTimeline.kill();
+          };
         }
 
-        return;
+        return () => counterTimeline.kill();
       }
 
       const timeline = gsap.timeline({ defaults: { overwrite: "auto" } });
@@ -329,7 +479,10 @@ export function HeroVisual() {
       }
 
       previousSlide.current = activeSlide;
-      return () => timeline.kill();
+      return () => {
+        timeline.kill();
+        counterTimeline.kill();
+      };
     },
     { scope, dependencies: [activeSlide] },
   );
@@ -342,8 +495,10 @@ export function HeroVisual() {
       <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:64px_64px]" />
 
       {slides.map((slide, index) => (
-        <div key={slide.eyebrow} data-portal-slide data-slide={index} className="absolute inset-0 overflow-hidden px-7 pb-8 pt-28 sm:px-12 sm:pb-12 sm:pt-32 lg:px-16 lg:pb-14 lg:pt-36" style={{ background: slide.background, opacity: index === 0 ? 1 : 0, visibility: index === 0 ? "visible" : "hidden" }}>
+        <div key={slide.eyebrow} data-portal-slide data-slide={index} className="absolute inset-0 overflow-hidden px-7 pb-8 pt-28 sm:px-12 sm:pb-12 sm:pt-32 lg:px-16 lg:pb-14 lg:pt-36" style={{ background: slide.background }}>
           <ImigongoPattern id={`imigongo-${index}`} />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-56 bg-gradient-to-b from-black/30 via-black/10 to-transparent sm:h-64" />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-48 bg-gradient-to-t from-black/30 via-black/10 to-transparent sm:h-56" />
           {slide.visual === "languages" ? (
             <div className="absolute top-1/2 right-10 aspect-square w-[50%] -translate-y-1/2 max-w-[520px] sm:right-16 sm:w-[45%] lg:right-24 lg:w-[42%] xl:w-[38%]" aria-label="Programming languages orbiting the software development hub">
               <div className="relative size-full">
@@ -372,7 +527,7 @@ export function HeroVisual() {
           )}
 
           {/* Center video-slide copy; keep the focused left composition for non-video slides. */}
-          <div className={`relative z-10 flex h-full w-full flex-col justify-center ${slide.video ? "mx-auto max-w-4xl items-center text-center" : "max-w-[92%] sm:max-w-[75%] lg:max-w-[58%] xl:max-w-[54%]"}`}>
+          <div className={`relative z-10 flex h-full w-full flex-col justify-center ${slide.video ? "mx-auto max-w-4xl items-center text-center" : "-translate-y-10 max-w-[92%] sm:-translate-y-12 sm:max-w-[75%] lg:max-w-[58%] xl:max-w-[54%]"}`}>
             <div data-video-copy={slide.video ? "true" : undefined} className={slide.video ? "w-full" : undefined}>
               <h2 data-portal-copy className={`${slide.video ? "max-w-none text-[clamp(1.75rem,5.2vw,5.5rem)] text-white drop-shadow-[0_5px_16px_rgba(0,0,0,0.65)]" : "max-w-2xl text-[clamp(2.75rem,5.2vw,5.5rem)] text-slate-900"} font-black leading-[0.94] tracking-[-0.06em]`}>
                 {(slide.video ? [slide.title.join(" ")] : slide.title).map((line, lineIndex) => (
@@ -387,6 +542,7 @@ export function HeroVisual() {
             </div>
             <HeroCtas video={Boolean(slide.video)} />
           </div>
+          <SlideFeatureRail slide={slide} />
         </div>
       ))}
 
@@ -400,14 +556,14 @@ export function HeroVisual() {
               aria-label={`Show ${slide.eyebrow.split(" · ")[0]} slide`}
               onClick={() => setActiveSlide(index)}
               className={`rounded-full transition-all duration-300 ${index === activeSlide ? "h-8 w-1.5" : "h-1.5 w-1.5 bg-slate-300 hover:bg-slate-400"}`}
-              style={index === activeSlide ? { background: slide.accent } : undefined}
+              style={index === activeSlide ? { background: "#0B0E87" } : undefined}
             />
           ))}
         </div>
       </div>
 
       {/* Footer content — bottom */}
-      <div className="absolute inset-x-7 bottom-5 z-20 flex flex-col items-start gap-1 sm:inset-x-12 sm:flex-row sm:items-center sm:justify-between lg:inset-x-16">
+      <div data-hero-footer className="absolute inset-x-7 bottom-5 z-20 flex flex-col items-start gap-1.5 sm:inset-x-12 sm:flex-row sm:items-center sm:justify-between lg:inset-x-16">
         <span className="text-[10px] font-semibold tracking-[0.08em] text-slate-400">© 2026 SAN TECH. All rights reserved.</span>
         <span className="text-[10px] font-medium text-slate-400">Making your ideas happen.</span>
         <a href="mailto:info@santechinnovate.com" className="text-[10px] font-semibold text-brand-secondary transition-colors hover:text-slate-900">info@santechinnovate.com</a>
@@ -450,7 +606,6 @@ function HeroStoryVideo({ src, label, isActive }: { src: string; label: string; 
   return (
     <div className="relative h-full w-full bg-slate-950">
       <video ref={videoRef} className="h-full w-full object-cover" src={src} autoPlay muted playsInline preload="metadata" onEnded={handleEnded} aria-label={label} />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-slate-950/75 via-slate-950/30 to-transparent sm:h-64" />
       <button type="button" onClick={toggleSound} className="absolute bottom-20 right-7 z-10 grid size-10 place-items-center rounded-full border border-white/30 bg-slate-950/70 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-slate-950 sm:bottom-24 sm:right-12" aria-label={muted ? "Turn video sound on" : "Mute video sound"}>
         {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
       </button>
