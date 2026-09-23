@@ -44,7 +44,7 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div className="relative bg-brand-secondary text-white">
-        <div className="mx-auto flex min-h-11 max-w-7xl items-center justify-center px-5 py-2 text-[11px] font-medium sm:px-8 lg:justify-between lg:px-10">
+        <div className="mx-auto flex min-h-11 max-w-7xl items-center justify-center px-5 py-2 text-sm font-medium sm:px-8 lg:justify-between lg:px-10">
           <div className="flex items-center gap-2 sm:gap-3">
             <Phone className="size-3.5 shrink-0" aria-hidden="true" />
             <a href="tel:+250780309833" className="whitespace-nowrap transition-colors hover:text-white/70">+250780309833 / +22371005873</a>
@@ -61,7 +61,17 @@ export function SiteHeader() {
             <span className="hidden items-center gap-2 md:inline-flex"><Radio className="size-3.5" aria-hidden="true" /> santech</span>
           </div>
         </div>
-        <div aria-hidden="true" className="h-1.5 bg-[#c9a313] [clip-path:polygon(0_55%,1%_0,2%_55%,3%_0,4%_55%,5%_0,6%_55%,7%_0,8%_55%,9%_0,10%_55%,11%_0,12%_55%,13%_0,14%_55%,15%_0,16%_55%,17%_0,18%_55%,19%_0,20%_55%,21%_0,22%_55%,23%_0,24%_55%,25%_0,26%_55%,27%_0,28%_55%,29%_0,30%_55%,31%_0,32%_55%,33%_0,34%_55%,35%_0,36%_55%,37%_0,38%_55%,39%_0,40%_55%,41%_0,42%_55%,43%_0,44%_55%,45%_0,46%_55%,47%_0,48%_55%,49%_0,50%_55%,51%_0,52%_55%,53%_0,54%_55%,55%_0,56%_55%,57%_0,58%_55%,59%_0,60%_55%,61%_0,62%_55%,63%_0,64%_55%,65%_0,66%_55%,67%_0,68%_55%,69%_0,70%_55%,71%_0,72%_55%,73%_0,74%_55%,75%_0,76%_55%,77%_0,78%_55%,79%_0,80%_55%,81%_0,82%_55%,83%_0,84%_55%,85%_0,86%_55%,87%_0,88%_55%,89%_0,90%_55%,91%_0,92%_55%,93%_0,94%_55%,95%_0,96%_55%,97%_0,98%_55%,99%_0,100%_55%)]" />
+        <div aria-hidden="true" className="h-2 overflow-hidden bg-[#c9a313]">
+          <svg className="h-full w-full" width="100%" height="8" preserveAspectRatio="none">
+            <defs>
+              <pattern id="imigongo-header-band" width="48" height="8" patternUnits="userSpaceOnUse">
+                <path d="M0 8 6 1 12 8 18 1 24 8 30 1 36 8 42 1 48 8" fill="none" stroke="#0B0E87" strokeWidth="1.7" />
+                <path d="M0 1 6 8 12 1 18 8 24 1 30 8 36 1 42 8 48 1" fill="none" stroke="#f3d45c" strokeWidth="0.8" opacity="0.9" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#imigongo-header-band)" />
+          </svg>
+        </div>
       </div>
       <motion.div
         animate={{
@@ -82,7 +92,7 @@ export function SiteHeader() {
           }}
           animate={{
             maxWidth: isScrolled ? "1280px" : "100%",
-            borderRadius: isScrolled ? "9999px" : "0px",
+            borderRadius: isScrolled ? "20px" : "0px",
             backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0)",
             boxShadow: isScrolled
               ? "0 0 0 1px rgba(226, 232, 240, 0.9), 0 14px 40px -8px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.04)"
@@ -107,19 +117,21 @@ export function SiteHeader() {
           </Link>
 
           {/* Navigation Items and CTA on Far Right Side */}
-          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
-            <nav className="flex items-center gap-6 xl:gap-7" aria-label="Main navigation">
+          <div className="hidden items-center gap-1 lg:flex xl:gap-2">
+            <nav className="flex items-center gap-1 xl:gap-2" aria-label="Main navigation">
               {navigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={isActiveRoute(item.href) ? "page" : undefined}
-                  className={`relative rounded-full px-3 py-2 text-[13px] font-semibold tracking-[0.04em] transition-all duration-200 after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:-translate-x-1/2 after:rounded-full after:bg-brand-secondary after:transition-all after:duration-200 ${
+                  className={`relative rounded-xl px-2 py-2 text-sm font-semibold tracking-[0.04em] transition-colors duration-200 after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:-translate-x-1/2 after:rounded-full after:bg-brand-secondary after:transition-all after:duration-200 ${
                     isActiveRoute(item.href)
-                      ? "text-brand-secondary after:w-8"
+                      ? darkHeader
+                        ? "text-white after:w-8"
+                        : "text-brand-secondary after:w-8"
                       : darkHeader
-                        ? "text-white/85 after:w-0 hover:bg-white/10 hover:text-white hover:after:w-5"
-                        : "text-slate-700 after:w-0 hover:bg-slate-100 hover:text-slate-950 hover:after:w-5"
+                        ? "text-white/85 after:w-0 hover:text-white hover:after:w-5"
+                        : "text-slate-700 after:w-0 hover:text-slate-950 hover:after:w-5"
                   }`}
                 >
                   {item.label}
@@ -129,7 +141,7 @@ export function SiteHeader() {
 
             <Link
               href="/join-the-community"
-              className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[11px] font-bold tracking-[0.06em] shadow-sm transition-all hover:shadow-md ${darkHeader ? "bg-white text-brand-secondary hover:bg-brand-secondary hover:text-white" : "bg-brand-secondary text-white hover:opacity-90"}`}
+              className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-bold tracking-[0.06em] shadow-sm transition-all hover:shadow-md ${darkHeader ? "bg-white text-brand-secondary hover:bg-brand-secondary hover:text-white" : "bg-brand-secondary text-white hover:opacity-90"}`}
             >
               JOIN THE COMMUNITY <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
@@ -139,7 +151,7 @@ export function SiteHeader() {
           <button
             type="button"
             aria-label={open ? "Close navigation" : "Open navigation"}
-            className={`grid h-10 w-10 place-items-center rounded-full border p-2 shadow-sm transition-colors lg:hidden ${darkHeader ? "border-white/30 bg-white/10 text-white hover:bg-white/20" : "border-slate-200/90 bg-white/80 text-slate-800 hover:bg-slate-100"}`}
+            className={`grid h-10 w-10 place-items-center rounded-xl border p-2 shadow-sm transition-colors lg:hidden ${darkHeader ? "border-white/30 bg-white/10 text-white hover:bg-white/20" : "border-slate-200/90 bg-white/80 text-slate-800 hover:bg-slate-100"}`}
             onClick={() => setOpen((value) => !value)}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -155,7 +167,7 @@ export function SiteHeader() {
             animate={{ height: "auto", opacity: 1, y: 0 }}
             exit={{ height: 0, opacity: 0, y: -10 }}
             transition={{ duration: 0.28, ease: "easeInOut" }}
-            className="mx-4 mt-2 overflow-hidden rounded-[1.75rem] border border-slate-200/90 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.15)] backdrop-blur-2xl lg:hidden"
+            className="mx-4 mt-2 overflow-hidden rounded-xl border border-slate-200/90 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.15)] backdrop-blur-2xl lg:hidden"
           >
             <div className="flex flex-col gap-1.5 p-5 sm:p-6">
               {navigation.map((item) => (
@@ -167,7 +179,7 @@ export function SiteHeader() {
                   className={`rounded-xl border-l-2 px-4 py-3 text-sm font-semibold transition-colors ${
                     isActiveRoute(item.href)
                       ? "border-brand-secondary bg-brand-secondary/10 text-brand-secondary"
-                      : "border-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-950"
+                      : "border-transparent text-slate-700 hover:text-slate-950"
                   }`}
                 >
                   {item.label}
@@ -176,7 +188,7 @@ export function SiteHeader() {
               <Link
                 href="/join-the-community"
                 onClick={() => setOpen(false)}
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand-secondary px-5 py-3.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-secondary px-5 py-3.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
               >
                 Join the community <ArrowUpRight className="h-4 w-4" />
               </Link>

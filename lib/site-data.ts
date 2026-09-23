@@ -1,6 +1,6 @@
 export const navigation = [
   { label: "SAN TECH", href: "/" },
-  { label: "Our Story", href: "/our-story" },
+  { label: "Our Legacy", href: "/our-story" },
   { label: "Innovation Lab", href: "/innovation-lab" },
   { label: "SAN HUB", href: "/san-hub" },
   { label: "E-Visitors", href: "/e-visitors" },

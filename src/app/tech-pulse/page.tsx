@@ -40,7 +40,7 @@ export default function TechPulsePage() {
                 href="/connect"
                 className="group grid gap-4 py-7 sm:grid-cols-[150px_1fr_auto] sm:items-center"
               >
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">{story.type}</span>
+                <span className="text-sm font-black uppercase tracking-[0.2em] text-brand-secondary">{story.type}</span>
                 <span className="text-xl font-black tracking-[-0.03em] text-slate-900 transition-colors group-hover:text-brand-secondary">{story.title}</span>
                 <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
                   {story.date}
@@ -60,7 +60,7 @@ export default function TechPulsePage() {
             title="Useful information, easy to find."
             description="The full platform will support search, category, date, deadline, and impact filters from the CMS."
           />
-          <div className="rounded-[1.75rem] border border-white/15 bg-white/[0.04] p-7">
+          <div className="rounded-xl border border-white/15 bg-white/[0.04] p-7">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex h-12 items-center rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-bold text-white/65">Opportunities</div>
               <div className="flex h-12 items-center rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-bold text-white/65">Technology trends</div>
