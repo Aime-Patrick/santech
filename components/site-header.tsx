@@ -90,11 +90,6 @@ export function SiteHeader() {
             <span>santech</span>
           </span>
         </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-1.5 bg-white"
-          style={{ backgroundImage: "url('/imingogo-trimmed.png')", backgroundPosition: "center bottom", backgroundRepeat: "repeat-x", backgroundSize: "56px 28px" }}
-        />
       </div>
 
       {/* Main Navbar */}
