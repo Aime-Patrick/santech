@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: "SAN TECH | Technology. Innovation. Impact.",
   description:
     "SAN TECH builds technology, skills, and innovation systems for a more connected Africa.",
+  icons: {
+    icon: "/santech.png",
+    shortcut: "/santech.png",
+    apple: "/santech.png",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

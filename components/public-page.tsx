@@ -15,16 +15,8 @@ export function PublicPage({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <SiteHeader />
       <main className="pt-32">{children}</main>
-      <footer className="relative isolate overflow-hidden bg-brand-secondary text-white">
+      <footer className="relative isolate overflow-hidden bg-[#1e1b4b] text-white">
         <FooterBackgroundGradient />
-        <div aria-hidden="true" className="relative z-10 h-2 overflow-hidden bg-[#c9a313]">
-          <svg className="h-full w-full" width="100%" height="8" preserveAspectRatio="none">
-            <defs><pattern id="imigongo-footer-band" width="48" height="8" patternUnits="userSpaceOnUse"><path d="M0 8 6 1 12 8 18 1 24 8 30 1 36 8 42 1 48 8" fill="none" stroke="#0B0E87" strokeWidth="1.7" /><path d="M0 1 6 8 12 1 18 8 24 1 30 8 36 1 42 8 48 1" fill="none" stroke="#f3d45c" strokeWidth="0.8" opacity="0.9" /></pattern></defs>
-            <rect width="100%" height="100%" fill="url(#imigongo-footer-band)" />
-          </svg>
-        </div>
-        <div aria-hidden="true" className="pointer-events-none absolute right-[-7rem] top-20 z-0 size-[34rem] opacity-[0.12]"><svg viewBox="0 0 240 240" className="size-full"><defs><pattern id="imigongo-footer-art" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M40 0 80 40 40 80 0 40Z" fill="none" stroke="#f3d45c" strokeWidth="2" /><path d="M40 15 65 40 40 65 15 40Z" fill="none" stroke="#fff" strokeWidth="1" /><path d="M40 29 51 40 40 51 29 40Z" fill="#c9a313" fillOpacity="0.28" /></pattern></defs><rect width="100%" height="100%" fill="url(#imigongo-footer-art)" /></svg></div>
-
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <div>
@@ -35,20 +27,59 @@ export function PublicPage({ children }: { children: ReactNode }) {
                   className="h-10 w-auto max-w-[170px] object-contain brightness-0 invert sm:h-11 sm:max-w-[190px]"
                 />
               </Link>
-              <p className="mt-3 text-xs font-bold uppercase tracking-[0.28em] text-[#f3d45c]">Making ideas happen</p>
-              <h2 className="font-exo mt-4 max-w-xl text-3xl font-black leading-[0.98] tracking-[-0.055em] sm:text-5xl">Useful technology. Stronger systems. More possibility.</h2>
-              <p className="mt-5 max-w-xl text-sm leading-6 text-white/65">From E-Visitors to SAN HUB, we build products, skills, and innovation pathways that help people and institutions move forward.</p>
+              <p className="mt-3 text-xs font-bold uppercase tracking-[0.28em] text-[#00A3E0]">Technology · Innovation · Skills · Impact</p>
+              <h2 className="font-exo mt-4 max-w-xl text-3xl font-black leading-[0.98] tracking-[-0.055em] sm:text-5xl">From Local Innovation to Technology Manufacturing.</h2>
+              <p className="mt-5 max-w-xl text-sm leading-6 text-white/70">Building smart solutions, developing talent, and creating opportunities for a digital and prosperous Africa.</p>
             </div>
-            <Link href="/connect" className="inline-flex w-fit items-center gap-2 rounded-xl bg-[#c9a313] px-5 py-3.5 text-sm font-bold text-brand-secondary transition-colors hover:bg-white">Start a conversation <ArrowUpRight className="size-4" /></Link>
+            <Link href="/connect" className="inline-flex w-fit items-center gap-2 rounded-xl bg-[#333292] px-6 py-3.5 text-xs font-extrabold uppercase tracking-wider text-white transition-colors hover:bg-[#252472] border border-white/20">Request  Demo <ArrowUpRight className="size-4" /></Link>
           </div>
 
           <div className="mt-14 grid gap-10 border-t border-white/15 pt-10 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.2fr]">
-            <div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#f3d45c]">Explore</p><div className="mt-5 grid gap-3 text-sm font-semibold text-white/75">{navigation.slice(0, 4).map((item) => <Link key={item.href} href={item.href} className="w-fit transition-colors hover:text-white">{item.label}</Link>)}</div></div>
-            <div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#f3d45c]">SAN HUB</p><div className="mt-5 grid gap-3 text-sm font-semibold text-white/75"><Link href="/san-hub/courses" className="w-fit transition-colors hover:text-white">Courses</Link><Link href="/san-hub" className="w-fit transition-colors hover:text-white">Training & programs</Link><Link href="/join-the-community" className="w-fit transition-colors hover:text-white">Join the community</Link><Link href="/tech-pulse" className="w-fit transition-colors hover:text-white">Events & updates</Link></div></div>
-            <div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#f3d45c]">Reach SAN TECH</p><div className="mt-5 grid gap-3 text-sm font-semibold text-white/75"><a href="mailto:info@santechinnovate.com" className="flex items-center gap-3 transition-colors hover:text-white"><Mail className="size-4 text-[#f3d45c]" />info@santechinnovate.com</a><a href="tel:+250780309833" className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-[#f3d45c]" />+250 780 309 833 / +223 710 058 73</a><span className="flex items-center gap-3"><MapPin className="size-4 text-[#f3d45c]" />Plot 48, KN 1 Road, Kigali-Rwanda</span></div></div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#00A3E0]">Explore Platform</p>
+              <div className="mt-5 grid gap-2.5 text-xs font-bold text-white/80">
+                {navigation.map((item) => (
+                  <Link key={item.href} href={item.href} className="w-fit transition-colors hover:text-[#00A3E0]">
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#00A3E0]">SAN HUB Ecosystem</p>
+              <div className="mt-5 grid gap-2.5 text-xs font-bold text-white/80">
+                <Link href="/san-hub/courses" className="w-fit transition-colors hover:text-[#00A3E0]">Course Catalogue</Link>
+                <Link href="/san-hub" className="w-fit transition-colors hover:text-[#00A3E0]">Training & Programs</Link>
+                <Link href="/join-the-community" className="w-fit transition-colors hover:text-[#00A3E0]">Join the Community</Link>
+                <Link href="/tech-pulse" className="w-fit transition-colors hover:text-[#00A3E0]">Tenders & Opportunities</Link>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#00A3E0]">Reach SAN TECH</p>
+              <div className="mt-5 grid gap-3 text-xs font-medium text-white/80">
+                <a href="mailto:info@santechinnovate.com" className="flex items-center gap-3 transition-colors hover:text-white">
+                  <Mail className="size-4 text-[#00A3E0]" />
+                  info@santechinnovate.com
+                </a>
+                <a href="tel:+250780309833" className="flex items-center gap-3 transition-colors hover:text-white">
+                  <Phone className="size-4 text-[#00A3E0]" />
+                  +250 780 309 833 / +223 710 058 73
+                </a>
+                <span className="flex items-center gap-3">
+                  <MapPin className="size-4 text-[#00A3E0]" />
+                  Plot 48, KN 1 Road, Sofaru Building; Kigali-Rwanda
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-3 border-t border-white/15 pt-6 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between"><span>Copyright 2026 SAN TECH. All rights reserved.</span><span>Making your ideas happen.</span><Link href="/connect" className="font-semibold text-[#f3d45c] transition-colors hover:text-white">info@santechinnovate.com <ArrowUpRight className="inline size-3" /></Link></div>
+          <div className="mt-10 flex flex-col gap-3 border-t border-white/15 pt-6 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
+            <span>Copyright 2026 SAN TECH. All rights reserved.</span>
+            <span>Technology. Innovation. Skills. Impact.</span>
+            <Link href="/connect" className="font-semibold text-[#00A3E0] transition-colors hover:text-white">
+              info@santechinnovate.com <ArrowUpRight className="inline size-3" />
+            </Link>
+          </div>
         </div>
       </footer>
     </div>

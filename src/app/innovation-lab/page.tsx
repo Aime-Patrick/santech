@@ -117,7 +117,7 @@ export default function InnovationLabPage() {
         titleClassName="text-4xl sm:text-5xl lg:text-6xl"
         description="Explore products, services, solutions, projects, and technologies built for the work that matters."
         actions={[
-          { label: "Start a conversation", href: "/connect" },
+          { label: "Request Demo", href: "/connect" },
           { label: "View E-Visitors", href: "/e-visitors", tone: "secondary" },
         ]}
       />

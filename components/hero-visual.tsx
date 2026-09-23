@@ -1,169 +1,190 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Volume2, VolumeX } from "lucide-react";
-import { FaJava } from "react-icons/fa6";
+import { 
+  Volume2, 
+  VolumeX, 
+  ExternalLink,
+  ArrowRight
+} from "lucide-react";
+import { 
+  FaInstagram, 
+  FaXTwitter, 
+  FaYoutube, 
+  FaLinkedinIn, 
+  FaJava 
+} from "react-icons/fa6";
 import { TbBrandCSharp } from "react-icons/tb";
-import { SiGo, SiJavascript, SiKotlin, SiPhp, SiPython, SiRust, SiTypescript } from "react-icons/si";
+import { 
+  SiGo, 
+  SiJavascript, 
+  SiKotlin, 
+  SiPhp, 
+  SiPython, 
+  SiRust, 
+  SiTypescript 
+} from "react-icons/si";
 import type { IconType } from "react-icons";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import { OrbitingCircles } from "@/components/ui/orbiting-circles";
 import InfiniteSpiral from "@/components/InfiniteSpiral";
+import { clientLogos, dynamicStats, heroCTAs } from "@/lib/site-data";
 
 gsap.registerPlugin(useGSAP);
 
-type SlideFeature = {
-  title: string;
-  detail: string;
-};
+type Language = "en" | "rw";
 
-type HeroSlide = {
-  eyebrow: string;
-  title: string[];
-  body: string;
-  featureLabel: string;
-  features: SlideFeature[];
-  stats?: { value: string; label: string; target: number; suffix?: string }[];
-  background: string;
-  accent: string;
-  visual?: "portal" | "languages";
+const heroImageItems = [
+  { src: "/images/team.jpg", alt: "SAN TECH team and community" },
+  { src: "/images/fieldwork.jpg", alt: "SAN TECH community fieldwork" },
+  { src: "/images/summit.jpg", alt: "SAN TECH innovation summit" },
+  { src: "/images/graduates.jpg", alt: "SAN TECH graduates and learners" },
+  { src: "/certificates/recognition-digital-innovation.png", alt: "SAN TECH digital innovation recognition" },
+  { src: "/certificates/recognition-community-impact.png", alt: "SAN TECH community impact recognition" },
+  { src: "/certificates/recognition-technology-excellence.png", alt: "SAN TECH technology excellence recognition" },
+  { src: "/troph.jpg", alt: "SAN TECH Best Exhibitor recognition" },
+  { src: "/certificates/edtech-trust-seal.png", alt: "SAN TECH EdTech trust seal" },
+] as const;
+
+type SlideData = {
+  id: string;
+  eyebrowEn: string;
+  eyebrowRw: string;
+  titleEn: string;
+  titleRw: string;
+  subtitleEn: string;
+  subtitleRw: string;
+  bodyEn: string;
+  bodyRw: string;
+  badgeEn: string;
+  badgeRw: string;
+  badgeHref: string;
+  cardTitleEn: string;
+  cardTitleRw: string;
+  statLabelEn: string;
+  statLabelRw: string;
+  statValueEn: string;
+  statValueRw: string;
+  gallery: readonly (typeof heroImageItems)[number][];
+  image?: string;
   video?: string;
+  visual?: "languages" | "recognition";
 };
 
-const slides: HeroSlide[] = [
+const heroSlides: SlideData[] = [
   {
-    eyebrow: "SAN TECH · ENABLE",
-    title: ["Ideas into", "impact."],
-    body: "We turn ambitious ideas into useful technology, stronger systems, and measurable progress.",
-    featureLabel: "Technology · Innovation · Skills · Impact",
-    features: [
-      { title: "Build", detail: "Digital products that move ideas forward." },
-      { title: "Enable", detail: "People, teams, and systems with clarity." },
-      { title: "Scale", detail: "Progress that can be seen and measured." },
-    ],
-    stats: [
-      { value: "7+", label: "Years building", target: 7, suffix: "+" },
-      { value: "12", label: "Countries reached", target: 12 },
-      { value: "10k+", label: "People empowered", target: 10000, suffix: "k+" },
-    ],
-    background: "linear-gradient(135deg, #f0fdfa 0%, #f8fafc 52%, #e0f2fe 100%)",
-    accent: "#0d9488",
+    id: "santech-lead",
+    gallery: [heroImageItems[0], heroImageItems[2], heroImageItems[4]],
+    eyebrowEn: "SMART TECHNOLOGIES · INNOVATION · IMPACT",
+    eyebrowRw: "IKORANABUHANGA · UDUSHYA · ITERAMBERE",
+    titleEn: "From Local Innovation to Technology Manufacturing & Digital Transformation",
+    titleRw: "Kuva ku Gushakira Ibisubizo Hano Iwacu kugeza ku Gukora Ikoranabuhanga Rikomeye",
+    subtitleEn: "Technology. Innovation. Skills. Impact.",
+    subtitleRw: "Ikoranabuhanga. Udushya. Ubumenyi. Iterambere.",
+    bodyEn: "We build smart solutions, develop top African tech talent, and create transformative digital systems for a connected, prosperous Africa.",
+    bodyRw: "Twubaka ibisubizo by'ikoranabuhanga bugezweho, tugaha ubumenyi urubyiruko rw'u Rwanda n'Afurika, tugateza imbere ubukungu bushingiye ku ikoranabuhanga.",
+    badgeEn: "Discover SAN TECH",
+    badgeRw: "Vumbura SAN TECH",
+    badgeHref: "/our-story",
+    cardTitleEn: "SAN TECH at a Glance",
+    cardTitleRw: "SAN TECH mu Mibare",
+    statLabelEn: "Beneficiaries & Innovators",
+    statLabelRw: "Abamaze Guhabwa Ubumenyi",
+    statValueEn: "10k+ Empowered",
+    statValueRw: "10k+ bahawe ubumenyi",
     video: "/videos4.mp4",
   },
   {
-    eyebrow: "AI · AUGMENT",
-    title: ["Make intelligence", "useful."],
-    body: "Practical AI that helps teams see more clearly, decide faster, and create with confidence.",
-    featureLabel: "AI solutions",
-    features: [
-      { title: "See clearly", detail: "Turn complex signals into useful insight." },
-      { title: "Decide faster", detail: "Give teams confidence at the right moment." },
-      { title: "Stay human", detail: "Design intelligence around real people." },
-    ],
-    background: "linear-gradient(135deg, #faf5ff 0%, #f8fafc 52%, #eef2ff 100%)",
-    accent: "#7c3aed",
+    id: "cls-mis",
+    gallery: [heroImageItems[1], heroImageItems[3], heroImageItems[5]],
+    eyebrowEn: "COMMUNITY LISTENING SYSTEMS · MIS",
+    eyebrowRw: "SISITEMU ZO KUMVA ABATURAGE · CLS & MIS",
+    titleEn: "Community Listening Systems (CLS) and Management Information Systems (MIS)",
+    titleRw: "Community Listening Systems (CLS) and Management Information Systems (MIS)",
+    subtitleEn: "For you & your community",
+    subtitleRw: "Kuri wowe",
+    bodyEn: "Advancing community voices through faith-based and technology-enabled collaboration. Join our network supporting health, unity, and sustainable systems across Rwanda.",
+    bodyRw: "Guteza imbere amajwi y'umuryango binyuze mu bufatanye bushingiye ku myemerere. Jya mu muryango wacu w'iyobokamana ushyigikira ubuzima, ubumwe, n'iterambere rirambye mu Rwanda.",
+    badgeEn: "Share your idea now",
+    badgeRw: "Tanga igitekerezo ubu",
+    badgeHref: "/connect",
+    cardTitleEn: "Training & Fieldwork Outcomes",
+    cardTitleRw: "Ibyavuye mu Mahugurwa",
+    statLabelEn: "Community Health & Tech Advisors",
+    statLabelRw: "Abajyanama b'Ubuzima b'Abaturage",
+    statValueEn: "450+ Trained",
+    statValueRw: "450+ bahuguwe",
+    image: "/images/graduates.jpg",
   },
   {
-    eyebrow: "IOT · CONNECT",
-    title: ["Connect the", "real world."],
-    body: "Connected devices and data flows that make operations more visible, responsive, and human.",
-    featureLabel: "IoT & embedded systems",
-    features: [
-      { title: "Sense", detail: "Listen to the world through connected devices." },
-      { title: "Connect", detail: "Move live data where it creates value." },
-      { title: "Respond", detail: "Make operations visible and responsive." },
-    ],
-    background: "linear-gradient(135deg, #ecfeff 0%, #f8fafc 52%, #f0fdf4 100%)",
-    accent: "#0891b2",
+    id: "e-visitors",
+    gallery: [heroImageItems[7], heroImageItems[8], heroImageItems[6]],
+    eyebrowEn: "E-VISITORS · FLAGSHIP PRODUCT",
+    eyebrowRw: "E-VISITORS · SISITEMU Y'ABASHYITSI",
+    titleEn: "Smart Visitor, Access & Attendance Management Platform",
+    titleRw: "Kwakira Abashyitsi no Gucunga Ibigo mu Buryo Bugezweho bwa E-Visitors",
+    subtitleEn: "Security & Operational Intelligence",
+    subtitleRw: "Umutekano & Ubudasa",
+    bodyEn: "Automated visitor registration, instant badge issuance, ID/OCR scanning, VIP tracking, and real-time security audit trails deployed in 47+ institutions.",
+    bodyRw: "Sisitemu ifasha ibigo bya leta n'iby'abikorera gucunga no kwandika abashyitsi mu buryo bwihuse, bunoze kandi buha umutekano uzuye ibiro n'ahakorerwa.",
+    badgeEn: "Request E-Visitors Demo",
+    badgeRw: "Tangira E-Visitors",
+    badgeHref: "/e-visitors",
+    cardTitleEn: "E-Visitors Deployment",
+    cardTitleRw: "Ibigo Bikoresha E-Visitors",
+    statLabelEn: "Active Deployments",
+    statLabelRw: "Ibigo bya Leta n'Ibyigenga",
+    statValueEn: "47+ Institutions",
+    statValueRw: "47+ Ibigo",
+    video: "/E-VS.mp4",
   },
   {
-    eyebrow: "CYBERSECURITY · PROTECT",
-    title: ["Build trust into", "everything."],
-    body: "Security-minded systems that protect the people, information, and momentum behind your work.",
-    featureLabel: "Cybersecurity",
-    features: [
-      { title: "Harden", detail: "Build protection into the foundation." },
-      { title: "Understand", detail: "See risk before it becomes disruption." },
-      { title: "Keep moving", detail: "Protect trust, people, and momentum." },
-    ],
-    background: "linear-gradient(135deg, #fff1f2 0%, #f8fafc 52%, #fdf2f8 100%)",
-    accent: "#e11d48",
-  },
-  {
-    eyebrow: "SOFTWARE DEVELOPMENT · SHIP",
-    title: ["Build what", "moves people."],
-    body: "From a focused prototype to a platform at scale, we make software that is ready for the real world.",
-    featureLabel: "Software development",
-    features: [
-      { title: "Web products", detail: "Fast, focused experiences for the web." },
-      { title: "Mobile apps", detail: "Useful tools that travel with your team." },
-      { title: "Platforms", detail: "Foundations ready for the next release." },
-    ],
-    background: "linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #f0fdfa 100%)",
-    accent: "#2563eb",
+    id: "software-dev",
+    gallery: [heroImageItems[6], heroImageItems[4], heroImageItems[2]],
+    eyebrowEn: "SOFTWARE DEVELOPMENT & AI · SHIP",
+    eyebrowRw: "IKORANABUHANGA & AI · POROGARAMU",
+    titleEn: "Engineering Resilient Software, AI Systems & Embedded IoT",
+    titleRw: "Twubaka Porogaramu za Mudasobwa, AI na Sisitemu z'Ikoranabuhanga",
+    subtitleEn: "Cutting-edge Modern Stacks",
+    subtitleRw: "Ubuhanga & Ubuziranenge",
+    bodyEn: "From focused prototypes to national-scale platforms, we engineer resilient software using Next.js, Python, TypeScript, Java, Go, and enterprise cloud frameworks.",
+    bodyRw: "Uhereye ku mishinga mito kugeza kuri porogaramu zikomeye z'ibigo bya leta n'ibyigenga, twubaka ikoranabuhanga rikomeye rikoresha indimi zigezweho zo ku rwego rw'isi.",
+    badgeEn: "Explore Innovation Lab",
+    badgeRw: "Reba Innovation Lab",
+    badgeHref: "/innovation-lab",
+    cardTitleEn: "Active Engineering Stacks",
+    cardTitleRw: "Indimi Z'Ikoranabuhanga",
+    statLabelEn: "Supported Languages & Tools",
+    statLabelRw: "Indimi n'Ikoranabuhanga",
+    statValueEn: "9+ Modern Stacks",
+    statValueRw: "9+ Stacks Zikoreshwa",
     visual: "languages",
   },
   {
-    eyebrow: "DIGITAL TRANSFORMATION · SCALE",
-    title: ["Change the way", "work moves."],
-    body: "Clearer processes, connected teams, and digital foundations built for the next chapter.",
-    featureLabel: "Digital transformation",
-    features: [
-      { title: "Integrate", detail: "Bring disconnected systems into one view." },
-      { title: "Simplify", detail: "Replace friction with clear processes." },
-      { title: "Align", detail: "Help teams move in the same direction." },
-    ],
-    background: "linear-gradient(135deg, #f5f3ff 0%, #f8fafc 52%, #ecfeff 100%)",
-    accent: "#6d28d9",
+    id: "san-hub",
+    gallery: [heroImageItems[3], heroImageItems[5], heroImageItems[7]],
+    eyebrowEn: "SAN HUB · DIGITAL ECOSYSTEM",
+    eyebrowRw: "SAN HUB · GUHANGA UDUSHYA",
+    titleEn: "Practical Capacity Building for the Next Generation of African Creators",
+    titleRw: "Urubuga rwo Kwiga no Guhanga Udushya ku Urubyiruko rw'u Rwanda n'Afurika",
+    subtitleEn: "Curiosity into Capability",
+    subtitleRw: "Ubumenyi & Amahirwe",
+    bodyEn: "Hands-on bootcamps, apprenticeships, verified certifications, and mentorship equipping youth with high-demand engineering and AI skills.",
+    bodyRw: "Amahugurwa y'ikoranabuhanga, ubumenyi bugezweho muri AI, ubuhanga bwo gukora porogaramu, no guhuza urubyiruko n'amahirwe yo kwiteza imbere.",
+    badgeEn: "Join SAN HUB Cohort",
+    badgeRw: "Injira muri SAN HUB",
+    badgeHref: "/san-hub",
+    cardTitleEn: "SAN HUB Ecosystem",
+    cardTitleRw: "SAN HUB Hub & Innovation",
+    statLabelEn: "Graduates & Active Members",
+    statLabelRw: "Urubyiruko n'Abanyeshuri",
+    statValueEn: "2,500+ Graduates",
+    statValueRw: "2,500+ Bahuguwe",
+    visual: "recognition",
   },
-  {
-    eyebrow: "INNOVATION · EXPLORE",
-    title: ["Find the next", "possibility."],
-    body: "Research, partnerships, and bold experiments that turn useful questions into new directions.",
-    featureLabel: "Innovation Lab",
-    features: [
-      { title: "Question", detail: "Start with the problem worth solving." },
-      { title: "Prototype", detail: "Make new possibilities tangible early." },
-      { title: "Partner", detail: "Grow ideas through shared expertise." },
-    ],
-    background: "linear-gradient(135deg, #f0f9ff 0%, #f8fafc 52%, #e0e7ff 100%)",
-    accent: "#0284c7",
-  },
-  {
-    eyebrow: "SAN HUB · GROW",
-    title: ["Learn something.", "Build something."],
-    body: "Practical pathways for people ready to turn curiosity into capability.",
-    featureLabel: "SAN HUB ecosystem",
-    features: [
-      { title: "Learn", detail: "Practical pathways into new capability." },
-      { title: "Connect", detail: "A community that turns knowledge outward." },
-      { title: "Contribute", detail: "Track progress from skill to impact." },
-    ],
-    background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 52%, #ecfdf5 100%)",
-    accent: "#059669",
-  },
-  {
-    eyebrow: "E-VISITORS · WELCOME",
-    title: ["Make every", "arrival count."],
-    body: "A calmer, smarter way to understand the people and places you serve.",
-    featureLabel: "Smart visitor operations",
-    features: [
-      { title: "Welcome", detail: "Make every arrival feel considered." },
-      { title: "Guide", detail: "Give people a clear path through the space." },
-      { title: "Remember", detail: "Turn visits into useful operational insight." },
-    ],
-    background: "linear-gradient(135deg, #fffbeb 0%, #f8fafc 52%, #f0fdfa 100%)",
-    accent: "#d97706",
-    video: "/E-VS.mp4",
-  },
-];
-
-const ctaLinks = [
-  { label: "Explore Our Solutions", href: "/innovation-lab" },
-  { label: "Join SAN HUB", href: "/san-hub" },
-  { label: "Discover E-Visitors", href: "/e-visitors" },
 ];
 
 const programmingLanguages = [
@@ -183,165 +204,67 @@ type ProgrammingLanguage = (typeof programmingLanguages)[number] & { icon: IconT
 const outerLanguages = programmingLanguages.filter((_, index) => index % 2 === 0);
 const innerLanguages = programmingLanguages.filter((_, index) => index % 2 !== 0);
 
-const recognitionItems = [
-  { src: "/certificates/recognition-digital-innovation.png", alt: "SAN TECH digital innovation recognition concept" },
-  { src: "/certificates/recognition-community-impact.png", alt: "SAN TECH community impact recognition concept" },
-  { src: "/certificates/recognition-technology-excellence.png", alt: "SAN TECH technology excellence recognition concept" },
-  { src: "/troph.jpg", alt: "SAN TECH Best Exhibitor recognition" },
-  { src: "/certificates/edtech-trust-seal.png", alt: "SAN TECH EdTech trust seal" },
-];
+const slideImpactIndexes: Record<string, number[]> = {
+  "santech-lead": [0, 1, 2],
+  "cls-mis": [1, 3, 5],
+  "e-visitors": [2, 4, 0],
+  "software-dev": [3, 4, 2],
+  "san-hub": [5, 0, 3],
+};
 
 function LanguageCard({ language }: { language: ProgrammingLanguage }) {
   const Icon = language.icon;
-
   return (
-    <div className="flex size-12 items-center justify-center rounded-xl border border-slate-200/90 bg-white shadow-[0_4px_14px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-300 hover:scale-115 hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] sm:size-14" title={language.name} aria-label={language.name}>
-      <Icon className="size-6 sm:size-7" style={{ color: language.color }} aria-hidden="true" />
+    <div 
+      className="flex size-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:scale-110 sm:size-13" 
+      title={language.name} 
+      aria-label={language.name}
+    >
+      <Icon className="size-5 sm:size-6" style={{ color: language.color }} aria-hidden="true" />
     </div>
   );
-}
-
-function RecognitionSpiral() {
-  return (
-    <div className="relative size-full overflow-hidden">
-      <InfiniteSpiral items={recognitionItems} animationMode="all" speed={0.24} radius={205} cardWidth={156} cardHeight={148} verticalSpacing={58} perspective={1000} cardRadius={10} centerScale={1.2} edgeBlur={0} cardsPerTurn={7} pauseOnHover cardTilt={-1} edgeFade={0.25} imageFit="contain" className="relative z-10" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-20 text-center">
-        <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-brand-secondary">Trust & recognition</p>
-        <p className="mt-1 text-xs font-medium text-slate-500">Moving with the SAN TECH story</p>
-      </div>
-    </div>
-  );
-}
-
-function HeroCtas({ video }: { video: boolean }) {
-  return (
-    <div data-portal-copy={video ? "true" : undefined} data-video-actions={video ? "true" : undefined} className={`relative z-30 flex w-max max-w-[calc(100vw-2rem)] flex-nowrap gap-2.5 overflow-x-auto pb-1 ${video ? "absolute left-1/2 top-[62%] mx-auto -translate-x-1/2 justify-center" : "mt-8"}`}>
-      {ctaLinks.map((cta, ctaIndex) => (
-        <Link key={cta.label} href={cta.href} className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-xl px-5 py-3 text-sm font-bold tracking-wide transition-all ${ctaIndex === 0 ? "bg-brand-secondary text-white shadow-md hover:bg-[#1519ad] hover:shadow-lg" : "border border-slate-200/90 bg-white/80 text-slate-800 shadow-sm backdrop-blur-sm hover:border-slate-300 hover:bg-white hover:shadow"}`}>
-          {cta.label}<ArrowUpRight className="h-3.5 w-3.5" />
-        </Link>
-      ))}
-    </div>
-  );
-}
-
-function SlideFeatureRail({ slide }: { slide: HeroSlide }) {
-  const video = Boolean(slide.video);
-  const tone = video ? "text-white" : "text-slate-900";
-  const rule = video ? "border-white/25" : "border-slate-900/15";
-  const muted = video ? "text-white/65" : "text-slate-500";
-  const accent = slide.eyebrow.startsWith("E-VISITORS") ? "text-brand-secondary" : video ? "text-white" : "text-brand-secondary";
-
-  return (
-    <div data-portal-copy className={`absolute bottom-16 left-7 z-20 max-w-[min(680px,calc(100%-2rem))] sm:bottom-20 sm:left-12 lg:bottom-14 lg:left-16 ${tone}`}>
-      <div className="flex items-center gap-3">
-        <span className={`h-px w-8 ${video ? "bg-white/70" : "bg-brand-secondary"}`} aria-hidden="true" />
-        <p className={`text-[10px] font-black uppercase tracking-[0.24em] ${accent}`}>{slide.featureLabel}</p>
-        <span className={`hidden text-[10px] font-bold tracking-[0.18em] sm:inline ${muted}`}>/ 03</span>
-      </div>
-      <div className={`mt-4 grid grid-cols-1 border-y ${rule} sm:grid-cols-3`}>
-        {slide.stats ? slide.stats.map((stat) => (
-          <div key={stat.label} className={`min-w-24 py-3 pr-5 sm:py-4 ${rule} sm:border-r sm:last:border-r-0 sm:pl-5 sm:first:pl-0`}>
-            <p data-counter data-counter-target={stat.target} data-counter-suffix={stat.suffix ?? ""} className={`text-3xl font-light leading-none tracking-[-0.06em] sm:text-4xl ${video ? "text-white" : "text-brand-secondary"}`}>{stat.value}</p>
-            <p className={`mt-2 text-[10px] font-bold uppercase tracking-[0.12em] ${muted}`}>{stat.label}</p>
-          </div>
-        )) : slide.features.map((feature, featureIndex) => (
-          <div key={feature.title} className={`group relative py-3 pr-5 sm:py-4 ${rule} sm:border-r sm:last:border-r-0 sm:pl-5 sm:first:pl-0`}>
-            <div className="flex items-center gap-2">
-              <span className={`text-[10px] font-black tracking-[0.16em] ${muted}`}>{String(featureIndex + 1).padStart(2, "0")}</span>
-              <span className={`h-1.5 w-1.5 rounded-full ${video ? "bg-white" : "bg-brand-secondary"}`} aria-hidden="true" />
-            </div>
-            <p className={`mt-2 text-sm font-black tracking-[-0.02em] ${accent}`}>{feature.title}</p>
-            <p className={`mt-1 max-w-40 text-[11px] leading-relaxed ${muted}`}>{feature.detail}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ImigongoPattern({ id }: { id: string }) {
-  return (
-    <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-[0.11] mix-blend-multiply" viewBox="0 0 800 800" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <pattern id={id} width="240" height="240" patternUnits="userSpaceOnUse">
-          <path d="M120 0 240 120 120 240 0 120Z" fill="none" stroke="#0B0E87" strokeWidth="2" />
-          <path d="M120 28 212 120 120 212 28 120Z" fill="none" stroke="#0B0E87" strokeWidth="1.25" />
-          <path d="M120 64 176 120 120 176 64 120Z" fill="#0B0E87" fillOpacity="0.12" />
-          <path d="M0 0 120 120 0 240ZM240 0 120 120 240 240Z" fill="#0B0E87" fillOpacity="0.05" />
-          <circle cx="120" cy="120" r="7" fill="#0B0E87" fillOpacity="0.2" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill={`url(#${id})`} />
-    </svg>
-  );
-}
-
-function getVideoMotionTargets(copy: HTMLElement, actions: HTMLElement) {
-  if (window.innerWidth < 768) return null;
-
-  const copyBounds = copy.getBoundingClientRect();
-  const actionBounds = actions.getBoundingClientRect();
-  const copyScale = 0.8;
-  const actionScale = 0.82;
-  // Keep the animated copy on the same horizontal rail as the desktop header.
-  const copyLeft = window.innerWidth >= 1024 ? 64 : 48;
-  const copyTop = Math.min(Math.max(window.innerHeight * 0.2, 140), 220);
-  const actionRight = window.innerWidth >= 640 ? 104 : 84;
-  const actionBottom = window.innerWidth >= 640 ? 96 : 80;
-  const actionLeft = window.innerWidth - actionRight - actionBounds.width * actionScale;
-  const actionTop = window.innerHeight - actionBottom - actionBounds.height * actionScale;
-
-  return {
-    copyX: copyLeft + (copyBounds.width * copyScale) / 2 - (copyBounds.left + copyBounds.width / 2),
-    copyY: copyTop + (copyBounds.height * copyScale) / 2 - (copyBounds.top + copyBounds.height / 2),
-    actionX: actionLeft + (actionBounds.width * actionScale) / 2 - (actionBounds.left + actionBounds.width / 2),
-    actionY: actionTop + (actionBounds.height * actionScale) / 2 - (actionBounds.top + actionBounds.height / 2),
-    copyScale,
-    actionScale,
-  };
-}
-
-function formatCounterValue(value: number, suffix: string) {
-  if (suffix === "k+") return `${Math.floor(value / 1000)}k+`;
-  return `${Math.round(value)}${suffix}`;
-}
-
-function createCounterAnimation(counters: NodeListOf<HTMLElement>, reduceMotion: boolean) {
-  const timeline = gsap.timeline();
-
-  counters.forEach((counter, index) => {
-    const target = Number(counter.dataset.counterTarget ?? 0);
-    const suffix = counter.dataset.counterSuffix ?? "";
-    const value = { current: 0 };
-
-    if (reduceMotion) {
-      counter.textContent = formatCounterValue(target, suffix);
-      return;
-    }
-
-    counter.textContent = formatCounterValue(0, suffix);
-    timeline.to(value, { current: target, duration: 1.15, ease: "power2.out", onUpdate: () => { counter.textContent = formatCounterValue(value.current, suffix); } }, index * 0.08);
-  });
-
-  return timeline;
 }
 
 export function HeroVisual() {
-  const scope = useRef<HTMLDivElement>(null);
-  const previousSlide = useRef(0);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [impactIndex, setImpactIndex] = useState(0);
+  const [language, setLanguage] = useState<Language>("en");
+  const previousSlide = useRef(0);
+  const slideContainerRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const slideCardRef = useRef<HTMLDivElement>(null);
+  const impactStackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) return;
+    const savedLang = localStorage.getItem("santech_lang") as Language | null;
+    if (savedLang === "en" || savedLang === "rw") {
+      setLanguage(savedLang);
+    }
 
-    const advanceAfterVideo = () => setActiveSlide((current) => (current + 1) % slides.length);
+    const handleLangChange = (event: Event) => {
+      const detail = (event as CustomEvent<{ lang?: Language }>).detail;
+      if (detail?.lang) {
+        setLanguage(detail.lang);
+      }
+    };
+
+    window.addEventListener("santech-language-change", handleLangChange);
+    return () => window.removeEventListener("santech-language-change", handleLangChange);
+  }, []);
+
+  // Auto advance slides unless current is a video that handles its own timing
+  useEffect(() => {
+    const advanceAfterVideo = () => setActiveSlide((current) => (current + 1) % heroSlides.length);
     window.addEventListener("santech-hero-video-ended", advanceAfterVideo);
 
-    if (slides[activeSlide]?.video) return () => window.removeEventListener("santech-hero-video-ended", advanceAfterVideo);
+    if (heroSlides[activeSlide]?.video) {
+      return () => window.removeEventListener("santech-hero-video-ended", advanceAfterVideo);
+    }
 
-    const timer = window.setTimeout(() => setActiveSlide((current) => (current + 1) % slides.length), 5600);
+    const timer = window.setTimeout(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 7000);
+
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener("santech-hero-video-ended", advanceAfterVideo);
@@ -349,119 +272,398 @@ export function HeroVisual() {
   }, [activeSlide]);
 
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent("santech-hero-theme", { detail: { dark: Boolean(slides[activeSlide]?.video) } }));
+    setImpactIndex(0);
+    const timer = window.setInterval(() => {
+      setImpactIndex((current) => (current + 1) % 3);
+    }, 2600);
+
+    return () => window.clearInterval(timer);
   }, [activeSlide]);
 
   useGSAP(() => {
-    const incoming = scope.current?.querySelector<HTMLElement>(`[data-slide="${activeSlide}"]`);
+    const incoming = slideContainerRef.current?.querySelector<HTMLElement>(`[data-slide-index="${activeSlide}"]`);
     if (!incoming) return;
-    const outgoing = scope.current?.querySelector<HTMLElement>(`[data-slide="${previousSlide.current}"]`) ?? incoming;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const incomingCopy = incoming.querySelectorAll<HTMLElement>("[data-portal-copy]");
-    const incomingCounters = incoming.querySelectorAll<HTMLElement>("[data-counter]");
-    const counterTimeline = createCounterAnimation(incomingCounters, reduceMotion);
-    const incomingMark = incoming.querySelector<HTMLElement>("[data-portal-mark]") ?? incoming;
-    const incomingVideoCopy = incoming.querySelector<HTMLElement>("[data-video-copy]");
-    const incomingVideoActions = incoming.querySelector<HTMLElement>("[data-video-actions]");
-
-    gsap.set(incoming, { xPercent: 0, yPercent: 0, x: 0, y: 0, scale: 1, rotate: 0 });
-    gsap.set(incomingMark, { x: 0, y: 0, scale: 1, rotate: 0 });
-    if (incomingVideoCopy && incomingVideoActions) {
-      gsap.set(incomingVideoCopy, { x: 0, y: 0, scale: 1 });
-      gsap.set(incomingVideoActions, { x: 0, y: 0, scale: 1 });
-    }
-    const videoTargets = incomingVideoCopy && incomingVideoActions ? getVideoMotionTargets(incomingVideoCopy, incomingVideoActions) : null;
-    const initialMount = previousSlide.current === activeSlide;
-
-    if (reduceMotion || initialMount) {
-      gsap.set("[data-portal-slide]", { autoAlpha: 0, xPercent: 0, scale: 1 });
+    const outgoing = slideContainerRef.current?.querySelector<HTMLElement>(`[data-slide-index="${previousSlide.current}"]`) ?? incoming;
+    
+    if (previousSlide.current === activeSlide) {
+      gsap.set("[data-hero-slide-item]", { autoAlpha: 0 });
       gsap.set(incoming, { autoAlpha: 1 });
-      gsap.set(incomingCopy, { autoAlpha: 1, y: 0 });
-      if (reduceMotion && videoTargets && incomingVideoCopy && incomingVideoActions) {
-        gsap.set(incomingVideoCopy, { x: videoTargets.copyX, y: videoTargets.copyY, scale: videoTargets.copyScale });
-        gsap.set(incomingVideoActions, { x: videoTargets.actionX, y: videoTargets.actionY, scale: videoTargets.actionScale });
-      }
-      previousSlide.current = activeSlide;
-
-      if (!reduceMotion && initialMount && videoTargets && incomingVideoCopy && incomingVideoActions) {
-        const introTimeline = gsap.timeline({ defaults: { overwrite: "auto" } });
-        introTimeline.to(incomingVideoCopy, { x: videoTargets.copyX, y: videoTargets.copyY, scale: videoTargets.copyScale, duration: 1.1, delay: 1.2, ease: "power3.inOut" }).to(incomingVideoActions, { x: videoTargets.actionX, y: videoTargets.actionY, scale: videoTargets.actionScale, duration: 1.1, ease: "power3.inOut" }, "<");
-        return () => { introTimeline.kill(); counterTimeline.kill(); };
-      }
-
-      return () => counterTimeline.kill();
+      return;
     }
 
-    const timeline = gsap.timeline({ defaults: { overwrite: "auto" } });
-    timeline.to(outgoing, { autoAlpha: 0, xPercent: -10, scale: 1.12, duration: 0.72, ease: "power3.inOut" }, 0).fromTo(incoming, { autoAlpha: 0, xPercent: 12, scale: 1.14 }, { autoAlpha: 1, xPercent: 0, scale: 1, duration: 0.92, ease: "power3.out" }, 0.12).fromTo(incomingCopy, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.48, stagger: 0.06, ease: "power2.out" }, 0.44).fromTo(incomingMark, { scale: 0.84, rotate: -4 }, { scale: 1, rotate: 0, duration: 0.8, ease: "back.out(1.2)" }, 0.2);
-
-    if (videoTargets && incomingVideoCopy && incomingVideoActions) {
-      timeline.to(incomingVideoCopy, { x: videoTargets.copyX, y: videoTargets.copyY, scale: videoTargets.copyScale, duration: 1.1, ease: "power3.inOut" }, 1.25).to(incomingVideoActions, { x: videoTargets.actionX, y: videoTargets.actionY, scale: videoTargets.actionScale, duration: 1.1, ease: "power3.inOut" }, "<");
-    }
+    gsap.timeline({ defaults: { overwrite: "auto" } })
+      .to(outgoing, { autoAlpha: 0, duration: 0.5, ease: "power2.inOut" }, 0)
+      .fromTo(incoming, { autoAlpha: 0, scale: 1.02 }, { autoAlpha: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0.1);
 
     previousSlide.current = activeSlide;
-    return () => { timeline.kill(); counterTimeline.kill(); };
-  }, { scope, dependencies: [activeSlide] });
+  }, { scope: slideContainerRef, dependencies: [activeSlide] });
+
+  const currentSlide = heroSlides[activeSlide];
+  const activeGallery = currentSlide.gallery;
+  const activeImpactStats = (slideImpactIndexes[currentSlide.id] ?? [0, 1, 2]).map((statIndex) => dynamicStats[statIndex]);
+  const metricOptions = currentSlide.id === "santech-lead"
+    ? activeImpactStats
+    : [{
+        value: language === "rw" ? currentSlide.statValueRw : currentSlide.statValueEn,
+        label: language === "rw" ? currentSlide.statLabelRw : currentSlide.statLabelEn,
+      }];
+  const activeMetricIndex = currentSlide.id === "santech-lead" ? impactIndex : 0;
+
+  useGSAP(() => {
+    const cards = galleryRef.current?.querySelectorAll<HTMLElement>("[data-gallery-card]");
+    if (!cards?.length) return;
+
+    gsap.fromTo(
+      cards,
+      { autoAlpha: 0, y: 14, scale: 0.97 },
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.08, ease: "power2.out", overwrite: true },
+    );
+  }, { scope: galleryRef, dependencies: [activeSlide] });
+
+  useGSAP(() => {
+    const card = slideCardRef.current;
+    if (!card) return;
+
+    gsap.fromTo(
+      card,
+      { autoAlpha: 0, y: 36 },
+      { autoAlpha: 1, y: 0, duration: 0.65, delay: 0.12, ease: "power3.out", overwrite: true },
+    );
+  }, { scope: slideCardRef, dependencies: [activeSlide] });
+
+  useGSAP(() => {
+    const stack = impactStackRef.current;
+    if (!stack) return;
+
+    const cards = stack.querySelectorAll<HTMLElement>("[data-impact-card]");
+    const activeCard = stack.querySelector<HTMLElement>(`[data-impact-index="${activeMetricIndex}"]`);
+    if (!cards.length || !activeCard) return;
+
+    gsap.set(cards, { autoAlpha: 0, y: 10 });
+    gsap.to(activeCard, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out", overwrite: true });
+  }, { scope: impactStackRef, dependencies: [activeSlide, activeMetricIndex] });
+
 
   return (
-    <div ref={scope} className="relative mx-auto h-screen w-full max-w-none overflow-hidden rounded-none border-0 bg-slate-50 shadow-none">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_35%,rgba(59,130,246,0.09),transparent_48%),radial-gradient(circle_at_20%_80%,rgba(13,148,136,0.08),transparent_45%)]" />
-      <div className="absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(15,23,42,0.12)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_70%,transparent_100%)]" />
-      <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.05)_1px,transparent_1px)] [background-size:64px_64px]" />
+    <div className="relative h-full min-h-0 w-full overflow-hidden bg-slate-100/70 p-3 sm:p-4 lg:p-5">
+      {/* 3-Column / Asymmetrical Layout Matching User's Reference with #333292 Brand Scheme */}
+      <div className="mx-auto flex h-full min-h-0 max-w-[1440px] flex-col">
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12 lg:items-stretch">
+          
+          {/* ========================================================
+              LEFT COLUMN: Active Slide Showcase (~6 cols on desktop)
+             ======================================================== */}
+          <div className="relative lg:col-span-6 xl:col-span-6 flex flex-col justify-between overflow-hidden rounded-none bg-[#1e1b4b] shadow-xl border border-slate-200/40 min-h-[380px] sm:min-h-[460px] lg:min-h-full">
+            
+            {/* Slide media container */}
+            <div ref={slideContainerRef} className="absolute inset-0 size-full overflow-hidden">
+              {heroSlides.map((slide, index) => (
+                <div
+                  key={slide.id}
+                  data-hero-slide-item
+                  data-slide-index={index}
+                  className="absolute inset-0 size-full overflow-hidden"
+                >
+                  {slide.video ? (
+                    <HeroVideoPlayer
+                      src={slide.video}
+                      isActive={activeSlide === index}
+                      label={slide.titleEn}
+                    />
+                  ) : slide.visual === "languages" ? (
+                    <div className="relative flex size-full items-center justify-center bg-gradient-to-br from-[#1e1b4b] via-[#333292] to-slate-950 p-6">
+                      <div className="relative aspect-square w-[75%] max-w-[360px]">
+                        <div className="relative size-full">
+                          <OrbitingCircles radius={135} duration={28} iconSize={44}>
+                            {outerLanguages.map((lang) => (
+                              <LanguageCard key={lang.name} language={lang} />
+                            ))}
+                          </OrbitingCircles>
+                        </div>
+                        <div className="absolute inset-0">
+                          <OrbitingCircles radius={80} duration={20} iconSize={44} reverse>
+                            {innerLanguages.map((lang) => (
+                              <LanguageCard key={lang.name} language={lang} />
+                            ))}
+                          </OrbitingCircles>
+                        </div>
+                      </div>
+                    </div>
+                  ) : slide.visual === "recognition" ? (
+                    <div className="relative flex size-full items-center justify-center bg-gradient-to-br from-[#1e1b4b] via-[#333292] to-slate-950 p-4">
+                      <div className="relative size-full overflow-hidden">
+                        <InfiniteSpiral
+                          items={[...activeGallery]}
+                          animationMode="all"
+                          speed={0.25}
+                          radius={160}
+                          cardWidth={130}
+                          cardHeight={120}
+                          verticalSpacing={48}
+                          perspective={800}
+                          cardRadius={8}
+                          centerScale={1.15}
+                          edgeBlur={0}
+                          cardsPerTurn={6}
+                          pauseOnHover
+                          edgeFade={0.2}
+                          imageFit="contain"
+                        />
+                      </div>
+                    </div>
+                  ) : slide.image ? (
+                    <div className="relative size-full">
+                      <Image
+                        src={slide.image}
+                        alt={slide.titleEn}
+                        fill
+                        className="object-cover object-center"
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
 
-      {slides.map((slide, index) => (
-        <div key={slide.eyebrow} data-portal-slide data-slide={index} className="absolute inset-0 overflow-hidden px-7 pb-8 pt-28 sm:px-12 sm:pb-12 sm:pt-32 lg:px-16 lg:pb-14 lg:pt-36" style={{ background: slide.background }}>
-          <ImigongoPattern id={`imigongo-${index}`} />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-56 bg-gradient-to-b from-black/30 via-black/10 to-transparent sm:h-64" />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-48 bg-gradient-to-t from-black/30 via-black/10 to-transparent sm:h-56" />
-          {slide.visual === "languages" ? (
-            <div className="absolute right-10 top-1/2 aspect-square w-[50%] max-w-[520px] -translate-y-1/2 sm:right-16 sm:w-[45%] lg:right-24 lg:w-[42%] xl:w-[38%]" aria-label="Programming languages orbiting the software development hub">
-              <div className="relative size-full"><OrbitingCircles radius={205} duration={32} iconSize={54}>{outerLanguages.map((language) => <LanguageCard key={language.name} language={language} />)}</OrbitingCircles></div>
-              <div className="absolute inset-0"><OrbitingCircles radius={125} duration={24} iconSize={54} reverse>{innerLanguages.map((language) => <LanguageCard key={language.name} language={language} />)}</OrbitingCircles></div>
-            </div>
-          ) : (
-            <div data-portal-mark className={slide.video ? "absolute inset-0 z-0 overflow-hidden" : "absolute right-10 top-1/2 flex aspect-square w-[50%] -translate-y-1/2 items-center justify-end overflow-hidden rounded-xl sm:right-16 sm:w-[45%] lg:right-24 lg:w-[42%] xl:w-[38%]"}>
-              {slide.video ? <HeroStoryVideo src={slide.video} label={`${slide.eyebrow.split(" · ")[0]} story video`} isActive={activeSlide === index} /> : <RecognitionSpiral />}
-            </div>
-          )}
+            {/* Subtle top gradient overlay */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-black/50 to-transparent" />
 
-          <div className={`relative z-10 flex h-full w-full flex-col justify-center ${slide.video ? "mx-auto max-w-4xl items-start text-left" : "-translate-y-10 max-w-[92%] sm:-translate-y-12 sm:max-w-[75%] lg:-translate-y-16 lg:max-w-[58%] xl:-translate-y-20 xl:max-w-[54%]"}`}>
-            <div data-video-copy={slide.video ? "true" : undefined} className={slide.video ? "w-full" : undefined}>
-              <h2 data-portal-copy className={`font-exo ${slide.video ? "max-w-none text-[clamp(1.75rem,5.2vw,5.5rem)] text-white drop-shadow-[0_5px_16px_rgba(0,0,0,0.65)]" : "max-w-2xl text-[clamp(2.75rem,5.2vw,5.5rem)] text-slate-900"} font-black leading-[0.94] tracking-[-0.06em]`}>
-                {(slide.video ? [slide.title.join(" ")] : slide.title).map((line, lineIndex) => <span key={`${slide.eyebrow}-${lineIndex}`} className="block whitespace-nowrap">{line}</span>)}
-              </h2>
-              <p data-portal-copy className={`mt-5 max-w-[520px] text-base font-medium leading-relaxed sm:text-lg ${slide.video ? "text-white/75" : "text-slate-600"}`}>{slide.body}</p>
+            {/* LOWER OVERLAY CARD (Bottom-Left Badge from Reference in #333292) */}
+            <div className="relative z-20 mt-auto p-4 sm:p-6">
+              <div ref={slideCardRef} className="relative w-full max-w-lg overflow-hidden rounded-xl border border-white/20 bg-[#333292]/95 p-4 text-white shadow-2xl backdrop-blur-md will-change-transform sm:p-5">
+                <div className="flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-[#00A3E0] animate-pulse" />
+                  <h3 className="text-base sm:text-lg font-bold tracking-tight text-white drop-shadow-xs">
+                    {currentSlide.id === "santech-lead"
+                      ? language === "rw" ? "SAN TECH mu Mibare" : "SAN TECH at a Glance"
+                      : language === "rw" ? currentSlide.cardTitleRw : currentSlide.cardTitleEn}
+                  </h3>
+                </div>
+
+                <div ref={impactStackRef} className="relative mt-3 min-h-[91px]" aria-live="polite">
+                  {metricOptions.map((impact, index) => {
+                    const isActive = index === activeMetricIndex;
+                    return (
+                      <div
+                        key={impact.label}
+                        data-impact-card
+                        data-impact-index={index}
+                        aria-hidden={!isActive}
+                        className={`px-1 py-3 ${isActive ? "relative" : "pointer-events-none absolute inset-0 opacity-0"}`}
+                      >
+                        <div className="flex items-end justify-between gap-4">
+                          <div>
+                            <p className="font-exo text-3xl font-black leading-none tracking-[-0.05em] text-white sm:text-4xl">{impact.value}</p>
+                            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/65">{impact.label}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+              </div>
+
+              {/* Slider Dots at Bottom Left */}
+              <div className="mt-4 flex items-center gap-2" aria-label="Hero slide indicators">
+                {heroSlides.map((slide, idx) => (
+                  <button
+                    key={slide.id}
+                    type="button"
+                    onClick={() => setActiveSlide(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`transition-all duration-300 rounded-full ${
+                      idx === activeSlide
+                        ? "h-2.5 w-8 bg-white shadow-md"
+                        : "size-2.5 bg-white/50 hover:bg-white/80"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
-            <HeroCtas video={Boolean(slide.video)} />
           </div>
-          <SlideFeatureRail slide={slide} />
+
+          {/* ========================================================
+              CENTER COLUMN: 3 Vertical Photo/Story Cards (~2 cols)
+             ======================================================== */}
+          <div ref={galleryRef} className="hidden md:flex lg:col-span-2 xl:col-span-2 flex-col justify-between gap-3">
+            {activeGallery.map((image, imageIndex) => (
+              <div
+                key={`${activeSlide}-${image.src}`}
+                data-gallery-card
+                onClick={() => setActiveSlide((activeSlide + imageIndex + 1) % heroSlides.length)}
+                className={`group relative flex-1 min-h-[120px] cursor-pointer overflow-hidden rounded-none border border-slate-200/80 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${imageIndex === 1 ? "grid grid-cols-5 bg-[#333292]" : "bg-white"}`}
+              >
+                <div className={imageIndex === 1 ? "relative col-span-3 h-full" : "relative size-full"}>
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 30vw, 20vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                </div>
+                {imageIndex === 1 ? (
+                  <div className="col-span-2 flex flex-col items-center justify-center bg-[#333292] p-2 text-center text-white">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-cyan-300">SAN TECH</span>
+                    <p className="mt-0.5 text-[10px] font-bold leading-tight">
+                      {language === "rw" ? "Ibyerekanwa" : "In focus"}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="absolute inset-x-2.5 bottom-2.5 text-white">
+                    <p className="text-[11px] font-bold leading-tight drop-shadow-xs">{image.alt.replace("SAN TECH ", "")}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* ========================================================
+              RIGHT COLUMN: #333292 Deep Blue Info & Branding Card (~4-5 cols)
+             ======================================================== */}
+          <div className="relative lg:col-span-4 xl:col-span-4 flex flex-col items-center justify-between overflow-hidden rounded-none border-l-4 border-[#333292] bg-[#f7f8fc] p-5 text-center text-slate-950 shadow-xl sm:p-7 lg:p-8">
+            
+            <div className="relative z-10 flex w-full max-w-xl flex-col items-center">
+              {/* Simple slide marker: clear, editorial, and tied to the active story. */}
+              <div className="flex items-center justify-center gap-3">
+                <span className="h-px w-8 bg-[#333292]" aria-hidden="true" />
+                <Link
+                  href={currentSlide.badgeHref}
+                  className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#333292] transition-colors hover:text-[#1519ad]"
+                >
+                  <span>{language === "rw" ? currentSlide.badgeRw : currentSlide.badgeEn}</span>
+                </Link>
+                <span className="h-px w-8 bg-[#333292]" aria-hidden="true" />
+              </div>
+
+              {/* Main Heading */}
+              <h1 className="font-exo mx-auto mt-5 max-w-lg text-xl font-black leading-[1.08] tracking-[-0.04em] text-slate-950 sm:text-2xl lg:text-[2.1rem]">
+                {language === "rw" ? currentSlide.titleRw : currentSlide.titleEn}
+              </h1>
+
+              {/* Subheading */}
+              <p className="mt-3 max-w-md text-xs font-semibold tracking-wide text-[#333292] sm:text-sm">
+                {language === "rw" ? currentSlide.subtitleRw : currentSlide.subtitleEn}
+              </p>
+
+              {/* Description Body */}
+              <p className="mx-auto mt-3 max-w-lg text-xs font-normal leading-relaxed text-slate-600 sm:text-sm">
+                {language === "rw" ? currentSlide.bodyRw : currentSlide.bodyEn}
+              </p>
+
+              {/* Quick CTAs from PDF Section 3.1 */}
+              <div className="mt-7 flex flex-wrap justify-center gap-2">
+                {heroCTAs.map((cta, ctaIdx) => (
+                  <Link
+                    key={cta.label}
+                    href={cta.href}
+                    className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11px] font-bold tracking-wide transition-all ${
+                      ctaIdx === 0
+                        ? "bg-[#333292] text-white hover:bg-[#1519ad] shadow-sm"
+                        : "border border-slate-300 bg-white text-slate-700 hover:border-[#333292] hover:text-[#333292]"
+                    }`}
+                  >
+                    <span>{cta.label}</span>
+                    <ArrowRight className="size-3" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Actions: Social Icons Row & Direct Link */}
+            <div className="relative z-10 mt-6 flex w-full max-w-xl flex-col items-center gap-3 border-t border-slate-200 pt-4">
+              {/* Social Media Circular Buttons */}
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="grid size-8 place-items-center rounded-full bg-white text-slate-600 shadow-sm transition-all duration-200 hover:bg-[#333292] hover:text-white hover:scale-110"
+                >
+                  <FaInstagram className="size-3.5" />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter / X"
+                  className="grid size-8 place-items-center rounded-full bg-white text-slate-600 shadow-sm transition-all duration-200 hover:bg-[#333292] hover:text-white hover:scale-110"
+                >
+                  <FaXTwitter className="size-3" />
+                </a>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="grid size-8 place-items-center rounded-full bg-white text-slate-600 shadow-sm transition-all duration-200 hover:bg-[#333292] hover:text-white hover:scale-110"
+                >
+                  <FaYoutube className="size-3.5" />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="grid size-8 place-items-center rounded-full bg-white text-slate-600 shadow-sm transition-all duration-200 hover:bg-[#333292] hover:text-white hover:scale-110"
+                >
+                  <FaLinkedinIn className="size-3" />
+                </a>
+              </div>
+
+              {/* Direct Quick Link */}
+              <Link
+                href="/connect"
+                className="inline-flex items-center gap-1 text-xs font-bold text-[#333292] transition-colors hover:text-[#1519ad]"
+              >
+                <span>{language === "rw" ? "Twandikire" : "Contact Us"}</span>
+                <ExternalLink className="size-3" />
+              </Link>
+            </div>
+          </div>
         </div>
-      ))}
 
-      <div className="absolute right-5 top-1/2 z-20 -translate-y-1/2 sm:right-8 lg:right-12" aria-label="Hero slides"><div className="flex flex-col items-center gap-2.5">{slides.map((slide, index) => <button key={slide.eyebrow} type="button" aria-label={`Show ${slide.eyebrow.split(" · ")[0]} slide`} onClick={() => setActiveSlide(index)} className={`rounded-full transition-all duration-300 ${index === activeSlide ? "h-8 w-1.5" : "h-1.5 w-1.5 bg-slate-300 hover:bg-slate-400"}`} style={index === activeSlide ? { background: "#0B0E87" } : undefined} />)}</div></div>
-
-      <div data-hero-footer className="absolute inset-x-7 bottom-5 z-20 flex flex-col items-start gap-1.5 sm:inset-x-12 sm:flex-row sm:items-center sm:justify-between lg:inset-x-16">
-        <span className="text-[10px] font-semibold tracking-[0.08em] text-slate-400">© 2026 SAN TECH. All rights reserved.</span>
-        <span className="text-[10px] font-medium text-slate-400">Making your ideas happen.</span>
-        <a href="mailto:info@santechinnovate.com" className="text-[10px] font-semibold text-brand-secondary transition-colors hover:text-slate-900">info@santechinnovate.com</a>
+        <div className="mt-3 grid shrink-0 items-center gap-3 border-t border-slate-300/80 pt-3 text-[10px] sm:grid-cols-[auto_1fr_auto] sm:gap-5">
+          <span className="font-black uppercase tracking-[0.2em] text-[#333292]">Trusted by teams building forward</span>
+          <div className="flex min-w-0 items-center gap-4 overflow-hidden text-slate-500">
+            {clientLogos.slice(0, 4).map((partner) => (
+              <span key={partner.name} className="shrink-0 truncate font-semibold uppercase tracking-[0.08em]" title={partner.name}>
+                {partner.name.replace("National Bank of Rwanda (BNR)", "BNR").replace("KIGEME District Hospital", "Kigeme Hospital")}
+              </span>
+            ))}
+          </div>
+          <span className="text-slate-500 sm:text-right">© 2026 SAN TECH · Kigali, Rwanda</span>
+        </div>
       </div>
+
     </div>
   );
 }
 
-function HeroStoryVideo({ src, label, isActive }: { src: string; label: string; isActive: boolean }) {
+function HeroVideoPlayer({ src, label, isActive }: { src: string; label: string; isActive: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
 
-  function handleEnded() { window.dispatchEvent(new Event("santech-hero-video-ended")); }
+  function handleEnded() {
+    window.dispatchEvent(new Event("santech-hero-video-ended"));
+  }
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = true;
     setMuted(true);
-    if (isActive) void video.play().catch(() => undefined);
-    else video.pause();
+    if (isActive) {
+      void video.play().catch(() => undefined);
+    } else {
+      video.pause();
+    }
   }, [isActive]);
 
   function toggleSound() {
@@ -473,9 +675,24 @@ function HeroStoryVideo({ src, label, isActive }: { src: string; label: string; 
   }
 
   return (
-    <div className="relative h-full w-full bg-slate-950">
-      <video ref={videoRef} className="h-full w-full object-cover" src={src} autoPlay muted playsInline preload="metadata" onEnded={handleEnded} aria-label={label} />
-      <button type="button" onClick={toggleSound} className="absolute bottom-20 right-7 z-10 grid size-10 place-items-center rounded-xl border border-white/30 bg-slate-950/70 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-slate-950 sm:bottom-24 sm:right-12" aria-label={muted ? "Turn video sound on" : "Mute video sound"}>
+    <div className="relative size-full bg-slate-950">
+      <video
+        ref={videoRef}
+        className="size-full object-cover"
+        src={src}
+        autoPlay
+        muted
+        playsInline
+        preload="metadata"
+        onEnded={handleEnded}
+        aria-label={label}
+      />
+      <button
+        type="button"
+        onClick={toggleSound}
+        className="absolute top-4 right-4 z-20 grid size-9 place-items-center rounded-xl border border-white/20 bg-black/60 text-white shadow-lg backdrop-blur-md transition-colors hover:bg-black/80"
+        aria-label={muted ? "Turn video sound on" : "Mute video sound"}
+      >
         {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
       </button>
     </div>

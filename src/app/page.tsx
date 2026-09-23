@@ -1,13 +1,11 @@
-import { HeroVisual } from "@/components/hero-visual";
+import { SantechHomeStage } from "@/components/santech-home-stage";
 import { SiteHeader } from "@/components/site-header";
 
 export default function HomePage() {
   return (
-    <main className="h-screen overflow-hidden bg-slate-50 text-slate-900">
-      <section className="relative isolate h-screen min-h-screen">
-        <SiteHeader />
-        <HeroVisual />
-      </section>
+    <main className="h-svh overflow-hidden bg-slate-100/60 pt-[112px] text-slate-900 sm:pt-[112px]">
+      <SiteHeader />
+      <SantechHomeStage />
     </main>
   );
 }

@@ -4,7 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-brand-secondary: #0B0E87;
+  --color-brand-secondary: #0a1f44;
+  --color-brand-primary: #0a1f44;
+  --color-brand-cyan: #00A3E0;
   --font-sans: "Exo", sans-serif;
   --font-exo: "Exo", sans-serif;
   --font-display: "Exo", sans-serif;
@@ -21,9 +23,11 @@
 }
 
 :root {
-  --brand-secondary: #0B0E87;
+  --brand-secondary: #0a1f44;
+  --brand-primary: #0a1f44;
+  --brand-cyan: #00A3E0;
   --ink: #070b24;
-  --indigo: #4a5cff;
+  --indigo: #0a1f44;
   --mist: #e8eef0;
   --font-sans: "Exo", sans-serif;
   --font-body: "Exo", sans-serif;
@@ -72,6 +76,16 @@ button, a { -webkit-tap-highlight-color: transparent; }
   text-transform: uppercase;
 }
 .eyebrow::before { content: ""; display: block; width: 28px; height: 1px; background: currentColor; opacity: .7; }
+
+@keyframes santech-partner-loop {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.santech-partner-loop {
+  animation: santech-partner-loop 28s linear infinite;
+  will-change: transform;
+}
 
 ::selection { background: var(--brand-secondary); color: #ffffff; }
 
