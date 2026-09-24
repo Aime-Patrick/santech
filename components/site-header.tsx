@@ -72,21 +72,21 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 transition-all">
       <div className="relative overflow-hidden bg-[#0a1f44] text-white">
-        <div className="mx-auto flex min-h-9 max-w-[1600px] items-center justify-between gap-3 px-4 py-1 text-[10px] font-semibold sm:px-6 sm:text-[11px] lg:px-8">
+        <div className="mx-auto flex min-h-10 max-w-[1600px] items-center justify-between gap-3 px-4 py-1.5 text-xs font-semibold sm:px-6 sm:text-[13px] lg:px-8">
           <a href="tel:+250780309833" className="inline-flex shrink-0 items-center gap-2 transition-colors hover:text-[#00A3E0]">
-            <Phone className="size-3.5" />
+            <Phone className="size-4" />
             <span>+250780309833 / +22371005873</span>
           </a>
           <span className="hidden items-center gap-2 md:inline-flex">
-            <MapPin className="size-3.5" />
+            <MapPin className="size-4" />
             <span>Plot 48, KN 1 Road, Sofaru Building; Kigali-Rwanda</span>
           </span>
           <a href="mailto:info@santechinnovate.com" className="hidden items-center gap-2 transition-colors hover:text-[#00A3E0] sm:inline-flex">
-            <Mail className="size-3.5" />
+            <Mail className="size-4" />
             <span>info@santechinnovate.com</span>
           </a>
           <span className="hidden items-center gap-2 lg:inline-flex">
-            <Radio className="size-3.5" />
+            <Radio className="size-4" />
             <span>santech</span>
           </span>
         </div>

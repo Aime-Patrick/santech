@@ -77,16 +77,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .eyebrow::before { content: ""; display: block; width: 28px; height: 1px; background: currentColor; opacity: .7; }
 
-@keyframes santech-partner-loop {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
-
-.santech-partner-loop {
-  animation: santech-partner-loop 28s linear infinite;
-  will-change: transform;
-}
-
 ::selection { background: var(--brand-secondary); color: #ffffff; }
 
 [data-hero-footer] > * {
