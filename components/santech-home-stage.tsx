@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaXTwitter, FaYoutube } from "react-icons/fa6";
-import { AnimatePresence, motion, useAnimationFrame } from "motion/react";
-import { useMotionValue, useSpring, useTransform } from "motion/react";
+import { AnimatePresence, animate, motion, useAnimationFrame, useInView } from "motion/react";
+import { useMotionValue, useTransform } from "motion/react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useEffect, useRef, useState } from "react";
@@ -34,55 +34,54 @@ const storySlides: StorySlide[] = [
   {
     id: "about",
     index: "01",
-    eyebrow: "SAN TECH / ABOUT US",
-    title: "Technology made useful for the places we call home.",
-    body: "SAN TECH builds smart products, resilient systems, and practical pathways that help African organizations move with confidence.",
-    detail: "We connect local insight with dependable technology so teams can solve real operational problems, serve people better, and build for the long term.",
+    eyebrow: "SAN TECH / ABOUT SAN TECH",
+    title: "Making your ideas happen with us!",
+    body: "SAN TECH is technological and digital transformation company that develops smart systems, AI, IoT, cybersecurity, embedded and digital solutions while building technology skills and innovation capacity through SAN HUB.",
+    detail: "SAN TECH helps insitutions, organizations and innovators  to move from an idea or problem → design → development → deployment → impact.",
     facts: [
-      { label: "Built for", value: "African organizations" },
-      { label: "Approach", value: "Useful by design" },
-      { label: "Measure", value: "Practical impact" },
+      { label: "Established", value: "2019" },
+      { label: "Focus", value: "Digital Transformation" },
+      { label: "Promise", value: "Practical impact" },
     ],
     highlights: [
-      { label: "Products", href: "/innovation-lab" },
-      { label: "Digital systems", href: "/innovation-lab" },
-      { label: "Technology skills", href: "/san-hub" },
+      { label: "Who we are", href: "/our-story" },
+      { label: "Mission & vision", href: "/our-story#mission" },
+      { label: "Leadership", href: "/our-story#leadership" },
     ],
   },
   {
     id: "mission",
     index: "02",
     eyebrow: "SAN TECH / TECHNOLOGIES",
-    title: "Tools that turn ambitious ideas into working systems.",
-    body: "We combine software, AI, connected devices, and secure infrastructure to help organizations see clearly and move faster.",
-    detail: "From the first prototype to a platform people use every day, our technology choices stay focused on useful outcomes, responsible data, and room to grow.",
+    title: "Technology built around real-world challenges.",
+    body: "SAN TECH works at the intersection of software engineering, artificial intelligence, cybersecurity, IoT, embedded systems, robotics, data, and digital transformation.",
+    detail: "We develop technology from the ground up—from identifying a problem and researching the context to prototyping, testing, deploying, and supporting systems in real environments.",
     facts: [
-      { label: "Connect", value: "People and systems" },
-      { label: "Protect", value: "Data and access" },
-      { label: "Enable", value: "Better decisions" },
+      { label: "Explore", value: "AI & data systems" },
+      { label: "Connect", value: "IoT & devices" },
+      { label: "Protect", value: "People & information" },
     ],
     highlights: [
-      { label: "AI & automation", href: "/innovation-lab?focus=ai-solutions" },
+      { label: "Artificial intelligence", href: "/innovation-lab?focus=ai-solutions" },
       { label: "IoT & embedded systems", href: "/innovation-lab?focus=iot" },
-      { label: "Secure cloud & data", href: "/innovation-lab?focus=cybersecurity" },
+      { label: "Cybersecurity", href: "/innovation-lab?focus=cybersecurity" },
     ],
   },
   {
     id: "services",
     index: "03",
     eyebrow: "SAN TECH / SERVICES",
-    title: "One technology partner for the work that matters.",
-    body: "From software and AI to cybersecurity, IoT, and digital transformation, we turn complex needs into systems people can rely on.",
-    detail: "We listen first, map the opportunity, then design and deliver the right system with the people who will operate it—not around them.",
+    title: "From a complex need to a dependable system.",
+    body: "We design and develop software, web and mobile platforms, AI solutions, cybersecurity programs, IoT systems, and digital transformation services.",
+    detail: "Our work also covers systems integration, technology infrastructure, research and innovation, product development, training, and consultancy—delivered around the people who use it.",
     facts: [
-      { label: "Discover", value: "The real need" },
-      { label: "Deliver", value: "The right system" },
-      { label: "Support", value: "The next stage" },
+      { label: "Start", value: "Assess the challenge" },
+      { label: "Build", value: "Design & integrate" },
+      { label: "Grow", value: "Train & support" },
     ],
     highlights: [
       { label: "Software development", href: "/innovation-lab?focus=software-development" },
       { label: "AI solutions", href: "/innovation-lab?focus=ai-solutions" },
-      { label: "Cybersecurity", href: "/innovation-lab?focus=cybersecurity" },
       { label: "Digital transformation", href: "/innovation-lab?focus=digital-transformation" },
     ],
   },
@@ -90,31 +89,31 @@ const storySlides: StorySlide[] = [
     id: "san-hub",
     index: "04",
     eyebrow: "SAN TECH / SAN HUB",
-    title: "A clear path from learning to contribution.",
-    body: "SAN HUB connects courses, training, innovation programmes, internships, and community opportunities in one ecosystem.",
-    detail: "Whether someone is starting out, changing direction, or helping others grow, the Hub makes technology skills practical, connected, and actionable.",
+    title: "Learn. Build. Innovate. Impact.",
+    body: "SAN HUB is SAN TECH’s learning, innovation, talent, and entrepreneurship ecosystem for learners, innovators, researchers, mentors, trainers, institutions, and businesses.",
+    detail: "The Hub connects technology training, innovation development, career development, entrepreneurship, internships, mentorship, scholarships, and community opportunities.",
     facts: [
-      { label: "Learn", value: "Practical skills" },
-      { label: "Build", value: "With a community" },
-      { label: "Grow", value: "Into opportunity" },
+      { label: "Learn", value: "Practical technology" },
+      { label: "Build", value: "Ideas into products" },
+      { label: "Join", value: "A growing ecosystem" },
     ],
     highlights: [
       { label: "Courses & training", href: "/san-hub/courses" },
-      { label: "Innovation programmes", href: "/innovation-lab" },
-      { label: "Community & internships", href: "/join-the-community" },
+      { label: "Innovation programs", href: "/innovation-lab" },
+      { label: "Internships & mentorship", href: "/join-the-community" },
     ],
   },
   {
     id: "e-visitors",
     index: "05",
     eyebrow: "SAN TECH / E-VISITORS",
-    title: "Every arrival becomes a clearer, safer operation.",
-    body: "Our flagship visitor platform brings registration, ID and OCR scanning, access, attendance, and reporting into one operational picture.",
-    detail: "E-Visitors helps institutions welcome people with less friction while giving teams the visibility, accountability, and control they need at every point of entry.",
+    title: "Smart visitor, access, and attendance management.",
+    body: "E-Visitors is SAN TECH’s flagship platform for managing visitors, access, attendance, movements, and institutional security.",
+    detail: "Registration, appointments, ID and passport scanning, OCR, access cards, gate management, watchlists, vehicle tracking, dashboards, role-based access, and audit logs work together in one system.",
     facts: [
-      { label: "Register", value: "Every visitor" },
-      { label: "Verify", value: "Identity faster" },
-      { label: "Report", value: "With confidence" },
+      { label: "Register", value: "Visitors & appointments" },
+      { label: "Verify", value: "Identity with OCR" },
+      { label: "Report", value: "Access & attendance" },
     ],
     highlights: [
       { label: "ID & OCR scanning", href: "/e-visitors#features" },
@@ -126,38 +125,129 @@ const storySlides: StorySlide[] = [
     id: "tech-pulse",
     index: "06",
     eyebrow: "SAN TECH / TECH PULSE",
-    title: "Find the opportunities that move work forward.",
-    body: "Stay close to SAN TECH news, tenders, events, training opportunities, and the ideas shaping a more connected Africa.",
-    detail: "Tech Pulse keeps useful signals in one place so partners, learners, and builders can spot the next conversation, opportunity, or collaboration.",
+    title: "Stay close to the ideas shaping a connected Africa.",
+    body: "Tech Pulse is SAN TECH’s media and knowledge platform for company news, opportunities, tenders, events, research, technology trends, and impact stories.",
+    detail: "It gives partners, learners, innovators, and technology users one place to discover useful signals, share knowledge, and find the next opportunity to participate.",
     facts: [
-      { label: "Follow", value: "What is changing" },
-      { label: "Find", value: "New opportunities" },
-      { label: "Join", value: "The conversation" },
+      { label: "Follow", value: "News & trends" },
+      { label: "Find", value: "Jobs & tenders" },
+      { label: "Join", value: "Events & research" },
     ],
     highlights: [
-      { label: "News & updates", href: "/tech-pulse" },
+      { label: "News & announcements", href: "/tech-pulse" },
       { label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
-      { label: "Events & trends", href: "/tech-pulse?type=events" },
+      { label: "Research & impact", href: "/tech-pulse?type=research" },
     ],
   },
 ];
 
 const impactStats = [
-  [10, "k+", "people empowered"],
-  [12, "+", "countries reached"],
-  [47, "+", "institutions served"],
+  [40, "+", "organizations & clients served"],
+  [2500, "+", "SAN HUB beneficiaries"],
+  [17, "+", "countries reached"],
+  [15, "+", "technology professionals"],
+  [54, "+", "startup / innovation projects"],
+  [700, "+", "jobs & opportunities influenced"],
+  [10, "+", "years combined leadership experience"],
 ] as const;
 
 function ImpactCount({ value, suffix }: { value: number; suffix: string }) {
   const count = useMotionValue(0);
-  const spring = useSpring(count, { damping: 24, stiffness: 80, mass: 0.8 });
-  const displayValue = useTransform(spring, (current) => `${Math.round(current)}${suffix}`);
+  const displayValue = useTransform(count, (current) => `${Math.round(current).toLocaleString("en-US")}${suffix}`);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(counterRef, { amount: 0.6 });
 
   useEffect(() => {
-    count.set(value);
-  }, [count, value]);
+    if (!isInView) {
+      count.set(0);
+      return;
+    }
 
-  return <motion.span>{displayValue}</motion.span>;
+    const controls = animate(count, value, {
+      duration: value < 50 ? 1.6 : 0.75,
+      ease: "easeOut",
+    });
+
+    return () => controls.stop();
+  }, [count, isInView, value]);
+
+  return <motion.span ref={counterRef}>{displayValue}</motion.span>;
+}
+
+function ImpactMarquee() {
+  const firstGroupRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const [loopWidth, setLoopWidth] = useState(0);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    const group = firstGroupRef.current;
+    if (!group) return;
+
+    const updateWidth = () => setLoopWidth(group.getBoundingClientRect().width);
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(group);
+    return () => observer.disconnect();
+  }, []);
+
+  useAnimationFrame((_, delta) => {
+    if (!loopWidth || hovered) return;
+    const next = x.get() - delta * 0.012;
+    x.set(next <= -loopWidth ? next + loopWidth : next);
+  });
+
+  return (
+    <div
+      className="min-w-0 flex-1 overflow-hidden"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      aria-label="SAN TECH impact statistics"
+    >
+      <motion.div style={{ x }} className="flex w-max select-none whitespace-nowrap">
+        {[0, 1].map((group) => (
+          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-8 pr-8 sm:gap-10">
+            {impactStats.map(([value, suffix, label]) => (
+              <div key={`${group}-${label}`} className="min-w-[130px] shrink-0">
+                <p className="font-exo text-[clamp(1.35rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44]">
+                  <ImpactCount value={value} suffix={suffix} />
+                </p>
+                <p className="mt-1 max-w-[150px] whitespace-normal text-[9px] font-bold uppercase leading-tight tracking-[0.03em] text-slate-500">{label}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+function StoryPlaybackIcon({ playing }: { playing: boolean }) {
+  return (
+    <motion.svg
+      viewBox="4 4 28 28"
+      className="size-7"
+      fill="none"
+      aria-hidden="true"
+      animate={{ rotate: playing ? 360 : 0 }}
+      transition={{ duration: 8, repeat: playing ? Infinity : 0, ease: "linear" }}
+      style={{ transformOrigin: "50% 50%" }}
+    >
+      <circle cx="18" cy="18" r="12.5" stroke="currentColor" strokeWidth="1" opacity="0.3" strokeDasharray="2 3" />
+      <path d="M6.5 18a11.5 11.5 0 0 1 8-10.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="m12 6.3 3.2.5-1.5 2.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M29.5 18a11.5 11.5 0 0 1-8 10.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+      <circle cx="18" cy="18" r="3" fill="currentColor" />
+      {playing ? (
+        <>
+          <path d="M11 13.5c1.7 2.8 1.7 6.2 0 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M25 13.5c-1.7 2.8-1.7 6.2 0 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </>
+      ) : (
+        <path d="m12.5 14 8 4-8 4v-8Z" fill="currentColor" />
+      )}
+    </motion.svg>
+  );
 }
 
 const partnerBrands: PartnerBrand[] = [
@@ -343,8 +433,8 @@ export function SantechHomeStage() {
               </div>
               <div className="flex shrink-0 items-center justify-between gap-4 bg-[#111735] px-4 py-3 text-white sm:px-6">
                 <div className="min-w-0">
-                  <p className="truncate text-[9px] font-black uppercase tracking-[0.2em] text-white">FLAGSHIP PRODUCT / E-VISITORS</p>
-                  <p className="mt-1 truncate text-xs font-semibold leading-snug sm:text-sm">Every arrival becomes a clearer, safer operation.</p>
+                  <p className="truncate text-[9px] font-black uppercase tracking-[0.2em] text-white">FLAGSHIP PRODUCT: E-VISITOR SYSTEM</p>
+                  <p className="mt-1 truncate text-xs font-semibold leading-snug sm:text-sm">Front-desk check-ins management system and premises-access platform.</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   <button type="button" onClick={toggleSound} className="grid size-8 place-items-center border border-white/30 text-white transition-colors hover:bg-white hover:text-[#111735]" aria-label={muted ? "Turn video sound on" : "Mute video sound"}>
@@ -358,7 +448,7 @@ export function SantechHomeStage() {
             </div>
 
             <article
-              className="flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-[#f8f9fc] p-5 sm:p-7 lg:p-8"
+              className="relative flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-[#f8f9fc] p-4 sm:p-5 lg:p-6"
               onMouseEnter={() => setStoryHovered(true)}
               onMouseLeave={() => setStoryHovered(false)}
             >
@@ -393,61 +483,53 @@ export function SantechHomeStage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full min-h-0 overflow-hidden pt-1"
+                    className="h-full min-h-0 overflow-hidden pb-12 pt-1"
                   >
-                  <h1 className="font-exo mt-2 max-w-xl text-[clamp(1.25rem,1.8vw,2.25rem)] font-black leading-[0.96] tracking-[-0.06em] text-[#0c1230]">{activeStory.title}</h1>
-                  <p className="mt-3 max-w-lg text-sm leading-5.5 text-slate-600 sm:text-[15px]">{activeStory.body}</p>
-                  <p className="mt-2 max-w-lg text-xs leading-5 text-slate-500 sm:text-sm">{activeStory.detail}</p>
+                  <h1 className="font-exo mt-3 max-w-3xl text-[clamp(1.35rem,2vw,2.45rem)] font-bold leading-[1.1] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>
+                  <p className="mt-5 max-w-2xl text-justify text-[15px] leading-7 tracking-[0.005em] text-slate-600 sm:text-base">{activeStory.body}</p>
+                  <p className="mt-4 max-w-2xl text-justify text-sm leading-6.5 tracking-[0.01em] text-slate-600 sm:text-[16px]">{activeStory.detail}</p>
 
                   <div className="mt-4 grid grid-cols-3 gap-2 border-y border-slate-200 py-3">
                     {activeStory.facts.map((fact) => (
                       <div key={fact.label} className="min-w-0 px-1">
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400 sm:text-[11px]">{fact.label}</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-600 sm:text-[11px]">{fact.label}</p>
                         <p className="mt-1 text-sm font-bold leading-tight text-[#0a1f44] sm:text-[15px]">{fact.value}</p>
                       </div>
                     ))}
                   </div>
 
-                    <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {/* <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                       {activeStory.highlights.map((highlight) => (
-                        <Link key={highlight.label} href={highlight.href} className="group flex min-h-9 items-center justify-between gap-2 border border-slate-200 bg-white px-2.5 py-2 text-[11px] font-bold leading-tight text-slate-700 transition-colors hover:border-[#0a1f44] hover:bg-[#0a1f44] hover:text-white sm:text-xs">
+                        <Link key={highlight.label} href={highlight.href} className="group flex min-h-9 items-center justify-between gap-2 border border-slate-200 bg-white px-2.5 py-2 text-xs font-bold leading-tight text-slate-700 transition-colors hover:border-[#0a1f44] hover:bg-[#0a1f44] hover:text-white sm:text-sm">
                           <span>{highlight.label}</span>
                           <ArrowUpRight className="size-3 shrink-0 text-[#0a1f44] transition-colors group-hover:text-white" />
                         </Link>
                       ))}
-                    </div>
+                    </div> */}
+
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              <div className="flex shrink-0 items-center justify-end border-t border-slate-200 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setStoryPlaying((playing) => !playing)}
-                  aria-label={storyPlaying ? "Pause homepage slides" : "Play homepage slides"}
-                  aria-pressed={!storyPlaying}
-                  className="grid size-9 place-items-center border border-slate-300 bg-white text-[#0a1f44] transition-colors hover:border-[#0a1f44] hover:bg-[#0a1f44] hover:text-white"
-                >
-                  {storyPlaying ? <Pause className="size-4" /> : <Play className="size-4" />}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setStoryPlaying((playing) => !playing)}
+                aria-label={storyPlaying ? "Pause homepage slides" : "Play homepage slides"}
+                aria-pressed={!storyPlaying}
+                className="absolute bottom-2 right-2 grid size-12 place-items-center rounded-full bg-transparent text-[#0a1f44] transition-transform duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a1f44] focus-visible:ring-offset-2"
+              >
+                <StoryPlaybackIcon playing={storyPlaying} />
+              </button>
             </article>
           </div>
         </div>
       </section>
 
-      <div className="grid min-h-[152px] shrink-0 border-t border-slate-300/80 bg-[#f8f9fc] text-[11px] font-semibold text-slate-500 sm:h-[80px] sm:min-h-0 sm:grid-cols-[minmax(270px,0.9fr)_minmax(0,1.6fr)]">
+      <div className="grid min-h-[152px] shrink-0 border-t border-slate-300/80 bg-[#f8f9fc] text-[11px] font-semibold text-slate-500 sm:h-[80px] sm:min-h-0 sm:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
         <div className="flex items-center border-b border-slate-300/80 px-4 py-2 sm:border-b-0 sm:border-r sm:px-7">
-          <div className="min-w-0 flex-1">
-            <p className="mb-1 font-black uppercase tracking-[0.2em] text-[#0a1f44]">Impact</p>
-            <div className="grid grid-cols-3 gap-3">
-              {impactStats.map(([value, suffix, label]) => (
-                <div key={label} className="min-w-0">
-                  <p className="font-exo text-[clamp(1.3rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44]"><ImpactCount value={value} suffix={suffix} /></p>
-                  <p className="mt-1 text-[9px] font-bold uppercase leading-tight tracking-[0.06em] text-slate-500">{label}</p>
-                </div>
-              ))}
-            </div>
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <p className="shrink-0 font-black uppercase tracking-[0.2em] text-[#0a1f44] whitespace-pre-wrap w-20">SAN TECH  Impacts</p>
+            <ImpactMarquee />
           </div>
         </div>
         <div className="flex min-w-0 items-center gap-4 overflow-hidden px-4 py-2 sm:px-7">

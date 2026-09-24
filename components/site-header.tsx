@@ -20,19 +20,78 @@ import { useEffect, useState, useRef } from "react";
 import { navigation } from "@/lib/site-data";
 import santechLogo from "@/src/assets/santech.png";
 
-type Language = "en" | "rw";
+type Language = "en" | "rw" | "fr" | "sw";
+
+const languageLabels: Record<Language, string> = {
+  en: "English",
+  rw: "Kinyarwanda",
+  fr: "Français",
+  sw: "Kiswahili",
+};
+
+const innovationMenu = [
+  {
+    title: "Products",
+    links: [
+      { label: "E-Visitors", href: "/e-visitors" },
+      { label: "SAN TRACK", href: "/innovation-lab?product=san-track" },
+      { label: "SAN BOOK", href: "/innovation-lab?product=san-book" },
+      { label: "REVIXSAN", href: "/innovation-lab?product=revixsan" },
+      { label: "SANVERSE", href: "/innovation-lab?product=sanverse" },
+    ],
+  },
+  {
+    title: "Services",
+    links: [
+      { label: "Software development", href: "/innovation-lab?focus=software-development" },
+      { label: "Web & mobile development", href: "/innovation-lab?focus=web-mobile" },
+      { label: "AI solutions", href: "/innovation-lab?focus=ai-solutions" },
+      { label: "Cybersecurity", href: "/innovation-lab?focus=cybersecurity" },
+      { label: "Digital transformation", href: "/innovation-lab?focus=digital-transformation" },
+      { label: "Systems integration", href: "/innovation-lab?focus=systems-integration" },
+    ],
+  },
+  {
+    title: "Solutions & technologies",
+    links: [
+      { label: "IoT & embedded systems", href: "/innovation-lab?focus=iot" },
+      { label: "Robotics & automation", href: "/innovation-lab?focus=robotics" },
+      { label: "Cloud & data systems", href: "/innovation-lab?focus=cloud" },
+      { label: "Digital identity & OCR", href: "/innovation-lab?focus=digital-identity" },
+      { label: "Smart infrastructure", href: "/innovation-lab?focus=smart-infrastructure" },
+      { label: "Research & innovation", href: "/innovation-lab?focus=research" },
+    ],
+  },
+] as const;
+
+const storyMenu = [
+  { label: "Who we are", href: "/our-story" },
+  { label: "Mission & vision", href: "/our-story#mission" },
+  { label: "Leadership", href: "/our-story#leadership" },
+] as const;
+
+const compactSubmenus = {
+  "/our-story": storyMenu,
+  "/tech-pulse": [
+    { label: "News & announcements", href: "/tech-pulse" },
+    { label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
+    { label: "Research & impact", href: "/tech-pulse?type=research" },
+  ],
+} as const;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [innovationMenuOpen, setInnovationMenuOpen] = useState(false);
+  const [compactMenuOpen, setCompactMenuOpen] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
     const savedLang = localStorage.getItem("santech_lang") as Language | null;
-    if (savedLang === "en" || savedLang === "rw") {
+    if (savedLang === "en" || savedLang === "rw" || savedLang === "fr" || savedLang === "sw") {
       setLanguage(savedLang);
     }
   }, []);
@@ -70,7 +129,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 transition-all">
+    <header className="fixed inset-x-0 top-0 z-[100] transition-all">
       <div className="relative overflow-hidden bg-[#0a1f44] text-white">
         <div className="mx-auto flex min-h-10 max-w-[1600px] items-center justify-between gap-3 px-4 py-1.5 text-xs font-semibold sm:px-6 sm:text-[13px] lg:px-8">
           <a href="tel:+250780309833" className="inline-flex shrink-0 items-center gap-2 transition-colors hover:text-[#00A3E0]">
@@ -93,7 +152,7 @@ export function SiteHeader() {
       </div>
 
       {/* Main Navbar */}
-      <div className={`transition-all duration-300 ${
+      <div className={`relative z-30 transition-all duration-300 ${
         isScrolled 
           ? "bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200/80 py-2.5" 
           : "bg-white border-b border-slate-200/60 py-3.5"
@@ -114,16 +173,119 @@ export function SiteHeader() {
             <nav className="flex items-center gap-1 xl:gap-1.5" aria-label="Main navigation">
               {navigation.map((item) => {
                 const active = isActiveRoute(item.href);
+                const linkClassName = `relative rounded-lg px-2.5 py-1.5 text-xs font-bold tracking-[0.04em] transition-all duration-200 ${
+                  active
+                    ? "text-[#0a1f44]"
+                    : "text-slate-700 hover:text-[#0a1f44]"
+                }`;
+
+                if (item.href === "/innovation-lab") {
+                  return (
+                    <div
+                      key={item.href}
+                      className="relative"
+                      onMouseEnter={() => setInnovationMenuOpen(true)}
+                      onMouseLeave={() => setInnovationMenuOpen(false)}
+                      onFocus={() => setInnovationMenuOpen(true)}
+                      onBlur={(event) => {
+                        if (!event.currentTarget.contains(event.relatedTarget as Node)) setInnovationMenuOpen(false);
+                      }}
+                    >
+                      <Link href={item.href} aria-current={active ? "page" : undefined} className={`${linkClassName} inline-flex items-center gap-1`}>
+                        {item.label}
+                        <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${innovationMenuOpen ? "rotate-180" : ""}`} />
+                        {active && <span className="absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-[#0a1f44]" />}
+                      </Link>
+
+                      <AnimatePresence>
+                        {innovationMenuOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -5, scale: 0.98 }}
+                            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                            className="absolute left-1/2 top-full z-50 w-[min(900px,calc(100vw-2rem))] -translate-x-1/2 pt-3"
+                          >
+                            <div className="grid grid-cols-3 gap-8 rounded-xl border border-slate-200 bg-white p-7 shadow-[0_22px_60px_rgba(10,31,68,0.16)]">
+                              {innovationMenu.map((group) => (
+                                <section key={group.title}>
+                                  <div className="border-b border-slate-200 pb-3 text-[#0a1f44]">
+                                    <h2 className="text-sm font-extrabold tracking-[-0.02em]">{group.title}</h2>
+                                  </div>
+                                  <div className="mt-3 space-y-1">
+                                    {group.links.map((link) => (
+                                      <Link key={link.label} href={link.href} className="group flex items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-[#0a1f44]/[0.06] hover:text-[#0a1f44]">
+                                        <span>{link.label}</span>
+                                        <ArrowUpRight className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </section>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
+                const compactMenu = compactSubmenus[item.href as keyof typeof compactSubmenus];
+
+                if (compactMenu) {
+                  return (
+                    <div
+                      key={item.href}
+                      className="relative"
+                      onMouseEnter={() => setCompactMenuOpen(item.href)}
+                      onMouseLeave={() => setCompactMenuOpen(null)}
+                      onFocus={() => setCompactMenuOpen(item.href)}
+                      onBlur={(event) => {
+                        if (!event.currentTarget.contains(event.relatedTarget as Node)) setCompactMenuOpen(null);
+                      }}
+                    >
+                      <Link href={item.href} aria-current={active ? "page" : undefined} className={`${linkClassName} inline-flex items-center gap-1`}>
+                        {item.label}
+                        <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${compactMenuOpen === item.href ? "rotate-180" : ""}`} />
+                        {active && (
+                          <span className="absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-[#0a1f44]" />
+                        )}
+                      </Link>
+
+                      <AnimatePresence>
+                        {compactMenuOpen === item.href && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -5, scale: 0.98 }}
+                            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                            className="absolute left-1/2 top-full z-50 w-[min(270px,calc(100vw-2rem))] -translate-x-1/2 pt-3"
+                          >
+                            <div className="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-2 shadow-[0_18px_45px_rgba(10,31,68,0.14)]">
+                              {compactMenu.map((link) => (
+                                <Link
+                                  key={link.label}
+                                  href={link.href}
+                                  className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-xs font-bold text-[#0a1f44] transition-colors hover:bg-[#0a1f44]/[0.06] hover:text-[#0a1f44]"
+                                >
+                                  <span>{link.label}</span>
+                                  <ArrowUpRight className="size-3 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`relative rounded-lg px-2.5 py-1.5 text-xs font-bold tracking-[0.04em] transition-all duration-200 ${
-                      active
-                        ? "text-[#0a1f44]"
-                        : "text-slate-700 hover:text-[#0a1f44]"
-                    }`}
+                    className={linkClassName}
                   >
                     {item.label}
                     {active && (
@@ -134,7 +296,7 @@ export function SiteHeader() {
               })}
             </nav>
 
-            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
+            <div className="relative z-[110] flex items-center gap-2.5 border-l border-slate-200 pl-2">
               {/* Language Selector Dropdown */}
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -145,7 +307,7 @@ export function SiteHeader() {
                   aria-label="Select language"
                 >
                   <Globe className="size-3.5 text-[#333292]" />
-                  <span>{language === "rw" ? "Kinyarwanda" : "English"}</span>
+                  <span>{languageLabels[language]}</span>
                   <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${langDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
 
@@ -156,7 +318,7 @@ export function SiteHeader() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 4, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-1.5 w-36 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl z-50"
+                      className="absolute right-0 z-[120] mt-1.5 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl"
                     >
                       <button
                         type="button"
@@ -178,6 +340,26 @@ export function SiteHeader() {
                         <span>Kinyarwanda</span>
                         {language === "rw" && <Check className="size-3.5 text-[#333292]" />}
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => handleLanguageChange("fr")}
+                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                          language === "fr" ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>Français</span>
+                        {language === "fr" && <Check className="size-3.5 text-[#333292]" />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleLanguageChange("sw")}
+                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                          language === "sw" ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>Kiswahili</span>
+                        {language === "sw" && <Check className="size-3.5 text-[#333292]" />}
+                      </button>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -189,7 +371,6 @@ export function SiteHeader() {
                 className="inline-flex items-center gap-1.5 rounded-xl bg-[#0a1f44] px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-white shadow-md transition-all duration-200 hover:bg-[#132f61] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>JOIN THE COMMUNITY</span>
-                <ArrowUpRight className="size-3.5" />
               </Link>
             </div>
           </div>
@@ -198,10 +379,10 @@ export function SiteHeader() {
           <div className="flex items-center gap-2 lg:hidden">
             <button
               type="button"
-              onClick={() => handleLanguageChange(language === "rw" ? "en" : "rw")}
+              onClick={() => handleLanguageChange(language === "en" ? "rw" : "en")}
               className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold text-[#333292]"
             >
-              {language === "rw" ? "RW" : "EN"}
+              {language === "en" ? "EN" : language === "rw" ? "RW" : language === "fr" ? "FR" : "SW"}
             </button>
             <button
               type="button"
@@ -255,7 +436,7 @@ export function SiteHeader() {
 
               <div className="my-2 border-t border-slate-100 pt-3 flex items-center justify-between px-2">
                 <span className="text-xs font-semibold text-slate-500">Language / Ururimi</span>
-                <div className="flex gap-1.5">
+                <div className="flex flex-wrap justify-end gap-1.5">
                   <button
                     type="button"
                     onClick={() => handleLanguageChange("en")}
@@ -274,6 +455,24 @@ export function SiteHeader() {
                   >
                     Kinyarwanda
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => handleLanguageChange("fr")}
+                    className={`rounded-lg px-3 py-1 text-xs font-bold ${
+                      language === "fr" ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    Français
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleLanguageChange("sw")}
+                    className={`rounded-lg px-3 py-1 text-xs font-bold ${
+                      language === "sw" ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    Kiswahili
+                  </button>
                 </div>
               </div>
 
@@ -283,7 +482,6 @@ export function SiteHeader() {
                 className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[#0a1f44] px-5 py-3.5 text-sm font-extrabold uppercase tracking-wider text-white shadow-md transition-all hover:bg-[#132f61]"
               >
                 <span>JOIN THE COMMUNITY</span>
-                <ArrowUpRight className="size-4" />
               </Link>
             </div>
           </motion.nav>
