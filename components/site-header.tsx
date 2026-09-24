@@ -20,14 +20,31 @@ import { useEffect, useState, useRef } from "react";
 import { navigation } from "@/lib/site-data";
 import santechLogo from "@/src/assets/santech.png";
 
-type Language = "en" | "rw" | "fr" | "sw";
+type Language = "en" | "rw" | "fr" | "sw" | "ar" | "ch" | "hi" | "ur" | "br";
 
 const languageLabels: Record<Language, string> = {
   en: "English",
   rw: "Kinyarwanda",
   fr: "Français",
   sw: "Kiswahili",
+  ch: "Chinese",
+  ar: "Arabic",
+  hi: "Hindi",
+  ur: "Urdu",
+  br: "Bambara",
 };
+
+const languageOptions: { code: Language; label: string }[] = [
+  { code: "en", label: "English" },
+  { code: "rw", label: "Kinyarwanda" },
+  { code: "fr", label: "Français" },
+  { code: "sw", label: "Kiswahili" },
+  { code: "ar", label: "Arabic" },
+  { code: "ch", label: "Chinese" },
+  { code: "hi", label: "Hindi" },
+  { code: "ur", label: "Urdu" },
+  { code: "br", label: "Bambara" },
+];
 
 const innovationMenu = [
   {
@@ -320,46 +337,19 @@ export function SiteHeader() {
                       transition={{ duration: 0.15 }}
                       className="absolute right-0 z-[120] mt-1.5 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl"
                     >
-                      <button
-                        type="button"
-                        onClick={() => handleLanguageChange("en")}
-                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
-                          language === "en" ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span>English</span>
-                        {language === "en" && <Check className="size-3.5 text-[#333292]" />}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleLanguageChange("rw")}
-                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
-                          language === "rw" ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span>Kinyarwanda</span>
-                        {language === "rw" && <Check className="size-3.5 text-[#333292]" />}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleLanguageChange("fr")}
-                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
-                          language === "fr" ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span>Français</span>
-                        {language === "fr" && <Check className="size-3.5 text-[#333292]" />}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleLanguageChange("sw")}
-                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
-                          language === "sw" ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span>Kiswahili</span>
-                        {language === "sw" && <Check className="size-3.5 text-[#333292]" />}
-                      </button>
+                      {languageOptions.map(({ code, label }) => (
+                        <button
+                          key={code}
+                          type="button"
+                          onClick={() => handleLanguageChange(code)}
+                          className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                            language === code ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
+                          }`}
+                        >
+                          <span>{label}</span>
+                          {language === code && <Check className="size-3.5 text-[#333292]" />}
+                        </button>
+                      ))}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -382,7 +372,7 @@ export function SiteHeader() {
               onClick={() => handleLanguageChange(language === "en" ? "rw" : "en")}
               className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold text-[#333292]"
             >
-              {language === "en" ? "EN" : language === "rw" ? "RW" : language === "fr" ? "FR" : "SW"}
+              {language.toUpperCase()}
             </button>
             <button
               type="button"
@@ -436,43 +426,19 @@ export function SiteHeader() {
 
               <div className="my-2 border-t border-slate-100 pt-3 flex items-center justify-between px-2">
                 <span className="text-xs font-semibold text-slate-500">Language / Ururimi</span>
-                <div className="flex flex-wrap justify-end gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => handleLanguageChange("en")}
-                    className={`rounded-lg px-3 py-1 text-xs font-bold ${
-                      language === "en" ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    English
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleLanguageChange("rw")}
-                    className={`rounded-lg px-3 py-1 text-xs font-bold ${
-                      language === "rw" ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    Kinyarwanda
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleLanguageChange("fr")}
-                    className={`rounded-lg px-3 py-1 text-xs font-bold ${
-                      language === "fr" ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    Français
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleLanguageChange("sw")}
-                    className={`rounded-lg px-3 py-1 text-xs font-bold ${
-                      language === "sw" ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    Kiswahili
-                  </button>
+                <div className="flex max-w-[260px] flex-wrap justify-end gap-1.5">
+                  {languageOptions.map(({ code, label }) => (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => handleLanguageChange(code)}
+                      className={`rounded-lg px-3 py-1 text-xs font-bold ${
+                        language === code ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
