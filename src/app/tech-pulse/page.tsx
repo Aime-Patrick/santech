@@ -41,7 +41,7 @@ export default function TechPulsePage() {
                 className="group grid gap-4 py-7 sm:grid-cols-[150px_1fr_auto] sm:items-center"
               >
                 <span className="text-sm font-black uppercase tracking-[0.2em] text-brand-secondary">{story.type}</span>
-                <span className="text-xl font-black tracking-[-0.03em] text-slate-900 transition-colors group-hover:text-brand-secondary">{story.title}</span>
+                <span className="text-lg font-bold tracking-[-0.02em] text-slate-900 transition-colors group-hover:text-brand-secondary">{story.title}</span>
                 <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
                   {story.date}
                   <ArrowUpRight className="size-4" />

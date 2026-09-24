@@ -44,9 +44,9 @@ const storySlides: StorySlide[] = [
       { label: "Promise", value: "Practical impact" },
     ],
     highlights: [
-      { label: "Who we are", href: "/our-story" },
-      { label: "Mission & vision", href: "/our-story#mission" },
-      { label: "Leadership", href: "/our-story#leadership" },
+      { label: "Who we are", href: "/our-legacy" },
+      { label: "Mission & vision", href: "/our-legacy#mission" },
+      { label: "Leadership", href: "/our-legacy#leadership" },
     ],
   },
   {
@@ -203,16 +203,17 @@ function ImpactMarquee() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       aria-label="SAN TECH impact statistics"
+      style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
     >
       <motion.div style={{ x }} className="flex w-max select-none whitespace-nowrap">
         {[0, 1].map((group) => (
-          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-8 pr-8 sm:gap-10">
+          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-5 pr-5 sm:gap-7 sm:pr-7 2xl:gap-10 2xl:pr-10">
             {impactStats.map(([value, suffix, label]) => (
-              <div key={`${group}-${label}`} className="min-w-[130px] shrink-0">
-                <p className="font-exo text-[clamp(1.35rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44]">
+              <div key={`${group}-${label}`} className="min-w-[96px] shrink-0 sm:min-w-[116px] 2xl:min-w-[130px]">
+                <p className="font-exo text-[clamp(1.15rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44]">
                   <ImpactCount value={value} suffix={suffix} />
                 </p>
-                <p className="mt-1 max-w-[150px] whitespace-normal text-[9px] font-bold uppercase leading-tight tracking-[0.03em] text-slate-500">{label}</p>
+                <p className="mt-1 max-w-[140px] whitespace-normal text-[8px] font-bold uppercase leading-tight tracking-[0.02em] text-slate-500 sm:text-[9px]">{label}</p>
               </div>
             ))}
           </div>
@@ -271,12 +272,12 @@ const socialLinks = [
 function PartnerMark({ partner }: { partner: PartnerBrand }) {
   const content = (
     <>
-      <span className={`relative block h-10 shrink-0 ${partner.government ? "w-10" : partner.showLabel ? "w-12" : "w-32"}`}>
+      <span className={`relative block h-10 shrink-0 sm:h-11 ${partner.government ? "w-10" : partner.showLabel ? "w-12" : "w-24 sm:w-28 2xl:w-32"}`}>
         <Image
           src={partner.src}
           alt={partner.label}
           fill
-          sizes={partner.government || partner.showLabel ? "48px" : "128px"}
+          sizes={partner.government || partner.showLabel ? "48px" : "(min-width: 1536px) 128px, (min-width: 640px) 112px, 96px"}
           className="object-contain mix-blend-multiply"
         />
       </span>
@@ -333,6 +334,7 @@ function PartnerMarquee() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       aria-label="Drag partner and client logos left or right"
+      style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
     >
       <motion.div
         ref={trackRef}
@@ -348,7 +350,7 @@ function PartnerMarquee() {
         className="flex w-max select-none whitespace-nowrap"
       >
         {[0, 1].map((group) => (
-          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-8 pr-8">
+          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-5 pr-5 sm:gap-6 sm:pr-6 2xl:gap-8 2xl:pr-8">
             {partnerBrands.map((partner) => (
               <PartnerMark key={`${group}-${partner.label}`} partner={partner} />
             ))}
@@ -412,10 +414,10 @@ export function SantechHomeStage() {
 
   return (
     <>
-      <section className="h-[calc(100svh-240px)] min-h-0 overflow-hidden bg-[#edf1f7] px-3 py-3 text-[#0c1230] sm:h-[calc(100svh-240px)] sm:px-5 sm:py-4 lg:px-7">
-        <div className="relative z-10 mx-auto flex h-full min-h-0 max-w-[1600px] flex-col">
-          <div className="grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(330px,0.68fr)] lg:gap-4">
-            <div className="relative flex min-h-0 flex-col overflow-hidden bg-[#111735]">
+      <section className="bg-[#edf1f7] px-3 py-3 text-[#0c1230] sm:px-5 sm:py-4 2xl:px-7 xl:h-[calc(100svh-242px)] xl:min-h-0 xl:overflow-hidden">
+        <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col xl:h-full">
+          <div className="grid min-h-0 gap-3 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_minmax(330px,0.68fr)] xl:gap-4">
+            <div className="relative flex min-h-[140px] flex-col overflow-hidden bg-[#111735] sm:min-h-[220px] xl:min-h-0">
               <div className="relative min-h-0 flex-1 overflow-hidden">
                 <video
                   ref={videoRef}
@@ -448,7 +450,7 @@ export function SantechHomeStage() {
             </div>
 
             <article
-              className="relative flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-[#f8f9fc] p-4 sm:p-5 lg:p-6"
+              className="relative flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-[#f8f9fc] p-4 sm:min-h-[420px] sm:p-5 2xl:p-6 xl:min-h-0"
               onMouseEnter={() => setStoryHovered(true)}
               onMouseLeave={() => setStoryHovered(false)}
             >
@@ -456,7 +458,7 @@ export function SantechHomeStage() {
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0a1f44]">{activeStory.eyebrow}</p>
                 <div className="flex items-center gap-2" aria-label="SAN TECH story slides">
                   <span ref={slideArrowRef} className="inline-flex shrink-0" aria-hidden="true">
-                    <Image src="/undraw_arrow.svg" alt="" width={62} height={17} />
+                    <Image src="/undraw_arrow.svg" alt="" width={62} height={17} className="h-auto w-8 sm:w-12 2xl:w-[62px]" />
                   </span>
                   <div className="flex items-center gap-1">
                     {storySlides.map((slide, index) => (
@@ -483,17 +485,17 @@ export function SantechHomeStage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full min-h-0 overflow-hidden pb-12 pt-1"
+                    className="min-h-0 overflow-hidden pb-0 pt-1 xl:h-full xl:pb-12"
                   >
-                  <h1 className="font-exo mt-3 max-w-3xl text-[clamp(1.35rem,2vw,2.45rem)] font-bold leading-[1.1] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>
-                  <p className="mt-5 max-w-2xl text-justify text-[15px] leading-7 tracking-[0.005em] text-slate-600 sm:text-base">{activeStory.body}</p>
-                  <p className="mt-4 max-w-2xl text-justify text-sm leading-6.5 tracking-[0.01em] text-slate-600 sm:text-[16px]">{activeStory.detail}</p>
+                  <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.25rem,1.8vw,2.35rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>
+                  <p className="mt-3 max-w-2xl text-justify text-[13px] leading-5 tracking-[0.005em] text-slate-600 sm:text-[15px] 2xl:text-base 2xl:leading-6">{activeStory.body}</p>
+                  <p className="mt-2 hidden max-w-2xl text-justify text-[12px] leading-5 tracking-[0.01em] text-slate-600 sm:block sm:text-[14px] 2xl:text-[15px] 2xl:leading-6">{activeStory.detail}</p>
 
-                  <div className="mt-4 grid grid-cols-3 gap-2 border-y border-slate-200 py-3">
+                  <div className="mt-3 grid grid-cols-3 gap-2 border-y border-slate-200 py-2">
                     {activeStory.facts.map((fact) => (
                       <div key={fact.label} className="min-w-0 px-1">
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-600 sm:text-[11px]">{fact.label}</p>
-                        <p className="mt-1 text-sm font-bold leading-tight text-[#0a1f44] sm:text-[15px]">{fact.value}</p>
+                        <p className="text-[9px] font-black uppercase tracking-[0.14em] text-slate-600 sm:text-[10px]">{fact.label}</p>
+                        <p className="mt-0.5 text-[13px] font-bold leading-tight text-[#0a1f44] sm:text-[14px] 2xl:text-[15px]">{fact.value}</p>
                       </div>
                     ))}
                   </div>
@@ -525,23 +527,25 @@ export function SantechHomeStage() {
         </div>
       </section>
 
-      <div className="grid min-h-[152px] shrink-0 border-t border-slate-300/80 bg-[#f8f9fc] text-[11px] font-semibold text-slate-500 sm:h-[80px] sm:min-h-0 sm:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
-        <div className="flex items-center border-b border-slate-300/80 px-4 py-2 sm:border-b-0 sm:border-r sm:px-7">
-          <div className="flex min-w-0 flex-1 items-center gap-4">
-            <p className="shrink-0 font-black uppercase tracking-[0.2em] text-[#0a1f44] whitespace-pre-wrap w-20">SAN TECH  Impacts</p>
+      <div className="mx-auto grid w-full max-w-[1440px] min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-[#f8f9fc] text-[11px] font-semibold text-slate-500 sm:min-h-[120px] xl:h-[80px] xl:min-h-0 xl:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
+        <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 xl:min-h-0 xl:border-b-0 xl:border-r xl:px-7">
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
             <ImpactMarquee />
           </div>
         </div>
-        <div className="flex min-w-0 items-center gap-4 overflow-hidden px-4 py-2 sm:px-7">
-          <span className="z-10 shrink-0 text-[11px] font-black uppercase tracking-[0.2em] text-[#0a1f44]">Partners / Clients</span>
-          <PartnerMarquee />
+        <div className="flex min-h-[74px] min-w-0 items-center gap-2 overflow-hidden px-2.5 py-2 sm:gap-3 sm:px-5 xl:px-7">
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <span className="z-10 w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">Partners</span><span className="block">/ Clients</span></span>
+            <PartnerMarquee />
+          </div>
         </div>
       </div>
 
-      <footer className="relative flex h-12.5 shrink-0 items-center justify-between gap-4 overflow-hidden bg-[#0c1230] px-4 pb-1 text-xs text-white sm:px-7">
+      <footer className="relative flex min-h-[68px] shrink-0 flex-col items-center justify-center gap-1 overflow-hidden bg-[#0c1230] px-4 py-2 pb-3 text-center text-[11px] text-white sm:h-12.5 sm:min-h-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-7 sm:pb-1 sm:text-left sm:text-xs">
         <span>© 2026 SAN TECH. All rights reserved.</span>
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/connect" className="transition-colors hover:text-white">Connect</Link>
+          <Link href="/connect" className="hidden transition-colors hover:text-white sm:inline-flex">Connect</Link>
           <a href="mailto:info@santechinnovate.com" className="hidden transition-colors hover:text-white sm:inline">info@santechinnovate.com</a>
           <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />
           <div className="flex items-center gap-2" aria-label="SAN TECH social media">

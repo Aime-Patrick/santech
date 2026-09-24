@@ -88,7 +88,7 @@ const heroSlides: SlideData[] = [
     bodyRw: "Twubaka ibisubizo by'ikoranabuhanga bugezweho, tugaha ubumenyi urubyiruko rw'u Rwanda n'Afurika, tugateza imbere ubukungu bushingiye ku ikoranabuhanga.",
     badgeEn: "Discover SAN TECH",
     badgeRw: "Vumbura SAN TECH",
-    badgeHref: "/our-story",
+    badgeHref: "/our-legacy",
     cardTitleEn: "SAN TECH at a Glance",
     cardTitleRw: "SAN TECH mu Mibare",
     statLabelEn: "Beneficiaries & Innovators",
@@ -542,7 +542,7 @@ export function HeroVisual() {
               </div>
 
               {/* Main Heading */}
-              <h1 className="font-exo mx-auto mt-5 max-w-lg text-xl font-black leading-[1.08] tracking-[-0.04em] text-slate-950 sm:text-2xl lg:text-[2.1rem]">
+              <h1 className="font-exo mx-auto mt-5 max-w-lg text-xl font-bold leading-[1.08] tracking-[-0.03em] text-slate-950 sm:text-2xl lg:text-[2rem]">
                 {language === "rw" ? currentSlide.titleRw : currentSlide.titleEn}
               </h1>
 

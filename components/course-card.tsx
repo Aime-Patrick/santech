@@ -27,7 +27,7 @@ export function CourseCard({ course, index }: { course: Course; index: number })
 
       <div className="flex flex-1 flex-col p-6 pt-12">
         <span className="text-sm font-black tracking-[0.16em] text-brand-secondary/55">0{index + 1}</span>
-        <h2 className="font-exo text-2xl font-black leading-tight tracking-[-0.04em] text-slate-950">{course.title}</h2>
+        <h2 className="font-exo text-xl font-bold leading-tight tracking-[-0.03em] text-slate-950">{course.title}</h2>
         <p className="mt-3 text-sm leading-6 text-slate-500">{course.description}</p>
 
         <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-5 text-sm font-semibold text-slate-500">

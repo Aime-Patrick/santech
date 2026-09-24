@@ -157,7 +157,7 @@ export default function InnovationLabPage() {
                 {/* Bottom Row: Product Title, Tagline & Action Arrow */}
                 <div className="relative z-10 mt-12 flex items-end justify-between gap-4">
                   <div>
-                    <h3 className="font-exo text-2xl font-black tracking-[-0.04em] text-white transition-colors group-hover:text-[#f3d45c]">
+                    <h3 className="font-exo text-xl font-bold tracking-[-0.03em] text-white transition-colors group-hover:text-[#f3d45c]">
                       {product.name}
                     </h3>
                     <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-white/75">
@@ -180,7 +180,7 @@ export default function InnovationLabPage() {
             <SectionHeading
               eyebrow="Services"
               title="Capability that meets the challenge."
-              titleClassName="text-3xl sm:text-4xl lg:text-[2.65rem] leading-[1.08]"
+              titleClassName="text-2xl sm:text-3xl lg:text-4xl leading-[1.08]"
               description="From first question to long-term support, our teams connect strategy, technology, and delivery."
             />
             <div className="mt-8 flex flex-col gap-2">

@@ -104,7 +104,7 @@ export function PageIntro({
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.24em] text-brand-secondary">{eyebrow}</p>
-          <h1 className={`font-exo mt-5 max-w-4xl font-black leading-[0.92] tracking-[-0.07em] text-slate-950 ${titleClassName || "text-5xl sm:text-7xl lg:text-8xl"}`}>{title}</h1>
+          <h1 className={`font-exo mt-5 max-w-4xl font-bold leading-[0.98] tracking-[-0.055em] text-slate-950 ${titleClassName || "text-2xl sm:text-3xl lg:text-4xl"}`}>{title}</h1>
         </div>
         <div className="max-w-md lg:justify-self-end">
           <p className="text-base leading-7 text-slate-600">{description}</p>
@@ -132,7 +132,7 @@ export function PageIntro({
   );
 }
 
-export function SectionHeading({
+export function  SectionHeading({
   eyebrow,
   title,
   description,
@@ -153,12 +153,12 @@ export function SectionHeading({
         {eyebrow}
       </p>
       <h2
-        className={`font-exo mt-4 font-black leading-[0.98] tracking-[-0.05em] ${
+        className={`font-exo mt-4 font-bold leading-[1] tracking-[-0.045em] ${
           titleClassName
             ? `${dark ? "text-white" : "text-slate-950"} ${titleClassName}`
             : dark
-              ? "text-4xl sm:text-6xl text-white"
-              : "text-4xl sm:text-6xl text-slate-950"
+              ? "text-2xl sm:text-4xl text-white"
+              : "text-2xl sm:text-4xl text-slate-950"
         }`}
       >
         {title}

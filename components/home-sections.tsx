@@ -61,7 +61,7 @@ export function SANTechAtAGlance() {
           <span className="text-xs font-black uppercase tracking-[0.24em] text-[#333292]">
             SAN TECH AT A GLANCE
           </span>
-          <h2 className="font-exo mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="font-exo mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             Measurable Impact Across Africa
           </h2>
           <p className="mt-4 text-base text-slate-600 leading-relaxed">
@@ -100,7 +100,7 @@ export function WhatWeDoSection() {
             <span className="text-xs font-black uppercase tracking-[0.24em] text-[#333292]">
               WHAT WE DO · 10 CORE CAPABILITIES
             </span>
-            <h2 className="font-exo mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+            <h2 className="font-exo mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               End-to-End Technology & Systems
             </h2>
             <p className="mt-3 text-base text-slate-600 max-w-2xl">
@@ -134,7 +134,7 @@ export function WhatWeDoSection() {
                       <Icon className="size-5" />
                     </div>
                   </div>
-                  <h3 className="font-exo mt-5 text-base font-extrabold text-slate-900 leading-snug">
+                  <h3 className="font-exo mt-5 text-base font-bold leading-snug text-slate-900">
                     {item.title}
                   </h3>
                   <p className="mt-2.5 text-xs text-slate-600 leading-relaxed">
@@ -171,7 +171,7 @@ export function FeaturedSolutionsSection() {
           <span className="text-xs font-black uppercase tracking-[0.24em] text-[#333292]">
             FEATURED SOLUTIONS · INNOVATION LAB
           </span>
-          <h2 className="font-exo mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="font-exo mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             Market-Ready Products & Digital Platforms
           </h2>
           <p className="mt-4 text-base text-slate-600">
@@ -196,7 +196,7 @@ export function FeaturedSolutionsSection() {
                   </span>
                 </div>
 
-                <h3 className="font-exo mt-5 text-2xl font-black text-slate-900">
+                  <h3 className="font-exo mt-5 text-xl font-bold text-slate-900">
                   {product.title}
                 </h3>
                 <p className="mt-1 text-xs font-bold text-[#333292]">
@@ -253,7 +253,7 @@ export function EVisitorsFlagshipSection() {
             <span className="rounded-full bg-cyan-400/20 px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-widest text-cyan-300 border border-cyan-400/30">
               FLAGSHIP PRODUCT · E-VISITORS
             </span>
-            <h2 className="font-exo mt-5 text-3xl sm:text-5xl font-black leading-tight tracking-tight text-white">
+          <h2 className="font-exo mt-5 text-2xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
               Smart Visitor, Access & Attendance Management Platform
             </h2>
             <p className="mt-5 text-base sm:text-lg text-white/80 leading-relaxed">
@@ -300,7 +300,7 @@ export function EVisitorsFlagshipSection() {
           {/* Right Highlight Box */}
           <div className="lg:col-span-5">
             <div className="overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
-              <h3 className="font-exo text-lg font-black text-white">
+              <h3 className="font-exo text-lg font-bold text-white">
                 Trusted by 47+ Leading Institutions
               </h3>
               <p className="mt-1 text-xs text-white/70">
@@ -336,7 +336,7 @@ export function SANHubSection() {
             <span className="text-xs font-black uppercase tracking-[0.24em] text-[#333292]">
               SAN HUB · DIGITAL ECOSYSTEM
             </span>
-            <h2 className="font-exo mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="font-exo mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Practical Training & Innovation Programs
             </h2>
             <p className="mt-3 text-base text-slate-600 max-w-2xl">
@@ -363,7 +363,7 @@ export function SANHubSection() {
                 <span className="rounded-md bg-[#333292]/10 px-2.5 py-1 text-[11px] font-extrabold text-[#333292]">
                   {course.category}
                 </span>
-                <h3 className="font-exo mt-4 text-lg font-black text-slate-900 leading-snug">
+                <h3 className="font-exo mt-4 text-lg font-bold leading-snug text-slate-900">
                   {course.title}
                 </h3>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -414,7 +414,7 @@ export function TechPulseSection() {
             <span className="text-xs font-black uppercase tracking-[0.24em] text-[#333292]">
               TECH PULSE · TRENDS & OPPORTUNITIES
             </span>
-            <h2 className="font-exo mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="font-exo mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Opportunities, News, Tenders & Events
             </h2>
             <p className="mt-3 text-base text-slate-600 max-w-2xl">
@@ -452,7 +452,7 @@ export function TechPulseSection() {
                 <span className="rounded-md bg-[#333292]/10 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#333292]">
                   {item.badge}
                 </span>
-                <h3 className="font-exo mt-4 text-base font-extrabold text-slate-900 leading-snug">
+                <h3 className="font-exo mt-4 text-base font-bold leading-snug text-slate-900">
                   {item.title}
                 </h3>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -485,7 +485,7 @@ export function CallToActionSection() {
         <span className="rounded-full bg-cyan-400/20 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-cyan-300 border border-cyan-400/30">
           BUILD WITH SAN TECH
         </span>
-        <h2 className="font-exo mt-6 text-3xl sm:text-5xl font-black text-white tracking-tight">
+        <h2 className="font-exo mt-6 text-2xl font-bold tracking-tight text-white sm:text-4xl">
           Ready to Turn Your Ideas into Impact?
         </h2>
         <p className="mt-5 text-base sm:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">

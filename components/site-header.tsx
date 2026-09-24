@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { 
-  Globe, 
   ChevronDown, 
   ArrowUpRight, 
   Menu, 
@@ -34,16 +33,16 @@ const languageLabels: Record<Language, string> = {
   br: "Bambara",
 };
 
-const languageOptions: { code: Language; label: string }[] = [
-  { code: "en", label: "English" },
-  { code: "rw", label: "Kinyarwanda" },
-  { code: "fr", label: "Français" },
-  { code: "sw", label: "Kiswahili" },
-  { code: "ar", label: "Arabic" },
-  { code: "ch", label: "Chinese" },
-  { code: "hi", label: "Hindi" },
-  { code: "ur", label: "Urdu" },
-  { code: "br", label: "Bambara" },
+const languageOptions: { code: Language; label: string; flag: string }[] = [
+  { code: "en", label: "English", flag: "gb" },
+  { code: "rw", label: "Kinyarwanda", flag: "rw" },
+  { code: "fr", label: "Français", flag: "fr" },
+  { code: "sw", label: "Kiswahili", flag: "tz" },
+  { code: "ar", label: "Arabic", flag: "sa" },
+  { code: "ch", label: "Chinese", flag: "cn" },
+  { code: "hi", label: "Hindi", flag: "in" },
+  { code: "ur", label: "Urdu", flag: "pk" },
+  { code: "br", label: "Bambara", flag: "ml" },
 ];
 
 const innovationMenu = [
@@ -82,13 +81,13 @@ const innovationMenu = [
 ] as const;
 
 const storyMenu = [
-  { label: "Who we are", href: "/our-story" },
-  { label: "Mission & vision", href: "/our-story#mission" },
-  { label: "Leadership", href: "/our-story#leadership" },
+  { label: "Who we are", href: "/our-legacy" },
+  { label: "Mission & vision", href: "/our-legacy#mission" },
+  { label: "Leadership", href: "/our-legacy#leadership" },
 ] as const;
 
 const compactSubmenus = {
-  "/our-story": storyMenu,
+  "/our-legacy": storyMenu,
   "/tech-pulse": [
     { label: "News & announcements", href: "/tech-pulse" },
     { label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
@@ -96,7 +95,7 @@ const compactSubmenus = {
   ],
 } as const;
 
-export function SiteHeader() {
+export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
@@ -104,7 +103,9 @@ export function SiteHeader() {
   const [innovationMenuOpen, setInnovationMenuOpen] = useState(false);
   const [compactMenuOpen, setCompactMenuOpen] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const selectedLanguage = languageOptions.find((option) => option.code === language) ?? languageOptions[0];
 
   useEffect(() => {
     const savedLang = localStorage.getItem("santech_lang") as Language | null;
@@ -122,7 +123,13 @@ export function SiteHeader() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        mobileDropdownRef.current &&
+        !mobileDropdownRef.current.contains(target)
+      ) {
         setLangDropdownOpen(false);
       }
     }
@@ -148,20 +155,20 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-[100] transition-all">
       <div className="relative overflow-hidden bg-[#0a1f44] text-white">
-        <div className="mx-auto flex min-h-10 max-w-[1600px] items-center justify-between gap-3 px-4 py-1.5 text-xs font-semibold sm:px-6 sm:text-[13px] lg:px-8">
-          <a href="tel:+250780309833" className="inline-flex shrink-0 items-center gap-2 transition-colors hover:text-[#00A3E0]">
-            <Phone className="size-4" />
-            <span>+250780309833 / +22371005873</span>
+        <div className="mx-auto flex min-h-9 min-w-0 max-w-[1600px] items-center justify-between gap-2 px-4 py-1 text-[10px] font-semibold sm:px-6 sm:text-xs 2xl:px-8">
+          <a href="tel:+250780309833" className="inline-flex min-w-0 flex-1 items-center gap-1.5 transition-colors hover:text-[#00A3E0] xl:flex-none xl:gap-2">
+            <Phone className="size-3 shrink-0 sm:size-3.5" />
+            <span className="truncate">+250780309833 / +22371005873</span>
           </a>
-          <span className="hidden items-center gap-2 md:inline-flex">
-            <MapPin className="size-4" />
-            <span>Plot 48, KN 1 Road, Sofaru Building; Kigali-Rwanda</span>
+          <span className="inline-flex min-w-0 flex-1 items-center justify-end gap-1.5 text-right xl:flex-none xl:gap-2">
+            <MapPin className="size-3 shrink-0 sm:size-3.5" />
+            <span className="truncate">Plot 48, KN 1 Road, Sofaru Building; Kigali-Rwanda</span>
           </span>
-          <a href="mailto:info@santechinnovate.com" className="hidden items-center gap-2 transition-colors hover:text-[#00A3E0] sm:inline-flex">
+          <a href="mailto:info@santechinnovate.com" className="hidden items-center gap-2 transition-colors hover:text-[#00A3E0] xl:inline-flex">
             <Mail className="size-4" />
-            <span>info@santechinnovate.com</span>
+            <span className="truncate">info@santechinnovate.com</span>
           </a>
-          <span className="hidden items-center gap-2 lg:inline-flex">
+          <span className="hidden items-center gap-2 2xl:inline-flex">
             <Radio className="size-4" />
             <span>santech</span>
           </span>
@@ -174,23 +181,23 @@ export function SiteHeader() {
           ? "bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200/80 py-2.5" 
           : "bg-white border-b border-slate-200/60 py-3.5"
       }`}>
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-3 sm:px-6 2xl:px-8">
           {/* Logo on Left */}
           <Link href="/" className="group flex items-center gap-3 shrink-0" onClick={() => setOpen(false)}>
             <Image
               src={santechLogo}
               alt="SAN TECH - Technology · Innovation · Skills · Impact"
-              className="h-9 w-auto max-w-[155px] object-contain transition-transform duration-300 group-hover:scale-105 sm:h-10 sm:max-w-[175px]"
+              className="h-8 w-auto max-w-[135px] object-contain transition-transform duration-300 group-hover:scale-105 sm:h-9 sm:max-w-[150px] 2xl:h-10 2xl:max-w-[175px]"
               priority
             />
           </Link>
 
           {/* Navigation Links from PDF Spec */}
-          <div className="hidden items-center gap-2 lg:flex xl:gap-4">
-            <nav className="flex items-center gap-1 xl:gap-1.5" aria-label="Main navigation">
+          <div className="hidden items-center gap-1 xl:flex 2xl:gap-4">
+            <nav className="flex items-center gap-0 2xl:gap-1.5" aria-label="Main navigation">
               {navigation.map((item) => {
                 const active = isActiveRoute(item.href);
-                const linkClassName = `relative rounded-lg px-2.5 py-1.5 text-xs font-bold tracking-[0.04em] transition-all duration-200 ${
+                const linkClassName = `relative rounded-lg px-2 py-1.5 text-[11px] font-bold tracking-[0.03em] transition-all duration-200 2xl:px-2.5 2xl:text-xs 2xl:tracking-[0.04em] ${
                   active
                     ? "text-[#0a1f44]"
                     : "text-slate-700 hover:text-[#0a1f44]"
@@ -221,9 +228,9 @@ export function SiteHeader() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -5, scale: 0.98 }}
                             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                            className="absolute left-1/2 top-full z-50 w-[min(900px,calc(100vw-2rem))] -translate-x-1/2 pt-3"
+                            className="absolute left-1/2 top-full z-50 w-[min(760px,calc(100vw-2rem))] -translate-x-1/2 pt-3 2xl:w-[min(900px,calc(100vw-2rem))]"
                           >
-                            <div className="grid grid-cols-3 gap-8 rounded-xl border border-slate-200 bg-white p-7 shadow-[0_22px_60px_rgba(10,31,68,0.16)]">
+                            <div className="grid grid-cols-3 gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-[0_22px_60px_rgba(10,31,68,0.16)] 2xl:gap-8 2xl:p-7">
                               {innovationMenu.map((group) => (
                                 <section key={group.title}>
                                   <div className="border-b border-slate-200 pb-3 text-[#0a1f44]">
@@ -313,17 +320,17 @@ export function SiteHeader() {
               })}
             </nav>
 
-            <div className="relative z-[110] flex items-center gap-2.5 border-l border-slate-200 pl-2">
+            <div className="relative z-[110] flex items-center gap-1.5 border-l border-slate-200 pl-1.5 2xl:gap-2.5 2xl:pl-2">
               {/* Language Selector Dropdown */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
                   onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50"
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[11px] font-semibold text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50 2xl:gap-1.5 2xl:px-2.5 2xl:text-xs"
                   aria-expanded={langDropdownOpen}
                   aria-label="Select language"
                 >
-                  <Globe className="size-3.5 text-[#333292]" />
+                  <img src={`https://flagcdn.com/w20/${selectedLanguage.flag}.png`} alt="" aria-hidden="true" className="h-3.5 w-5 object-cover" />
                   <span>{languageLabels[language]}</span>
                   <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${langDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
@@ -337,7 +344,7 @@ export function SiteHeader() {
                       transition={{ duration: 0.15 }}
                       className="absolute right-0 z-[120] mt-1.5 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl"
                     >
-                      {languageOptions.map(({ code, label }) => (
+                      {languageOptions.map(({ code, label, flag }) => (
                         <button
                           key={code}
                           type="button"
@@ -346,7 +353,7 @@ export function SiteHeader() {
                             language === code ? "bg-[#333292]/10 text-[#333292] font-bold" : "text-slate-700 hover:bg-slate-100"
                           }`}
                         >
-                          <span>{label}</span>
+                          <span className="inline-flex items-center gap-2"><img src={`https://flagcdn.com/w20/${flag}.png`} alt="" aria-hidden="true" className="h-3.5 w-5 object-cover" />{label}</span>
                           {language === code && <Check className="size-3.5 text-[#333292]" />}
                         </button>
                       ))}
@@ -358,7 +365,7 @@ export function SiteHeader() {
               {/* Visually Prominent CTA Button: JOIN THE COMMUNITY */}
               <Link
                 href="/join-the-community"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#0a1f44] px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-white shadow-md transition-all duration-200 hover:bg-[#132f61] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-1 rounded-xl bg-[#0a1f44] px-3 py-2 text-[11px] font-extrabold uppercase tracking-[0.06em] text-white shadow-md transition-all duration-200 hover:scale-[1.02] hover:bg-[#132f61] hover:shadow-lg active:scale-[0.98] 2xl:gap-1.5 2xl:px-4 2xl:text-xs 2xl:tracking-wider"
               >
                 <span>JOIN THE COMMUNITY</span>
               </Link>
@@ -366,14 +373,46 @@ export function SiteHeader() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 lg:hidden">
-            <button
-              type="button"
-              onClick={() => handleLanguageChange(language === "en" ? "rw" : "en")}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold text-[#333292]"
-            >
-              {language.toUpperCase()}
-            </button>
+          <div className="flex items-center gap-2 xl:hidden">
+            <div ref={mobileDropdownRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setLangDropdownOpen((open) => !open)}
+                aria-expanded={langDropdownOpen}
+                aria-label="Select language"
+                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold text-[#333292]"
+              >
+                <img src={`https://flagcdn.com/w20/${selectedLanguage.flag}.png`} alt="" aria-hidden="true" className="h-3.5 w-5 object-cover" />
+                <span>{language.toUpperCase()}</span>
+                <ChevronDown className={`size-3 transition-transform ${langDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {langDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 5, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 3, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 top-full z-[130] mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl"
+                  >
+                    {languageOptions.map(({ code, label, flag }) => (
+                      <button
+                        key={code}
+                        type="button"
+                        onClick={() => handleLanguageChange(code)}
+                        className={`flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-xs font-semibold transition-colors ${
+                          language === code ? "bg-[#333292]/10 font-bold text-[#333292]" : "text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span className="inline-flex items-center gap-2"><img src={`https://flagcdn.com/w20/${flag}.png`} alt="" aria-hidden="true" className="h-3.5 w-5 object-cover" />{label}</span>
+                        {language === code && <Check className="size-3.5 text-[#333292]" />}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <button
               type="button"
               aria-label={open ? "Close navigation" : "Open navigation"}
@@ -401,7 +440,7 @@ export function SiteHeader() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="mx-3 mt-2 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/98 shadow-2xl backdrop-blur-2xl lg:hidden"
+            className="mx-3 mt-2 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/98 shadow-2xl backdrop-blur-2xl xl:hidden"
           >
             <div className="flex flex-col gap-1 p-5">
               {navigation.map((item) => {
@@ -423,24 +462,6 @@ export function SiteHeader() {
                   </Link>
                 );
               })}
-
-              <div className="my-2 border-t border-slate-100 pt-3 flex items-center justify-between px-2">
-                <span className="text-xs font-semibold text-slate-500">Language / Ururimi</span>
-                <div className="flex max-w-[260px] flex-wrap justify-end gap-1.5">
-                  {languageOptions.map(({ code, label }) => (
-                    <button
-                      key={code}
-                      type="button"
-                      onClick={() => handleLanguageChange(code)}
-                      className={`rounded-lg px-3 py-1 text-xs font-bold ${
-                        language === code ? "bg-[#333292] text-white" : "bg-slate-100 text-slate-700"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               <Link
                 href="/join-the-community"

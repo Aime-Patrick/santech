@@ -1,7 +1,7 @@
 export const navigation = [
   { label: "HOME", href: "/", iconName: "Home" },
-  { label: "OUR STORY", href: "/our-story", iconName: "Info" },
-  { label: "INNOVATION LAB", href: "/innovation-lab", iconName: "Zap" },
+  { label: "OUR LEGACY", href: "/our-legacy", iconName: "Info" },
+  { label: "EXPLORE SOLUTIONS", href: "/innovation-lab", iconName: "Zap" },
   { label: "SAN HUB", href: "/san-hub", iconName: "GraduationCap" },
   { label: "E-VISITORS", href: "/e-visitors", iconName: "ShieldCheck" },
   { label: "TECH PULSE", href: "/tech-pulse", iconName: "Radio" },
