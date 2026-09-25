@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { 
   ChevronDown, 
-  ArrowUpRight, 
   Menu, 
   X, 
   Check,
@@ -45,63 +44,11 @@ const languageOptions: { code: Language; label: string; flag: string }[] = [
   { code: "br", label: "Bambara", flag: "ml" },
 ];
 
-const innovationMenu = [
-  {
-    title: "Products",
-    links: [
-      { label: "E-Visitors", href: "/e-visitors" },
-      { label: "SAN TRACK", href: "/innovation-lab?product=san-track" },
-      { label: "SAN BOOK", href: "/innovation-lab?product=san-book" },
-      { label: "REVIXSAN", href: "/innovation-lab?product=revixsan" },
-      { label: "SANVERSE", href: "/innovation-lab?product=sanverse" },
-    ],
-  },
-  {
-    title: "Services",
-    links: [
-      { label: "Software development", href: "/innovation-lab?focus=software-development" },
-      { label: "Web & mobile development", href: "/innovation-lab?focus=web-mobile" },
-      { label: "AI solutions", href: "/innovation-lab?focus=ai-solutions" },
-      { label: "Cybersecurity", href: "/innovation-lab?focus=cybersecurity" },
-      { label: "Digital transformation", href: "/innovation-lab?focus=digital-transformation" },
-      { label: "Systems integration", href: "/innovation-lab?focus=systems-integration" },
-    ],
-  },
-  {
-    title: "Solutions & technologies",
-    links: [
-      { label: "IoT & embedded systems", href: "/innovation-lab?focus=iot" },
-      { label: "Robotics & automation", href: "/innovation-lab?focus=robotics" },
-      { label: "Cloud & data systems", href: "/innovation-lab?focus=cloud" },
-      { label: "Digital identity & OCR", href: "/innovation-lab?focus=digital-identity" },
-      { label: "Smart infrastructure", href: "/innovation-lab?focus=smart-infrastructure" },
-      { label: "Research & innovation", href: "/innovation-lab?focus=research" },
-    ],
-  },
-] as const;
-
-const storyMenu = [
-  { label: "Who we are", href: "/our-legacy" },
-  { label: "Mission & vision", href: "/our-legacy#mission" },
-  { label: "Leadership", href: "/our-legacy#leadership" },
-] as const;
-
-const compactSubmenus = {
-  "/our-legacy": storyMenu,
-  "/tech-pulse": [
-    { label: "News & announcements", href: "/tech-pulse" },
-    { label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
-    { label: "Research & impact", href: "/tech-pulse?type=research" },
-  ],
-} as const;
-
 export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
-  const [innovationMenuOpen, setInnovationMenuOpen] = useState(false);
-  const [compactMenuOpen, setCompactMenuOpen] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -202,107 +149,6 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                     ? "text-[#0a1f44]"
                     : "text-slate-700 hover:text-[#0a1f44]"
                 }`;
-
-                if (item.href === "/innovation-lab") {
-                  return (
-                    <div
-                      key={item.href}
-                      className="relative"
-                      onMouseEnter={() => setInnovationMenuOpen(true)}
-                      onMouseLeave={() => setInnovationMenuOpen(false)}
-                      onFocus={() => setInnovationMenuOpen(true)}
-                      onBlur={(event) => {
-                        if (!event.currentTarget.contains(event.relatedTarget as Node)) setInnovationMenuOpen(false);
-                      }}
-                    >
-                      <Link href={item.href} aria-current={active ? "page" : undefined} className={`${linkClassName} inline-flex items-center gap-1`}>
-                        {item.label}
-                        <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${innovationMenuOpen ? "rotate-180" : ""}`} />
-                        {active && <span className="absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-[#0a1f44]" />}
-                      </Link>
-
-                      <AnimatePresence>
-                        {innovationMenuOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -5, scale: 0.98 }}
-                            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                            className="absolute left-1/2 top-full z-50 w-[min(760px,calc(100vw-2rem))] -translate-x-1/2 pt-3 2xl:w-[min(900px,calc(100vw-2rem))]"
-                          >
-                            <div className="grid grid-cols-3 gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-[0_22px_60px_rgba(10,31,68,0.16)] 2xl:gap-8 2xl:p-7">
-                              {innovationMenu.map((group) => (
-                                <section key={group.title}>
-                                  <div className="border-b border-slate-200 pb-3 text-[#0a1f44]">
-                                    <h2 className="text-sm font-extrabold tracking-[-0.02em]">{group.title}</h2>
-                                  </div>
-                                  <div className="mt-3 space-y-1">
-                                    {group.links.map((link) => (
-                                      <Link key={link.label} href={link.href} className="group flex items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-[#0a1f44]/[0.06] hover:text-[#0a1f44]">
-                                        <span>{link.label}</span>
-                                        <ArrowUpRight className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </section>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                }
-
-                const compactMenu = compactSubmenus[item.href as keyof typeof compactSubmenus];
-
-                if (compactMenu) {
-                  return (
-                    <div
-                      key={item.href}
-                      className="relative"
-                      onMouseEnter={() => setCompactMenuOpen(item.href)}
-                      onMouseLeave={() => setCompactMenuOpen(null)}
-                      onFocus={() => setCompactMenuOpen(item.href)}
-                      onBlur={(event) => {
-                        if (!event.currentTarget.contains(event.relatedTarget as Node)) setCompactMenuOpen(null);
-                      }}
-                    >
-                      <Link href={item.href} aria-current={active ? "page" : undefined} className={`${linkClassName} inline-flex items-center gap-1`}>
-                        {item.label}
-                        <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${compactMenuOpen === item.href ? "rotate-180" : ""}`} />
-                        {active && (
-                          <span className="absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-[#0a1f44]" />
-                        )}
-                      </Link>
-
-                      <AnimatePresence>
-                        {compactMenuOpen === item.href && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -5, scale: 0.98 }}
-                            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                            className="absolute left-1/2 top-full z-50 w-[min(270px,calc(100vw-2rem))] -translate-x-1/2 pt-3"
-                          >
-                            <div className="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-2 shadow-[0_18px_45px_rgba(10,31,68,0.14)]">
-                              {compactMenu.map((link) => (
-                                <Link
-                                  key={link.label}
-                                  href={link.href}
-                                  className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-xs font-bold text-[#0a1f44] transition-colors hover:bg-[#0a1f44]/[0.06] hover:text-[#0a1f44]"
-                                >
-                                  <span>{link.label}</span>
-                                  <ArrowUpRight className="size-3 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                                </Link>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                }
 
                 return (
                   <Link

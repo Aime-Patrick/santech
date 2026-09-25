@@ -344,7 +344,7 @@ export function SANHubSection() {
             </p>
           </div>
           <Link
-            href="/san-hub/courses"
+            href="/san-hub"
             className="inline-flex items-center gap-2 rounded-xl bg-[#333292] px-5 py-3 text-xs font-extrabold uppercase tracking-wider text-white shadow-md hover:bg-[#252472] transition-colors"
           >
             <span>View All Courses</span>
@@ -384,7 +384,7 @@ export function SANHubSection() {
 
               <div className="mt-6 pt-4 border-t border-slate-100">
                 <Link
-                  href={`/san-hub/courses`}
+                  href="/san-hub"
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-xs font-bold text-[#333292] group-hover:bg-[#333292] group-hover:text-white transition-colors"
                 >
                   <span>Register for Course</span>

@@ -1,73 +1,75 @@
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { PageIntro, Pill, PublicPage, SectionHeading } from "@/components/public-page";
+import { PublicPage } from "@/components/public-page";
+import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
+import { StickyPageMenu } from "@/components/sticky-page-menu";
 
-const stories = [
-  { type: "Opportunity", title: "Build your next chapter with SAN HUB", date: "Open now" },
-  { type: "News", title: "Designing technology for the realities people live", date: "SAN TECH journal" },
-  { type: "Event", title: "The next generation of African innovation", date: "Coming soon" },
-  { type: "Award", title: "SAN TECH recognized for ICT and innovation", date: "Latest" },
-  { type: "Trend", title: "Technology that strengthens sustainable growth", date: "In focus" },
-  { type: "Impact", title: "Tracking contribution beyond the launch", date: "SAN TECH journal" },
+const pulseMenu = [
+  { key: "news", label: "News & announcements", href: "/tech-pulse" },
+  { key: "opportunities", label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
+  { key: "research", label: "Research & impact", href: "/tech-pulse?type=research" },
+] as const;
+
+const pulseItems: SharedContentItem[] = [
+  {
+    id: "fellowship",
+    label: "Fellowship",
+    title: "SAN HUB Tech & AI Innovation Fellowship 2026",
+    description: "A full scholarship and incubation pathway for African developers building high-impact AI and embedded systems.",
+    details: ["Open until November 30, 2026.", "The opportunity connects learning, mentorship, prototyping, and a route toward real-world deployment."],
+    facts: [{ label: "Type", value: "Opportunity" }, { label: "Status", value: "Open now" }],
+  },
+  {
+    id: "news",
+    label: "News",
+    title: "Designing technology for the realities people live",
+    description: "A closer look at how SAN TECH turns practical needs into useful digital systems for institutions and communities.",
+    details: ["Published in the SAN TECH journal.", "The story follows the decisions, people, and local context behind useful technology."],
+    facts: [{ label: "Type", value: "News" }, { label: "Channel", value: "SAN TECH journal" }],
+  },
+  {
+    id: "summit",
+    label: "Event",
+    title: "African Innovation & Digital Systems Summit 2026",
+    description: "Industry leaders, policymakers, and engineering teams come together to discuss local manufacturing and responsible technology scale.",
+    details: ["Taking place in Kigali on November 12, 2026.", "The program includes conversations, demonstrations, and connections across the ecosystem."],
+    facts: [{ label: "Type", value: "Event" }, { label: "Date", value: "12 Nov 2026 · Kigali" }],
+  },
+  {
+    id: "recognition",
+    label: "Recognition",
+    title: "SAN TECH recognized for ICT and innovation",
+    description: "Recognition for pioneering digital transformation and the rapid deployment of E-Visitors across Rwanda.",
+    details: ["Published September 2026.", "The recognition reflects the work of the teams, institutions, and partners behind the deployments."],
+    facts: [{ label: "Type", value: "Award" }, { label: "Status", value: "Latest" }],
+  },
+  {
+    id: "trends",
+    label: "Trends",
+    title: "Technology that strengthens sustainable growth",
+    description: "Signals and perspectives on technology that improves operations while creating room for people and communities to grow.",
+    details: ["In focus across the SAN TECH ecosystem.", "The collection connects technology choices with sustainability, access, and long-term usefulness."],
+    facts: [{ label: "Type", value: "Trend" }, { label: "Focus", value: "Sustainable contribution" }],
+  },
+  {
+    id: "impact",
+    label: "Impact",
+    title: "Tracking contribution beyond the launch",
+    description: "Impact is measured through the people reached, systems strengthened, opportunities created, and capabilities that remain after delivery.",
+    details: ["The SAN TECH journal documents outcomes beyond a product launch.", "Evidence from programs, partnerships, and deployments will feed the future CMS archive."],
+    facts: [{ label: "Type", value: "Research & impact" }, { label: "Channel", value: "SAN TECH journal" }],
+  },
 ];
 
-export default function TechPulsePage() {
+export default async function TechPulsePage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
+  const params = await searchParams;
+  const selectedType = params.type === "opportunities" ? "fellowship" : params.type === "research" ? "impact" : "news";
+  const activeMenu = params.type === "opportunities" ? "opportunities" : params.type === "research" ? "research" : "news";
+
   return (
     <PublicPage>
-      <PageIntro
-        eyebrow="Trends / Tech Pulse"
-        title="Keep moving with the signal."
-        description="Opportunities, news, tenders, events, achievements, partnerships, technology trends, and sustainable contribution from across the SAN TECH ecosystem."
-        actions={[{ label: "Submit an opportunity", href: "/connect" }]}
-      />
-
-      <section className="px-6 py-20 sm:px-10 lg:px-16 lg:py-28">
+      <StickyPageMenu items={pulseMenu} activeKey={activeMenu} ariaLabel="Tech Pulse sections" />
+      <section className="border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-6">
-            <Pill>All</Pill>
-            <Pill>Opportunities</Pill>
-            <Pill>News</Pill>
-            <Pill>Tenders</Pill>
-            <Pill>Events</Pill>
-            <Pill>Trends</Pill>
-            <Pill>Sustainable contribution</Pill>
-          </div>
-
-          <div className="mt-10 divide-y divide-slate-200 border-y border-slate-200">
-            {stories.map((story) => (
-              <Link
-                key={story.title}
-                href="/connect"
-                className="group grid gap-4 py-7 sm:grid-cols-[150px_1fr_auto] sm:items-center"
-              >
-                <span className="text-sm font-black uppercase tracking-[0.2em] text-brand-secondary">{story.type}</span>
-                <span className="text-lg font-bold tracking-[-0.02em] text-slate-900 transition-colors group-hover:text-brand-secondary">{story.title}</span>
-                <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                  {story.date}
-                  <ArrowUpRight className="size-4" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-slate-950 px-6 py-20 text-white sm:px-10 lg:px-16 lg:py-28">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.7fr_1.3fr]">
-          <SectionHeading
-            dark
-            eyebrow="Tenders, trends, and contribution"
-            title="Useful information, easy to find."
-            description="The full platform will support search, category, date, deadline, and impact filters from the CMS."
-          />
-          <div className="rounded-xl border border-white/15 bg-white/[0.04] p-7">
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="flex h-12 items-center rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-bold text-white/65">Opportunities</div>
-              <div className="flex h-12 items-center rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-bold text-white/65">Technology trends</div>
-              <div className="flex h-12 items-center rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-bold text-white/65">Sustainable contribution</div>
-            </div>
-            <p className="mt-6 text-sm leading-6 text-white/50">Search and filtering will connect opportunities, tenders, news, and events into one pulse.</p>
-          </div>
+          <SharedContentBrowser items={pulseItems} initialItemId={selectedType} />
         </div>
       </section>
     </PublicPage>

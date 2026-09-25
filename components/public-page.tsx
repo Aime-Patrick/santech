@@ -41,7 +41,7 @@ export function PublicPage({ children }: { children: ReactNode }) {
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-cyan">SAN HUB</p>
               <div className="mt-4 grid gap-2 text-sm font-semibold text-white/75">
-                <Link href="/san-hub/courses" className="w-fit transition-colors hover:text-brand-cyan">Courses</Link>
+                <Link href="/san-hub" className="w-fit transition-colors hover:text-brand-cyan">Courses</Link>
                 <Link href="/san-hub" className="w-fit transition-colors hover:text-brand-cyan">Training & programs</Link>
                 <Link href="/join-the-community" className="w-fit transition-colors hover:text-brand-cyan">Join the community</Link>
               </div>

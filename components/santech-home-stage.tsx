@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { AnimatePresence, animate, motion, useAnimationFrame, useInView } from "motion/react";
 import { useMotionValue, useTransform } from "motion/react";
@@ -18,7 +18,6 @@ type StorySlide = {
   body: string;
   detail: string;
   facts: { label: string; value: string }[];
-  highlights: { label: string; href: string }[];
 };
 
 type PartnerBrand = {
@@ -43,11 +42,6 @@ const storySlides: StorySlide[] = [
       { label: "Focus", value: "Digital Transformation" },
       { label: "Promise", value: "Practical impact" },
     ],
-    highlights: [
-      { label: "Who we are", href: "/our-legacy" },
-      { label: "Mission & vision", href: "/our-legacy#mission" },
-      { label: "Leadership", href: "/our-legacy#leadership" },
-    ],
   },
   {
     id: "mission",
@@ -60,11 +54,6 @@ const storySlides: StorySlide[] = [
       { label: "Explore", value: "AI & data systems" },
       { label: "Connect", value: "IoT & devices" },
       { label: "Protect", value: "People & information" },
-    ],
-    highlights: [
-      { label: "Artificial intelligence", href: "/innovation-lab?focus=ai-solutions" },
-      { label: "IoT & embedded systems", href: "/innovation-lab?focus=iot" },
-      { label: "Cybersecurity", href: "/innovation-lab?focus=cybersecurity" },
     ],
   },
   {
@@ -79,11 +68,6 @@ const storySlides: StorySlide[] = [
       { label: "Build", value: "Design & integrate" },
       { label: "Grow", value: "Train & support" },
     ],
-    highlights: [
-      { label: "Software development", href: "/innovation-lab?focus=software-development" },
-      { label: "AI solutions", href: "/innovation-lab?focus=ai-solutions" },
-      { label: "Digital transformation", href: "/innovation-lab?focus=digital-transformation" },
-    ],
   },
   {
     id: "san-hub",
@@ -96,11 +80,6 @@ const storySlides: StorySlide[] = [
       { label: "Learn", value: "Practical technology" },
       { label: "Build", value: "Ideas into products" },
       { label: "Join", value: "A growing ecosystem" },
-    ],
-    highlights: [
-      { label: "Courses & training", href: "/san-hub/courses" },
-      { label: "Innovation programs", href: "/innovation-lab" },
-      { label: "Internships & mentorship", href: "/join-the-community" },
     ],
   },
   {
@@ -115,11 +94,6 @@ const storySlides: StorySlide[] = [
       { label: "Verify", value: "Identity with OCR" },
       { label: "Report", value: "Access & attendance" },
     ],
-    highlights: [
-      { label: "ID & OCR scanning", href: "/e-visitors#features" },
-      { label: "Access & attendance", href: "/e-visitors#features" },
-      { label: "Reports & audit trails", href: "/e-visitors#features" },
-    ],
   },
   {
     id: "tech-pulse",
@@ -132,11 +106,6 @@ const storySlides: StorySlide[] = [
       { label: "Follow", value: "News & trends" },
       { label: "Find", value: "Jobs & tenders" },
       { label: "Join", value: "Events & research" },
-    ],
-    highlights: [
-      { label: "News & announcements", href: "/tech-pulse" },
-      { label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
-      { label: "Research & impact", href: "/tech-pulse?type=research" },
     ],
   },
 ];
@@ -414,7 +383,7 @@ export function SantechHomeStage() {
 
   return (
     <>
-      <section className="bg-[#edf1f7] px-3 py-3 text-[#0c1230] sm:px-5 sm:py-4 2xl:px-7 xl:h-[calc(100svh-242px)] xl:min-h-0 xl:overflow-hidden">
+      <section className="bg-[#edf1f7] px-3 py-3 text-[#0c1230] sm:px-5 sm:py-4 2xl:px-7 xl:h-[min(640px,calc(100svh-242px))] xl:min-h-0 xl:overflow-hidden">
         <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col xl:h-full">
           <div className="grid min-h-0 gap-3 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_minmax(330px,0.68fr)] xl:gap-4">
             <div className="relative flex min-h-[140px] flex-col overflow-hidden bg-[#111735] sm:min-h-[220px] xl:min-h-0">
@@ -485,11 +454,11 @@ export function SantechHomeStage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="min-h-0 overflow-hidden pb-0 pt-1 xl:h-full xl:pb-12"
+                    className="flex min-h-0 flex-col overflow-hidden pb-0 pt-1 xl:h-full xl:pb-12"
                   >
                   <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.25rem,1.8vw,2.35rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>
-                  <p className="mt-3 max-w-2xl text-justify text-[13px] leading-5 tracking-[0.005em] text-slate-600 sm:text-[15px] 2xl:text-base 2xl:leading-6">{activeStory.body}</p>
-                  <p className="mt-2 hidden max-w-2xl text-justify text-[12px] leading-5 tracking-[0.01em] text-slate-600 sm:block sm:text-[14px] 2xl:text-[15px] 2xl:leading-6">{activeStory.detail}</p>
+                  <p className="mt-3 max-w-2xl text-justify text-[13px] leading-5 tracking-[0.005em] text-slate-600 sm:text-[15px] 2xl:text-[18px] 2xl:leading-6">{activeStory.body}</p>
+                  <p className="mt-2 hidden max-w-2xl text-justify text-[12px] leading-5 tracking-[0.01em] text-slate-600 sm:block sm:text-[14px] 2xl:text-[18px] 2xl:leading-6">{activeStory.detail}</p>
 
                   <div className="mt-3 grid grid-cols-3 gap-2 border-y border-slate-200 py-2">
                     {activeStory.facts.map((fact) => (
@@ -499,15 +468,6 @@ export function SantechHomeStage() {
                       </div>
                     ))}
                   </div>
-
-                    {/* <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                      {activeStory.highlights.map((highlight) => (
-                        <Link key={highlight.label} href={highlight.href} className="group flex min-h-9 items-center justify-between gap-2 border border-slate-200 bg-white px-2.5 py-2 text-xs font-bold leading-tight text-slate-700 transition-colors hover:border-[#0a1f44] hover:bg-[#0a1f44] hover:text-white sm:text-sm">
-                          <span>{highlight.label}</span>
-                          <ArrowUpRight className="size-3 shrink-0 text-[#0a1f44] transition-colors group-hover:text-white" />
-                        </Link>
-                      ))}
-                    </div> */}
 
                   </motion.div>
                 </AnimatePresence>

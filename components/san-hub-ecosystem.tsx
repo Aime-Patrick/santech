@@ -10,7 +10,7 @@ import { useRef } from "react";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const hubTracks = [
-  { label: "Learn", title: "Courses", description: "Practical courses, bootcamps, workshops, and labs for people building useful technology.", meta: "6 learning pathways", icon: BookOpen, href: "/san-hub/courses", tone: "bg-white text-slate-950", iconTone: "bg-brand-secondary text-white" },
+  { label: "Learn", title: "Courses", description: "Practical courses, bootcamps, workshops, and labs for people building useful technology.", meta: "6 learning pathways", icon: BookOpen, href: "/san-hub", tone: "bg-white text-slate-950", iconTone: "bg-brand-secondary text-white" },
   { label: "Join us next", title: "Upcoming training", description: "See the next training cohorts, their delivery format, and the skills each one is designed to unlock.", meta: "Next cohort · 14 Oct 2026", icon: CalendarDays, href: "/connect?topic=upcoming-training", tone: "bg-slate-900 text-white", iconTone: "bg-white text-brand-secondary" },
   { label: "Make it real", title: "Innovation programs", description: "Turn a difficult question into a tested idea through research, prototyping, and partnership.", meta: "Labs · challenges · pilots", icon: FlaskConical, href: "/innovation-lab", tone: "bg-brand-secondary text-white", iconTone: "bg-white text-brand-secondary" },
   { label: "Get experience", title: "Apprenticeships / Internships", description: "Learn inside real delivery teams with guided work, mentorship, and a clear path to contribution.", meta: "Applications open by placement", icon: BriefcaseBusiness, href: "/join-the-community?role=Intern", tone: "bg-slate-100 text-slate-950", iconTone: "bg-slate-950 text-white" },
