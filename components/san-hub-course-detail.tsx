@@ -158,7 +158,7 @@ export function SanHubCourseDetail({ course }: { course: SanHubCourse }) {
             </div>
           </div>
 
-          <div className="relative z-10 -mb-36 mt-14 grid gap-0 overflow-hidden rounded-2xl bg-white shadow-[0_18px_45px_rgba(10,31,68,0.14)] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="relative z-10 mt-14 grid gap-0 overflow-hidden rounded-2xl bg-white shadow-[0_18px_45px_rgba(10,31,68,0.14)] sm:grid-cols-2 lg:grid-cols-4">
             {course.stats.map((stat, index) => <div key={stat.label} className={`p-6 sm:p-7 ${index > 0 ? "border-t border-slate-200 sm:border-l sm:border-t-0" : ""}`}><p className="text-sm font-bold text-[#0a1f44]">{stat.value}</p><p className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-brand-secondary">{stat.label}</p><p className="mt-2 text-sm leading-5 text-slate-500">{stat.detail}</p></div>)}
           </div>
         </div>
