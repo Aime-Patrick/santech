@@ -3,7 +3,6 @@ export const navigation = [
   { label: "OUR LEGACY", href: "/our-legacy", iconName: "Info" },
   { label: "EXPLORE SOLUTIONS", href: "/innovation-lab", iconName: "Zap" },
   { label: "SAN HUB", href: "/san-hub", iconName: "GraduationCap" },
-  { label: "E-VISITORS", href: "/e-visitors", iconName: "ShieldCheck" },
   { label: "TECH PULSE", href: "/tech-pulse", iconName: "Radio" },
   { label: "CONNECT", href: "/connect", iconName: "Mail" },
 ];
@@ -11,7 +10,7 @@ export const navigation = [
 export const heroCTAs = [
   { label: "Explore Our Solutions", href: "/innovation-lab" },
   { label: "Join SAN HUB", href: "/san-hub" },
-  { label: "Discover E-Visitors", href: "/e-visitors" },
+  { label: "Discover E-Visitors", href: "/innovation-lab/product/e-visitors" },
 ];
 
 export const dynamicStats = [
@@ -105,7 +104,7 @@ export const products = [
     category: "Security & Operations",
     badge: "Flagship Product",
     stats: "47+ Deployments",
-    href: "/e-visitors",
+    href: "/innovation-lab/product/e-visitors",
     features: ["ID/OCR Scanning", "VIP Management", "Access Cards", "Gate Control", "Audit Logs"],
   },
   {

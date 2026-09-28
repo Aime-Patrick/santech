@@ -1,54 +1,19 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
-import { navigation } from "@/lib/site-data";
 import { Tiles } from "@/components/ui/tiles";
-import santechLogo from "@/src/assets/santech.png";
 
 type Action = { label: string; href: string; tone?: "primary" | "secondary" };
 
 export function PublicPage({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#edf1f7] text-slate-900">
+    <div className="flex min-h-screen flex-col bg-[#edf1f7] text-slate-900">
       <SiteHeader />
-      <main className="pt-28">{children}</main>
+      <main className="flex-1 pt-28">{children}</main>
       <footer className="relative overflow-hidden bg-[#0c1230] text-white">
         <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16 lg:py-10">
-          <div className="grid gap-8 lg:grid-cols-[1.15fr_0.8fr_1fr] lg:items-start">
-            <div>
-              <Link href="/" className="inline-block transition-transform hover:scale-105">
-                <Image
-                  src={santechLogo}
-                  alt="SAN TECH"
-                  className="h-10 w-auto max-w-[170px] object-contain brightness-0 invert sm:h-11 sm:max-w-[190px]"
-                />
-              </Link>
-              <p className="mt-3 max-w-sm text-lg font-bold leading-tight text-white sm:text-xl">Useful technology. Stronger systems. More possibility.</p>
-              <p className="mt-3 max-w-sm text-sm leading-5 text-white/65">Building practical digital systems, products, and skills for a more connected Africa.</p>
-            </div>
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-cyan">Explore SAN TECH</p>
-              <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-2 text-sm font-semibold text-white/75">
-                {navigation.map((item) => (
-                  <Link key={item.href} href={item.href} className="w-fit transition-colors hover:text-brand-cyan">
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-cyan">SAN HUB</p>
-              <div className="mt-4 grid gap-2 text-sm font-semibold text-white/75">
-                <Link href="/san-hub" className="w-fit transition-colors hover:text-brand-cyan">Courses</Link>
-                <Link href="/san-hub" className="w-fit transition-colors hover:text-brand-cyan">Training & programs</Link>
-                <Link href="/join-the-community" className="w-fit transition-colors hover:text-brand-cyan">Join the community</Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-6 border-t border-white/15 pt-7 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div className="grid gap-6 border-white/15 sm:grid-cols-[1fr_auto] sm:items-end">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-cyan">Connect with SAN TECH</p>
               <div className="mt-3 flex flex-col gap-2 text-sm font-medium text-white/75 sm:flex-row sm:flex-wrap sm:gap-x-6">

@@ -282,7 +282,7 @@ export function EVisitorsFlagshipSection() {
             {/* CTAs */}
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
-                href="/e-visitors"
+                href="/innovation-lab/product/e-visitors"
                 className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-xs font-extrabold uppercase tracking-wider text-[#333292] shadow-lg hover:bg-cyan-50 transition-colors"
               >
                 <span>Discover Full Product Details</span>

@@ -132,7 +132,7 @@ const heroSlides: SlideData[] = [
     bodyRw: "Sisitemu ifasha ibigo bya leta n'iby'abikorera gucunga no kwandika abashyitsi mu buryo bwihuse, bunoze kandi buha umutekano uzuye ibiro n'ahakorerwa.",
     badgeEn: "Request E-Visitors Demo",
     badgeRw: "Tangira E-Visitors",
-    badgeHref: "/e-visitors",
+    badgeHref: "/innovation-lab/product/e-visitors",
     cardTitleEn: "E-Visitors Deployment",
     cardTitleRw: "Ibigo Bikoresha E-Visitors",
     statLabelEn: "Active Deployments",

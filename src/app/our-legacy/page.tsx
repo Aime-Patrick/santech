@@ -60,7 +60,7 @@ const legacyItems: SharedContentItem[] = [
       "This recognition marks the shared effort behind SAN TECH's technology, learning, and community work.",
       "Trust is earned through useful delivery, responsible systems, and consistent progress.",
     ],
-    media: { kind: "image", src: "/troph.jpg", alt: "SAN TECH recognition for ICT and innovation" },
+    media: { kind: "image", src: "/troph.jpg", alt: "SAN TECH recognition for ICT and innovation", fit: "contain", transparent: true },
   },
   {
     id: "leadership",

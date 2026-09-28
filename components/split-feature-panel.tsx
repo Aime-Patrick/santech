@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -15,6 +16,8 @@ export type SplitFeatureMedia = {
   kind: "image" | "video";
   src: string;
   alt: string;
+  fit?: "cover" | "contain";
+  transparent?: boolean;
 };
 
 export type SplitFeatureFact = {
@@ -35,6 +38,7 @@ export function SplitFeaturePanel({
   timeline = [],
   coreFeatures,
   media,
+  detailHref,
 }: {
   title: string;
   description?: string;
@@ -43,6 +47,7 @@ export function SplitFeaturePanel({
   timeline?: SplitFeatureTimelineItem[];
   coreFeatures?: CoreFeature[];
   media?: SplitFeatureMedia;
+  detailHref?: string;
 }) {
   const [expandedFeature, setExpandedFeature] = useState<string | null>(coreFeatures?.[0]?.label ?? null);
   const prefersReducedMotion = useReducedMotion();
@@ -94,14 +99,23 @@ export function SplitFeaturePanel({
             );
           })}
         </div>}
+
+        {detailHref && (
+          <Link
+            href={detailHref}
+            className="mt-10 inline-flex w-fit text-xs font-bold uppercase tracking-[0.1em] text-[#0a1f44] underline decoration-[#0a1f44]/40 underline-offset-4 transition-colors hover:text-brand-secondary hover:decoration-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 lg:mt-20"
+          >
+            <span>View full details</span>
+          </Link>
+        )}
       </div>
 
       {media ? (
-        <div className="relative min-h-[360px] overflow-hidden rounded-xl bg-[#dceaf8] shadow-[0_24px_70px_rgba(10,31,68,0.1)] sm:min-h-[480px]">
+        <div className={`relative min-h-[360px] overflow-hidden sm:min-h-[480px] ${media.transparent ? "flex items-center justify-center bg-transparent" : "rounded-xl bg-[#dceaf8] shadow-[0_24px_70px_rgba(10,31,68,0.1)]"}`}>
           {media.kind === "video" ? (
             <video src={media.src} className="size-full object-cover" autoPlay muted loop playsInline preload="metadata" aria-label={media.alt} />
           ) : (
-            <Image src={media.src} alt={media.alt} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
+            <Image src={media.src} alt={media.alt} fill sizes="(max-width: 1024px) 100vw, 60vw" className={media.fit === "contain" ? "object-contain" : "object-cover"} />
           )}
         </div>
       ) : (
