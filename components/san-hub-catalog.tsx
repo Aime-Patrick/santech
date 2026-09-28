@@ -123,7 +123,15 @@ export function SanHubCatalog({ items = sanHubCatalogItems }: { items?: readonly
   }
 
   return (
-    <section className="border-y border-slate-200 bg-white px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
+    <section
+      className="border-y border-slate-200 bg-[#edf1f7] px-6 pb-12 pt-0 sm:px-10 lg:px-16 lg:pb-16"
+      style={{
+        backgroundImage: "linear-gradient(rgba(237, 241, 247, 0.92), rgba(237, 241, 247, 0.92)), url('/images/rw-graphic01-30p.png')",
+        backgroundPosition: "center, center",
+        backgroundRepeat: "no-repeat, repeat",
+        backgroundSize: "auto, 427px 427px",
+      }}
+    >
       <div className="mx-auto max-w-[1500px]">
         <div id="san-hub-catalog" className="sticky top-[104px] z-40 -mx-6 bg-white/95 px-6 shadow-[0_8px_18px_rgba(10,31,68,0.04)] backdrop-blur-md sm:-mx-10 sm:px-10 lg:-mx-16 lg:px-16">
           <div className="flex flex-col gap-3 border-y border-slate-200 py-4 lg:flex-row lg:items-center">
