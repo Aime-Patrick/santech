@@ -4,7 +4,8 @@ import { StickyPageMenu } from "@/components/sticky-page-menu";
 
 const pulseMenu = [
   { key: "news", label: "News & announcements", href: "/tech-pulse" },
-  { key: "opportunities", label: "Opportunities & tenders", href: "/tech-pulse?type=opportunities" },
+  { key: "opportunities", label: "Opportunities", href: "/tech-pulse?type=opportunities" },
+  { key: "tenders", label: "Tenders", href: "/tech-pulse?type=tenders" },
   { key: "research", label: "Research & impact", href: "/tech-pulse?type=research" },
 ] as const;
 
@@ -67,8 +68,8 @@ export default async function TechPulsePage({ searchParams }: { searchParams: Pr
   return (
     <PublicPage>
       <StickyPageMenu items={pulseMenu} activeKey={activeMenu} ariaLabel="Tech Pulse sections" />
-      <section className="border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
-        <div className="mx-auto max-w-7xl">
+      <section className="border-t border-slate-200 px-2 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
+        <div className="mx-auto max-w-7xl bg-white">
           <SharedContentBrowser items={pulseItems} initialItemId={selectedType} />
         </div>
       </section>

@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Award, CalendarDays, Check, ChevronRight, Clock3, House, Languages, ShieldCheck, Star, Users } from "lucide-react";
+import { ArrowUpRight, Award, CalendarDays, Check, ChevronRight, House, Languages, ShieldCheck, Star, Users } from "lucide-react";
 import { PublicPage } from "@/components/public-page";
 import { CourseSectionNav } from "@/components/san-hub-course-section-nav";
+import { SanHubCourseJourney } from "@/components/san-hub/san-hub-course-journey";
+import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 
 type CourseStat = { label: string; value: string; detail: string };
-type CourseCatalogItem = { id: string; category: "Courses"; title: string; provider: string; description: string; image: string; format: string; duration: string; level: string; badge?: string; href: string };
+type CourseCatalogItem = SanHubCatalogItem & { category: "Courses" };
 
 type CourseDetail = {
   subtitle: string;
@@ -23,11 +25,7 @@ type CourseDetail = {
 
 export type SanHubCourse = CourseCatalogItem & CourseDetail;
 
-const courseCatalogItems: readonly CourseCatalogItem[] = [
-  { id: "full-stack-software-engineering", category: "Courses", title: "Full-Stack Software Engineering", provider: "SAN TECH / SAN HUB", description: "Build reliable web and platform experiences from user needs to deployment.", image: "/images/team.jpg", format: "Cohort", duration: "16 weeks", level: "Intermediate", badge: "Featured pathway", href: "/san-hub/course/full-stack-software-engineering" },
-  { id: "applied-ai-machine-learning", category: "Courses", title: "Applied AI & Machine Learning", provider: "SAN TECH / SAN HUB", description: "Use computer vision, analytics, and responsible AI to solve practical problems.", image: "/images/summit.jpg", format: "Weekend labs", duration: "12 weeks", level: "All levels", href: "/san-hub/course/applied-ai-machine-learning" },
-  { id: "cybersecurity-defense", category: "Courses", title: "Cybersecurity & Threat Intelligence", provider: "SAN TECH / SAN HUB", description: "Learn the habits, tools, and thinking needed to protect systems and information.", image: "/images/fieldwork.jpg", format: "Intensive labs", duration: "10 weeks", level: "Intermediate", href: "/san-hub/course/cybersecurity-defense" },
-];
+const courseCatalogItems = sanHubCatalogItems.filter((item): item is CourseCatalogItem => item.category === "Courses");
 
 const courseDetails: Record<string, CourseDetail> = {
   "full-stack-software-engineering": {
@@ -139,7 +137,7 @@ function DetailIcon({ icon }: { icon: CourseDetail["details"][number]["icon"] })
 export function SanHubCourseDetail({ course }: { course: SanHubCourse }) {
   return (
     <PublicPage>
-      <section className="bg-[#edf3fc] px-6 pb-20 pt-8 sm:px-10 lg:px-16 lg:pb-24">
+      <section className="bg-[#edf3fc] px-6 pb-20 pt-8 sm:px-10 lg:px-16 lg:pb-24" style={{ backgroundImage: "linear-gradient(rgba(237, 243, 252, 0.9), rgba(237, 243, 252, 0.9)), url('/images/rw-graphic01-30p.png')", backgroundPosition: "center, center", backgroundRepeat: "no-repeat, repeat", backgroundSize: "auto, 427px 427px" }}>
         <div className="mx-auto max-w-7xl">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-slate-500"><Link href="/san-hub" className="transition-colors hover:text-brand-secondary"><House className="size-4" aria-label="SAN HUB home" /></Link><ChevronRight className="size-3.5" /><Link href="/san-hub" className="hover:text-brand-secondary">SAN HUB</Link><ChevronRight className="size-3.5" /><span className="truncate text-[#0a1f44]">{course.title}</span></nav>
 
@@ -184,11 +182,7 @@ export function SanHubCourseDetail({ course }: { course: SanHubCourse }) {
           <div className="mt-4 grid gap-10 lg:grid-cols-[0.75fr_1.25fr]"><h2 className="font-exo text-3xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Turn learning into visible capability.</h2><div className="grid gap-4 sm:grid-cols-2">{course.details.map((detail) => <div key={detail.title} className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-5"><DetailIcon icon={detail.icon} /><h3 className="mt-4 font-bold text-[#0a1f44]">{detail.title}</h3><p className="mt-1 text-sm leading-6 text-slate-600">{detail.detail}</p></div>)}</div></div>
         </section>
 
-        <section id="courses" className="scroll-mt-48 border-b border-slate-200 py-16">
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Course series</p>
-          <h2 className="font-exo mt-4 max-w-2xl text-3xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">A practical sequence with a clear destination.</h2>
-          <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200">{course.courseSeries.map((module, index) => <article key={module.title} className="grid gap-4 py-6 sm:grid-cols-[72px_1fr_auto] sm:items-start"><span className="font-exo text-2xl font-bold text-brand-secondary">0{index + 1}</span><div><h3 className="text-lg font-bold text-[#0a1f44]">{module.title}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{module.description}</p></div><span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500"><Clock3 className="size-3.5 text-brand-secondary" />{module.duration}</span></article>)}</div>
-        </section>
+        <SanHubCourseJourney modules={course.courseSeries} />
 
         <section id="testimonials" className="scroll-mt-48 border-b border-slate-200 py-16">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Learner voices</p>

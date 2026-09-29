@@ -16,7 +16,7 @@ export function StickyPageMenu({
   ariaLabel: string;
 }) {
   return (
-    <div className="sticky top-[104px] z-40 bg-[#edf1f7]/95 px-3 pt-2 backdrop-blur-sm sm:px-6 2xl:px-8">
+    <div className="sticky top-[104px] z-40 bg-white/95 px-3 pt-2 backdrop-blur-sm sm:px-6 2xl:px-8">
       <div className="mx-auto max-w-[1600px]">
         <nav aria-label={ariaLabel} className="mb-3 flex flex-wrap items-center justify-start gap-x-7 gap-y-1 py-1 sm:gap-x-8">
           {items.map((item) => (

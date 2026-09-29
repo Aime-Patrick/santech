@@ -77,6 +77,82 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .eyebrow::before { content: ""; display: block; width: 28px; height: 1px; background: currentColor; opacity: .7; }
 
+.san-hub-graphic-section {
+  background-color: #f7f8fa;
+  background-image: linear-gradient(rgba(237, 243, 252, 0.9), rgba(237, 243, 252, 0.9)), url('/images/rw-graphic01-30p.png');
+  background-position: center, center;
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 427px 427px;
+}
+
+.rw-graphic-background {
+  background-color: #edf3fc;
+  background-image: linear-gradient(rgba(237, 243, 252, 0.9), rgba(237, 243, 252, 0.9)), url('/images/rw-graphic01-30p.png');
+  background-position: center, center;
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 427px 427px;
+}
+
+.circuit-background {
+  position: relative;
+  isolation: isolate;
+  background-color: #edf3fc;
+  background-image: linear-gradient(rgba(237, 243, 252, 0.9), rgba(237, 243, 252, 0.9));
+}
+
+.circuit-background__pieces {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.circuit-background__piece {
+  position: absolute;
+  display: block;
+  opacity: 0.28;
+  background-repeat: no-repeat;
+}
+
+.circuit-background__piece--top,
+.circuit-background__piece--bottom {
+  right: 0;
+  left: 0;
+  height: clamp(150px, 22vw, 340px);
+  background-image: url('/images/bottom__circuit_1.png');
+  background-size: 100% auto;
+}
+
+.circuit-background__piece--top {
+  top: 0;
+  background-position: center top;
+}
+
+.circuit-background__piece--bottom {
+  bottom: 0;
+  background-position: center bottom;
+}
+
+.circuit-background__piece--left,
+.circuit-background__piece--right {
+  top: 0;
+  bottom: 0;
+  width: clamp(130px, 16vw, 250px);
+  background-image: url('/images/left__right_circuit_2.png');
+  background-size: auto 100%;
+}
+
+.circuit-background__piece--left {
+  left: 0;
+  background-position: left center;
+}
+
+.circuit-background__piece--right {
+  right: 0;
+  background-position: right center;
+}
+
 ::selection { background: var(--brand-secondary); color: #ffffff; }
 
 [data-hero-footer] > * {

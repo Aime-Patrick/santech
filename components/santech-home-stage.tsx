@@ -241,7 +241,7 @@ const socialLinks = [
 function PartnerMark({ partner }: { partner: PartnerBrand }) {
   const content = (
     <>
-      <span className={`relative block h-10 shrink-0 sm:h-11 ${partner.government ? "w-10" : partner.showLabel ? "w-12" : "w-24 sm:w-28 2xl:w-32"}`}>
+      <span className={`relative block h-10 shrink-0 sm:h-11 ${partner.government ? "w-10" : partner.showLabel ? "w-12" : "w-20 sm:w-24 2xl:w-28"}`}>
         <Image
           src={partner.src}
           alt={partner.label}
@@ -383,7 +383,7 @@ export function SantechHomeStage() {
 
   return (
     <>
-      <section className="bg-[#edf1f7] px-3 py-3 text-[#0c1230] sm:px-5 sm:py-4 2xl:px-7 xl:h-[min(640px,calc(100svh-242px))] xl:min-h-0 xl:overflow-hidden">
+      <section className="bg-transparent px-3 py-3 text-[#0c1230] sm:px-5 sm:py-4 2xl:px-7 xl:h-[min(640px,calc(100svh-242px))] xl:min-h-0 xl:overflow-hidden">
         <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col xl:h-full">
           <div className="grid min-h-0 gap-3 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_minmax(330px,0.68fr)] xl:gap-4">
             <div className="relative flex min-h-[140px] flex-col overflow-hidden bg-[#111735] sm:min-h-[220px] xl:min-h-0">
@@ -419,7 +419,7 @@ export function SantechHomeStage() {
             </div>
 
             <article
-              className="relative flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-[#f8f9fc] p-4 sm:min-h-[420px] sm:p-5 2xl:p-6 xl:min-h-0"
+              className="relative flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-white p-4 sm:min-h-[420px] sm:p-5 2xl:p-6 xl:min-h-0"
               onMouseEnter={() => setStoryHovered(true)}
               onMouseLeave={() => setStoryHovered(false)}
             >
@@ -487,7 +487,7 @@ export function SantechHomeStage() {
         </div>
       </section>
 
-      <div className="mx-auto grid w-full max-w-[1440px] min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-[#f8f9fc] text-[11px] font-semibold text-slate-500 sm:min-h-[120px] xl:h-[80px] xl:min-h-0 xl:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
+      <div className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] xl:h-[80px] xl:min-h-0 xl:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 xl:min-h-0 xl:border-b-0 xl:border-r xl:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>

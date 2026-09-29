@@ -1,4 +1,4 @@
-import { PublicPage } from "@/components/public-page";
+﻿import { PublicPage } from "@/components/public-page";
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 
@@ -6,6 +6,7 @@ const legacyMenu = [
   { key: "who-we-are", label: "Who we are", href: "/our-legacy" },
   { key: "mission", label: "Mission & vision", href: "/our-legacy?section=mission" },
   { key: "leadership", label: "Leadership", href: "/our-legacy?section=leadership&view=executive" },
+  { key: "intellectual-property", label: "Intellectual property", href: "/our-legacy?section=intellectual-property" },
 ] as const;
 
 const legacyItems: SharedContentItem[] = [
@@ -78,18 +79,33 @@ const legacyItems: SharedContentItem[] = [
     ],
     content: "leadership",
   },
+  {
+    id: "intellectual-property",
+    label: "Intellectual property",
+    title: "Ideas made useful and protected with care.",
+    description: "Our intellectual property brings together the products, platforms, research, and methods SAN TECH develops to solve real problems.",
+    details: [
+      "We build and maintain original digital products, software systems, educational content, research outputs, and implementation methods for African environments.",
+      "We protect the work through clear ownership, responsible collaboration, documentation, and practical delivery that keeps the value close to the people and institutions it serves.",
+    ],
+    facts: [
+      { label: "Product portfolio", value: "SAN BOOK Â· E-Visitors Â· SAN TRACK" },
+      { label: "Core practice", value: "Research Â· design Â· engineering" },
+      { label: "Purpose", value: "Turn ideas into useful systems" },
+    ],
+  },
 ];
 
 export default async function OurLegacyPage({ searchParams }: { searchParams: Promise<{ section?: string; view?: string }> }) {
   const params = await searchParams;
-  const selectedSection = params.section === "mission" ? "mission" : params.section === "leadership" ? "leadership" : "who-we-are";
+  const selectedSection = params.section === "mission" ? "mission" : params.section === "leadership" ? "leadership" : params.section === "intellectual-property" ? "intellectual-property" : "who-we-are";
   const leadershipView = params.view === "team" ? "team" : "executive";
 
   return (
     <PublicPage>
       <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" />
-      <section className="border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
-        <div className="mx-auto max-w-7xl">
+      <section className="min-h-[calc(100svh-7rem)] border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
+        <div className="mx-auto max-w-7xl bg-white">
           <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} />
         </div>
       </section>

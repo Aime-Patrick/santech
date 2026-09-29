@@ -1,0 +1,52 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight, BookOpen, CalendarDays, Clock3, Sparkles, Users } from "lucide-react";
+
+import type { SanHubCatalogItem, SanHubCategory } from "@/lib/san-hub-catalog-data";
+
+const categoryIcons: Record<SanHubCategory, typeof BookOpen> = {
+  Courses: BookOpen,
+  Programs: Sparkles,
+  "Upcoming training": CalendarDays,
+  "Innovation programs": Sparkles,
+  "Apprenticeships / Internships": Users,
+  "Upskilling programs": BookOpen,
+  Events: CalendarDays,
+};
+
+export function SanHubCatalogCard({ item }: { item: SanHubCatalogItem }) {
+  const Icon = categoryIcons[item.category];
+
+  return (
+    <article className="group flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_rgba(10,31,68,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-secondary/40 hover:shadow-[0_24px_50px_rgba(10,31,68,0.12)]">
+      <Link href={item.href} className="relative block h-44 overflow-hidden bg-[#dceaf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset">
+        <Image src={item.image} alt="" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1f44]/75 via-[#0a1f44]/10 to-transparent" />
+        <span className="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#0a1f44] shadow-sm">{item.category}</span>
+        {item.badge && <span className="absolute bottom-4 left-4 rounded-full bg-brand-secondary px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-white">{item.badge}</span>}
+      </Link>
+
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
+          <span className="grid size-7 place-items-center rounded-lg bg-[#e6eef8] text-brand-secondary"><Icon className="size-3.5" aria-hidden="true" /></span>
+          <span>{item.provider}</span>
+        </div>
+        <Link href={item.href} className="mt-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+          <h3 className="font-exo text-lg font-bold leading-tight tracking-[-0.025em] text-[#0a1f44] transition-colors group-hover:text-brand-secondary">{item.title}</h3>
+        </Link>
+        <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">{item.description}</p>
+        <div className="mt-auto grid grid-cols-2 gap-3 border-t border-slate-100 pt-4 text-xs text-slate-500">
+          <span><strong className="block font-black uppercase tracking-[0.1em] text-slate-400">Format</strong><span className="mt-1 block font-semibold text-slate-700">{item.format}</span></span>
+          <span><strong className="block font-black uppercase tracking-[0.1em] text-slate-400">Level</strong><span className="mt-1 block font-semibold text-slate-700">{item.level}</span></span>
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-3 text-xs font-bold text-slate-500">
+          <span className="inline-flex items-center gap-1.5"><Clock3 className="size-3.5 text-brand-secondary" />{item.duration}</span>
+          <div className="flex items-center gap-3">
+            <Link href={item.href} className="inline-flex items-center gap-1 text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">Explore <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></Link>
+            {(item.category === "Courses" || item.category === "Programs") && <Link href={`/join-the-community?${item.category === "Courses" ? "course" : "program"}=${encodeURIComponent(item.title)}`} className="inline-flex items-center gap-1 rounded-lg bg-[#0a1f44] px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">Apply <ArrowUpRight className="size-3" aria-hidden="true" /></Link>}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}

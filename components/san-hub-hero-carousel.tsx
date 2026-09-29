@@ -56,7 +56,7 @@ export function SanHubHeroCarousel() {
   }
 
   return (
-    <section className="relative isolate min-h-[620px] overflow-hidden bg-[#07152d] text-white sm:min-h-[660px] lg:min-h-[calc(100svh-7rem)]" aria-roledescription="carousel" aria-label="SAN HUB learning pathways">
+    <section id="san-hub-about" className="relative isolate min-h-[620px] scroll-mt-40 overflow-hidden bg-[#07152d] text-white sm:min-h-[660px] lg:min-h-[calc(100svh-7rem)]" aria-roledescription="carousel" aria-label="SAN HUB learning pathways">
       <AnimatePresence initial={false} mode="sync">
         <motion.div
           key={activeSlide.id}

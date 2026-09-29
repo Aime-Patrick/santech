@@ -3,14 +3,15 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { Tiles } from "@/components/ui/tiles";
+import { CircuitBackground } from "@/components/ui/circuit-background";
 
 type Action = { label: string; href: string; tone?: "primary" | "secondary" };
 
 export function PublicPage({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-[#edf1f7] text-slate-900">
+    <CircuitBackground className="flex min-h-screen flex-col text-slate-900">
       <SiteHeader />
-      <main className="flex-1 pt-28">{children}</main>
+      <main className="min-h-[calc(100svh-7rem)] flex-1 bg-white pt-28">{children}</main>
       <footer className="relative overflow-hidden bg-[#0c1230] text-white">
         <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16 lg:py-10">
           <div className="grid gap-6 border-white/15 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -44,7 +45,7 @@ export function PublicPage({ children }: { children: ReactNode }) {
           style={{ backgroundImage: "url('/imingogo-trimmed.png')", backgroundPosition: "center bottom", backgroundRepeat: "repeat-x", backgroundSize: "44px 22px" }}
         />
       </footer>
-    </div>
+    </CircuitBackground>
   );
 }
 
