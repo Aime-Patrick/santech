@@ -25,7 +25,7 @@ export function SanHubSectionMenu({ activeSection }: { activeSection: SanHubSect
             const isActive = item.id === activeSection;
 
             return (
-              <Link key={item.id} href={item.href} className="relative flex min-h-12 items-center px-2 text-xs font-bold text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:min-h-14 sm:px-3 sm:text-sm">
+              <Link key={item.id} href={item.href} className="relative flex min-h-12 items-center px-2 text-xs font-bold uppercase tracking-[0.03em] text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:min-h-14 sm:px-3 sm:text-sm">
                 {item.label}
                 {isActive && <motion.span layoutId="san-hub-section-active" className="absolute inset-x-2 bottom-0 h-0.5 bg-cyan-300 sm:inset-x-3" transition={{ duration: 0.2, ease: "easeOut" }} aria-hidden="true" />}
               </Link>
