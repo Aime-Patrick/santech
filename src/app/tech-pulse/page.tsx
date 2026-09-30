@@ -1,12 +1,12 @@
 import { PublicPage } from "@/components/public-page";
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
+import { TechPulseOpportunities } from "@/components/tech-pulse-opportunities";
 
 const pulseMenu = [
-  { key: "news", label: "News & announcements", href: "/tech-pulse" },
+  { key: "news", label: "News", href: "/tech-pulse" },
   { key: "announcements", label: "Announcements", href: "/tech-pulse?type=announcements" },
   { key: "opportunities", label: "Opportunities", href: "/tech-pulse?type=opportunities" },
-  { key: "tenders", label: "Tenders", href: "/tech-pulse?type=tenders" },
   { key: "research", label: "Research & impact", href: "/tech-pulse?type=research" },
 ] as const;
 
@@ -79,7 +79,7 @@ export default async function TechPulsePage({ searchParams }: { searchParams: Pr
       <StickyPageMenu items={pulseMenu} activeKey={activeMenu} ariaLabel="Tech Pulse sections" />
       <section className="border-t border-slate-200 px-2 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
         <div className="mx-auto max-w-7xl bg-white px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
-          <SharedContentBrowser items={pulseItems} initialItemId={selectedType} combinedPanel />
+          {params.type === "opportunities" ? <TechPulseOpportunities /> : <SharedContentBrowser items={pulseItems} initialItemId={selectedType} combinedPanel />}
         </div>
       </section>
     </PublicPage>
