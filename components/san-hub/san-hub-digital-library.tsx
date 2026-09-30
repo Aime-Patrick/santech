@@ -79,7 +79,7 @@ export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigit
 
   return (
     <section id="san-hub-digital-library" className="san-hub-graphic-section scroll-mt-40 border-b border-[#0a1f44]/10 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
-      <div className="mx-auto max-w-[1500px]">
+      <div className="mx-auto max-w-[1500px] bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
         {activeBook ? (
           <BookReader book={activeBook} src={src} onBack={() => setActiveBook(null)} />
         ) : (

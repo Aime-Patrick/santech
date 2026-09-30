@@ -1,12 +1,15 @@
-﻿import { PublicPage } from "@/components/public-page";
+import { PublicPage } from "@/components/public-page";
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 
 const legacyMenu = [
   { key: "who-we-are", label: "Who we are", href: "/our-legacy" },
+  { key: "journey", label: "Our journey", href: "/our-legacy?section=journey" },
+  { key: "focus", label: "Our focus", href: "/our-legacy?section=focus" },
   { key: "mission", label: "Mission & vision", href: "/our-legacy?section=mission" },
+  { key: "recognition", label: "Recognition", href: "/our-legacy?section=recognition" },
   { key: "leadership", label: "Leadership", href: "/our-legacy?section=leadership&view=executive" },
-  { key: "intellectual-property", label: "Intellectual property", href: "/our-legacy?section=intellectual-property" },
+  { key: "profile", label: "Company profile", href: "/our-legacy?section=profile" },
 ] as const;
 
 const legacyItems: SharedContentItem[] = [
@@ -14,54 +17,36 @@ const legacyItems: SharedContentItem[] = [
     id: "who-we-are",
     label: "Who we are",
     title: "Technology with a human reason.",
-    description: "SAN TECH is a Rwandan technology and innovation company established in 2019 by young engineers with a mission to turn ideas and operational challenges into practical solutions.",
-    details: [
-      "We bring together software engineering, artificial intelligence, cybersecurity, IoT, research, product development, digital transformation, and technology education for real African environments.",
-      "We help institutions, organizations, and innovators move from an idea or problem to design, development, deployment, and impact.",
-    ],
-    facts: [
-      { label: "Established", value: "2019" },
-      { label: "Focus", value: "Digital transformation" },
-      { label: "Promise", value: "Practical impact" },
-    ],
+    description: "SAN TECH is a technological company focused on digital transformation and innovation.",
+    content: "identity",
+  },
+  {
+    id: "journey",
+    label: "Our journey",
+    title: "SAN TECH Journey at a Glance",
+    description: "A decade of turning practical problems into technology, capability, partnerships, and a growing African innovation ecosystem.",
+    content: "journey",
+  },
+  {
+    id: "focus",
+    label: "Our focus",
+    title: "Turning capability into useful progress.",
+    description: "From software and AI to training and deployment, SAN TECH brings the capabilities needed to move from a challenge or idea to a working solution.",
+    content: "focus",
   },
   {
     id: "mission",
     label: "Mission & vision",
     title: "Useful systems. Wider possibility.",
     description: "Our mission is to build technology and pathways that help people and institutions move forward with confidence.",
-    details: [
-      "Our vision is an African innovation ecosystem where ideas become trusted, lasting impact.",
-      "Our values are practical thinking, curiosity, inclusion, accountability, and generous knowledge-sharing.",
-    ],
-    facts: [
-      { label: "Mission", value: "Build useful technology" },
-      { label: "Vision", value: "Grow African innovation" },
-      { label: "Values", value: "Practical · curious · accountable" },
-    ],
-  },
-  {
-    id: "journey",
-    label: "Our journey",
-    title: "Built one useful step at a time.",
-    description: "SAN TECH continues to grow through products, programs, partnerships, and people empowered to create more.",
-    details: [
-      "2019 — SAN TECH founded with a focus on homegrown technology and digital capacity.",
-      "2022 — Training and innovation programs connected skills, ideas, and communities.",
-      "2023 — SAN HUB expanded into a shared space for courses, mentorship, and progress.",
-      "2024–2026 — Products, platforms, and partnerships grew into a wider African ecosystem.",
-    ],
+    content: "mission",
   },
   {
     id: "recognition",
     label: "Recognition",
     title: "Recognition belongs to the ecosystem.",
     description: "Our work is shaped by the people and partners who make every product, program, and outcome possible.",
-    details: [
-      "This recognition marks the shared effort behind SAN TECH's technology, learning, and community work.",
-      "Trust is earned through useful delivery, responsible systems, and consistent progress.",
-    ],
-    media: { kind: "image", src: "/troph.jpg", alt: "SAN TECH recognition for ICT and innovation", fit: "contain", transparent: true },
+    content: "recognition",
   },
   {
     id: "leadership",
@@ -73,40 +58,32 @@ const legacyItems: SharedContentItem[] = [
       "Our team brings together software engineering, product and design, innovation and research, and community programs.",
     ],
     facts: [
-      { label: "Executive direction", value: "CEO · Operations and programs" },
+      { label: "Executive direction", value: "Founder & CEO · Co-founder & COO/CFO" },
       { label: "Our team", value: "Builders · researchers · educators" },
       { label: "Working style", value: "Accountable and close to the work" },
     ],
     content: "leadership",
   },
   {
-    id: "intellectual-property",
-    label: "Intellectual property",
-    title: "Ideas made useful and protected with care.",
-    description: "Our intellectual property brings together the products, platforms, research, and methods SAN TECH develops to solve real problems.",
-    details: [
-      "We build and maintain original digital products, software systems, educational content, research outputs, and implementation methods for African environments.",
-      "We protect the work through clear ownership, responsible collaboration, documentation, and practical delivery that keeps the value close to the people and institutions it serves.",
-    ],
-    facts: [
-      { label: "Product portfolio", value: "SAN BOOK Â· E-Visitors Â· SAN TRACK" },
-      { label: "Core practice", value: "Research Â· design Â· engineering" },
-      { label: "Purpose", value: "Turn ideas into useful systems" },
-    ],
+    id: "profile",
+    label: "Company profile",
+    title: "From ideation to transformative impact.",
+    description: "SAN TECH is a Kigali-based technology and innovation company that connects people, ideas, and technology to create digital products, strengthen organizations, and grow the next generation of builders.",
+    content: "profile",
   },
 ];
 
 export default async function OurLegacyPage({ searchParams }: { searchParams: Promise<{ section?: string; view?: string }> }) {
   const params = await searchParams;
-  const selectedSection = params.section === "mission" ? "mission" : params.section === "leadership" ? "leadership" : params.section === "intellectual-property" ? "intellectual-property" : "who-we-are";
+  const selectedSection = legacyMenu.find((item) => item.key === params.section)?.key ?? "who-we-are";
   const leadershipView = params.view === "team" ? "team" : "executive";
 
   return (
     <PublicPage>
       <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" />
       <section className="min-h-[calc(100svh-7rem)] border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
-        <div className="mx-auto max-w-7xl bg-white">
-          <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} />
+        <div className="mx-auto max-w-7xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+          <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl />
         </div>
       </section>
     </PublicPage>

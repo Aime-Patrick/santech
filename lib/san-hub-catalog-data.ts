@@ -40,10 +40,40 @@ export const sanHubCatalogItems: readonly SanHubCatalogItem[] = [
   { id: "tech-community-talks", category: "Events", title: "SAN HUB Tech Community Talks", provider: "SAN HUB events", description: "Join conversations with practitioners, mentors, and innovators working on useful technology.", image: "/images/fieldwork.jpg", format: "Talks and panels", duration: "Monthly", level: "Open to all", href: "/tech-pulse" },
 ];
 
-export const sanHubProgramItems: readonly SanHubCatalogItem[] = [
+const sanHubProgramItemsLegacy: readonly SanHubCatalogItem[] = [
   { id: "apprenticeship", category: "Programs", title: "Apprenticeship", provider: "SAN HUB programs", description: "Learn through guided practice, mentorship, and contribution to real technology projects.", image: "/images/team.jpg", format: "Mentored placement", duration: "3–6 months", level: "Emerging practitioners", badge: "Apply now", href: "/join-the-community?program=Apprenticeship" },
   { id: "devbreak", category: "Programs", title: "DevBreak", provider: "SAN HUB programs", description: "A focused builder programme for turning a technical idea into a working prototype.", image: "/images/summit.jpg", format: "Build sprint", duration: "8 weeks", level: "Builders and innovators", badge: "Build with us", href: "/join-the-community?program=DevBreak" },
   { id: "professional-capacity-building", category: "Programs", title: "Professional Capacity Building", provider: "SAN HUB programs", description: "Strengthen the practical digital, technical, and collaboration skills that help teams deliver.", image: "/images/graduates.jpg", format: "Skills programme", duration: "Custom schedule", level: "Professionals and teams", href: "/join-the-community?program=Professional%20Capacity%20Building" },
   { id: "professional-career-guidance", category: "Programs", title: "Professional Career Guidance", provider: "SAN HUB programs", description: "Get clear direction, practical feedback, and a stronger next step for your technology career.", image: "/images/fieldwork.jpg", format: "Guidance sessions", duration: "By appointment", level: "Students and professionals", href: "/join-the-community?program=Professional%20Career%20Guidance" },
   { id: "research-innovation-projects", category: "Programs", title: "Research, Innovation and Projects Development", provider: "SAN HUB programs", description: "Move a meaningful question from research into a tested idea, project, or solution.", image: "/images/ch10-datacenter.jpg", format: "Project support", duration: "Rolling intake", level: "Researchers and innovators", badge: "Partner with us", href: "/join-the-community?program=Research%2C%20Innovation%20and%20Projects%20Development" },
 ];
+
+export const sanHubProgramItems: readonly SanHubCatalogItem[] = [
+  ["Tech Explorers", "Introduce young people to technology through accessible, practical experiences.", "/images/graduates.jpg"],
+  ["Software Development", "Build professional software engineering skills through guided practice and projects.", "/images/team.jpg"],
+  ["AI & Data", "Learn artificial intelligence, machine learning, and data technologies for practical work.", "/images/summit.jpg"],
+  ["IoT & Embedded Systems", "Build connected devices, embedded systems, and automation projects.", "/images/ch10-datacenter.jpg"],
+  ["Cybersecurity", "Develop security awareness and professional skills for protecting systems and data.", "/images/fieldwork.jpg"],
+  ["Robotics", "Explore robotics, electronics, automation, and the systems that connect them.", "/images/ch10-datacenter.jpg"],
+  ["Innovation Accelerator", "Develop promising ideas into viable solutions through structure, feedback, and support.", "/images/summit.jpg"],
+  ["Internship Program", "Gain practical workplace experience with technology teams and projects.", "/images/team.jpg"],
+  ["Mentorship", "Connect participants with experienced experts who can guide their next step.", "/images/fieldwork.jpg"],
+  ["Research & Development", "Conduct applied technology research and move findings toward useful outcomes.", "/images/ch10-datacenter.jpg"],
+  ["Startup Development", "Support venture creation and growth from an early idea to a stronger business direction.", "/images/summit.jpg"],
+  ["Challenges & Hackathons", "Solve real-world problems through focused teamwork, experimentation, and invention.", "/images/team.jpg"],
+  ["Scholarships", "Increase access to technology education and opportunity for promising participants.", "/images/graduates.jpg"],
+  ["DevBreak", "Intensive practical technology learning for people ready to build and apply.", "/images/summit.jpg"],
+  ["Tech Forward Live", "Engage with technology, innovation, practitioners, and the wider ecosystem.", "/images/fieldwork.jpg"],
+].map(([title, description, image], index) => ({
+  id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+  category: "Programs" as const,
+  title,
+  provider: "SAN HUB programs",
+  description,
+  image,
+  format: index === 7 ? "Work placement" : "SAN HUB program",
+  duration: index === 7 ? "By placement" : "Scheduled or rolling intake",
+  level: "Learners, innovators, and professionals",
+  badge: index === 6 || index === 7 ? "Apply now" : undefined,
+  href: `/join-the-community?program=${encodeURIComponent(title)}`,
+}));

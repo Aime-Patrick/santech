@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { SanHubCatalogCard } from "@/components/san-hub/san-hub-course-card";
 import { sanHubCatalogItems, sanHubCategories, type SanHubCatalogItem, type SanHubCategory } from "@/lib/san-hub-catalog-data";
 
-export function SanHubCatalog({ items = sanHubCatalogItems, showFilters = true, categories = sanHubCategories }: { items?: readonly SanHubCatalogItem[]; showFilters?: boolean; categories?: readonly SanHubCategory[] }) {
+export function SanHubCatalog({ items = sanHubCatalogItems, showFilters = true, showCategoryFilter = true, showResultSummary = true, withTopPadding = false, categories = sanHubCategories }: { items?: readonly SanHubCatalogItem[]; showFilters?: boolean; showCategoryFilter?: boolean; showResultSummary?: boolean; withTopPadding?: boolean; categories?: readonly SanHubCategory[] }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<SanHubCategory | "All">("All");
   const [format, setFormat] = useState("All formats");
@@ -14,6 +14,7 @@ export function SanHubCatalog({ items = sanHubCatalogItems, showFilters = true, 
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
+  const hasCatalogControls = showFilters || showCategoryFilter;
 
   const formats = useMemo(() => ["All formats", ...Array.from(new Set(items.map((item) => item.format)))], [items]);
   const levels = useMemo(() => ["All levels", ...Array.from(new Set(items.map((item) => item.level)))], [items]);
@@ -43,10 +44,10 @@ export function SanHubCatalog({ items = sanHubCatalogItems, showFilters = true, 
   return (
     <section
       id="san-hub-digital-library"
-      className="san-hub-graphic-section border-y border-slate-200 px-6 pb-12 pt-0 sm:px-10 lg:px-16 lg:pb-16"
+      className="san-hub-graphic-section mt-6 border-y border-slate-200 px-6 pb-12 pt-0 sm:px-10 lg:mt-8 lg:px-16 lg:pb-16"
     >
-      <div className="mx-auto max-w-[1500px]">
-        {(showFilters || categories.length > 0) && <div id="san-hub-catalog" className="scroll-mt-40 sticky top-[104px] z-40 -mx-6 bg-white/95 px-6 shadow-[0_8px_18px_rgba(10,31,68,0.04)] backdrop-blur-md sm:-mx-10 sm:px-10 lg:-mx-16 lg:px-16">
+      <div className={`mx-auto max-w-[1500px] bg-white px-5 sm:px-8 lg:px-12 ${hasCatalogControls ? "py-8 sm:py-10 lg:py-12" : withTopPadding ? "pb-8 pt-8 sm:pb-10 sm:pt-10 lg:pb-12 lg:pt-12" : "pb-8 pt-0 sm:pb-10 lg:pb-12"}`}>
+        {(showFilters || showCategoryFilter) && <div id="san-hub-catalog" className="scroll-mt-40 sticky top-[104px] z-40 -mx-5 bg-white/95 px-5 shadow-[0_8px_18px_rgba(10,31,68,0.04)] backdrop-blur-md sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12">
           {showFilters && <div className="flex flex-col gap-3 border-y border-slate-200 py-4 lg:flex-row lg:items-center">
             <label className="relative min-w-0 flex-1">
               <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
@@ -56,10 +57,10 @@ export function SanHubCatalog({ items = sanHubCatalogItems, showFilters = true, 
             <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-bold text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-[#f8fafc]"><Filter className="size-4" />Filter &amp; sort<ChevronDown className={`size-4 text-slate-400 transition-transform ${filtersOpen ? "rotate-180" : ""}`} /></button>
           </div>}
 
-          <div className="flex gap-2 overflow-x-auto py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {showCategoryFilter && <div className="flex gap-2 overflow-x-auto py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <button type="button" onClick={() => { setCategory("All"); setCurrentPage(1); }} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold transition-colors ${category === "All" ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>{showFilters ? "All results" : "All programs"}</button>
             {categories.map((itemCategory) => <button key={itemCategory} type="button" onClick={() => { setCategory(itemCategory); setCurrentPage(1); }} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold transition-colors ${category === itemCategory ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>{itemCategory}</button>)}
-          </div>
+          </div>}
 
           {showFilters && filtersOpen && (
             <div className="grid gap-3 rounded-2xl bg-[#f8fafc] p-4 sm:grid-cols-3">
@@ -70,10 +71,10 @@ export function SanHubCatalog({ items = sanHubCatalogItems, showFilters = true, 
           )}
         </div>}
 
-        <div className="mt-7 flex items-center justify-between gap-4"><p className="text-sm font-bold text-[#0a1f44]">{filteredItems.length} {filteredItems.length === 1 ? "result" : "results"}</p><p className="hidden text-xs font-semibold uppercase tracking-[0.14em] text-slate-400 sm:block">Learn · build · keep going</p></div>
+        {showResultSummary && <div className={`${hasCatalogControls ? "mt-7" : "mt-0"} flex items-center justify-between gap-4`}><p className="text-sm font-bold text-[#0a1f44]">{filteredItems.length} {filteredItems.length === 1 ? "result" : "results"}</p><p className="hidden text-xs font-semibold uppercase tracking-[0.14em] text-slate-400 sm:block">Learn · build · keep going</p></div>}
 
         {filteredItems.length > 0 ? <>
-          <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">{visibleItems.map((item) => <SanHubCatalogCard key={item.id} item={item} />)}</div>
+          <div className={`${showResultSummary ? "mt-5" : "mt-0"} grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4`}>{visibleItems.map((item) => <SanHubCatalogCard key={item.id} item={item} />)}</div>
           {pageCount > 1 && <nav aria-label="SAN HUB catalog pagination" className="mt-9 flex items-center justify-center gap-2">
             <button type="button" disabled={safePage === 1} onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition-colors hover:border-brand-secondary hover:text-[#0a1f44] disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
             {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => <button key={page} type="button" onClick={() => setCurrentPage(page)} aria-current={safePage === page ? "page" : undefined} className={`grid size-9 place-items-center rounded-xl border text-xs font-bold transition-colors ${safePage === page ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>{page}</button>)}

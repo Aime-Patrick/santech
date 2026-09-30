@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { Tiles } from "@/components/ui/tiles";
@@ -7,11 +8,19 @@ import { CircuitBackground } from "@/components/ui/circuit-background";
 
 type Action = { label: string; href: string; tone?: "primary" | "secondary" };
 
+const socialLinks = [
+  { label: "Facebook", href: "https://www.facebook.com/santechinnovate", icon: FaFacebookF },
+  { label: "Instagram", href: "https://www.instagram.com/santechinnovate", icon: FaInstagram },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/santechinnovate", icon: FaLinkedinIn },
+  { label: "X", href: "https://x.com/santechinnovate", icon: FaXTwitter },
+  { label: "YouTube", href: "https://www.youtube.com/@santechinnovate", icon: FaYoutube },
+];
+
 export function PublicPage({ children }: { children: ReactNode }) {
   return (
     <CircuitBackground className="flex min-h-screen flex-col text-slate-900">
       <SiteHeader />
-      <main className="min-h-[calc(100svh-7rem)] flex-1 bg-white pt-28">{children}</main>
+      <main className="min-h-[calc(100svh-7rem)] flex-1 pt-28">{children}</main>
       <footer className="relative overflow-hidden bg-[#0c1230] text-white">
         <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16 lg:py-10">
           <div className="grid gap-6 border-white/15 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -27,6 +36,21 @@ export function PublicPage({ children }: { children: ReactNode }) {
                   +250 780 309 833 / +223 710 058 73
                 </a>
                 <span className="flex items-center gap-2"><MapPin className="size-4 text-brand-cyan" />Kigali, Rwanda</span>
+              </div>
+              <div className="mt-4 flex items-center gap-2">
+                <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">Follow us</span>
+                {socialLinks.map(({ label, href, icon: Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`SAN TECH on ${label}`}
+                    className="grid size-8 place-items-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-brand-cyan hover:bg-brand-cyan hover:text-[#0c1230]"
+                  >
+                    <Icon className="size-3.5" aria-hidden="true" />
+                  </a>
+                ))}
               </div>
             </div>
             <Link href="/connect" className="inline-flex w-fit items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-brand-secondary transition-colors hover:bg-brand-cyan hover:text-brand-secondary">

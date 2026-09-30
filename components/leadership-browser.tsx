@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { FaLinkedinIn } from "react-icons/fa6";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type LeadershipView = "executive" | "team";
 
 const executives = [
-  { role: "CEO", title: "Chief Executive Officer", description: "Sets SAN TECH's direction, partnerships, and long-term technology strategy.", image: "/images/team.jpg" },
-  { role: "OP", title: "Operations and Programs", description: "Turns strategy into coordinated delivery across products, programs, and people.", image: "/images/fieldwork.jpg" },
+  { name: "Shema Pacifique", role: "Founder & CEO", title: "Founder & Chief Executive Officer", image: "/images/CEO.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Claudine Niyonzima", role: "Co-founder & COO/CFO", title: "Co-founder & Chief Operating / Financial Officer", image: "/images/Niyonzima_Claudine-removebg.png", profile: "https://www.linkedin.com/company/santechinnovate" },
 ];
 
 const teamMembers = [
@@ -22,20 +22,17 @@ const teamMembers = [
 function TeamProfileCard({ member }: { member: (typeof teamMembers)[number] }) {
   return (
     <article className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_16px_36px_rgba(10,31,68,0.08)]">
-      <div className="relative h-44 overflow-hidden bg-[#dceaf8] sm:h-48">
+      <div className="relative h-96 overflow-hidden bg-[#dceaf8] sm:h-96">
         <Image src={member.image} alt={`${member.position} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-cover" />
-        <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2 py-1 text-[8px] font-black uppercase tracking-[0.1em] text-[#0a1f44] shadow-sm">SAN TECH team</span>
       </div>
-      <div className="space-y-2.5 p-3.5">
+      <div className="flex items-end justify-between gap-4 p-3.5 sm:p-4">
         <div>
-          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-brand-secondary">{member.department}</p>
-          <h3 className="font-exo mt-1 text-sm font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{member.name}</h3>
-          <p className="mt-1 text-[11px] font-semibold leading-4 text-[#68718a]">{member.position}</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.14em] text-brand-secondary sm:text-xs">{member.name}</p>
+          <h3 className="font-exo mt-1 text-sm font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{member.position}</h3>
         </div>
-        <div className="border-t border-slate-200 pt-2.5 text-[11px] leading-4 text-[#68718a]">
-          <p><span className="font-black uppercase tracking-[0.1em] text-slate-400">Expertise</span><br />{member.expertise}</p>
-        </div>
-        <a href={member.profile} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] font-bold text-brand-secondary transition-colors hover:text-[#0a1f44]">Professional profile <ArrowUpRight className="size-3" /></a>
+        <a href={member.profile} target="_blank" rel="noreferrer" aria-label={`Open LinkedIn profile for ${member.name}`} className="grid size-8 shrink-0 place-items-center rounded-full border border-slate-200 text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-brand-secondary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+          <FaLinkedinIn className="size-3.5" aria-hidden="true" />
+        </a>
       </div>
     </article>
   );
@@ -47,9 +44,15 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
   const prefersReducedMotion = useReducedMotion();
   const visibleMembers = [teamMembers[teamIndex], teamMembers[(teamIndex + 1) % teamMembers.length]];
 
-  function moveTeam(direction: 1 | -1) {
-    setTeamIndex((current) => (current + direction + teamMembers.length) % teamMembers.length);
-  }
+  useEffect(() => {
+    if (view !== "team" || prefersReducedMotion) return;
+
+    const timer = window.setInterval(() => {
+      setTeamIndex((current) => (current + 1) % teamMembers.length);
+    }, 4800);
+
+    return () => window.clearInterval(timer);
+  }, [prefersReducedMotion, view]);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[0.58fr_1.42fr] lg:items-stretch lg:gap-10">
@@ -70,14 +73,17 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
             <motion.section key="executive-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }} className="grid gap-4 sm:grid-cols-2">
               {executives.map((executive) => (
                 <article key={executive.role} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_16px_36px_rgba(10,31,68,0.08)]">
-                  <div className="relative h-36 overflow-hidden bg-[#dceaf8] sm:h-40">
-                    <Image src={executive.image} alt={`${executive.title} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-cover" />
-                    <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2 py-1 text-[8px] font-black uppercase tracking-[0.1em] text-[#0a1f44] shadow-sm">SAN TECH direction</span>
+                  <div className="relative h-96 overflow-hidden bg-[#dceaf8] sm:h-96">
+                    <Image src={executive.image} alt={`${executive.title} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className={executive.name === "Claudine Niyonzima" ? "object-contain object-bottom" : "object-cover"} />
                   </div>
-                  <div className="p-3.5 sm:p-4">
-                    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-brand-secondary">{executive.role}</p>
-                    <h3 className="font-exo mt-1.5 text-base font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{executive.title}</h3>
-                    <p className="mt-2 text-xs leading-5 text-[#68718a]">{executive.description}</p>
+                  <div className="flex items-end justify-between gap-4 p-3.5 sm:p-4">
+                    <div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.14em] text-brand-secondary sm:text-xs">{executive.name ?? executive.role}</p>
+                      <h3 className="font-exo mt-1.5 text-base font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{executive.title}</h3>
+                    </div>
+                    <a href={executive.profile} target="_blank" rel="noreferrer" aria-label={`Open LinkedIn profile for ${executive.title}`} className="grid size-8 shrink-0 place-items-center rounded-full border border-slate-200 text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-brand-secondary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+                      <FaLinkedinIn className="size-3.5" aria-hidden="true" />
+                    </a>
                   </div>
                 </article>
               ))}
@@ -89,12 +95,6 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
                   {visibleMembers.map((member) => <TeamProfileCard key={member.name} member={member} />)}
                 </motion.div>
               </AnimatePresence>
-              <div className="mt-4 flex justify-end">
-                <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 text-[#0a1f44]">
-                  <button type="button" onClick={() => moveTeam(-1)} className="grid size-8 place-items-center rounded-full transition-colors hover:bg-[#0a1f44] hover:text-white" aria-label="Previous team"><ArrowLeft className="size-3.5" /></button>
-                  <button type="button" onClick={() => moveTeam(1)} className="grid size-8 place-items-center rounded-full transition-colors hover:bg-[#0a1f44] hover:text-white" aria-label="Next team"><ArrowRight className="size-3.5" /></button>
-                </div>
-              </div>
             </motion.section>
           )}
         </AnimatePresence>

@@ -32,8 +32,8 @@ export function SanHubSectionMenu({ activeSection }: { activeSection: SanHubSect
             );
           })}
         </div>
-        <Link href="/join-the-community?source=san-hub" className="ml-auto inline-flex min-h-9 shrink-0 items-center rounded-lg bg-cyan-300 px-4 text-xs font-black text-[#07152d] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:min-h-10 sm:px-5 sm:text-sm">
-          Apply <span className="ml-1" aria-hidden="true">↗</span>
+        <Link href="/join-the-community?source=san-hub" className="ml-auto inline-flex min-h-9 shrink-0 items-center rounded-lg bg-slate-200 px-4 text-xs font-black text-[#07152d] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:min-h-10 sm:px-5 sm:text-sm">
+          Join SAN HUB <span className="ml-1" aria-hidden="true">↗</span>
         </Link>
       </div>
     </nav>

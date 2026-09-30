@@ -36,9 +36,20 @@ export type InnovationItem = {
   label: string;
   title: string;
   description: string;
+  subItems?: string[];
   coreFeatures: InnovationFeature[];
   media: InnovationMedia;
 };
+
+function innovationSlug(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 const productItems: InnovationItem[] = [
   {
@@ -109,48 +120,50 @@ const productItems: InnovationItem[] = [
 ];
 
 const serviceItems: InnovationItem[] = [
-  ["Software development", "Build dependable systems around the way people work.", Code2],
-  ["Web and mobile applications", "Create accessible experiences across the devices people use every day.", Smartphone],
-  ["AI solutions", "Apply practical intelligence to decisions, services, and operations.", BrainCircuit],
-  ["IoT and embedded systems", "Connect devices, environments, and useful data.", Cpu],
-  ["Cybersecurity", "Protect systems, people, and information from changing risks.", LockKeyhole],
-  ["Digital transformation", "Move from disconnected processes to systems that work together.", Workflow],
-  ["Training and capacity building", "Grow the skills needed to keep technology useful.", GraduationCap],
-  ["Systems integration", "Bring tools and workflows together into one dependable operation.", Network],
-  ["Consultancy", "Turn a difficult question into a practical technology direction.", Globe2],
+  ["Software & Digital Products", "Web, mobile, enterprise software, APIs, and databases.", Code2],
+  ["AI, Data & Automation", "AI, machine learning, OCR, computer vision, and analytics.", BrainCircuit],
+  ["IoT, Embedded & Robotics", "IoT, sensors, embedded systems, and robotics.", Cpu],
+  ["Cybersecurity & Infrastructure", "Cybersecurity, networks, servers, cloud, and data centers.", LockKeyhole],
+  ["Smart Systems", "E-Visitors, access control, tracking, and monitoring.", Radar],
+  ["Digital Transformation", "Automation, integration, consultancy, modernization, business-process digitization, paperless workflows, and enterprise modernization.", Workflow],
+  ["Business Digital Intelligence (BDI)", "ERP, management information systems, CRM, inventory, agriculture, finance, payroll, visitor management, document management, workflow automation, asset management, procurement, attendance, reporting, and analytics.", Database],
+  ["Innovation & R&D", "Prototyping, research, product development, testing, and scale.", Boxes],
+  ["SAN HUB: Capacity Building & Employment", "Training, internships, mentorship, project development, career guidance, and innovation development programs.", GraduationCap],
+  ["Technology Consultancy", "IT strategy, business analysis, system requirements, technology architecture, digital transformation consulting, ICT project management, technical feasibility studies, technology procurement advisory, system audits, and IT policy and documentation.", Globe2],
 ].map(([label, description, icon]) => ({
-  id: String(label).toLowerCase().replaceAll(" ", "-"),
+  id: innovationSlug(String(label)),
   label: String(label),
   title: String(label),
   description: String(description),
   coreFeatures: [
-    { label: "Discovery and planning", description: "Map the challenge, users, and constraints before choosing the right technology approach.", icon: icon as LucideIcon },
-    { label: "Design and delivery", description: "Turn the agreed direction into a tested system that people can use with confidence.", icon: Code2 },
-    { label: "Integration and support", description: "Connect the new work to existing operations and keep it useful after launch.", icon: Workflow },
+    { label: "Main services", description: String(description), icon: icon as LucideIcon },
+    { label: "Delivery model", description: "Move from discovery and requirements through design, development, deployment, training, and support.", icon: Code2 },
+    { label: "Built for growth", description: "Create technology that fits real operational needs and can grow with the organization.", icon: Workflow },
   ],
   media: { kind: "image" as const, src: "/images/team.jpg", alt: `SAN TECH ${String(label)} team` },
 }));
 
 const solutionItems: InnovationItem[] = [
-  ["Web platforms", "Create digital foundations that are clear, accessible, and ready to grow.", Globe2],
-  ["Mobile apps", "Put useful services and workflows where people already work.", Smartphone],
-  ["Cloud systems", "Make infrastructure more flexible, secure, and easier to operate.", Database],
-  ["AI and machine learning", "Find patterns and support better decisions with responsible intelligence.", BrainCircuit],
-  ["IoT", "Connect devices and environments to the systems that guide action.", Cpu],
-  ["Data and analytics", "Turn scattered information into signals teams can use.", Workflow],
-  ["Cybersecurity", "Design protection into systems from the beginning.", ShieldCheck],
-  ["Automation", "Reduce repetitive work and give teams more room to focus.", Code2],
-].map(([label, description, icon]) => ({
-  id: String(label).toLowerCase().replaceAll(" ", "-"),
+  ["Software Engineering", "Design and build dependable digital products for everyday work, institutional operations, and growing organizations.", ["Web applications", "Mobile applications", "Desktop applications", "Enterprise systems", "API development & integration", "ERP, HRMIS and workflow systems", "Database systems"], Globe2],
+  ["Artificial Intelligence & Machine Learning", "Apply intelligent systems to understand information, automate work, and support better decisions.", ["Computer vision", "OCR and document recognition", "AI assistants and chatbots", "Predictive analytics", "Recommendation systems", "Intelligent automation", "AI-powered decision-support systems"], BrainCircuit],
+  ["E-Visitors & Access Management", "Create safer, more visible visitor and access experiences for institutions, facilities, and events.", ["Visitor registration", "Appointment management", "VIP management", "Gate-pass management", "QR/barcode access", "ID/passport OCR", "Watchlist/blacklist management", "Vehicle and driver tracking", "Visitor analytics and reports"], ScanLine],
+  ["IoT & Embedded Systems", "Connect devices, environments, and operational data to systems that can monitor and guide action.", ["IoT monitoring", "Smart sensors", "RFID/NFC", "GPS tracking", "Embedded systems", "Smart access control", "Industrial monitoring", "Automation and control systems"], Cpu],
+  ["Cybersecurity", "Protect systems, data, identities, and organizations through security built into technology and operations.", ["Security assessments", "Vulnerability assessment", "Network security", "Identity and access management", "Security monitoring", "Data protection", "Secure application development", "Cybersecurity awareness and training"], ShieldCheck],
+  ["Digital Transformation", "Help organizations move from manual processes to connected, paperless, and modern digital operations.", ["Business-process digitization", "Paperless workflows", "Digital records", "Automation", "System integration", "Digital platforms", "Enterprise modernization"], Workflow],
+  ["Networking & IT Infrastructure", "Build and maintain the reliable network and infrastructure foundations that technology depends on.", ["LAN/WAN", "Wi-Fi infrastructure", "Servers", "Data-center solutions", "CCTV and surveillance infrastructure", "Structured cabling", "Network monitoring", "IT infrastructure maintenance"], Network],
+  ["Cloud & DevOps", "Deploy, operate, and improve applications and infrastructure with repeatable cloud and delivery practices.", ["Cloud deployment", "Application hosting", "CI/CD", "Containerization", "System monitoring", "Backup and disaster recovery", "Infrastructure automation"], Database],
+  ["Data & Analytics", "Turn operational information into clear reporting, useful intelligence, and better decisions.", ["Database architecture", "Business intelligence", "Dashboards", "Data visualization", "Reporting systems", "Data integration", "Operational analytics"], Workflow],
+  ["Innovation & R&D", "Move promising ideas from research and prototypes toward tested, useful, and scalable products.", ["Prototype development", "Proof-of-concept development", "Research systems", "Product engineering", "Technology testing", "Innovation challenges", "Commercialization support"], Boxes],
+  ["SAN HUB", "Develop the technology talent and innovation capacity needed to create products, careers, and opportunity.", ["Technology training", "Digital skills development", "Internships", "Mentorship", "Innovation programs", "Startup development", "Research and product development"], GraduationCap],
+  ["Industry Solutions", "Adapt technology to the operating realities of sectors that serve people, communities, and the economy.", ["Banking & financial services", "Government", "Education", "Healthcare", "Manufacturing", "Hospitality", "Logistics", "Real estate", "Retail", "NGOs and development organizations"], Globe2],
+].map(([label, description, subItems, icon]) => ({
+  id: innovationSlug(String(label)),
   label: String(label),
   title: String(label),
   description: String(description),
-  coreFeatures: [
-    { label: "Applied technology", description: "Choose tools and methods that fit the real environment, people, and outcome being pursued.", icon: icon as LucideIcon },
-    { label: "Secure foundations", description: "Build privacy, resilience, and responsible access into the system from the start.", icon: ShieldCheck },
-    { label: "Useful outcomes", description: "Measure the work by what it helps people do better, faster, or more safely.", icon: Workflow },
-  ],
-  media: { kind: "image" as const, src: "/images/summit.jpg", alt: `SAN TECH ${String(label)} innovation` },
+  subItems: subItems as string[],
+  coreFeatures: [],
+  media: { kind: "image" as const, src: "/images/summit.jpg", alt: `SAN TECH ${String(label)} solution` },
 }));
 
 export const innovationItems: Record<InnovationSection, InnovationItem[]> = {

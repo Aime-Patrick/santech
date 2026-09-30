@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" role="img" aria-label="Rwanda flag">
+  <rect width="24" height="8" fill="#00a1de"/>
+  <rect y="8" width="24" height="4" fill="#f1c40f"/>
+  <rect y="12" width="24" height="4" fill="#20603d"/>
+  <circle cx="19.5" cy="4" r="1.65" fill="#f9d616"/>
+  <path d="M19.5 1.65v4.7M17.15 4h4.7M17.84 2.34l3.32 3.32M21.16 2.34l-3.32 3.32" stroke="#f9d616" stroke-width=".45"/>
+</svg>

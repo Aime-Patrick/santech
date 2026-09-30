@@ -1,18 +1,49 @@
-import { ArrowUpRight, Globe2, GraduationCap, Landmark, Users } from "lucide-react";
+"use client";
+
+import { animate, useInView, useMotionValue, useReducedMotion, useTransform } from "motion/react";
+import { BriefcaseBusiness, Globe2, GraduationCap, Rocket, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const impactStats = [
-  { value: "10k+", label: "Beneficiaries empowered", description: "People reached through SAN TECH programs, projects, and community work.", icon: Users },
-  { value: "2,500+", label: "Training graduates", description: "Learners who have strengthened their digital and technology capability.", icon: GraduationCap },
-  { value: "47+", label: "Institutions served", description: "Organizations supported with systems, skills, and practical innovation.", icon: Landmark },
-  { value: "12+", label: "Countries reached", description: "A growing network of people and partners across Africa and beyond.", icon: Globe2 },
+  { value: "2,500+", label: "Beneficiaries", description: "People reached through SAN HUB learning, innovation, and ecosystem activities.", icon: Users },
+  { value: "17+", label: "Countries", description: "Participants and innovators connected across countries and communities.", icon: Globe2 },
+  { value: "300+", label: "Scholarship / training opportunities", description: "Opportunities that expand access to technology learning and participation.", icon: GraduationCap },
+  { value: "54+", label: "Startups / projects", description: "Projects and ventures developed through practical innovation pathways.", icon: Rocket },
+  { value: "743+", label: "Jobs created", description: "Employment and opportunity connected to SAN HUB activity and partnerships.", icon: BriefcaseBusiness },
 ] as const;
+
+function ImpactCounter({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.7 });
+  const prefersReducedMotion = useReducedMotion();
+  const numericValue = Number(value.replace(/[^0-9]/g, ""));
+  const suffix = value.replace(/[0-9,]/g, "");
+  const count = useMotionValue(prefersReducedMotion ? numericValue : 0);
+  const formattedCount = useTransform(count, (latest) => Math.round(latest).toLocaleString());
+  const [displayValue, setDisplayValue] = useState(() => (prefersReducedMotion ? numericValue.toLocaleString() : "0"));
+
+  useEffect(() => formattedCount.on("change", setDisplayValue), [formattedCount]);
+
+  useEffect(() => {
+    if (!isInView) return;
+    if (prefersReducedMotion) {
+      count.set(numericValue);
+      return;
+    }
+
+    const controls = animate(count, numericValue, { duration: 1.1, ease: "easeOut" });
+    return () => controls.stop();
+  }, [count, isInView, numericValue, prefersReducedMotion]);
+
+  return <span ref={ref}>{displayValue}{suffix}</span>;
+}
 
 export function SanHubImpactSection() {
   return (
-    <section id="san-hub-impact" className="san-hub-graphic-section border-b border-slate-200 py-4 sm:px-4 lg:px-10 lg:py-8">
-      <div className="mx-auto max-w-[1500px] bg-white px-4 py-2">
+    <section id="san-hub-impact" className="san-hub-graphic-section border-b border-slate-200 py-2 sm:px-4 lg:px-10 lg:py-4">
+      <div className="mx-auto max-w-[1500px] bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
         <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-secondary">SAN HUB / Impact in action</p>
-        <div className="mt-4 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-16">
+        <div className="mt-3 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-12">
           <h1 className="font-exo max-w-xl text-3xl font-bold leading-[1.02] tracking-[-0.055em] text-[#0a1f44] sm:text-4xl">Impact is what remains after the program ends.</h1>
           <div className="max-w-2xl">
             <p className="text-lg leading-8 text-[#303755]">SAN HUB brings people, practical learning, innovation, and opportunity closer together.</p>
@@ -20,16 +51,17 @@ export function SanHubImpactSection() {
           </div>
         </div>
 
-        <div className="mt-12 grid border-y border-slate-200 sm:grid-cols-2 lg:grid-cols-4  ">
+        <div className="mt-7 grid border-y border-slate-200 sm:grid-cols-2 lg:grid-cols-5">
           {impactStats.map(({ value, label, description, icon: Icon }, index) => (
-            <article key={label} className={`py-6 sm:px-6 lg:py-7 ${index > 0 ? "border-t border-slate-200 sm:border-l sm:border-t-0 lg:border-t-0" : "sm:pl-0"}`}>
-              <div className="flex items-center justify-between gap-4"><span className="grid size-10 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Icon className="size-5" aria-hidden="true" /></span><ArrowUpRight className="size-4 text-slate-400" aria-hidden="true" /></div>
-              <p className="font-exo mt-6 text-3xl font-bold tracking-[-0.04em] text-[#0a1f44]">{value}</p>
+            <article key={label} className={`py-4 sm:px-5 lg:py-5 ${index > 0 ? "border-t border-slate-200 sm:border-l sm:border-t-0 lg:border-t-0" : "sm:pl-0"}`}>
+              <div className="flex items-center"><span className="grid size-10 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Icon className="size-5" aria-hidden="true" /></span></div>
+              <p className="font-exo mt-4 text-3xl font-bold tracking-[-0.04em] text-[#0a1f44]"><ImpactCounter value={value} /></p>
               <h2 className="mt-1 text-sm font-bold text-[#0a1f44]">{label}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+              <p className="mt-1 text-sm leading-5 text-slate-600">{description}</p>
             </article>
           ))}
         </div>
+        <p className="mt-5 text-xs leading-5 text-slate-500">Figures should be presented with the applicable reporting period and updated regularly as the SAN HUB database grows.</p>
       </div>
     </section>
   );

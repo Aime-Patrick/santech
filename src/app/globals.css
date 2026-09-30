@@ -78,11 +78,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .eyebrow::before { content: ""; display: block; width: 28px; height: 1px; background: currentColor; opacity: .7; }
 
 .san-hub-graphic-section {
-  background-color: #f7f8fa;
-  background-image: linear-gradient(rgba(237, 243, 252, 0.9), rgba(237, 243, 252, 0.9)), url('/images/rw-graphic01-30p.png');
-  background-position: center, center;
-  background-repeat: no-repeat, repeat;
-  background-size: auto, 427px 427px;
+  background-color: transparent;
+  background-image: none;
 }
 
 .rw-graphic-background {
@@ -119,9 +116,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .circuit-background__piece--bottom {
   right: 0;
   left: 0;
-  height: clamp(150px, 22vw, 340px);
+  height: clamp(100px, 14vw, 220px);
   background-image: url('/images/bottom__circuit_1.png');
-  background-size: 100% auto;
+  background-size: auto 160px;
+  background-repeat: repeat-x;
 }
 
 .circuit-background__piece--top {
@@ -140,17 +138,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
   bottom: 0;
   width: clamp(130px, 16vw, 250px);
   background-image: url('/images/left__right_circuit_2.png');
-  background-size: auto 100%;
+  background-size: auto 260px;
+  background-repeat: repeat-y;
 }
 
 .circuit-background__piece--left {
   left: 0;
-  background-position: left center;
+  background-position: left top;
 }
 
 .circuit-background__piece--right {
   right: 0;
-  background-position: right center;
+  background-position: left top;
+  transform: scaleX(-1);
 }
 
 ::selection { background: var(--brand-secondary); color: #ffffff; }

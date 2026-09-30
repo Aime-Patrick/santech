@@ -4,6 +4,7 @@ import { StickyPageMenu } from "@/components/sticky-page-menu";
 
 const pulseMenu = [
   { key: "news", label: "News & announcements", href: "/tech-pulse" },
+  { key: "announcements", label: "Announcements", href: "/tech-pulse?type=announcements" },
   { key: "opportunities", label: "Opportunities", href: "/tech-pulse?type=opportunities" },
   { key: "tenders", label: "Tenders", href: "/tech-pulse?type=tenders" },
   { key: "research", label: "Research & impact", href: "/tech-pulse?type=research" },
@@ -25,6 +26,14 @@ const pulseItems: SharedContentItem[] = [
     description: "A closer look at how SAN TECH turns practical needs into useful digital systems for institutions and communities.",
     details: ["Published in the SAN TECH journal.", "The story follows the decisions, people, and local context behind useful technology."],
     facts: [{ label: "Type", value: "News" }, { label: "Channel", value: "SAN TECH journal" }],
+  },
+  {
+    id: "announcements",
+    label: "Announcements",
+    title: "SAN TECH announcements and updates",
+    description: "Follow the latest updates from SAN TECH, including new programmes, partnerships, launches, and community milestones.",
+    details: ["New announcements are added as the SAN TECH ecosystem moves forward.", "Follow this listing for important updates across products, programmes, and partnerships."],
+    facts: [{ label: "Type", value: "Announcement" }, { label: "Channel", value: "SAN TECH updates" }],
   },
   {
     id: "summit",
@@ -62,15 +71,15 @@ const pulseItems: SharedContentItem[] = [
 
 export default async function TechPulsePage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const params = await searchParams;
-  const selectedType = params.type === "opportunities" ? "fellowship" : params.type === "research" ? "impact" : "news";
-  const activeMenu = params.type === "opportunities" ? "opportunities" : params.type === "research" ? "research" : "news";
+  const selectedType = params.type === "opportunities" ? "fellowship" : params.type === "research" ? "impact" : params.type === "announcements" ? "announcements" : "news";
+  const activeMenu = params.type === "opportunities" ? "opportunities" : params.type === "research" ? "research" : params.type === "announcements" ? "announcements" : "news";
 
   return (
     <PublicPage>
       <StickyPageMenu items={pulseMenu} activeKey={activeMenu} ariaLabel="Tech Pulse sections" />
       <section className="border-t border-slate-200 px-2 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
-        <div className="mx-auto max-w-7xl bg-white">
-          <SharedContentBrowser items={pulseItems} initialItemId={selectedType} />
+        <div className="mx-auto max-w-7xl bg-white px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+          <SharedContentBrowser items={pulseItems} initialItemId={selectedType} combinedPanel />
         </div>
       </section>
     </PublicPage>

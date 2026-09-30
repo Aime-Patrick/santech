@@ -36,30 +36,38 @@ export function SplitFeaturePanel({
   details = [],
   facts = [],
   timeline = [],
+  subItems = [],
   coreFeatures,
   media,
   detailHref,
+  combined = false,
 }: {
   title: string;
   description?: string;
   details?: string[];
   facts?: SplitFeatureFact[];
   timeline?: SplitFeatureTimelineItem[];
+  subItems?: string[];
   coreFeatures?: CoreFeature[];
   media?: SplitFeatureMedia;
   detailHref?: string;
+  combined?: boolean;
 }) {
   const [expandedFeature, setExpandedFeature] = useState<string | null>(coreFeatures?.[0]?.label ?? null);
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <div className={`grid gap-10 lg:items-stretch lg:gap-14 ${media ? "lg:grid-cols-[0.82fr_1.18fr]" : "lg:grid-cols-[0.9fr_1.1fr]"}`}>
+    <div className={`grid ${combined ? "gap-4 lg:gap-5" : "gap-10 lg:gap-14"} lg:items-start ${media ? "lg:grid-cols-[0.82fr_1.18fr]" : combined ? "lg:grid-cols-1" : "lg:grid-cols-[0.9fr_1.1fr]"}`}>
       <div className="flex min-w-0 flex-col justify-start">
-        <h1 className="font-exo max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">{title}</h1>
+        <h1 className={`font-exo max-w-xl font-normal leading-[1.12] tracking-[-0.035em] text-[#303755] ${combined ? "text-xl sm:text-2xl lg:text-[2rem]" : "text-2xl sm:text-3xl lg:text-[2.55rem]"}`}>{title}</h1>
 
         {media && description && <p className="mt-5 max-w-xl text-base leading-7 text-[#68718a]">{description}</p>}
 
-        {coreFeatures && coreFeatures.length > 0 && <div className="mt-7 border-l border-slate-300 pl-4" role="tablist" aria-label="Features">
+        {subItems.length > 0 && <motion.div layout className="mt-7 grid gap-x-6 gap-y-3 border-t border-slate-200 pt-5 sm:grid-cols-2" aria-label="Solution capabilities">
+          {subItems.map((item) => <motion.div layout key={item} className="flex items-start gap-2 text-sm leading-5 text-[#68718a]"><span className="mt-0.5 text-brand-secondary" aria-hidden="true">+</span><span>{item}</span></motion.div>)}
+        </motion.div>}
+
+        {coreFeatures && coreFeatures.length > 0 && <motion.div layout transition={{ layout: { duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" } }} className="mt-7 border-l border-slate-300 pl-4" role="tablist" aria-label="Features">
           {coreFeatures.map(({ label, icon: Icon, description }) => {
             const expanded = expandedFeature === label;
 
@@ -98,7 +106,7 @@ export function SplitFeaturePanel({
               </motion.button>
             );
           })}
-        </div>}
+        </motion.div>}
 
         {detailHref && (
           <Link
@@ -111,19 +119,19 @@ export function SplitFeaturePanel({
       </div>
 
       {media ? (
-        <div className={`relative min-h-[360px] overflow-hidden sm:min-h-[480px] ${media.transparent ? "flex items-center justify-center bg-transparent" : "rounded-xl bg-[#dceaf8] shadow-[0_24px_70px_rgba(10,31,68,0.1)]"}`}>
+        <div className={`relative h-[360px] self-start overflow-hidden sm:h-[480px] lg:h-[500px] ${media.transparent ? "flex items-center justify-center bg-transparent" : "rounded-xl bg-[#dceaf8] shadow-[0_24px_70px_rgba(10,31,68,0.1)]"}`}>
           {media.kind === "video" ? (
             <video src={media.src} className="size-full object-cover" autoPlay muted loop playsInline preload="metadata" aria-label={media.alt} />
           ) : (
-            <Image src={media.src} alt={media.alt} fill sizes="(max-width: 1024px) 100vw, 60vw" className={media.fit === "contain" ? "object-contain" : "object-cover"} />
+            <Image src={media.src} alt={media.alt} fill loading="eager" sizes="(max-width: 1024px) 100vw, 60vw" className={media.fit === "contain" ? "object-contain" : "object-cover"} />
           )}
         </div>
       ) : (
-        <div className="border-l border-slate-300 pl-6 lg:pl-10">
-          {description && <p className="max-w-2xl text-base leading-7 text-[#68718a] sm:text-lg">{description}</p>}
+        <div className={combined ? "pl-0" : "border-l border-slate-300 pl-6 lg:pl-10"}>
+          {description && <p className="max-w-2xl text-lg leading-8 text-[#68718a] sm:text-xl">{description}</p>}
           {timeline.length > 0 && <div className="mt-6 grid gap-4">{timeline.map((item) => <div key={item.year} className="grid grid-cols-[5.5rem_1fr] gap-4 border-l-2 border-[#dce7f5] pl-4"><p className="font-exo text-lg font-bold leading-6 tracking-[-0.02em] text-brand-secondary">{item.year}</p><p className="max-w-2xl text-sm leading-6 text-[#68718a] sm:text-base">{item.description}</p></div>)}</div>}
-          {details.length > 0 && <div className="mt-6 grid gap-4">{details.map((detail) => <p key={detail} className="max-w-2xl text-sm leading-6 text-[#68718a] sm:text-base">{detail}</p>)}</div>}
-          {facts.length > 0 && <div className="mt-8 grid gap-5 border-t border-slate-300 pt-6 sm:grid-cols-2">{facts.map((fact) => <div key={fact.label}><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">{fact.label}</p><p className="mt-2 text-sm font-bold text-[#0a1f44] sm:text-base">{fact.value}</p></div>)}</div>}
+          {details.length > 0 && <div className="mt-7 grid gap-5">{details.map((detail) => <p key={detail} className="max-w-2xl text-base leading-7 text-[#68718a] sm:text-lg">{detail}</p>)}</div>}
+          {facts.length > 0 && <div className="mt-8 grid gap-5 border-t border-slate-300 pt-6 sm:grid-cols-2">{facts.map((fact) => <div key={fact.label}><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">{fact.label}</p><p className="mt-2 text-base font-bold text-[#0a1f44] sm:text-lg">{fact.value}</p></div>)}</div>}
         </div>
       )}
     </div>
