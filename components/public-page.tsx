@@ -1,74 +1,21 @@
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Tiles } from "@/components/ui/tiles";
 import { CircuitBackground } from "@/components/ui/circuit-background";
 
 type Action = { label: string; href: string; tone?: "primary" | "secondary" };
 
-const socialLinks = [
-  { label: "Facebook", href: "https://www.facebook.com/santechinnovate", icon: FaFacebookF },
-  { label: "Instagram", href: "https://www.instagram.com/santechinnovate", icon: FaInstagram },
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/santechinnovate", icon: FaLinkedinIn },
-  { label: "X", href: "https://x.com/santechinnovate", icon: FaXTwitter },
-  { label: "YouTube", href: "https://www.youtube.com/@santechinnovate", icon: FaYoutube },
-];
-
 export function PublicPage({ children }: { children: ReactNode }) {
   return (
-    <CircuitBackground className="flex min-h-screen flex-col text-slate-900">
-      <SiteHeader />
-      <main className="min-h-[calc(100svh-7rem)] flex-1 pt-28">{children}</main>
-      <footer className="relative overflow-hidden bg-[#0c1230] text-white">
-        <div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16 lg:py-10">
-          <div className="grid gap-6 border-white/15 sm:grid-cols-[1fr_auto] sm:items-end">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-cyan">Connect with SAN TECH</p>
-              <div className="mt-3 flex flex-col gap-2 text-sm font-medium text-white/75 sm:flex-row sm:flex-wrap sm:gap-x-6">
-                <a href="mailto:info@santechinnovate.com" className="flex items-center gap-2 transition-colors hover:text-brand-cyan">
-                  <Mail className="size-4 text-brand-cyan" />
-                  info@santechinnovate.com
-                </a>
-                <a href="tel:+250780309833" className="flex items-center gap-2 transition-colors hover:text-brand-cyan">
-                  <Phone className="size-4 text-brand-cyan" />
-                  +250 780 309 833 / +223 710 058 73
-                </a>
-                <span className="flex items-center gap-2"><MapPin className="size-4 text-brand-cyan" />Kigali, Rwanda</span>
-              </div>
-              <div className="mt-4 flex items-center gap-2">
-                <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">Follow us</span>
-                {socialLinks.map(({ label, href, icon: Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`SAN TECH on ${label}`}
-                    className="grid size-8 place-items-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-brand-cyan hover:bg-brand-cyan hover:text-[#0c1230]"
-                  >
-                    <Icon className="size-3.5" aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-            </div>
-            <Link href="/connect" className="inline-flex w-fit items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-brand-secondary transition-colors hover:bg-brand-cyan hover:text-brand-secondary">
-              Start a conversation <ArrowUpRight className="size-4" />
-            </Link>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-2 border-t border-white/15 pt-4 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
-            <span>Copyright 2026 SAN TECH. All rights reserved.</span>
-            <span>Technology · Innovation · Skills · Impact</span>
-          </div>
-        </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-2 bg-white"
-          style={{ backgroundImage: "url('/imingogo-trimmed.png')", backgroundPosition: "center bottom", backgroundRepeat: "repeat-x", backgroundSize: "44px 22px" }}
-        />
-      </footer>
+    <CircuitBackground className="text-slate-900">
+      <div className="flex min-h-svh flex-col">
+        <SiteHeader />
+        <main className="min-h-0 flex-1 pt-28">{children}</main>
+        <SiteFooter />
+      </div>
     </CircuitBackground>
   );
 }
@@ -79,32 +26,34 @@ export function PageIntro({
   description,
   actions = [],
   titleClassName = "",
+  compact = false,
 }: {
   eyebrow: string;
   title: string;
   description: string;
   actions?: Action[];
   titleClassName?: string;
+  compact?: boolean;
 }) {
   return (
-    <section className="relative isolate overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-[#edf1f7] via-[#edf1f7] to-[#e4eaf3] px-6 pb-14 pt-14 sm:px-10 sm:pt-20 lg:px-16 lg:pb-20">
+    <section className={`relative isolate overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-[#edf1f7] via-[#edf1f7] to-[#e4eaf3] px-6 sm:px-10 lg:px-16 ${compact ? "pb-8 pt-8 sm:pb-10 sm:pt-10" : "pb-14 pt-14 sm:pt-20 lg:pb-20"}`}>
       <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-40 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_60%,transparent_100%)]">
-        <Tiles rows={40} cols={6} tileSize="lg" className="w-full h-full" />
+        <Tiles rows={40} cols={6} tileSize="lg" className="h-full w-full" />
       </div>
-      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+      <div className={`mx-auto grid max-w-7xl lg:grid-cols-[1.2fr_0.8fr] lg:items-end ${compact ? "gap-6" : "gap-10"}`}>
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.24em] text-brand-secondary">{eyebrow}</p>
-          <h1 className={`font-exo mt-5 max-w-4xl font-bold leading-[0.98] tracking-[-0.055em] text-slate-950 ${titleClassName || "text-2xl sm:text-3xl lg:text-4xl"}`}>{title}</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-secondary">{eyebrow}</p>
+          <h1 className={`font-exo max-w-4xl font-bold leading-[0.98] tracking-[-0.055em] text-slate-950 ${compact ? "mt-3 text-2xl sm:text-3xl lg:text-4xl" : `mt-5 ${titleClassName || "text-2xl sm:text-3xl lg:text-4xl"}`}`}>{title}</h1>
         </div>
         <div className="max-w-md lg:justify-self-end">
-          <p className="text-base leading-7 text-slate-600">{description}</p>
+          <p className={`${compact ? "text-sm leading-6" : "text-base leading-7"} text-slate-600`}>{description}</p>
           {actions.length > 0 && (
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className={`${compact ? "mt-5 gap-2" : "mt-7 gap-3"} flex flex-wrap`}>
               {actions.map((action) => (
                 <Link
                   key={action.label}
                   href={action.href}
-                  className={`inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold transition-all ${
+                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-bold transition-all ${
                     action.tone === "secondary"
                       ? "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:shadow-sm"
                       : "bg-brand-secondary text-white hover:bg-[#1519ad]"
@@ -122,7 +71,7 @@ export function PageIntro({
   );
 }
 
-export function  SectionHeading({
+export function SectionHeading({
   eyebrow,
   title,
   description,
@@ -147,8 +96,8 @@ export function  SectionHeading({
           titleClassName
             ? `${dark ? "text-white" : "text-slate-950"} ${titleClassName}`
             : dark
-              ? "text-2xl sm:text-4xl text-white"
-              : "text-2xl sm:text-4xl text-slate-950"
+              ? "text-2xl text-white sm:text-4xl"
+              : "text-2xl text-slate-950 sm:text-4xl"
         }`}
       >
         {title}

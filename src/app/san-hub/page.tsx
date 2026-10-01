@@ -29,7 +29,7 @@ export default async function SanHubPage({ searchParams }: { searchParams: Promi
 
       {section === "impact" && <SanHubSectionReveal><SanHubImpactSection /></SanHubSectionReveal>}
 
-      {section === "programs" && <SanHubSectionReveal><SanHubCatalog items={sanHubProgramItems} showFilters={false} showCategoryFilter={false} showResultSummary={false} withTopPadding categories={["Programs"]} /></SanHubSectionReveal>}
+      {section === "programs" && <SanHubSectionReveal><SanHubCatalog compact items={sanHubProgramItems} showFilters={false} showCategoryFilter={false} showResultSummary={false} withTopPadding categories={["Programs"]} /></SanHubSectionReveal>}
 
       {section === "traction" && <SanHubSectionReveal><SanHubTractionSection /></SanHubSectionReveal>}
 

@@ -106,25 +106,17 @@ export function SanHubInsightsSection() {
     : insightArticles.filter((article) => article.category === activeCategory);
 
   return (
-    <section className="san-hub-graphic-section border-b border-slate-200 py-2 sm:px-4 lg:px-10 lg:py-4">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
-        <div className="grid gap-6 border-b border-slate-200 pb-7 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-16">
+    <section className="san-hub-graphic-section border-b border-slate-200 py-1 sm:px-4 lg:px-8 lg:py-2">
+      <div className="mx-auto max-w-7xl bg-white px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
+        <div className="grid gap-4 border-b border-slate-200 pb-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-10">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-secondary">SAN HUB / Insights</p>
-            <h1 className="font-exo mt-3 max-w-xl text-3xl font-bold leading-[1.02] tracking-[-0.045em] text-[#0a1f44] sm:text-4xl">Stories beyond the trends.</h1>
+            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN HUB / Insights</p>
+            <h1 className="font-exo mt-2 max-w-xl text-2xl font-bold leading-[1.02] tracking-[-0.04em] text-[#0a1f44] sm:text-3xl">Stories beyond the trends.</h1>
           </div>
           <div className="max-w-2xl">
-            <p className="text-lg leading-8 text-[#303755]">Read the stories, research, and media coverage shaping SAN HUB&apos;s innovation ecosystem.</p>
-            <p className="mt-3 text-sm leading-6 text-slate-600">These links take you to the original publication or video source. New SAN HUB articles can be added here as the editorial library grows.</p>
+            <p className="text-sm leading-6 text-[#303755]">Read the stories, research, and media coverage shaping SAN HUB&apos;s innovation ecosystem.</p>
+            <p className="mt-2 text-xs leading-5 text-slate-600">These links take you to the original publication or video source. New SAN HUB articles can be added here as the editorial library grows.</p>
           </div>
-        </div>
-
-        <div className="mt-7 flex items-end justify-between gap-4 border-b border-slate-200 pb-3">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-brand-secondary">Filter stories</p>
-            <p className="mt-1 text-sm text-slate-600">Browse coverage by insight category.</p>
-          </div>
-          <span className="hidden text-xs font-bold uppercase tracking-[0.16em] text-slate-400 sm:block">{insightArticles.length} stories</span>
         </div>
 
         <div className="flex gap-2 overflow-x-auto border-b border-slate-200 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Insight categories">

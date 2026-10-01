@@ -324,15 +324,6 @@ function StoryPlaybackIcon({ playing }: { playing: boolean }) {
   );
 }
 
-const partnerBrands: PartnerBrand[] = [
-  { label: "Pallotti Presse Ltd", src: "/palloti.png", href: "https://pallottipresse.com/", showLabel: true },
-  { label: "RICH Ubuzima", src: "/richubuzima.png", href: "https://richubuzima.rw/" },
-  { label: "H&M Group", src: "/H&M-Logo.png", href: "https://handmgroup.rw/" },
-  { label: "Eva Wellness Spa", src: "/eva_spa.jpg", href: "https://www.evawellnessspa.com/" },
-  { label: "BNR", src: "/bnr-logo.webp", href: "https://www.bnr.rw/", showLabel: true },
-  { label: "MINICOM", src: "/Coat_of_arms_of_Rwanda.svg", href: "https://minicom.gov.rw/", government: true },
-];
-
 const socialLinks = [
   { label: "Facebook", href: "https://www.facebook.com/santechinnovate", icon: FaFacebookF },
   { label: "YouTube", href: "https://www.youtube.com/@santechinnovate", icon: FaYoutube },
@@ -340,6 +331,15 @@ const socialLinks = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/santechinnovate", icon: FaLinkedinIn },
   { label: "WhatsApp", href: "https://wa.me/250780309833", icon: FaWhatsapp },
   { label: "Instagram", href: "https://www.instagram.com/santechinnovate", icon: FaInstagram },
+];
+
+const partnerBrands: PartnerBrand[] = [
+  { label: "Pallotti Presse Ltd", src: "/palloti.png", href: "https://pallottipresse.com/", showLabel: true },
+  { label: "RICH Ubuzima", src: "/richubuzima.png", href: "https://richubuzima.rw/" },
+  { label: "H&M Group", src: "/H&M-Logo.png", href: "https://handmgroup.rw/" },
+  { label: "Eva Wellness Spa", src: "/eva_spa.jpg", href: "https://www.evawellnessspa.com/" },
+  { label: "BNR", src: "/bnr-logo.webp", href: "https://www.bnr.rw/", showLabel: true },
+  { label: "MINICOM", src: "/Coat_of_arms_of_Rwanda.svg", href: "https://minicom.gov.rw/", government: true },
 ];
 
 function PartnerMark({ partner }: { partner: PartnerBrand }) {

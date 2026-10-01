@@ -10,10 +10,8 @@ const identity = [
   ["Founder & CEO", "Mr. Shema Pacifique"],
   ["Co-founder & COO/CFO", "Claudine Niyonzima"],
   ["Head office", "Kigali, Rwanda"],
-  ["Registration no.", "109014654"],
   ["Core philosophy", "From Ideation to Transformative Impact"],
   ["Stamp motto", "Innovate · Empower · Deliver"],
-  ["Certificate footer", "Making Your Ideas Happen"],
 ] as const;
 
 const values = [
@@ -112,7 +110,10 @@ export function MissionPanel() {
   );
 }
 
-export function JourneyPanel() {
+export { JourneyPanel } from "@/components/journey-panel";
+
+
+function LegacyJourneyGrid() {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.32fr_0.68fr] lg:gap-12">
       <div className="grid gap-3 sm:grid-cols-2">
@@ -157,7 +158,7 @@ export function CompanyProfilePanel() {
   return (
     <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
       <div><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Company profile</p><h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">From ideation to transformative impact.</h1><p className="mt-6 max-w-xl text-base leading-7 text-[#68718a]">SAN TECH is a Kigali-based technology and innovation company that connects people, ideas, and technology to create digital products, strengthen organizations, and grow the next generation of builders.</p><Link href="/connect" className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-secondary px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-cyan hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">Start a conversation <ArrowUpRight className="size-4" /></Link></div>
-      <div className="border-l border-slate-300 pl-6 lg:pl-10"><div className="border-y border-slate-300 py-5"><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Our model</p><p className="mt-3 max-w-2xl text-lg font-bold leading-7 text-[#0a1f44]">Connect people. Develop ideas. Deploy technology. Create impact.</p></div><div className="mt-6 grid gap-5 sm:grid-cols-2"><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Established</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">2019 · Kigali, Rwanda</p></div><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Registration</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">109014654</p></div><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Motto</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Innovate · Empower · Deliver</p></div><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Certificate footer</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Making Your Ideas Happen</p></div></div></div>
+      <div className="border-l border-slate-300 pl-6 lg:pl-10"><div className="border-y border-slate-300 py-5"><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Our model</p><p className="mt-3 max-w-2xl text-lg font-bold leading-7 text-[#0a1f44]">Connect people. Develop ideas. Deploy technology. Create impact.</p></div><div className="mt-6 grid gap-5 sm:grid-cols-2"><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Established</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">2019 · Kigali, Rwanda</p></div><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Motto</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Innovate · Empower · Deliver</p></div></div></div>
     </div>
   );
 }

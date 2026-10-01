@@ -37,7 +37,6 @@ export default function ConnectPage() {
               </div>
 
               <div className="mt-4 flex gap-3 text-sm text-[#303755]"><Radio className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" /><span><span className="block text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">SAN TECH Radio</span><span className="mt-1 block">Zeno.FM – SAN TECH</span></span></div>
-              <div className="mt-4 flex gap-3 text-sm text-[#303755]"><FileText className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" /><span><span className="block text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">Registration No.</span><span className="mt-1 block">109014654</span></span></div>
             </section>
 
             <form className="grid gap-4 border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(10,31,68,0.06)] sm:grid-cols-2 sm:p-6" aria-labelledby="contact-form-title">

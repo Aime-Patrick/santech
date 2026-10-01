@@ -53,19 +53,6 @@ function innovationSlug(value: string) {
 
 const productItems: InnovationItem[] = [
   {
-    id: "e-visitors",
-    label: "E-Visitors",
-    title: "Make every arrival count.",
-    description: "A smarter way to manage visitors, access, attendance, and institutional security.",
-    coreFeatures: [
-      { label: "Visitor registration", description: "Capture visitor details, appointments, and host information before issuing a pass.", icon: ScanLine },
-      { label: "ID and OCR scanning", description: "Scan a national ID or passport to reduce manual entry and verify identity faster.", icon: FileText },
-      { label: "Access and attendance", description: "Issue access cards, record entry and exit, and track attendance across gates.", icon: ShieldCheck },
-      { label: "Reports and audit trails", description: "Give authorized teams a clear history of movements, exceptions, and approvals.", icon: Boxes },
-    ],
-    media: { kind: "video", src: "/E-VS.mp4", alt: "E-Visitors visitor management platform" },
-  },
-  {
     id: "san-track",
     label: "SAN TRACK",
     title: "See operations as they move.",

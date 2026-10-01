@@ -77,7 +77,7 @@ export function TechPulseOpportunities() {
 
   return (
     <div className="w-full">
-      <div role="tablist" aria-label="Opportunity categories" className="flex w-full min-w-max overflow-x-auto border-b-2 border-brand-cyan [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div role="tablist" aria-label="Opportunity categories" className="flex w-full min-w-max overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {opportunityTabs.map((tab) => {
           const active = tab.id === activeTab;
 
@@ -100,9 +100,9 @@ export function TechPulseOpportunities() {
       <div className="mt-5" role="tabpanel" aria-label={`${activeTab} opportunities`}>
         <div className="grid gap-4 lg:grid-cols-2">
           {activeOpportunities.map((opportunity) => (
-            <article key={opportunity.title} className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(10,31,68,0.05)] sm:p-5">
-              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-brand-cyan">{opportunity.label}</p>
-              <h2 className="font-exo mt-2 max-w-xl text-xl font-bold leading-tight tracking-[-0.035em] text-[#0a1f44] sm:text-[1.4rem]">{opportunity.title}</h2>
+            <article key={opportunity.title} className="relative border-l-2 border-[#0a1f44]/25 py-1 pl-5 pr-1">
+              <span className="absolute -left-[5px] top-4 size-2 rounded-full bg-brand-cyan ring-4 ring-white" aria-hidden="true" />
+              <h2 className="font-exo max-w-xl text-xl font-bold leading-tight tracking-[-0.035em] text-[#0a1f44] sm:text-[1.4rem]">{opportunity.title}</h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{opportunity.description}</p>
               <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
                 <span className="inline-flex items-center gap-2"><MapPin className="size-3.5 text-brand-cyan" aria-hidden="true" />{opportunity.location}</span>

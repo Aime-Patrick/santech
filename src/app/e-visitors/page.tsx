@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { EVisitorsProductPage } from "@/components/e-visitors-product-page";
 
 export default function EVisitorsPage() {
-  redirect("/innovation-lab/product/e-visitors");
+  return <EVisitorsProductPage />;
 }

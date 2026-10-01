@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Bookmark, Maximize2, Pause, Play } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowUpRight, BookOpen, Bookmark, Maximize2 } from "lucide-react";
+import { useState } from "react";
 
 type LibraryBook = {
   id: string;
@@ -78,8 +78,8 @@ export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigit
   const [activeBook, setActiveBook] = useState<LibraryBook | null>(null);
 
   return (
-    <section id="san-hub-digital-library" className="san-hub-graphic-section scroll-mt-40 border-b border-[#0a1f44]/10 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+    <section id="san-hub-digital-library" className="san-hub-graphic-section scroll-mt-40 border-b border-[#0a1f44]/10 px-4 py-7 sm:px-6 lg:px-8 lg:py-9">
+      <div className="mx-auto max-w-7xl bg-white px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
         {activeBook ? (
           <BookReader book={activeBook} src={src} onBack={() => setActiveBook(null)} />
         ) : (
@@ -91,63 +91,28 @@ export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigit
 }
 
 function BookShelf({ onOpen }: { onOpen: (book: LibraryBook) => void }) {
-  const railRef = useRef<HTMLDivElement>(null);
-  const [autoPlay, setAutoPlay] = useState(true);
-
-  const moveRail = useCallback((direction: 1 | -1) => {
-    const rail = railRef.current;
-    if (!rail || rail.scrollWidth <= rail.clientWidth) return;
-
-    const distance = Math.max(rail.clientWidth * 0.78, 250);
-    const maximumScroll = rail.scrollWidth - rail.clientWidth;
-    const nextPosition = rail.scrollLeft + distance * direction;
-    const target = direction === 1 && nextPosition >= maximumScroll - 8
-      ? 0
-      : direction === -1 && nextPosition <= 8
-        ? maximumScroll
-        : Math.max(0, Math.min(nextPosition, maximumScroll));
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    rail.scrollTo({ left: target, behavior: prefersReducedMotion ? "auto" : "smooth" });
-  }, []);
-
-  useEffect(() => {
-    if (!autoPlay) return;
-    const timer = window.setInterval(() => moveRail(1), 4800);
-    return () => window.clearInterval(timer);
-  }, [autoPlay, moveRail]);
-
   return (
     <>
-      <div className="mb-9 flex flex-col justify-between gap-5 border-b border-[#0a1f44]/15 pb-7 sm:flex-row sm:items-end">
+      <div className="mb-4 flex flex-col justify-between gap-2.5 border-b border-[#0a1f44]/15 pb-4 sm:flex-row sm:items-end">
         <div>
           <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.24em] text-[#0a1f44]">
             <BookOpen className="size-4 text-brand-cyan" aria-hidden="true" />
             SAN BOOK / Digital library
           </p>
-          <h1 className="font-exo mt-4 max-w-3xl text-3xl font-bold leading-tight tracking-[-0.05em] text-[#0a1f44] sm:text-4xl lg:text-5xl">
+          <h1 className="font-exo mt-2 max-w-3xl text-xl font-bold leading-[1.05] tracking-[-0.04em] text-[#0a1f44] sm:text-2xl lg:text-3xl">
             Choose a book and start reading.
           </h1>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
+          <p className="mt-1.5 max-w-2xl text-xs leading-5 text-slate-600">
             Browse the SAN HUB collection, then open one title in the reading room.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <span className="mr-2 text-xs font-black uppercase tracking-[0.18em] text-[#0a1f44]/55">{libraryBooks.length} titles</span>
-          <button type="button" onClick={() => moveRail(-1)} aria-label="Previous books" className="inline-flex size-9 items-center justify-center border border-[#0a1f44]/20 text-[#0a1f44] transition-colors hover:border-brand-cyan hover:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">
-            <ArrowLeft className="size-4" aria-hidden="true" />
-          </button>
-          <button type="button" onClick={() => moveRail(1)} aria-label="Next books" className="inline-flex size-9 items-center justify-center border border-[#0a1f44]/20 text-[#0a1f44] transition-colors hover:border-brand-cyan hover:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </button>
-          <button type="button" onClick={() => setAutoPlay((playing) => !playing)} aria-pressed={autoPlay} aria-label={autoPlay ? "Pause automatic book scrolling" : "Play automatic book scrolling"} className="inline-flex size-9 items-center justify-center border border-[#0a1f44]/20 text-[#0a1f44] transition-colors hover:border-brand-cyan hover:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">
-            {autoPlay ? <Pause className="size-3.5" aria-hidden="true" /> : <Play className="size-3.5" aria-hidden="true" />}
-          </button>
         </div>
       </div>
 
-      <div className="px-5 py-9 sm:px-8 lg:px-12 lg:py-12">
-        <div ref={railRef} className="grid auto-cols-[minmax(220px,1fr)] grid-flow-col gap-x-8 overflow-x-auto overscroll-x-contain pb-5 snap-x snap-mandatory focus-visible:outline-none sm:auto-cols-[minmax(260px,1fr)] lg:auto-cols-[minmax(280px,1fr)]" tabIndex={0} aria-label="SAN HUB book collection">
+      <div className="px-2 py-5 sm:px-4 lg:px-6 lg:py-7">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6" aria-label="SAN HUB book collection">
           {libraryBooks.map((book) => <div key={book.id} className="min-w-0 snap-start"><BookCover book={book} onOpen={onOpen} /></div>)}
         </div>
       </div>

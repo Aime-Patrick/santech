@@ -49,31 +49,8 @@ const sanHubProgramItemsLegacy: readonly SanHubCatalogItem[] = [
 ];
 
 export const sanHubProgramItems: readonly SanHubCatalogItem[] = [
-  ["Tech Explorers", "Introduce young people to technology through accessible, practical experiences.", "/images/graduates.jpg"],
-  ["Software Development", "Build professional software engineering skills through guided practice and projects.", "/images/team.jpg"],
-  ["AI & Data", "Learn artificial intelligence, machine learning, and data technologies for practical work.", "/images/summit.jpg"],
-  ["IoT & Embedded Systems", "Build connected devices, embedded systems, and automation projects.", "/images/ch10-datacenter.jpg"],
-  ["Cybersecurity", "Develop security awareness and professional skills for protecting systems and data.", "/images/fieldwork.jpg"],
-  ["Robotics", "Explore robotics, electronics, automation, and the systems that connect them.", "/images/ch10-datacenter.jpg"],
-  ["Innovation Accelerator", "Develop promising ideas into viable solutions through structure, feedback, and support.", "/images/summit.jpg"],
-  ["Internship Program", "Gain practical workplace experience with technology teams and projects.", "/images/team.jpg"],
-  ["Mentorship", "Connect participants with experienced experts who can guide their next step.", "/images/fieldwork.jpg"],
-  ["Research & Development", "Conduct applied technology research and move findings toward useful outcomes.", "/images/ch10-datacenter.jpg"],
-  ["Startup Development", "Support venture creation and growth from an early idea to a stronger business direction.", "/images/summit.jpg"],
-  ["Challenges & Hackathons", "Solve real-world problems through focused teamwork, experimentation, and invention.", "/images/team.jpg"],
-  ["Scholarships", "Increase access to technology education and opportunity for promising participants.", "/images/graduates.jpg"],
-  ["DevBreak", "Intensive practical technology learning for people ready to build and apply.", "/images/summit.jpg"],
-  ["Tech Forward Live", "Engage with technology, innovation, practitioners, and the wider ecosystem.", "/images/fieldwork.jpg"],
-].map(([title, description, image], index) => ({
-  id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-  category: "Programs" as const,
-  title,
-  provider: "SAN HUB programs",
-  description,
-  image,
-  format: index === 7 ? "Work placement" : "SAN HUB program",
-  duration: index === 7 ? "By placement" : "Scheduled or rolling intake",
-  level: "Learners, innovators, and professionals",
-  badge: index === 6 || index === 7 ? "Apply now" : undefined,
-  href: `/join-the-community?program=${encodeURIComponent(title)}`,
-}));
+  { id: "devbreak", category: "Programs", title: "DevBreak", provider: "SAN HUB programs", description: "Intensive practical technology learning for people ready to build, test, and apply useful ideas.", image: "/images/summit.jpg", format: "SAN HUB program", duration: "Scheduled or rolling intake", level: "Learners and builders", href: "/san-hub/explore/build" },
+  { id: "capacity-building", category: "Programs", title: "Professional Capacity Building", provider: "SAN HUB programs", description: "Strengthen the technical, digital, and collaboration skills that help people and teams deliver.", image: "/images/graduates.jpg", format: "SAN HUB program", duration: "Scheduled or rolling intake", level: "Professionals and teams", href: "/san-hub/explore/learn" },
+  { id: "research-development", category: "Programs", title: "Research & Development", provider: "SAN HUB programs", description: "Explore meaningful questions through applied research, experimentation, prototypes, and product development.", image: "/images/ch10-datacenter.jpg", format: "SAN HUB program", duration: "Scheduled or rolling intake", level: "Researchers and innovators", href: "/san-hub/explore/research" },
+  { id: "apprenticeship", category: "Programs", title: "Apprenticeship", provider: "SAN HUB programs", description: "Learn through guided practice, mentorship, and contribution to real technology projects.", image: "/images/team.jpg", format: "SAN HUB program", duration: "Scheduled or rolling intake", level: "Emerging practitioners", href: "/san-hub/explore/work" },
+];
