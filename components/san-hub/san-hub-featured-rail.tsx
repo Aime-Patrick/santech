@@ -15,7 +15,7 @@ type FeaturedRailProps = {
 export function SanHubFeaturedRail({ items = sanHubCatalogItems.filter((item) => item.category === "Courses"), eyebrow = "Start with a pathway", title = "Featured learning for useful work.", description = "Choose a focused route, build something real, and keep your next step close.", compact = false }: FeaturedRailProps) {
   return (
     <section id="san-hub-programs" className={`san-hub-graphic-section scroll-mt-40 px-4 sm:px-6 lg:px-8 ${compact ? "py-7 lg:py-9" : "py-16 lg:py-20"}`}>
-      <div className={`mx-auto max-w-7xl bg-white ${compact ? "px-4 py-6 sm:px-6 sm:py-7 lg:px-8" : "px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12"}`}>
+      <div className={`mx-auto max-w-7xl rounded-2xl bg-white ${compact ? "px-4 py-6 sm:px-6 sm:py-7 lg:px-8" : "px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12"}`}>
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{eyebrow}</p>

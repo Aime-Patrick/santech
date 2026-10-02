@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
 import { getInnovationItem, innovationItems, type InnovationSection } from "@/lib/innovation-data";
@@ -37,12 +37,8 @@ export default async function InnovationDetailPage({ params }: { params: Promise
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-brand-secondary">{sectionLabels[innovationSection]}</p>
               <h1 className="font-exo mt-5 text-4xl font-bold leading-[0.98] tracking-[-0.055em] text-[#0a1f44] sm:text-5xl lg:text-6xl">{item.label}</h1>
-              <h2 className="font-exo mt-6 max-w-xl text-2xl font-normal leading-tight tracking-[-0.035em] text-[#303755] sm:text-3xl">{item.title}</h2>
+              <h2 className="font-exo mt-5 max-w-xl text-xl font-normal leading-tight tracking-[-0.03em] text-[#303755] sm:text-2xl">{item.title}</h2>
               <p className="mt-6 max-w-xl text-base leading-7 text-[#68718a] sm:text-lg">{item.description}</p>
-              <Link href={`/connect?topic=${encodeURIComponent(item.label)}`} className="mt-8 inline-flex items-center gap-2 rounded-xl bg-brand-secondary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#1519ad]">
-                Talk to SAN TECH
-                <ArrowUpRight className="size-4" aria-hidden="true" />
-              </Link>
             </div>
 
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#dceaf8] shadow-[0_24px_70px_rgba(10,31,68,0.12)]">

@@ -30,7 +30,7 @@ export function SanHubGuide({ title = "Tell us what you want to make possible.",
 
   return (
     <section id="san-hub-guide" className="san-hub-graphic-section scroll-mt-40 border-y border-slate-200 px-6 py-8 sm:px-10 lg:px-16 lg:py-10">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-6 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
+      <div className="mx-auto max-w-[1500px] rounded-2xl bg-white px-5 py-6 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white/85">
           <div className="grid gap-7 px-6 py-6 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:px-10 lg:py-7">
             <div>

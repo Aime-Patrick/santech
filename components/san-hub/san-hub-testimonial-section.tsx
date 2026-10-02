@@ -1,123 +1,125 @@
 "use client";
 
-import { Quote } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { ArrowUpRight, Star } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 
 const testimonials = [
   {
     quote: "SAN HUB helped me move from learning concepts to building something people could actually use.",
     name: "Aline M.",
     role: "SAN HUB learner",
+    rating: "4.9",
+    date: "12 Jun, 2024",
+    source: "Learner story",
+    image: "/images/team.jpg",
+    tone: "bg-white",
   },
   {
     quote: "The practical projects and mentorship gave our team the confidence to take an idea further.",
     name: "Eric N.",
     role: "Innovation program participant",
+    rating: "4.8",
+    date: "29 Aug, 2024",
+    source: "Innovation program",
+    image: "/images/graduates.jpg",
+    tone: "bg-[#f3f6ff]",
   },
   {
     quote: "SAN HUB creates a useful bridge between technology skills, opportunity, and the needs of our community.",
     name: "Diane U.",
     role: "Community partner",
-  },
-  {
-    quote: "The practical sessions helped me turn a difficult problem into a clear plan I could start building.",
-    name: "Mugisha T.",
-    role: "SAN HUB builder",
-  },
-  {
-    quote: "SAN HUB gave our team the tools, guidance, and confidence to keep improving after the programme ended.",
-    name: "Claudine R.",
-    role: "Programme participant",
-  },
-  {
-    quote: "The strongest value was learning with people who understand the realities of building technology here.",
-    name: "Patrick K.",
-    role: "Community collaborator",
-  },
-  {
-    quote: "I left with more than new skills. I left with a useful project and a clearer direction for my next step.",
-    name: "Jeanette N.",
-    role: "SAN HUB learner",
-  },
-  {
-    quote: "The mentorship made it easier to ask better questions, test ideas, and make steady progress.",
-    name: "Kevin M.",
-    role: "Innovation participant",
-  },
-  {
-    quote: "SAN HUB connects learning to action in a way that makes technology feel practical and achievable.",
-    name: "Beata A.",
-    role: "Community partner",
+    rating: "4.9",
+    date: "14 Nov, 2024",
+    source: "Partner story",
+    image: "/images/fieldwork.jpg",
+    tone: "bg-[#f8f4ff]",
   },
 ] as const;
 
-// Keep the testimonial copy in one place. The row order changes only to create
-// the vertical card transition; additional testimonial rows can be added here later.
-const testimonialRows = [
-  [testimonials[0], testimonials[1], testimonials[2]],
-  [testimonials[3], testimonials[4], testimonials[5]],
-  [testimonials[6], testimonials[7], testimonials[8]],
-] as const;
+function TestimonialCard({ item, index, reducedMotion }: { item: (typeof testimonials)[number]; index: number; reducedMotion: boolean }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: reducedMotion ? 0 : 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: reducedMotion ? 0.01 : 0.3, delay: reducedMotion ? 0 : Math.min(index, 2) * 0.06, ease: "easeOut" }}
+      className={`group flex h-[205px] w-[270px] shrink-0 flex-col rounded-2xl border border-[#dbe5ef] p-4 shadow-[0_8px_22px_rgba(10,31,68,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-cyan/60 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] sm:w-[300px] sm:p-5 ${item.tone}`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <span className="inline-flex min-w-0 items-center gap-2 text-[9px] font-black uppercase tracking-[0.14em] text-[#7186a4]">
+          <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#e5eef8] text-xs text-brand-secondary" aria-hidden="true">✦</span>
+          <span className="truncate">{item.source}</span>
+        </span>
+        <ArrowUpRight className="size-3.5 shrink-0 text-[#8da1ba] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+      </div>
+
+      <p className="mt-4 line-clamp-3 flex-1 text-[13px] leading-5 text-[#303f5c]">&ldquo;{item.quote}&rdquo;</p>
+
+      <div className="mt-3 flex items-center gap-2.5 border-t border-[#dbe5ef] pt-3">
+        <span className="relative size-9 shrink-0 overflow-hidden rounded-full border border-white bg-[#dfe8f2] shadow-sm">
+          <Image src={item.image} alt="" fill className="object-cover" sizes="36px" />
+        </span>
+        <span className="min-w-0">
+          <span className="block truncate text-xs font-bold text-[#0a1f44]">{item.name}</span>
+          <span className="mt-0.5 block truncate text-[10px] text-[#7186a4]">{item.role}</span>
+        </span>
+        <span className="ml-auto flex shrink-0 items-center gap-1 text-[10px] text-[#7186a4]">
+          <Star className="size-2.5 fill-brand-secondary text-brand-secondary" aria-hidden="true" />
+          {item.rating}
+        </span>
+      </div>
+      <p className="mt-1 pl-11 text-[9px] font-bold uppercase tracking-[0.1em] text-[#9aabc0]">{item.date}</p>
+    </motion.article>
+  );
+}
+
+function TestimonialMarquee({ reverse = false, reducedMotion }: { reverse?: boolean; reducedMotion: boolean }) {
+  const baseRow = reverse ? [...testimonials].reverse() : [...testimonials];
+  // Repeat the content inside each moving sequence so the centered rail stays filled
+  // while the next copy enters before the current copy leaves.
+  const row = [...baseRow, ...baseRow];
+
+  return (
+    <div className="testimonial-marquee relative mx-auto w-full max-w-[1100px] overflow-hidden" aria-label={reverse ? "More SAN HUB testimonials" : "SAN HUB testimonials"}>
+      <span className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#eef5fb] via-[#eef5fb]/85 to-transparent blur-[1px] sm:w-12" aria-hidden="true" />
+      <motion.div
+        className="testimonial-track flex w-max will-change-transform"
+        initial={false}
+        animate={reducedMotion ? { x: 0 } : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
+        transition={reducedMotion ? { duration: 0.01 } : { duration: reverse ? 38 : 34, ease: "linear", repeat: Infinity, repeatType: "loop" }}
+      >
+        {[0, 1].map((copy) => (
+          <div key={copy} className="testimonial-group flex gap-3 pr-3 sm:gap-4 sm:pr-4" aria-hidden={copy === 1}>
+            {row.map((item, index) => <TestimonialCard key={`${copy}-${index}-${item.name}`} item={item} index={index} reducedMotion={reducedMotion} />)}
+          </div>
+        ))}
+      </motion.div>
+      <span className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#eef5fb] via-[#eef5fb]/85 to-transparent blur-[1px] sm:w-12" aria-hidden="true" />
+    </div>
+  );
+}
 
 export function SanHubTestimonialSection() {
   const prefersReducedMotion = useReducedMotion();
-  const [activeRow, setActiveRow] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    if (prefersReducedMotion || isPaused) return;
-
-    const timer = window.setInterval(() => {
-      setActiveRow((row) => (row + 1) % testimonialRows.length);
-    }, 5200);
-
-    return () => window.clearInterval(timer);
-  }, [isPaused, prefersReducedMotion]);
 
   return (
-    <section id="san-hub-testimonials" className="san-hub-graphic-section scroll-mt-40 border-b border-slate-200 px-6 py-10 sm:px-10 lg:px-16 lg:py-16">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-        <div className="grid gap-8 border-b border-slate-200 pb-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+    <section id="san-hub-testimonials" className="san-hub-graphic-section scroll-mt-40 border-b border-slate-200 px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+      <div className="mx-auto max-w-7xl rounded-3xl bg-[#eef5fb] px-4 py-6 sm:px-7 sm:py-8 lg:px-10 lg:py-9">
+        <div className="grid gap-3 border-b border-[#d5e1ec] pb-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-12">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-secondary">SAN HUB / Testimonials</p>
-            <h1 className="font-exo mt-4 max-w-xl text-3xl font-bold leading-[1.02] tracking-[-0.055em] text-[#0a1f44] sm:text-4xl">What people are building from here.</h1>
+            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN HUB / Stories</p>
+            <h1 className="font-exo mt-2 max-w-xl text-2xl font-bold leading-[1.04] tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">What people are building from here.</h1>
           </div>
-          <p className="max-w-2xl text-base leading-7 text-slate-600">SAN HUB is measured by the people who leave with more clarity, stronger capability, and a next step they can act on.</p>
+          <p className="max-w-2xl text-sm leading-6 text-[#526989]">Learners, builders, and partners share what changed when learning became practical work.</p>
         </div>
 
-        <div
-          className="relative min-h-[640px] overflow-hidden sm:min-h-[540px] lg:min-h-[275px]"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          aria-label="SAN HUB testimonials"
-          aria-live="polite"
-        >
-          <AnimatePresence initial={false} mode="popLayout">
-            <motion.div
-              key={activeRow}
-              initial={prefersReducedMotion ? false : { y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={prefersReducedMotion ? undefined : { y: "-100%", opacity: 0 }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 grid divide-y divide-slate-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0"
-            >
-              {testimonialRows[activeRow].map((testimonial) => (
-                <blockquote key={`${activeRow}-${testimonial.name}`} className="flex min-h-[210px] flex-col justify-start py-6 lg:min-h-0 lg:px-7 lg:first:pl-0 lg:last:pr-0">
-                  <div>
-                    <Quote className="size-7 text-brand-cyan" aria-hidden="true" />
-                    <p className="mt-4 text-lg leading-8 text-[#303755]">&ldquo;{testimonial.quote}&rdquo;</p>
-                  </div>
-                  <footer className="mt-6">
-                    <cite className="not-italic text-sm font-bold text-[#0a1f44]">{testimonial.name}</cite>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-400">{testimonial.role}</p>
-                  </footer>
-                </blockquote>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+        <div className="mt-5 space-y-3 sm:space-y-4">
+          <TestimonialMarquee reducedMotion={Boolean(prefersReducedMotion)} />
+          <TestimonialMarquee reverse reducedMotion={Boolean(prefersReducedMotion)} />
         </div>
       </div>
+
     </section>
   );
 }

@@ -107,22 +107,18 @@ export function SanHubInsightsSection() {
 
   return (
     <section className="san-hub-graphic-section border-b border-slate-200 py-1 sm:px-4 lg:px-8 lg:py-2">
-      <div className="mx-auto max-w-7xl bg-white px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
-        <div className="grid gap-4 border-b border-slate-200 pb-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-10">
+      <div className="mx-auto max-w-7xl rounded-2xl bg-white px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
+        <div className="border-b border-slate-200 pb-5">
           <div>
             <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN HUB / Insights</p>
             <h1 className="font-exo mt-2 max-w-xl text-2xl font-bold leading-[1.02] tracking-[-0.04em] text-[#0a1f44] sm:text-3xl">Stories beyond the trends.</h1>
           </div>
-          <div className="max-w-2xl">
-            <p className="text-sm leading-6 text-[#303755]">Read the stories, research, and media coverage shaping SAN HUB&apos;s innovation ecosystem.</p>
-            <p className="mt-2 text-xs leading-5 text-slate-600">These links take you to the original publication or video source. New SAN HUB articles can be added here as the editorial library grows.</p>
-          </div>
         </div>
 
         <div className="flex gap-2 overflow-x-auto border-b border-slate-200 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Insight categories">
-          <button type="button" onClick={() => setActiveCategory("All stories")} className={`shrink-0 border px-3 py-2 text-xs font-bold transition-colors ${activeCategory === "All stories" ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>All stories</button>
+          <button type="button" onClick={() => setActiveCategory("All stories")} className={`shrink-0 rounded-full border px-3 py-2 text-xs font-bold transition-colors ${activeCategory === "All stories" ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>All stories</button>
           {availableCategories.map((category) => (
-            <button key={category} type="button" onClick={() => setActiveCategory(category)} className={`shrink-0 border px-3 py-2 text-xs font-bold transition-colors ${activeCategory === category ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>{category}</button>
+            <button key={category} type="button" onClick={() => setActiveCategory(category)} className={`shrink-0 rounded-full border px-3 py-2 text-xs font-bold transition-colors ${activeCategory === category ? "border-[#0a1f44] bg-[#0a1f44] text-white" : "border-slate-200 bg-white text-slate-600 hover:border-brand-secondary hover:text-[#0a1f44]"}`}>{category}</button>
           ))}
         </div>
 

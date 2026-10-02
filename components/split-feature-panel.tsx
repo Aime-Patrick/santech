@@ -111,9 +111,9 @@ export function SplitFeaturePanel({
         {detailHref && (
           <Link
             href={detailHref}
-            className="mt-10 inline-flex w-fit text-xs font-bold uppercase tracking-[0.1em] text-[#0a1f44] underline decoration-[#0a1f44]/40 underline-offset-4 transition-colors hover:text-brand-secondary hover:decoration-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 lg:mt-20"
+            className="mt-6 inline-flex w-fit text-xs font-bold uppercase tracking-[0.1em] text-[#0a1f44] underline decoration-1 decoration-[#0a1f44]/55 underline-offset-4 transition-colors hover:text-brand-secondary hover:decoration-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 lg:mt-8"
           >
-            <span>View full details</span>
+            <span>Explore more</span>
           </Link>
         )}
       </div>

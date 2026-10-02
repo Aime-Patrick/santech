@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Eye, Target, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const identity = [
   ["Founded", "1 August 2019"],
@@ -89,22 +89,49 @@ export function IdentityPanel() {
 }
 
 export function MissionPanel() {
-  const [expandedValue, setExpandedValue] = useState<string | null>(values[0].label);
+  const [selectedValue, setSelectedValue] = useState<string>(values[0].label);
   const prefersReducedMotion = useReducedMotion();
+  const activeValue = values.find((value) => value.label === selectedValue) ?? values[0];
+
   return (
-    <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-      <div>
-        <div className="grid gap-6">
-          <div><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Our mission</p><p className="mt-3 max-w-md text-base leading-7 text-[#68718a]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p></div>
-          <div className="border-t border-slate-300 pt-4"><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Our vision</p><p className="mt-3 max-w-md text-base leading-7 text-[#68718a]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p></div>
-          <p className="max-w-md text-sm leading-6 text-[#68718a]">SAN TECH brings technology solutions, SAN HUB, innovation and research, and capacity building into one corporate direction — positioning the company around technological products, talent development, innovation, and contribution to economic development.</p>
+    <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
+      <div className="relative">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="grid size-8 place-items-center rounded-full bg-[#e8f1fc] text-[10px] font-black text-brand-secondary">01</span>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our direction</p>
+        </div>
+        <div className="relative grid gap-3 pl-5">
+          <span className="absolute bottom-8 left-9 top-8 w-px bg-gradient-to-b from-brand-cyan via-brand-secondary to-[#0a1f44]" aria-hidden="true" />
+          <article className="relative rounded-2xl border border-[#bdeaf3] bg-[#f2fcfe] p-5 shadow-[0_8px_22px_rgba(8,198,231,0.08)]">
+            <div className="flex items-center gap-3">
+              <span className="grid size-9 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Target className="size-5" aria-hidden="true" /></span>
+              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Mission</p><p className="text-xs font-bold text-[#0a1f44]">Build useful capability</p></div>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
+          </article>
+          <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-5 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
+            <div className="flex items-center gap-3">
+              <span className="grid size-9 place-items-center rounded-xl bg-white text-[#0a1f44] shadow-sm"><Eye className="size-5" aria-hidden="true" /></span>
+              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Vision</p><p className="text-xs font-bold text-[#0a1f44]">Widen what is possible</p></div>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
+          </article>
         </div>
       </div>
-      <div className="border-l border-slate-300 pl-6 lg:pl-10">
-        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core values</p>
-        <div className="mt-5" role="list" aria-label="SAN TECH core values">
-          {values.map((value) => { const expanded = expandedValue === value.label; return <div key={value.label} className="border-b border-slate-200 last:border-b-0"><button type="button" onClick={() => setExpandedValue(expanded ? null : value.label)} aria-expanded={expanded} className="flex w-full items-center justify-between gap-5 py-4 text-left text-sm font-bold text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><span>{value.label}</span><ChevronDown className={`size-4 shrink-0 text-brand-secondary transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></button><AnimatePresence initial={false}>{expanded && <motion.div key={`${value.label}-description`} initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }} className="overflow-hidden"><p className="-mt-1 pb-4 pr-8 text-sm leading-6 text-[#68718a]">{value.description}</p></motion.div>}</AnimatePresence></div>; })}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-6">
+        <div className="flex items-end justify-between gap-4">
+          <div><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core values</p><p className="mt-2 text-xs text-[#71809a]">Select a value to see how it shapes our work.</p></div>
+          <span className="text-[10px] font-black tracking-[0.16em] text-slate-400">{String(values.length).padStart(2, "0")} PRINCIPLES</span>
         </div>
+        <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3" role="list" aria-label="SAN TECH core values">
+          {values.map((value, index) => { const selected = selectedValue === value.label; return <button key={value.label} type="button" onClick={() => setSelectedValue(value.label)} aria-pressed={selected} className={`group rounded-xl border p-3 text-left transition-[transform,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 ${selected ? "border-[#0a1f44] bg-[#0a1f44] text-white shadow-[0_10px_20px_rgba(10,31,68,0.16)]" : "border-slate-200 bg-[#f8faff] text-[#0a1f44] hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:bg-white"}`}><span className={`block text-[9px] font-black tracking-[0.16em] ${selected ? "text-brand-cyan" : "text-brand-secondary/60"}`}>{String(index + 1).padStart(2, "0")}</span><span className="mt-2 block text-xs font-bold leading-4">{value.label}</span></button>; })}
+        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={activeValue.label} initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }} className="mt-4 rounded-xl border border-[#bdeaf3] bg-[#f2fcfe] p-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{activeValue.label}</p>
+            <p className="mt-2 text-sm leading-6 text-[#526989]">{activeValue.description}</p>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -125,12 +152,81 @@ function LegacyJourneyGrid() {
 }
 
 export function RecognitionPanel() {
-  const [expandedRecognition, setExpandedRecognition] = useState<string | null>(recognitionItems[0][1]);
+  const [selectedRecognition, setSelectedRecognition] = useState<{ year: string; title: string; description: string } | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const orderedRecognitions = [...recognitionItems].sort((a, b) => {
+    const yearA = a[0] ? Number(a[0]) : -1;
+    const yearB = b[0] ? Number(b[0]) : -1;
+    return yearB - yearA;
+  });
+
+  useEffect(() => {
+    if (!selectedRecognition) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedRecognition(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedRecognition]);
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2" role="list" aria-label="SAN TECH recognitions and awards">
-        {recognitionItems.map(([year, title, description]) => { const expanded = expandedRecognition === title; return <article key={title} className={`border border-slate-200 bg-slate-50/60 ${expanded ? "sm:col-span-2" : ""}`}><button type="button" onClick={() => setExpandedRecognition(expanded ? null : title)} aria-expanded={expanded} className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="w-10 shrink-0 text-[10px] font-black tracking-[0.12em] text-brand-secondary">{year || "—"}</span><span className="flex-1 text-sm font-bold leading-5 text-[#0a1f44]">{title}</span><ChevronDown className={`mt-0.5 size-4 shrink-0 text-brand-secondary transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></button><AnimatePresence initial={false}>{expanded && <motion.div initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }} className="overflow-hidden"><p className="border-t border-slate-200 px-4 pb-4 pt-3 text-sm leading-6 text-[#68718a]">{description}</p></motion.div>}</AnimatePresence></article>; })}
+    <div className="relative" role="list" aria-label="SAN TECH recognitions and awards">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {orderedRecognitions.map(([year, title, description], index) => (
+          <motion.button
+            key={title}
+            type="button"
+            onClick={() => setSelectedRecognition({ year, title, description })}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, delay: prefersReducedMotion ? 0 : index * 0.025, ease: "easeOut" }}
+            className="group relative flex min-h-[108px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 pl-5 text-left shadow-[0_6px_18px_rgba(10,31,68,0.05)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-secondary/50 hover:shadow-[0_16px_32px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+          >
+            <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-brand-cyan via-brand-secondary to-[#0a1f44]" aria-hidden="true" />
+            <span className="pointer-events-none absolute -right-7 -top-7 size-20 rounded-full bg-[#e8f8fc] transition-transform duration-300 group-hover:scale-150" aria-hidden="true" />
+            <div className="relative flex items-center justify-between gap-3">
+              <span className="inline-flex rounded-full bg-[#e8f1fc] px-2 py-1 text-[10px] font-black tracking-[0.12em] text-brand-secondary">{year || "DATE N/A"}</span>
+              <span className="text-[10px] font-black tracking-[0.16em] text-slate-400">{String(index + 1).padStart(2, "0")}</span>
+            </div>
+            <h3 className="relative mt-3 text-sm font-bold leading-4 text-[#0a1f44]">{title}</h3>
+            <span className="relative mt-auto inline-flex items-center gap-2 pt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#0a1f44] transition-colors group-hover:text-brand-secondary">
+              View details
+              <ArrowUpRight className="size-3.5" aria-hidden="true" />
+            </span>
+          </motion.button>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {selectedRecognition && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/55 p-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="recognition-dialog-title"
+            onMouseDown={() => setSelectedRecognition(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-[0_24px_70px_rgba(7,21,45,0.25)] sm:p-8"
+              onMouseDown={(event) => event.stopPropagation()}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 16, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, y: 10, scale: 0.98 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }}
+            >
+              <button type="button" onClick={() => setSelectedRecognition(null)} aria-label="Close recognition details" className="absolute right-4 top-4 grid size-9 place-items-center rounded-full text-[#0a1f44] transition-colors hover:bg-[#e8f1fc] hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+                <X className="size-4" aria-hidden="true" />
+              </button>
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{selectedRecognition.year || "Recognition detail"}</p>
+              <h2 id="recognition-dialog-title" className="font-exo mt-3 max-w-xl pr-8 text-2xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44] sm:text-3xl">{selectedRecognition.title}</h2>
+              <p className="mt-5 text-base leading-7 text-[#68718a]">{selectedRecognition.description}</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

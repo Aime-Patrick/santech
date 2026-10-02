@@ -5,6 +5,7 @@ import { TechPulseOpportunities } from "@/components/tech-pulse-opportunities";
 
 const pulseMenu = [
   { key: "news", label: "News", href: "/tech-pulse" },
+  { key: "trends", label: "Trends", href: "/tech-pulse?type=trends" },
   { key: "announcements", label: "Announcements", href: "/tech-pulse?type=announcements" },
   { key: "opportunities", label: "Opportunities", href: "/tech-pulse?type=opportunities" },
   { key: "research", label: "Research & impact", href: "/tech-pulse?type=research" },
@@ -71,14 +72,14 @@ const pulseItems: SharedContentItem[] = [
 
 export default async function TechPulsePage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const params = await searchParams;
-  const selectedType = params.type === "opportunities" ? "fellowship" : params.type === "research" ? "impact" : params.type === "announcements" ? "announcements" : "news";
-  const activeMenu = params.type === "opportunities" ? "opportunities" : params.type === "research" ? "research" : params.type === "announcements" ? "announcements" : "news";
+  const selectedType = params.type === "opportunities" ? "fellowship" : params.type === "research" ? "impact" : params.type === "announcements" ? "announcements" : params.type === "trends" ? "trends" : "news";
+  const activeMenu = params.type === "opportunities" ? "opportunities" : params.type === "research" ? "research" : params.type === "announcements" ? "announcements" : params.type === "trends" ? "trends" : "news";
 
   return (
     <PublicPage>
       <StickyPageMenu items={pulseMenu} activeKey={activeMenu} ariaLabel="Tech Pulse sections" />
       <section className="border-t border-slate-200 px-2 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
-        <div className="mx-auto max-w-7xl bg-white px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+        <div className="mx-auto max-w-7xl rounded-2xl bg-white px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
           {params.type === "opportunities" ? <TechPulseOpportunities /> : <SharedContentBrowser items={pulseItems} initialItemId={selectedType} combinedPanel />}
         </div>
       </section>

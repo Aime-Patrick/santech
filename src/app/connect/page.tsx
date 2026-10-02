@@ -1,5 +1,6 @@
-import { AtSign, ArrowUpRight, FileText, Globe2, Mail, MapPin, MessageCircle, Phone, Radio } from "lucide-react";
+import { AtSign, ArrowUpRight, Globe2, Mail, MapPin, MessageCircle, Phone, Radio } from "lucide-react";
 import { PublicPage } from "@/components/public-page";
+import { ConnectRequestForm } from "@/components/connect-request-form";
 
 const contactDetails = [
   { label: "Phone", value: "+250 783 250 033 / +250 780 309 833", href: "tel:+250783250033", icon: Phone },
@@ -9,53 +10,70 @@ const contactDetails = [
   { label: "Website", value: "santechinnovate.com", href: "https://santechinnovate.com", icon: Globe2 },
 ] as const;
 
-export default function ConnectPage() {
+export default async function ConnectPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
+  const { topic } = await searchParams;
+  const normalizedTopic = topic?.toLowerCase().replace(/\s+/g, "-");
+  const initialTopic = normalizedTopic === "e-visitors-demo" || normalizedTopic === "partnership" || normalizedTopic === "training" ? normalizedTopic : "talk";
+
   return (
     <PublicPage>
-      <section className="san-hub-graphic-section border-y border-slate-200 py-2 sm:px-4 lg:px-10 lg:py-4">
-        <div className="mx-auto max-w-[1500px] bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-10 lg:py-8">
-          <div className="grid gap-5 lg:grid-cols-[0.82fr_1.18fr_0.82fr] lg:items-start">
-            <section className="p-0" aria-labelledby="contact-details-title">
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">SAN TECH / Contacts</p>
-              <h2 id="contact-details-title" className="font-exo mt-2 text-2xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Smart Applications and Networking Technology.</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">From ideation to transformative impact.</p>
+      <section className="san-hub-graphic-section border-y border-slate-200 py-2 sm:px-4 lg:px-8 lg:py-3">
+        <div className="mx-auto max-w-[1280px] bg-white px-4 py-4 sm:px-7 sm:py-5 lg:px-8 lg:py-6">
+          <header className="mb-5 grid gap-2 border-b border-slate-200 pb-4 md:grid-cols-[0.86fr_1.14fr] md:items-end md:gap-8">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN TECH / Connect</p>
+              <h1 className="font-exo mt-1.5 text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">Let&apos;s move something forward.</h1>
+            </div>
+            <p className="max-w-xl text-xs leading-5 text-slate-600 sm:text-sm">Tell us what you are building, improving, or exploring. We will connect you with the right SAN TECH team.</p>
+          </header>
 
-              <address className="mt-5 not-italic">
-                <div className="flex gap-3 text-sm leading-6 text-[#303755]">
-                  <MapPin className="mt-1 size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
+          <div className="grid gap-5 lg:grid-cols-[0.86fr_1.14fr] lg:items-start lg:gap-6">
+            <div className="min-w-0">
+              <section className="rounded-2xl bg-[#f7f9fc] p-4 sm:p-5" aria-labelledby="contact-details-title">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Contact details</p>
+                <p id="contact-details-title" className="mt-1.5 text-xs leading-5 text-slate-600">From ideation to transformative impact.</p>
+
+                <address className="mt-4 flex gap-2.5 text-xs leading-5 text-[#303755] not-italic">
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
                   <span>Plot 48, KN 1 Road, Sofaru Building, 3rd Floor, Muhima, Kigali, Rwanda</span>
+                </address>
+
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {contactDetails.map(({ label, value, href, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noreferrer" : undefined}
+                      className="group min-w-0 rounded-xl bg-white/80 px-2.5 py-2 transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
+                    >
+                      <span className="flex items-start gap-2">
+                        <Icon className="mt-0.5 size-3.5 shrink-0 text-brand-secondary" aria-hidden="true" />
+                        <span className="min-w-0">
+                          <span className="block text-[9px] font-black uppercase tracking-[0.13em] text-slate-400">{label}</span>
+                          <span className="mt-0.5 block break-words text-[11px] leading-4 text-[#303755] group-hover:text-brand-secondary">{value}</span>
+                        </span>
+                      </span>
+                    </a>
+                  ))}
                 </div>
-              </address>
 
-              <div className="mt-5 space-y-3">
-                {contactDetails.map(({ label, value, href, icon: Icon }) => (
-                  <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} className="group flex gap-3 text-sm transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
-                    <Icon className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
-                    <span className="min-w-0"><span className="block text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">{label}</span><span className="mt-1 block break-words text-[#303755] group-hover:text-brand-secondary">{value}</span></span>
-                  </a>
-                ))}
-              </div>
+                <div className="mt-3 flex items-center gap-2 text-[11px] text-[#303755]"><Radio className="size-3.5 shrink-0 text-brand-secondary" aria-hidden="true" /><span><span className="font-black uppercase tracking-[0.13em] text-slate-400">SAN TECH Radio</span><span className="ml-2">Zeno.FM — SAN TECH</span></span></div>
+              </section>
 
-              <div className="mt-4 flex gap-3 text-sm text-[#303755]"><Radio className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" /><span><span className="block text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">SAN TECH Radio</span><span className="mt-1 block">Zeno.FM – SAN TECH</span></span></div>
-            </section>
+              <section className="mt-4 rounded-2xl bg-[#edf1f7] p-2.5" aria-labelledby="map-title">
+                <div className="flex items-center justify-between gap-3 px-1.5 pb-2">
+                  <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Find us in Kigali</p><h2 id="map-title" className="font-exo mt-1 text-base font-bold tracking-[-0.03em] text-[#0a1f44]">Sofaru Building, Muhima</h2></div>
+                  <MapPin className="size-4 text-brand-secondary" aria-hidden="true" />
+                </div>
+                <div className="overflow-hidden rounded-xl bg-slate-200">
+                  <iframe title="SAN TECH location at Sofaru Building in Kigali" src="https://www.google.com/maps?q=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda&output=embed" className="h-[205px] w-full border-0 sm:h-[225px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 px-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">Get directions <ArrowUpRight className="size-3.5" aria-hidden="true" /></a>
+              </section>
+            </div>
 
-            <form className="grid gap-4 border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(10,31,68,0.06)] sm:grid-cols-2 sm:p-6" aria-labelledby="contact-form-title">
-              <div className="sm:col-span-2"><p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Start a conversation</p><h2 id="contact-form-title" className="font-exo mt-3 text-2xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">How can SAN TECH help?</h2><p className="mt-2 text-sm leading-6 text-slate-600">Share a little context and our team will route your request.</p></div>
-              <label className="grid gap-2 text-xs font-bold text-[#0a1f44]">Name<input required name="name" className="h-11 rounded-lg border border-slate-200 bg-slate-50 px-3 font-normal text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary focus:bg-white" placeholder="Your name" /></label>
-              <label className="grid gap-2 text-xs font-bold text-[#0a1f44]">Email<input required type="email" name="email" className="h-11 rounded-lg border border-slate-200 bg-slate-50 px-3 font-normal text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary focus:bg-white" placeholder="you@example.com" /></label>
-              <label className="grid gap-2 text-xs font-bold text-[#0a1f44]">Organization<input name="organization" className="h-11 rounded-lg border border-slate-200 bg-slate-50 px-3 font-normal text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary focus:bg-white" placeholder="Company or institution" /></label>
-              <label className="grid gap-2 text-xs font-bold text-[#0a1f44]">Inquiry type<select name="type" className="h-11 rounded-lg border border-slate-200 bg-slate-50 px-3 font-normal text-slate-700 outline-none transition-colors focus:border-brand-secondary focus:bg-white"><option>Product inquiry</option><option>Service inquiry</option><option>Training</option><option>E-Visitors demo</option><option>Partnership</option><option>General inquiry</option></select></label>
-              <label className="grid gap-2 text-xs font-bold text-[#0a1f44] sm:col-span-2">Message<textarea required name="message" rows={7} className="resize-y rounded-lg border border-slate-200 bg-slate-50 p-3 font-normal text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary focus:bg-white" placeholder="Tell us what you are working on..." /></label>
-              <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#0a1f44] px-5 text-sm font-bold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 sm:col-span-2">Send inquiry <ArrowUpRight className="size-4" aria-hidden="true" /></button>
-            </form>
-
-            <section className="border border-slate-200 bg-white p-3" aria-labelledby="map-title">
-              <div className="flex items-start justify-between gap-3 px-2 pb-3"><div><p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Find us</p><h2 id="map-title" className="font-exo mt-2 text-xl font-bold tracking-[-0.03em] text-[#0a1f44]">Sofaru Building</h2></div><MapPin className="mt-1 size-5 text-brand-secondary" aria-hidden="true" /></div>
-              <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
-                <iframe title="SAN TECH location at Sofaru Building in Kigali" src="https://www.google.com/maps?q=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda&output=embed" className="h-[260px] w-full border-0 sm:h-[300px] lg:h-[280px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-              </div>
-              <a href="https://www.google.com/maps/search/?api=1&query=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda" target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 px-2 text-xs font-black uppercase tracking-[0.14em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">Open in Google Maps <ArrowUpRight className="size-4" aria-hidden="true" /></a>
-            </section>
+            <ConnectRequestForm initialTopic={initialTopic} />
           </div>
         </div>
       </section>

@@ -23,7 +23,7 @@ const growthTimeline = [
 export function SanHubTractionSection() {
   return (
     <section className="san-hub-graphic-section border-b border-slate-200 py-2 sm:px-4 lg:px-10 lg:py-4">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
+      <div className="mx-auto max-w-[1500px] rounded-2xl bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
         <div className="grid gap-8 border-b border-slate-200 pb-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-16">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-secondary">SAN HUB / Traction</p>

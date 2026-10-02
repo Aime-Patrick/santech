@@ -9,7 +9,7 @@ const aboutSteps = [
 export function SanHubAboutSection() {
   return (
     <section id="san-hub-about" className="san-hub-graphic-section scroll-mt-40 border-b border-slate-200 px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+      <div className="mx-auto max-w-[1500px] rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-20">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-secondary">SAN HUB</p>

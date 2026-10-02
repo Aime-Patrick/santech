@@ -12,7 +12,7 @@ import {
   Phone,
   Radio,
 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { navigation } from "@/lib/site-data";
@@ -43,6 +43,44 @@ const languageOptions: { code: Language; label: string; flag: string }[] = [
   { code: "ur", label: "Urdu", flag: "pk" },
   { code: "br", label: "Bambara", flag: "ml" },
 ];
+
+function CommunityCta({ mobile = false, onClick }: { mobile?: boolean; onClick?: () => void }) {
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <Link
+      href="/join-the-community"
+      onClick={onClick}
+      className={`group relative isolate inline-flex items-center justify-center overflow-hidden rounded-xl bg-[#0a1f44] font-extrabold uppercase text-white shadow-md transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#132f61] hover:shadow-[0_10px_26px_rgba(0,163,224,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00A3E0] focus-visible:ring-offset-2 active:translate-y-0 ${
+        mobile
+          ? "w-full gap-2 px-5 py-3.5 text-sm tracking-wider"
+          : "gap-1 px-3 py-2 text-[11px] tracking-[0.06em] 2xl:gap-1.5 2xl:px-4 2xl:text-xs 2xl:tracking-wider"
+      }`}
+    >
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 -left-1/2 z-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-[#50e4f6]/45 to-transparent"
+        animate={prefersReducedMotion ? { x: "-20%" } : { x: ["-20%", "280%"] }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0.01 }
+            : { duration: 3.4, delay: 0.8, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8 }
+        }
+      />
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 rounded-xl bg-[#00A3E0]/10"
+        animate={prefersReducedMotion ? { opacity: 0.1 } : { opacity: [0.08, 0.22, 0.08] }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0.01 }
+            : { duration: 2.8, ease: "easeInOut", repeat: Infinity }
+        }
+      />
+      <span className="relative z-10">JOIN THE COMMUNITY</span>
+    </Link>
+  );
+}
 
 export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -209,12 +247,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
               </div>
 
               {/* Visually Prominent CTA Button: JOIN THE COMMUNITY */}
-              <Link
-                href="/join-the-community"
-                className="inline-flex items-center gap-1 rounded-xl bg-[#0a1f44] px-3 py-2 text-[11px] font-extrabold uppercase tracking-[0.06em] text-white shadow-md transition-all duration-200 hover:scale-[1.02] hover:bg-[#132f61] hover:shadow-lg active:scale-[0.98] 2xl:gap-1.5 2xl:px-4 2xl:text-xs 2xl:tracking-wider"
-              >
-                <span>JOIN THE COMMUNITY</span>
-              </Link>
+              <CommunityCta />
             </div>
           </div>
 
@@ -309,13 +342,9 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                 );
               })}
 
-              <Link
-                href="/join-the-community"
-                onClick={() => setOpen(false)}
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[#0a1f44] px-5 py-3.5 text-sm font-extrabold uppercase tracking-wider text-white shadow-md transition-all hover:bg-[#132f61]"
-              >
-                <span>JOIN THE COMMUNITY</span>
-              </Link>
+              <div className="mt-2 w-full">
+                <CommunityCta mobile onClick={() => setOpen(false)} />
+              </div>
             </div>
           </motion.nav>
         )}

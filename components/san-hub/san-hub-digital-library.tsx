@@ -79,7 +79,7 @@ export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigit
 
   return (
     <section id="san-hub-digital-library" className="san-hub-graphic-section scroll-mt-40 border-b border-[#0a1f44]/10 px-4 py-7 sm:px-6 lg:px-8 lg:py-9">
-      <div className="mx-auto max-w-7xl bg-white px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
+      <div className="mx-auto max-w-7xl rounded-2xl bg-white px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
         {activeBook ? (
           <BookReader book={activeBook} src={src} onBack={() => setActiveBook(null)} />
         ) : (
@@ -95,19 +95,15 @@ function BookShelf({ onOpen }: { onOpen: (book: LibraryBook) => void }) {
     <>
       <div className="mb-4 flex flex-col justify-between gap-2.5 border-b border-[#0a1f44]/15 pb-4 sm:flex-row sm:items-end">
         <div>
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.24em] text-[#0a1f44]">
-            <BookOpen className="size-4 text-brand-cyan" aria-hidden="true" />
-            SAN BOOK / Digital library
-          </p>
-          <h1 className="font-exo mt-2 max-w-3xl text-xl font-bold leading-[1.05] tracking-[-0.04em] text-[#0a1f44] sm:text-2xl lg:text-3xl">
+          <h1 className="font-exo max-w-3xl text-lg font-bold leading-[1.05] tracking-[-0.04em] text-[#0a1f44] sm:text-xl lg:text-2xl">
             Choose a book and start reading.
           </h1>
-          <p className="mt-1.5 max-w-2xl text-xs leading-5 text-slate-600">
+          <p className="mt-1 max-w-2xl text-[11px] leading-4 text-slate-600">
             Browse the SAN HUB collection, then open one title in the reading room.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <span className="mr-2 text-xs font-black uppercase tracking-[0.18em] text-[#0a1f44]/55">{libraryBooks.length} titles</span>
+          <span className="mr-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#0a1f44]/55">{libraryBooks.length} titles</span>
         </div>
       </div>
 
@@ -144,9 +140,9 @@ function BookCover({ book, onOpen }: { book: LibraryBook; onOpen: (book: Library
           )}
         </span>
       </span>
-      <span className="mt-5 block text-lg font-bold leading-tight tracking-[-0.03em] text-[#0a1f44]">{book.title}</span>
-      <span className="mt-1 block text-sm leading-6 text-slate-600">{book.description}</span>
-      <span className="mt-3 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#0a1f44] transition-colors group-hover:text-brand-cyan">
+      <span className="mt-4 block text-base font-bold leading-tight tracking-[-0.03em] text-[#0a1f44]">{book.title}</span>
+      <span className="mt-1 block text-xs leading-5 text-slate-600">{book.description}</span>
+      <span className="mt-2 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44] transition-colors group-hover:text-brand-cyan">
         Open book
         <ArrowUpRight className="size-3.5" aria-hidden="true" />
       </span>
@@ -157,19 +153,13 @@ function BookCover({ book, onOpen }: { book: LibraryBook; onOpen: (book: Library
 function BookReader({ book, src, onBack }: { book: LibraryBook; src: string; onBack: () => void }) {
   return (
     <>
-      <div className="mb-8 flex flex-col justify-between gap-5 border-b border-[#0a1f44]/15 pb-7 sm:flex-row sm:items-end">
-        <div>
-          <button type="button" onClick={onBack} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#0a1f44] hover:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2">
-            <ArrowLeft className="size-4" aria-hidden="true" />
-            Back to library
-          </button>
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.24em] text-[#0a1f44]">
-            <BookOpen className="size-4 text-brand-cyan" aria-hidden="true" />
-            Reading room / {book.category}
-          </p>
-          <h1 className="font-exo mt-4 text-3xl font-bold leading-tight tracking-[-0.05em] text-[#0a1f44] sm:text-4xl lg:text-5xl">{book.title}</h1>
-        </div>
-        <a href={src} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#0a1f44] underline-offset-4 hover:text-brand-cyan hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2">
+      <div className="mb-5 grid gap-3 border-b border-[#0a1f44]/15 pb-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+        <button type="button" onClick={onBack} className="inline-flex items-center gap-2 justify-self-start text-xs font-bold text-[#0a1f44] hover:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2">
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Back to library
+        </button>
+        <h1 className="font-exo text-center text-2xl font-bold leading-tight tracking-[-0.05em] text-[#0a1f44] sm:text-3xl lg:text-4xl">{book.title}</h1>
+        <a href={src} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 justify-self-start text-xs font-bold text-[#0a1f44] underline-offset-4 hover:text-brand-cyan hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 sm:justify-self-end">
           Open in new tab
           <ArrowUpRight className="size-4" aria-hidden="true" />
         </a>

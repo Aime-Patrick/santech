@@ -49,7 +49,7 @@ function ImpactCounter({ value }: { value: string }) {
 export function SanHubImpactSection() {
   return (
     <section id="san-hub-impact" className="san-hub-graphic-section border-b border-slate-200 py-2 sm:px-4 lg:px-10 lg:py-4">
-      <div className="mx-auto max-w-[1500px] bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
+      <div className="mx-auto max-w-[1500px] rounded-2xl bg-white px-5 py-5 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
         <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-secondary">SAN HUB / Impact in action</p>
         <div className="mt-3 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-12">
           <h1 className="font-exo max-w-xl text-3xl font-bold leading-[1.02] tracking-[-0.055em] text-[#0a1f44] sm:text-4xl">Impact is what remains after the program ends.</h1>
