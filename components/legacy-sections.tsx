@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, ChevronDown, Eye, Target, X } from "lucide-react";
+import { ArrowUpRight, BrainCircuit, ChevronDown, Code2, Compass, Cpu, Eye, FlaskConical, GraduationCap, Lightbulb, Network, Radio, Rocket, ShieldCheck, Target, Workflow, X, type LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
@@ -41,6 +41,21 @@ const focusAreas = [
   ["Consultancy", "Provides technical and digital transformation guidance"],
   ["Product deployment", "Installs, integrates, trains users and supports solutions"],
 ] as const;
+
+const focusIcons: readonly LucideIcon[] = [
+  Code2,
+  BrainCircuit,
+  ShieldCheck,
+  Radio,
+  Cpu,
+  Workflow,
+  Network,
+  Lightbulb,
+  GraduationCap,
+  FlaskConical,
+  Compass,
+  Rocket,
+];
 
 const journeyStages = [
   ["2018", "Idea", "Founders identify problems with manual visitor management"],
@@ -234,18 +249,76 @@ export function RecognitionPanel() {
 export function FocusPanel() {
   const [expandedArea, setExpandedArea] = useState<string>(focusAreas[0][0]);
   const prefersReducedMotion = useReducedMotion();
+  const activeIndex = Math.max(0, focusAreas.findIndex(([area]) => area === expandedArea));
+  const activeArea = focusAreas[activeIndex] ?? focusAreas[0];
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.28fr_0.72fr] lg:gap-14">
-      <div className="border-y border-slate-300">
-        <div className="grid sm:grid-cols-2 sm:gap-x-8" role="list" aria-label="SAN TECH areas of focus">
-          {focusAreas.map(([area, description], index) => {
-            const expanded = expandedArea === area;
-            return <div key={area} className={`border-b border-slate-200 last:border-b-0 ${expanded ? "sm:col-span-2" : ""}`}><button type="button" onClick={() => setExpandedArea(expanded ? "" : area)} aria-expanded={expanded} className="flex w-full items-center gap-3 py-3.5 text-left transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><span className="w-5 shrink-0 text-[10px] font-black text-brand-secondary/55">{String(index + 1).padStart(2, "0")}</span><span className="flex-1 text-sm font-bold text-[#0a1f44]">{area}</span><ChevronDown className={`size-4 shrink-0 text-brand-secondary transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></button><AnimatePresence initial={false}>{expanded && <motion.div key={`${area}-description`} initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }} className="overflow-hidden"><p className="pb-4 pl-8 pr-4 text-sm leading-6 text-[#68718a]">{description}</p></motion.div>}</AnimatePresence></div>;
-          })}
+    <div className="grid gap-6 lg:grid-cols-[minmax(250px,0.7fr)_minmax(0,1.3fr)] lg:items-start lg:gap-8">
+      <aside className="relative overflow-hidden rounded-[1.75rem] bg-[#0a1f44] p-6 text-white shadow-[0_18px_42px_rgba(10,31,68,0.14)] sm:p-7 lg:p-8">
+        <span className="pointer-events-none absolute -right-16 -top-16 size-44 rounded-full border-[18px] border-brand-cyan/15" aria-hidden="true" />
+        <span className="pointer-events-none absolute -bottom-20 -left-12 size-40 rounded-full border-[14px] border-white/5" aria-hidden="true" />
+        <div className="relative">
+          <div className="flex items-start justify-between gap-4">
+            <span className="grid size-11 place-items-center rounded-2xl bg-brand-cyan text-[#0a1f44]"><Target className="size-5" aria-hidden="true" /></span>
+            <span className="rounded-full border border-white/20 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-white/65">{String(focusAreas.length).padStart(2, "0")} capabilities</span>
+          </div>
+          <p className="mt-8 text-[10px] font-black uppercase tracking-[0.22em] text-brand-cyan">Our focus</p>
+          <h2 className="font-exo mt-3 max-w-xs text-2xl font-bold leading-[1.03] tracking-[-0.045em] sm:text-3xl">From challenge to working solution.</h2>
+          <p className="mt-5 max-w-sm text-sm leading-6 text-white/70">From software and AI to training and deployment, SAN TECH brings the capabilities needed to move an idea into useful, working technology.</p>
+          <div className="mt-8 border-t border-white/15 pt-5">
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/50">Selected capability</p>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="grid size-9 place-items-center rounded-xl bg-white/10 text-brand-cyan"><Target className="size-4" aria-hidden="true" /></span>
+              <span className="text-sm font-bold text-white">{activeArea[0]}</span>
+            </div>
+          </div>
+          <div className="mt-7 flex items-center gap-1.5" aria-hidden="true">{focusAreas.map(([area], index) => <span key={area} className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${index === activeIndex ? "bg-brand-cyan" : index < activeIndex ? "bg-white/50" : "bg-white/15"}`} />)}</div>
+        </div>
+      </aside>
+
+      <div>
+        <div className="mb-4 flex items-end justify-between gap-4 border-b border-slate-200 pb-3">
+          <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Capability map</p><p className="mt-1 text-xs text-[#71809a]">Select a capability to see how SAN TECH delivers it.</p></div>
+          <span className="hidden text-[10px] font-black uppercase tracking-[0.16em] text-slate-400 sm:block">{String(activeIndex + 1).padStart(2, "0")} / {String(focusAreas.length).padStart(2, "0")}</span>
+        </div>
+        <div role="list" aria-label="SAN TECH areas of focus" className="grid gap-3 sm:grid-cols-2">
+        {focusAreas.map(([area, description], index) => {
+          const expanded = expandedArea === area;
+          const Icon = focusIcons[index] ?? Code2;
+
+          return (
+            <motion.article
+              key={area}
+              layout
+              className={`overflow-hidden rounded-2xl border transition-[border-color,background-color,box-shadow] duration-200 ${expanded ? "border-brand-cyan bg-[#f3fcfe] shadow-[0_10px_28px_rgba(0,163,224,0.1)] sm:col-span-2" : "border-[#dce6ef] bg-white hover:border-brand-secondary/45 hover:shadow-[0_8px_22px_rgba(10,31,68,0.06)]"}`}
+            >
+              <button type="button" onClick={() => setExpandedArea(expanded ? "" : area)} aria-expanded={expanded} className="group flex w-full items-center gap-3 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset">
+                <span className={`grid size-10 shrink-0 place-items-center rounded-xl transition-colors ${expanded ? "bg-[#0a1f44] text-brand-cyan" : "bg-[#edf4fa] text-brand-secondary group-hover:bg-[#e2f7fb]"}`}><Icon className="size-[18px]" aria-hidden="true" /></span>
+                <span className="min-w-0 flex-1"><span className={`block text-[9px] font-black uppercase tracking-[0.16em] ${expanded ? "text-brand-secondary" : "text-[#94a5b8]"}`}>{String(index + 1).padStart(2, "0")} / CAPABILITY</span><span className="mt-1 block text-sm font-bold leading-5 text-[#0a1f44] sm:text-[15px]">{area}</span></span>
+                <ChevronDown className={`size-4 shrink-0 text-brand-secondary transition-transform duration-200 ${expanded ? "rotate-180" : "group-hover:translate-y-0.5"}`} aria-hidden="true" />
+              </button>
+              <AnimatePresence initial={false}>
+                {expanded && (
+                  <motion.div
+                    key={`${area}-description`}
+                    initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }}
+                    transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="flex items-start gap-3 border-t border-brand-cyan/20 px-4 pb-4 pt-3.5">
+                      <Icon className="mt-0.5 size-4 shrink-0 text-brand-cyan" aria-hidden="true" />
+                      <p className="text-sm leading-6 text-[#68718a]">{description}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.article>
+          );
+        })}
         </div>
       </div>
-      <div className="flex flex-col justify-center border-l border-slate-300 pl-6 lg:pl-8"><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our focus</p><p className="mt-6 max-w-md text-base leading-7 text-[#68718a]">From software and AI to training and deployment, SAN TECH brings the capabilities needed to move from a challenge or idea to a working solution.</p></div>
     </div>
   );
 }

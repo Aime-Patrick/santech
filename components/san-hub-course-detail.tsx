@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Award, CalendarDays, Check, ChevronRight, House, Languages, ShieldCheck, Star, Users } from "lucide-react";
+import type { IconType } from "react-icons";
+import { SiFigma, SiGithub, SiGit, SiNextdotjs, SiPostgresql, SiReact, SiTypescript, SiVercel } from "react-icons/si";
+import { TbApi, TbCloudComputing, TbCode, TbTestPipe } from "react-icons/tb";
+import { VscVscode } from "react-icons/vsc";
 import { PublicPage } from "@/components/public-page";
 import { CourseSectionNav } from "@/components/san-hub-course-section-nav";
 import { SanHubCourseJourney } from "@/components/san-hub/san-hub-course-journey";
@@ -134,67 +138,96 @@ function DetailIcon({ icon }: { icon: CourseDetail["details"][number]["icon"] })
   return <Icon className="size-5 text-brand-secondary" aria-hidden="true" />;
 }
 
+const courseTechnologyIcons: Record<string, { Icon: IconType; color: string }> = {
+  TypeScript: { Icon: SiTypescript, color: "#3178c6" },
+  React: { Icon: SiReact, color: "#149eca" },
+  "Next.js": { Icon: SiNextdotjs, color: "#0a1f44" },
+  "API design": { Icon: TbApi, color: "#0a1f44" },
+  PostgreSQL: { Icon: SiPostgresql, color: "#4169e1" },
+  Testing: { Icon: TbTestPipe, color: "#0a1f44" },
+  "Git workflows": { Icon: SiGit, color: "#f05032" },
+  "Cloud deployment": { Icon: TbCloudComputing, color: "#149eca" },
+  "VS Code": { Icon: VscVscode, color: "#007acc" },
+  GitHub: { Icon: SiGithub, color: "#0a1f44" },
+  Figma: { Icon: SiFigma, color: "#f24e1e" },
+  Vercel: { Icon: SiVercel, color: "#0a1f44" },
+};
+
+function CourseTechnologyChip({ item }: { item: string }) {
+  const technology = courseTechnologyIcons[item] ?? { Icon: TbCode, color: "#0a1f44" };
+  const Icon = technology.Icon;
+
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#e3ebf7] px-2.5 py-1.5 text-xs text-[#0a1f44]">
+      <Icon className="size-3.5 shrink-0" style={{ color: technology.color }} aria-hidden="true" />
+      {item}
+    </span>
+  );
+}
+
 export function SanHubCourseDetail({ course }: { course: SanHubCourse }) {
   return (
     <PublicPage>
-      <section className="bg-[#edf3fc] px-6 pb-20 pt-8 sm:px-10 lg:px-16 lg:pb-24" style={{ backgroundImage: "linear-gradient(rgba(237, 243, 252, 0.9), rgba(237, 243, 252, 0.9)), url('/images/rw-graphic01-30p.png')", backgroundPosition: "center, center", backgroundRepeat: "no-repeat, repeat", backgroundSize: "auto, 427px 427px" }}>
+      <div className="mx-3 bg-white shadow-[0_0_24px_rgba(10,31,68,0.03)] sm:mx-5 lg:mx-8 2xl:mx-auto 2xl:max-w-[1600px]">
+      <section className="bg-white px-6 pb-12 pt-5 sm:px-10 sm:pb-14 lg:px-16 lg:pb-16">
         <div className="mx-auto max-w-7xl">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-slate-500"><Link href="/san-hub" className="transition-colors hover:text-brand-secondary"><House className="size-4" aria-label="SAN HUB home" /></Link><ChevronRight className="size-3.5" /><Link href="/san-hub" className="hover:text-brand-secondary">SAN HUB</Link><ChevronRight className="size-3.5" /><span className="truncate text-[#0a1f44]">{course.title}</span></nav>
 
-          <div className="mt-12 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="mt-7 grid gap-7 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-9">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">SAN HUB / {course.category}</p>
-              <h1 className="font-exo mt-5 max-w-3xl text-4xl font-bold leading-[0.98] tracking-[-0.055em] text-[#0a1f44] sm:text-5xl lg:text-6xl">{course.title}</h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">{course.subtitle}</p>
-              <div className="mt-6 flex items-center gap-3 text-sm text-slate-700"><span className="grid size-9 place-items-center rounded-full bg-white text-brand-secondary shadow-sm"><Users className="size-4" /></span><span>Instructor: <span className="font-bold text-[#0a1f44]">{course.instructor}</span></span></div>
-              <Link href={`/join-the-community?course=${encodeURIComponent(course.title)}`} className="mt-8 inline-flex items-center gap-2 rounded-xl bg-brand-secondary px-7 py-4 text-sm font-bold text-white shadow-[0_12px_24px_rgba(11,14,135,0.2)] transition-all hover:-translate-y-0.5 hover:bg-[#1519ad]">Enroll for SAN HUB <ArrowUpRight className="size-4" /></Link>
+              <h1 className="font-exo mt-5 max-w-3xl text-3xl font-bold leading-[1] tracking-[-0.045em] text-[#0a1f44] sm:text-4xl lg:text-5xl">{course.title}</h1>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-700">{course.subtitle}</p>
+              <div className="mt-5 flex items-center gap-3 text-sm text-slate-700"><span className="grid size-8 place-items-center rounded-full bg-white text-brand-secondary shadow-sm"><Users className="size-3.5" /></span><span>Instructor: <span className="font-bold text-[#0a1f44]">{course.instructor}</span></span></div>
+              <Link href={`/join-the-community?course=${encodeURIComponent(course.title)}`} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-secondary px-6 py-3 text-sm font-bold text-white shadow-[0_10px_20px_rgba(11,14,135,0.16)] transition-all hover:-translate-y-0.5 hover:bg-[#1519ad]">Enroll for SAN HUB <ArrowUpRight className="size-4" /></Link>
             </div>
-            <div className="relative min-h-[300px] overflow-hidden rounded-2xl bg-[#dceaf8] shadow-[0_24px_60px_rgba(10,31,68,0.12)] sm:min-h-[380px]">
+            <div className="relative aspect-[1.2/1] overflow-hidden rounded-2xl bg-[#dceaf8] shadow-[0_20px_45px_rgba(10,31,68,0.1)] sm:aspect-[1.35/1] lg:aspect-[1.15/1]">
               <Image src={course.image} alt="" fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover" priority />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a1f44]/60 via-transparent to-transparent" />
-              <span className="absolute bottom-5 left-5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-[#0a1f44]">SAN HUB learning pathway</span>
+              <span className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#0a1f44]">SAN HUB learning pathway</span>
             </div>
           </div>
 
-          <div className="relative z-10 mt-14 grid gap-0 overflow-hidden rounded-2xl bg-white shadow-[0_18px_45px_rgba(10,31,68,0.14)] sm:grid-cols-2 lg:grid-cols-4">
-            {course.stats.map((stat, index) => <div key={stat.label} className={`p-6 sm:p-7 ${index > 0 ? "border-t border-slate-200 sm:border-l sm:border-t-0" : ""}`}><p className="text-sm font-bold text-[#0a1f44]">{stat.value}</p><p className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-brand-secondary">{stat.label}</p><p className="mt-2 text-sm leading-5 text-slate-500">{stat.detail}</p></div>)}
+          <div className="relative z-10 mt-8 grid gap-0 overflow-hidden rounded-2xl bg-white shadow-[0_14px_35px_rgba(10,31,68,0.1)] sm:grid-cols-2 lg:grid-cols-4">
+            {course.stats.map((stat, index) => <div key={stat.label} className={`p-4 sm:p-5 ${index > 0 ? "border-t border-slate-200 sm:border-l sm:border-t-0" : ""}`}><p className="text-sm font-bold text-[#0a1f44]">{stat.value}</p><p className="mt-1 text-[10px] font-black uppercase tracking-[0.12em] text-brand-secondary">{stat.label}</p><p className="mt-1 text-xs leading-5 text-slate-500">{stat.detail}</p></div>)}
           </div>
         </div>
       </section>
 
       <CourseSectionNav course={course} />
 
-      <main className="mx-auto max-w-7xl px-6 pb-24 pt-8 sm:px-10 lg:px-16">
-        <section id="about" className="scroll-mt-48 border-b border-slate-200 pb-16">
+      <main className="mx-auto max-w-7xl px-6 pb-16 pt-5 sm:px-10 lg:px-16">
+        <section id="about" className="scroll-mt-48 border-b border-slate-200 pb-10">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">About this pathway</p>
-          <div className="mt-4 grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
+          <div className="mt-3 grid gap-7 lg:grid-cols-[0.75fr_1.25fr]">
             <h2 className="font-exo text-3xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">What you&apos;ll learn</h2>
-            <div className="grid gap-6 sm:grid-cols-2">{course.learningOutcomes.map((outcome) => <div key={outcome} className="flex gap-3 text-base leading-7 text-slate-700"><Check className="mt-1 size-4 shrink-0 text-brand-secondary" />{outcome}</div>)}</div>
+            <div className="grid gap-4 sm:grid-cols-2">{course.learningOutcomes.map((outcome) => <div key={outcome} className="flex gap-3 text-sm leading-6 text-slate-700"><Check className="mt-1 size-4 shrink-0 text-brand-secondary" />{outcome}</div>)}</div>
           </div>
-          <div className="mt-12 grid gap-10 lg:grid-cols-2">
-            <div><h3 className="font-exo text-xl font-bold text-[#0a1f44]">Skills you&apos;ll gain</h3><div className="mt-4 flex flex-wrap gap-2">{course.skills.map((skill) => <span key={skill} className="rounded-full bg-[#e3ebf7] px-3 py-2 text-sm text-[#0a1f44]">{skill}</span>)}</div></div>
-            <div><h3 className="font-exo text-xl font-bold text-[#0a1f44]">Tools you&apos;ll learn</h3><div className="mt-4 flex flex-wrap gap-2">{course.tools.map((tool) => <span key={tool} className="rounded-full bg-[#e3ebf7] px-3 py-2 text-sm text-[#0a1f44]">{tool}</span>)}</div></div>
+          <div className="mt-8 grid gap-7 lg:grid-cols-2">
+            <div><h3 className="font-exo text-lg font-bold text-[#0a1f44]">Skills you&apos;ll gain</h3><div className="mt-3 flex flex-wrap gap-2">{course.skills.map((skill) => <CourseTechnologyChip key={skill} item={skill} />)}</div></div>
+            <div><h3 className="font-exo text-lg font-bold text-[#0a1f44]">Tools you&apos;ll learn</h3><div className="mt-3 flex flex-wrap gap-2">{course.tools.map((tool) => <CourseTechnologyChip key={tool} item={tool} />)}</div></div>
           </div>
         </section>
 
-        <section id="outcomes" className="scroll-mt-48 border-b border-slate-200 py-16">
+        <section id="outcomes" className="scroll-mt-48 border-b border-slate-200 py-10">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Your next step</p>
-          <div className="mt-4 grid gap-10 lg:grid-cols-[0.75fr_1.25fr]"><h2 className="font-exo text-3xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Turn learning into visible capability.</h2><div className="grid gap-4 sm:grid-cols-2">{course.details.map((detail) => <div key={detail.title} className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-5"><DetailIcon icon={detail.icon} /><h3 className="mt-4 font-bold text-[#0a1f44]">{detail.title}</h3><p className="mt-1 text-sm leading-6 text-slate-600">{detail.detail}</p></div>)}</div></div>
+          <div className="mt-3 grid gap-7 lg:grid-cols-[0.75fr_1.25fr]"><h2 className="font-exo text-2xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Turn learning into visible capability.</h2><div className="grid gap-3 sm:grid-cols-2">{course.details.map((detail) => <div key={detail.title} className="rounded-xl border border-slate-200 bg-[#f8fafc] p-4"><DetailIcon icon={detail.icon} /><h3 className="mt-3 text-sm font-bold text-[#0a1f44]">{detail.title}</h3><p className="mt-1 text-xs leading-5 text-slate-600">{detail.detail}</p></div>)}</div></div>
         </section>
 
         <SanHubCourseJourney modules={course.courseSeries} />
 
-        <section id="testimonials" className="scroll-mt-48 border-b border-slate-200 py-16">
+        <section id="testimonials" className="scroll-mt-48 border-b border-slate-200 py-10">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Learner voices</p>
-          <h2 className="font-exo mt-4 max-w-2xl text-3xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Built for people who want to use what they learn.</h2>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">{course.testimonials.map((testimonial) => <blockquote key={testimonial.name} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_12px_30px_rgba(10,31,68,0.05)]"><div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-full bg-[#0a1f44] text-sm font-bold text-white">{testimonial.initials}</span><cite className="not-italic font-bold text-[#0a1f44]">{testimonial.name}</cite></div><p className="mt-5 text-base leading-7 text-slate-600">&ldquo;{testimonial.quote}&rdquo;</p></blockquote>)}</div>
+          <h2 className="font-exo mt-3 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Built for people who want to use what they learn.</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">{course.testimonials.map((testimonial) => <blockquote key={testimonial.name} className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_10px_24px_rgba(10,31,68,0.04)]"><div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-full bg-[#0a1f44] text-xs font-bold text-white">{testimonial.initials}</span><cite className="not-italic text-sm font-bold text-[#0a1f44]">{testimonial.name}</cite></div><p className="mt-3 text-sm leading-6 text-slate-600">&ldquo;{testimonial.quote}&rdquo;</p></blockquote>)}</div>
         </section>
 
-        <section id="reviews" className="scroll-mt-48 py-16">
+        <section id="reviews" className="scroll-mt-48 py-10">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">Reviews</p>
-          <div className="mt-4 grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-start"><div><h2 className="font-exo text-3xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Learner reviews</h2><div className="mt-6 flex items-center gap-3"><span className="font-exo text-5xl font-bold text-[#0a1f44]">{course.rating}</span><span><span className="flex gap-1 text-brand-secondary">{Array.from({ length: 5 }, (_, index) => <Star key={index} className="size-4 fill-current" />)}</span><span className="mt-1 block text-sm text-slate-500">{course.reviewCount}</span></span></div></div><div className="grid gap-4">{course.testimonials.map((testimonial) => <div key={`review-${testimonial.name}`} className="rounded-2xl border border-slate-200 p-5"><div className="flex items-center justify-between gap-4"><p className="font-bold text-[#0a1f44]">{testimonial.name}</p><span className="flex gap-0.5 text-brand-secondary">{Array.from({ length: 5 }, (_, index) => <Star key={index} className="size-3.5 fill-current" />)}</span></div><p className="mt-3 text-sm leading-6 text-slate-600">{testimonial.quote}</p></div>)}</div></div>
+          <div className="mt-3 grid gap-7 lg:grid-cols-[0.7fr_1.3fr] lg:items-start"><div><h2 className="font-exo text-2xl font-bold leading-tight tracking-[-0.04em] text-[#0a1f44]">Learner reviews</h2><div className="mt-4 flex items-center gap-3"><span className="font-exo text-4xl font-bold text-[#0a1f44]">{course.rating}</span><span><span className="flex gap-1 text-brand-secondary">{Array.from({ length: 5 }, (_, index) => <Star key={index} className="size-3.5 fill-current" />)}</span><span className="mt-1 block text-xs text-slate-500">{course.reviewCount}</span></span></div></div><div className="grid gap-3">{course.testimonials.map((testimonial) => <div key={`review-${testimonial.name}`} className="rounded-xl border border-slate-200 p-4"><div className="flex items-center justify-between gap-4"><p className="text-sm font-bold text-[#0a1f44]">{testimonial.name}</p><span className="flex gap-0.5 text-brand-secondary">{Array.from({ length: 5 }, (_, index) => <Star key={index} className="size-3" fill="currentColor" />)}</span></div><p className="mt-2 text-xs leading-5 text-slate-600">{testimonial.quote}</p></div>)}</div></div>
         </section>
       </main>
+      </div>
     </PublicPage>
   );
 }

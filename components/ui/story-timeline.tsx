@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
@@ -8,6 +9,8 @@ export type StoryTimelineItem = {
   year: string;
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 type StoryTimelineProps = {
@@ -38,6 +41,8 @@ export function StoryTimeline({ items, ariaLabel = "Story timeline" }: StoryTime
 
   const activeItem = items[activeIndex] ?? items[0];
   const activeProgress = items.length === 1 ? 0 : (activeIndex / (items.length - 1)) * 100;
+  const previousItem = activeIndex > 0 ? items[activeIndex - 1] : undefined;
+  const nextItem = activeIndex < items.length - 1 ? items[activeIndex + 1] : undefined;
   const contentId = `${ariaLabel.replaceAll(" ", "-").toLowerCase()}-content`;
 
   function selectItem(index: number) {
@@ -50,6 +55,12 @@ export function StoryTimeline({ items, ariaLabel = "Story timeline" }: StoryTime
       <div className="relative min-h-[320px] pt-2">
         <div className="relative h-8" role="tablist" aria-label={`${ariaLabel} markers`}>
           <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#b9cce1]" aria-hidden="true" />
+          <motion.div
+            aria-hidden="true"
+            className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-[#00a3e0]"
+            animate={{ width: `${activeProgress}%` }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.45, ease: "easeOut" }}
+          />
           <motion.span
             aria-hidden="true"
             className="pointer-events-none absolute left-0 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#0a1f44] bg-[#00a3e0] ring-2 ring-[#bce8f7]"
@@ -109,7 +120,7 @@ export function StoryTimeline({ items, ariaLabel = "Story timeline" }: StoryTime
           ))}
         </div>
 
-        <div id={contentId} className="relative mt-3 min-h-[130px]" aria-live="polite">
+        <div id={contentId} className="relative mt-3" aria-live="polite">
           <AnimatePresence initial={false} mode="wait" custom={direction}>
             <motion.div
               key={activeItem.id}
@@ -118,11 +129,29 @@ export function StoryTimeline({ items, ariaLabel = "Story timeline" }: StoryTime
               animate={{ opacity: 1, x: 0 }}
               exit={prefersReducedMotion ? undefined : { opacity: 0, x: direction * -14 }}
               transition={{ duration: prefersReducedMotion ? 0.01 : 0.3, ease: "easeOut" }}
-              className={`absolute top-4 w-[min(100%,20rem)] py-2 sm:py-3 ${activeIndex >= items.length - 3 ? "-translate-x-full" : "translate-x-0"}`}
-              style={{ left: `${activeProgress}%` }}
+              className="relative w-full py-2 pb-6 sm:py-3 sm:pb-6"
             >
-              <h3 className="font-exo text-xl font-semibold text-[#0a1f44] sm:text-2xl">{activeItem.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#607492] sm:text-base">{activeItem.description}</p>
+              <div className="grid gap-5 border-y border-[#d8e4ef] py-5 sm:grid-cols-[210px_minmax(0,1fr)] sm:items-center sm:gap-8">
+                {activeItem.image && (
+                  <figure className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#dce8f2]">
+                    <Image src={activeItem.image} alt={activeItem.imageAlt ?? `${activeItem.title} milestone`} fill sizes="(min-width: 640px) 210px, 100vw" className="object-cover" />
+                    <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0a1f44]/75 to-transparent px-3 pb-2 pt-7 text-[9px] font-black uppercase tracking-[0.16em] text-white/90">SAN TECH / {activeItem.year}</figcaption>
+                  </figure>
+                )}
+
+                <div className="min-w-0">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#00a3e0]"><span className="h-px w-7 bg-[#00a3e0]" aria-hidden="true" />{activeItem.year} / {String(activeIndex + 1).padStart(2, "0")} of {String(items.length).padStart(2, "0")}</span>
+                  </div>
+                  <h3 className="font-exo mt-3 text-2xl font-semibold tracking-[-0.035em] text-[#0a1f44] sm:text-3xl">{activeItem.title}</h3>
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-[#607492] sm:text-base">{activeItem.description}</p>
+
+                  <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-semibold text-[#8195b1]">
+                    <span title={previousItem?.title}>{previousItem ? `From ${previousItem.year} / ${previousItem.title}` : "The beginning"}</span>
+                    {nextItem && <span title={nextItem.title}>Next: {nextItem.year} / {nextItem.title}</span>}
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>

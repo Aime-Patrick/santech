@@ -29,7 +29,7 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
 
           <div className="grid gap-5 lg:grid-cols-[0.86fr_1.14fr] lg:items-start lg:gap-6">
             <div className="min-w-0">
-              <section className="rounded-2xl bg-[#f7f9fc] p-4 sm:p-5" aria-labelledby="contact-details-title">
+              <section className="p-0" aria-labelledby="contact-details-title">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Contact details</p>
                 <p id="contact-details-title" className="mt-1.5 text-xs leading-5 text-slate-600">From ideation to transformative impact.</p>
 
@@ -45,7 +45,7 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
                       href={href}
                       target={href.startsWith("http") ? "_blank" : undefined}
                       rel={href.startsWith("http") ? "noreferrer" : undefined}
-                      className="group min-w-0 rounded-xl bg-white/80 px-2.5 py-2 transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
+                      className="group min-w-0 rounded-xl px-2.5 py-2 transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
                     >
                       <span className="flex items-start gap-2">
                         <Icon className="mt-0.5 size-3.5 shrink-0 text-brand-secondary" aria-hidden="true" />
@@ -63,7 +63,7 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
 
               <section className="mt-4 rounded-2xl bg-[#edf1f7] p-2.5" aria-labelledby="map-title">
                 <div className="flex items-center justify-between gap-3 px-1.5 pb-2">
-                  <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Find us in Kigali</p><h2 id="map-title" className="font-exo mt-1 text-base font-bold tracking-[-0.03em] text-[#0a1f44]">Sofaru Building, Muhima</h2></div>
+                  <div><p id="map-title" className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Find us in Kigali</p></div>
                   <MapPin className="size-4 text-brand-secondary" aria-hidden="true" />
                 </div>
                 <div className="overflow-hidden rounded-xl bg-slate-200">

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ChevronRight, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { AnimatePresence, animate, motion, useAnimationFrame, useInView, useReducedMotion } from "motion/react";
 import { useMotionValue, useTransform } from "motion/react";
@@ -35,6 +35,15 @@ type PartnerBrand = {
 };
 
 const storyCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] 2xl:text-[18px]";
+
+function ecosystemEmoji(item: string) {
+  if (item.startsWith("SAN TECH")) return "⚙️";
+  if (item.startsWith("SAN HUB")) return "🎓";
+  if (item.startsWith("E-VISITORS")) return "🪪";
+  if (item.startsWith("Tech Forward")) return "🚀";
+  if (item.startsWith("SAN CITY")) return "🏙️";
+  return "🧩";
+}
 
 const legacyStorySlides: StorySlide[] = [
   {
@@ -442,12 +451,22 @@ export function SantechHomeStage() {
   const [muted, setMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const slideArrowRef = useRef<HTMLSpanElement>(null);
-  const [expandedEcosystemItem, setExpandedEcosystemItem] = useState<string | null>(null);
+  const [ecosystemDialogItem, setEcosystemDialogItem] = useState<string | null>(null);
   const activeStory = storySlides[activeStoryIndex];
   const isApproachStory = activeStory.id === "approach";
   const isEcosystemStory = activeStory.id === "ecosystem";
   const isStakeholderStory = activeStory.id === "stakeholders";
+  const isEcosystemDialogOpen = isEcosystemStory && ecosystemDialogItem !== null;
   const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!isEcosystemDialogOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setEcosystemDialogItem(null); };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
+  }, [isEcosystemDialogOpen]);
 
   useGSAP(() => {
     const arrow = slideArrowRef.current;
@@ -459,6 +478,7 @@ export function SantechHomeStage() {
   useEffect(() => {
     if (!storyPlaying || storyHovered) return;
     const timer = window.setTimeout(() => {
+      setEcosystemDialogItem(null);
       setActiveStoryIndex((current) => (current + 1) % storySlides.length);
     }, 6800);
 
@@ -491,11 +511,11 @@ export function SantechHomeStage() {
   }
 
   return (
-    <>
-      <section className="bg-transparent px-3 py-3 text-[#0c1230] sm:px-5 sm:py-4 2xl:px-7 xl:h-[min(640px,calc(100svh-242px))] xl:min-h-0 xl:overflow-hidden">
-        <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col xl:h-full">
-          <div className="grid min-h-0 gap-3 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_minmax(330px,0.68fr)] xl:gap-4">
-            <div className="relative flex min-h-[140px] flex-col overflow-hidden bg-[#111735] sm:min-h-[220px] xl:min-h-0">
+    <div className="lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden">
+      <section className="bg-transparent px-3 py-3 text-[#0c1230] sm:px-5 sm:py-5 lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:px-7 lg:py-3">
+        <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col lg:h-full">
+          <div className="grid min-h-0 gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.68fr)] lg:gap-4">
+            <div className="relative flex aspect-[16/10] min-h-0 flex-col overflow-hidden bg-[#111735] sm:aspect-video lg:h-full lg:aspect-auto">
               <div className="relative min-h-0 flex-1 overflow-hidden">
                 <video
                   ref={videoRef}
@@ -528,13 +548,13 @@ export function SantechHomeStage() {
             </div>
 
             <article
-              className="relative flex min-h-0 flex-col overflow-hidden border border-slate-300/80 bg-white p-4 sm:min-h-[420px] sm:p-5 2xl:p-6 xl:min-h-0"
+              className="relative flex min-h-[360px] flex-col overflow-hidden border border-slate-300/80 bg-white p-4 sm:min-h-[420px] sm:p-5 lg:h-full lg:min-h-0 2xl:p-6"
               onMouseEnter={() => setStoryHovered(true)}
               onMouseLeave={() => setStoryHovered(false)}
             >
-              <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0a1f44]">{activeStory.eyebrow}</p>
-                <div className="flex items-center gap-2" aria-label="SAN TECH story slides">
+                <div className="flex min-w-0 items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                <p className="min-w-0 truncate text-[10px] font-black uppercase tracking-[0.2em] text-[#0a1f44]">{activeStory.eyebrow}</p>
+                <div className="flex shrink-0 items-center gap-1.5" aria-label="SAN TECH story slides">
                   <span ref={slideArrowRef} className="inline-flex shrink-0" aria-hidden="true">
                     <Image src="/undraw_arrow.svg" alt="" width={62} height={17} className="h-auto w-8 sm:w-12 2xl:w-[62px]" />
                   </span>
@@ -543,7 +563,7 @@ export function SantechHomeStage() {
                       <button
                         key={slide.id}
                         type="button"
-                        onClick={() => setActiveStoryIndex(index)}
+                        onClick={() => { setActiveStoryIndex(index); setEcosystemDialogItem(null); }}
                         aria-label={`Show slide ${slide.index}: ${slide.eyebrow}`}
                         aria-current={index === activeStoryIndex ? "true" : undefined}
                         className={`px-1 text-[11px] font-black tracking-[0.12em] transition-colors duration-200 ${index === activeStoryIndex ? "text-[#0a1f44]" : "text-slate-400 hover:text-[#0a1f44]"}`}
@@ -555,7 +575,7 @@ export function SantechHomeStage() {
                 </div>
               </div>
 
-              <div className="min-h-0 flex-1 overflow-hidden">
+              <div className="min-h-0 flex-1">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeStory.id}
@@ -563,9 +583,9 @@ export function SantechHomeStage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex min-h-0 flex-col overflow-hidden pb-0 pt-1 xl:h-full xl:pb-12"
+                    className="flex min-h-0 flex-col pb-10 pt-1"
                   >
-                  {activeStory.title && <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.25rem,1.8vw,2.35rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>}
+                  {activeStory.title && <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.2rem,1.55vw,2.1rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>}
                   {activeStory.variant === "services" ? (
                     <div className="mt-2 w-full max-w-none self-start">
                       <p className={`w-full ${storyCopyClass} text-slate-700`}>
@@ -610,7 +630,7 @@ export function SantechHomeStage() {
                   {activeStory.items && (
                     <div className={`${isEcosystemStory ? "mt-5 gap-3 border-0 py-0" : isStakeholderStory ? "mt-4 gap-x-6 gap-y-2.5 border-y border-slate-200 py-3" : "mt-3 gap-x-3 gap-y-1.5 border-y border-slate-200 py-2"} grid grid-cols-1 sm:grid-cols-2`}>
                       {activeStory.items.map((item) => (
-                        isEcosystemStory ? (() => { const [label, ...descriptionParts] = item.split(" — "); const expanded = expandedEcosystemItem === item; return <div key={item} className={`min-w-0 border border-slate-200 bg-slate-50/60 ${expanded ? "sm:col-span-2" : ""}`}><button type="button" onClick={() => setExpandedEcosystemItem(expanded ? null : item)} aria-expanded={expanded} className="flex w-full items-center gap-2 px-3 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="shrink-0 text-sm font-bold leading-none text-brand-cyan" aria-hidden="true">+</span><span className="flex-1 text-[12px] font-bold leading-5 text-[#0a1f44] sm:text-[13px] 2xl:text-[14px]">{label}</span><ChevronDown className={`size-3.5 shrink-0 text-brand-secondary transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden="true" /></button><AnimatePresence initial={false}>{expanded && <motion.p key={`${item}-description`} initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }} className="overflow-hidden border-t border-slate-200 px-3 pb-3 pt-2 text-left text-[12px] leading-5 text-slate-600 sm:text-[13px]">{descriptionParts.join(" — ")}</motion.p>}</AnimatePresence></div>; })() : <p key={item} className={`${isStakeholderStory ? "text-[12px] leading-[1.35] sm:text-[13px] 2xl:text-[14px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
+                        isEcosystemStory ? (() => { const [label] = item.split(/\s+[—–-]\s+/); return <button key={item} type="button" onClick={() => { setStoryPlaying(false); setEcosystemDialogItem(item); }} aria-haspopup="dialog" className="group flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand-cyan hover:bg-white hover:shadow-[0_8px_18px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-white text-base leading-none shadow-sm" aria-hidden="true">{ecosystemEmoji(item)}</span><span className="flex-1 text-[12px] font-bold leading-5 text-[#0a1f44] sm:text-[13px] 2xl:text-[14px]">{label}</span><ChevronRight className="size-3.5 shrink-0 text-brand-secondary transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></button>; })() : <p key={item} className={`${isStakeholderStory ? "text-[12px] leading-[1.35] sm:text-[13px] 2xl:text-[14px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
                       ))}
                     </div>
                   )}
@@ -644,14 +664,50 @@ export function SantechHomeStage() {
         </div>
       </section>
 
-      <div className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] xl:h-[80px] xl:min-h-0 xl:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
-        <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 xl:min-h-0 xl:border-b-0 xl:border-r xl:px-7">
+      <AnimatePresence>
+        {isEcosystemDialogOpen && ecosystemDialogItem && (() => {
+          const [label, ...descriptionParts] = ecosystemDialogItem.split(/\s+[—–-]\s+/);
+          return (
+            <motion.div
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/60 p-4 backdrop-blur-sm sm:p-6"
+              role="presentation"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onMouseDown={(event) => { if (event.currentTarget === event.target) setEcosystemDialogItem(null); }}
+            >
+              <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="ecosystem-dialog-title"
+                className="w-full max-w-lg rounded-2xl border border-white/70 bg-white p-5 shadow-[0_28px_80px_rgba(7,21,45,0.28)] sm:p-7"
+                initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }}
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN TECH / Ecosystem</p>
+                    <h2 id="ecosystem-dialog-title" className="font-exo mt-2 text-xl font-bold leading-tight tracking-[-0.035em] text-[#0a1f44] sm:text-2xl">{label}</h2>
+                  </div>
+                  <button type="button" onClick={() => setEcosystemDialogItem(null)} aria-label="Close ecosystem detail" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" /></button>
+                </div>
+                <p className="mt-5 text-sm leading-6 text-slate-600 sm:text-base">{descriptionParts.join(" — ")}</p>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
+
+      <div className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[64px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
+        <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
             <ImpactMarquee />
           </div>
         </div>
-        <div className="flex min-h-[74px] min-w-0 items-center gap-2 overflow-hidden px-2.5 py-2 sm:gap-3 sm:px-5 xl:px-7">
+        <div className="flex min-h-[74px] min-w-0 items-center gap-2 overflow-hidden px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <span className="z-10 w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">Partners</span><span className="block">/ Clients</span></span>
             <PartnerMarquee />
@@ -659,7 +715,7 @@ export function SantechHomeStage() {
         </div>
       </div>
 
-      <footer className="relative flex min-h-[68px] shrink-0 flex-col items-center justify-center gap-1 overflow-hidden bg-[#0c1230] px-4 py-2 pb-3 text-center text-[11px] text-white sm:h-12.5 sm:min-h-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-7 sm:pb-1 sm:text-left sm:text-xs">
+      <footer className="relative flex min-h-[68px] shrink-0 flex-col items-center justify-center gap-1 overflow-hidden bg-[#0c1230] px-4 py-2 pb-3 text-center text-[11px] text-white sm:h-12.5 sm:min-h-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-7 sm:pb-1 sm:text-left sm:text-xs lg:h-[42px]">
         <span>© 2026 SAN TECH. All rights reserved.</span>
         <div className="flex items-center gap-2 sm:gap-3">
           <Link href="/connect" className="hidden transition-colors hover:text-white sm:inline-flex">Connect</Link>
@@ -679,6 +735,6 @@ export function SantechHomeStage() {
           style={{ backgroundImage: "url('/imingogo-trimmed.png')", backgroundPosition: "center bottom", backgroundRepeat: "repeat-x", backgroundSize: "44px 22px" }}
         />
       </footer>
-    </>
+    </div>
   );
 }

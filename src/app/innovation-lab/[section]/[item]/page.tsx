@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
+import { ComputerScreenFrame } from "@/components/computer-screen-frame";
 import { getInnovationItem, innovationItems, type InnovationSection } from "@/lib/innovation-data";
 
 const sections: InnovationSection[] = ["product", "services", "solutions"];
@@ -41,13 +41,7 @@ export default async function InnovationDetailPage({ params }: { params: Promise
               <p className="mt-6 max-w-xl text-base leading-7 text-[#68718a] sm:text-lg">{item.description}</p>
             </div>
 
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#dceaf8] shadow-[0_24px_70px_rgba(10,31,68,0.12)]">
-              {item.media.kind === "video" ? (
-                <video src={item.media.src} className="size-full object-cover" autoPlay muted loop playsInline preload="metadata" aria-label={item.media.alt} />
-              ) : (
-                <Image src={item.media.src} alt={item.media.alt} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" priority />
-              )}
-            </div>
+            <ComputerScreenFrame kind={item.media.kind} src={item.media.src} alt={item.media.alt} priority label={`SAN TECH / ${item.label}`} />
           </div>
         </div>
       </section>

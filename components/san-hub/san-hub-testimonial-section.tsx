@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, Star } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { ArrowUpRight, Star, X } from "lucide-react";
+import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from "motion/react";
+import { useEffect, useState } from "react";
 
 const testimonials = [
   {
@@ -37,7 +38,7 @@ const testimonials = [
   },
 ] as const;
 
-function TestimonialCard({ item, index, reducedMotion }: { item: (typeof testimonials)[number]; index: number; reducedMotion: boolean }) {
+function TestimonialCard({ item, index, reducedMotion, onOpen }: { item: (typeof testimonials)[number]; index: number; reducedMotion: boolean; onOpen: (item: (typeof testimonials)[number]) => void }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: reducedMotion ? 0 : 10 }}
@@ -51,7 +52,14 @@ function TestimonialCard({ item, index, reducedMotion }: { item: (typeof testimo
           <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#e5eef8] text-xs text-brand-secondary" aria-hidden="true">✦</span>
           <span className="truncate">{item.source}</span>
         </span>
-        <ArrowUpRight className="size-3.5 shrink-0 text-[#8da1ba] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        <button
+          type="button"
+          onClick={() => onOpen(item)}
+          aria-label={`Read ${item.name}'s testimonial`}
+          className="grid size-7 shrink-0 place-items-center rounded-full text-[#8da1ba] transition-[background-color,color,transform] duration-200 hover:bg-[#dcecf7] hover:text-brand-secondary hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+        >
+          <ArrowUpRight className="size-3.5" aria-hidden="true" />
+        </button>
       </div>
 
       <p className="mt-4 line-clamp-3 flex-1 text-[13px] leading-5 text-[#303f5c]">&ldquo;{item.quote}&rdquo;</p>
@@ -74,24 +82,50 @@ function TestimonialCard({ item, index, reducedMotion }: { item: (typeof testimo
   );
 }
 
-function TestimonialMarquee({ reverse = false, reducedMotion }: { reverse?: boolean; reducedMotion: boolean }) {
+function TestimonialMarquee({ reverse = false, reducedMotion, onOpen }: { reverse?: boolean; reducedMotion: boolean; onOpen: (item: (typeof testimonials)[number]) => void }) {
   const baseRow = reverse ? [...testimonials].reverse() : [...testimonials];
   // Repeat the content inside each moving sequence so the centered rail stays filled
   // while the next copy enters before the current copy leaves.
   const row = [...baseRow, ...baseRow];
+  const controls = useAnimationControls();
+
+  const startMarquee = () => {
+    if (reducedMotion) return;
+    void controls.start({
+      x: reverse ? ["-50%", "0%"] : ["0%", "-50%"],
+      transition: { duration: reverse ? 38 : 34, ease: "linear", repeat: Infinity, repeatType: "loop" },
+    });
+  };
+
+  useEffect(() => {
+    if (reducedMotion) {
+      controls.set({ x: 0 });
+      return;
+    }
+    startMarquee();
+    return () => controls.stop();
+  }, [controls, reducedMotion, reverse]);
 
   return (
-    <div className="testimonial-marquee relative mx-auto w-full max-w-[1100px] overflow-hidden" aria-label={reverse ? "More SAN HUB testimonials" : "SAN HUB testimonials"}>
+    <div
+      className="testimonial-marquee relative mx-auto w-full max-w-[1100px] overflow-hidden"
+      aria-label={reverse ? "More SAN HUB testimonials" : "SAN HUB testimonials"}
+      onMouseEnter={() => controls.stop()}
+      onMouseLeave={startMarquee}
+      onFocus={() => controls.stop()}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) startMarquee();
+      }}
+    >
       <span className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#eef5fb] via-[#eef5fb]/85 to-transparent blur-[1px] sm:w-12" aria-hidden="true" />
       <motion.div
         className="testimonial-track flex w-max will-change-transform"
         initial={false}
-        animate={reducedMotion ? { x: 0 } : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
-        transition={reducedMotion ? { duration: 0.01 } : { duration: reverse ? 38 : 34, ease: "linear", repeat: Infinity, repeatType: "loop" }}
+        animate={controls}
       >
         {[0, 1].map((copy) => (
           <div key={copy} className="testimonial-group flex gap-3 pr-3 sm:gap-4 sm:pr-4" aria-hidden={copy === 1}>
-            {row.map((item, index) => <TestimonialCard key={`${copy}-${index}-${item.name}`} item={item} index={index} reducedMotion={reducedMotion} />)}
+            {row.map((item, index) => <TestimonialCard key={`${copy}-${index}-${item.name}`} item={item} index={index} reducedMotion={reducedMotion} onOpen={onOpen} />)}
           </div>
         ))}
       </motion.div>
@@ -102,6 +136,18 @@ function TestimonialMarquee({ reverse = false, reducedMotion }: { reverse?: bool
 
 export function SanHubTestimonialSection() {
   const prefersReducedMotion = useReducedMotion();
+  const [selectedTestimonial, setSelectedTestimonial] = useState<(typeof testimonials)[number] | null>(null);
+
+  useEffect(() => {
+    if (!selectedTestimonial) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedTestimonial(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedTestimonial]);
+
+  const reducedMotion = Boolean(prefersReducedMotion);
 
   return (
     <section id="san-hub-testimonials" className="san-hub-graphic-section scroll-mt-40 border-b border-slate-200 px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
@@ -115,10 +161,52 @@ export function SanHubTestimonialSection() {
         </div>
 
         <div className="mt-5 space-y-3 sm:space-y-4">
-          <TestimonialMarquee reducedMotion={Boolean(prefersReducedMotion)} />
-          <TestimonialMarquee reverse reducedMotion={Boolean(prefersReducedMotion)} />
+          <TestimonialMarquee reducedMotion={reducedMotion} onOpen={setSelectedTestimonial} />
+          <TestimonialMarquee reverse reducedMotion={reducedMotion} onOpen={setSelectedTestimonial} />
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedTestimonial && (
+          <motion.div
+            className="fixed inset-0 z-50 grid place-items-center bg-[#07152d]/45 p-4 backdrop-blur-[2px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reducedMotion ? 0.01 : 0.2, ease: "easeOut" }}
+            onMouseDown={() => setSelectedTestimonial(null)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="testimonial-dialog-title"
+              className={`w-full max-w-lg rounded-2xl border border-white/80 p-5 shadow-[0_24px_70px_rgba(7,21,45,0.28)] sm:p-7 ${selectedTestimonial.tone}`}
+              initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.9, y: reducedMotion ? 0 : 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: reducedMotion ? 1 : 0.94, y: reducedMotion ? 0 : 8 }}
+              transition={{ duration: reducedMotion ? 0.01 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+              onMouseDown={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{selectedTestimonial.source}</p>
+                  <h2 id="testimonial-dialog-title" className="font-exo mt-2 text-xl font-bold leading-tight tracking-[-0.035em] text-[#0a1f44]">A SAN HUB story</h2>
+                </div>
+                <button type="button" onClick={() => setSelectedTestimonial(null)} aria-label="Close testimonial" className="grid size-9 shrink-0 place-items-center rounded-full border border-[#dbe5ef] text-[#7186a4] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+                  <X className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+              <blockquote className="mt-6 text-base leading-7 text-[#303f5c] sm:text-lg">&ldquo;{selectedTestimonial.quote}&rdquo;</blockquote>
+              <div className="mt-6 flex items-center gap-3 border-t border-[#dbe5ef] pt-4">
+                <span className="relative size-11 shrink-0 overflow-hidden rounded-full border border-white bg-[#dfe8f2] shadow-sm"><Image src={selectedTestimonial.image} alt="" fill className="object-cover" sizes="44px" /></span>
+                <span className="min-w-0"><span className="block text-sm font-bold text-[#0a1f44]">{selectedTestimonial.name}</span><span className="mt-0.5 block text-xs text-[#7186a4]">{selectedTestimonial.role}</span></span>
+                <span className="ml-auto flex shrink-0 items-center gap-1 text-xs text-[#7186a4]"><Star className="size-3 fill-brand-secondary text-brand-secondary" aria-hidden="true" />{selectedTestimonial.rating}</span>
+              </div>
+              <p className="mt-2 pl-14 text-[10px] font-bold uppercase tracking-[0.1em] text-[#9aabc0]">{selectedTestimonial.date}</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </section>
   );

@@ -31,7 +31,7 @@ export function ConnectRequestForm({ initialTopic = "talk" }: { initialTopic?: C
         {(Object.keys(topicCopy) as ConnectTopic[]).map((id) => {
           const active = id === topic;
           return (
-            <button key={id} type="button" onClick={() => { setTopic(id); setSubmitted(false); }} className={`rounded-lg px-2 py-2 text-[10px] font-bold leading-4 transition-colors ${active ? "bg-[#0a1f44] text-white" : "bg-slate-50 text-slate-600 hover:bg-[#edf1f7] hover:text-[#0a1f44]"}`}>
+            <button key={id} type="button" onClick={() => { setTopic(id); setSubmitted(false); }} className={`rounded-lg px-2 py-2 text-[11px] font-bold leading-4 transition-colors ${active ? "bg-[#0a1f44] text-white" : "bg-slate-50 text-slate-600 hover:bg-[#edf1f7] hover:text-[#0a1f44]"}`}>
               {topicCopy[id].label}
             </button>
           );

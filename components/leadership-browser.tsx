@@ -73,8 +73,8 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
             <motion.section key="executive-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }} className="grid gap-4 sm:grid-cols-2">
               {executives.map((executive) => (
                 <article key={executive.role} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_16px_36px_rgba(10,31,68,0.08)]">
-                  <div className="relative h-72 overflow-hidden bg-[#dceaf8] sm:h-72">
-                    <Image src={executive.image} alt={`${executive.title} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className={executive.name === "Claudine Niyonzima" ? "object-contain object-bottom" : "object-cover"} />
+                  <div className={`relative h-72 overflow-hidden sm:h-72 ${executive.name === "Claudine Niyonzima" ? "bg-white" : "bg-[#2d79c7]"}`}>
+                    <Image src={executive.image} alt={`${executive.title} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-contain object-center" />
                   </div>
                   <div className="flex items-end justify-between gap-4 p-3.5 sm:p-4">
                     <div>
