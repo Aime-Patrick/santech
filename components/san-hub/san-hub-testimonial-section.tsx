@@ -13,7 +13,7 @@ const testimonials = [
     rating: "4.9",
     date: "12 Jun, 2024",
     source: "Learner story",
-    image: "/images/team.jpg",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg",
     tone: "bg-white",
   },
   {
@@ -23,7 +23,7 @@ const testimonials = [
     rating: "4.8",
     date: "29 Aug, 2024",
     source: "Innovation program",
-    image: "/images/graduates.jpg",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg",
     tone: "bg-[#f3f6ff]",
   },
   {
@@ -33,7 +33,7 @@ const testimonials = [
     rating: "4.9",
     date: "14 Nov, 2024",
     source: "Partner story",
-    image: "/images/fieldwork.jpg",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg",
     tone: "bg-[#f8f4ff]",
   },
 ] as const;

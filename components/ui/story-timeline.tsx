@@ -140,10 +140,7 @@ export function StoryTimeline({ items, ariaLabel = "Story timeline" }: StoryTime
                 )}
 
                 <div className="min-w-0">
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#00a3e0]"><span className="h-px w-7 bg-[#00a3e0]" aria-hidden="true" />{activeItem.year} / {String(activeIndex + 1).padStart(2, "0")} of {String(items.length).padStart(2, "0")}</span>
-                  </div>
-                  <h3 className="font-exo mt-3 text-2xl font-semibold tracking-[-0.035em] text-[#0a1f44] sm:text-3xl">{activeItem.title}</h3>
+                  <h3 className="font-exo text-2xl font-semibold tracking-[-0.035em] text-[#0a1f44] sm:text-3xl">{activeItem.title}</h3>
                   <p className="mt-2 max-w-xl text-sm leading-6 text-[#607492] sm:text-base">{activeItem.description}</p>
 
                   <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-semibold text-[#8195b1]">

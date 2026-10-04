@@ -79,7 +79,7 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
                   <div className="flex items-end justify-between gap-4 p-3.5 sm:p-4">
                     <div>
                       <p className="text-[11px] font-black uppercase tracking-[0.14em] text-brand-secondary sm:text-xs">{executive.name ?? executive.role}</p>
-                      <h3 className="font-exo mt-1.5 text-base font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{executive.title}</h3>
+                      <h3 className="font-exo mt-1.5 text-sm font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{executive.title}</h3>
                     </div>
                     <a href={executive.profile} target="_blank" rel="noreferrer" aria-label={`Open LinkedIn profile for ${executive.title}`} className="grid size-8 shrink-0 place-items-center rounded-full border border-slate-200 text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-brand-secondary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
                       <FaLinkedinIn className="size-3.5" aria-hidden="true" />

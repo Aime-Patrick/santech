@@ -13,7 +13,7 @@ const contactDetails = [
 export default async function ConnectPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
   const { topic } = await searchParams;
   const normalizedTopic = topic?.toLowerCase().replace(/\s+/g, "-");
-  const initialTopic = normalizedTopic === "e-visitors-demo" || normalizedTopic === "partnership" || normalizedTopic === "training" ? normalizedTopic : "talk";
+  const initialTopic = normalizedTopic === "partnership" || normalizedTopic === "training" ? normalizedTopic : "talk";
 
   return (
     <PublicPage>

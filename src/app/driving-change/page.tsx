@@ -15,7 +15,7 @@ const impactItems: readonly SharedContentItem[] = [
     description: "We build practical systems that help institutions welcome people, protect information, understand operations, and make better decisions.",
     details: ["From visitor management to connected operations, the work starts with a real need.", "The measure of a system is what becomes easier, safer, or more useful after it is adopted."],
     facts: [{ label: "Focus", value: "Useful systems" }, { label: "Approach", value: "Built with context" }],
-    media: { kind: "image", src: "/images/ch10-datacenter.jpg", alt: "Technology infrastructure supporting practical digital systems" },
+    media: { kind: "image", src: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(18).jpg", alt: "SAN TECH engineers demonstrating deployed systems to institutional partners" },
   },
   {
     id: "learning-that-remains",
@@ -24,7 +24,7 @@ const impactItems: readonly SharedContentItem[] = [
     description: "Our work connects delivery with training, documentation, and support so people can continue improving the systems they depend on.",
     details: ["Teams gain clearer processes, stronger digital habits, and the confidence to keep learning.", "SAN HUB extends this work through courses, mentorship, innovation programs, and placements."],
     facts: [{ label: "Focus", value: "Lasting capability" }, { label: "Route", value: "Learn · build · prove" }],
-    media: { kind: "image", src: "/images/ch12-curriculum.jpg", alt: "Learner working through a practical technology curriculum" },
+    media: { kind: "image", src: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg", alt: "Innovators pitching practical AI and digital solutions developed during SAN TECH programs" },
   },
   {
     id: "african-context",
@@ -45,7 +45,7 @@ const careerItems: readonly SharedContentItem[] = [
     description: "Career outreach connects people to practical learning, project experience, and the relationships that help a career move forward.",
     details: ["Courses and short programs build foundations around software, AI, cybersecurity, and connected systems.", "Learners leave with work they can explain, improve, and use as evidence of capability."],
     facts: [{ label: "Focus", value: "Practical skills" }, { label: "Route", value: "Learning to work" }],
-    media: { kind: "image", src: "/images/graduates.jpg", alt: "SAN TECH graduates and emerging technology practitioners" },
+    media: { kind: "image", src: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg", alt: "Young STEM students and tech cohort members participating in SAN HUB programs" },
   },
   {
     id: "mentorship-and-placement",
@@ -54,7 +54,7 @@ const careerItems: readonly SharedContentItem[] = [
     description: "Apprenticeships, internships, mentorship, and industry exposure help emerging practitioners move from potential into contribution.",
     details: ["People learn through guided contribution, feedback, and the habits of working with a real team.", "Partners can help shape pathways around the skills and opportunities their communities need."],
     facts: [{ label: "Focus", value: "Experience" }, { label: "Connection", value: "People and teams" }],
-    media: { kind: "image", src: "/images/team.jpg", alt: "Technology team collaborating on practical work" },
+    media: { kind: "image", src: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg", alt: "SAN TECH leadership awarding official certificates and recognition to program graduates" },
   },
   {
     id: "community-outreach",
@@ -63,7 +63,7 @@ const careerItems: readonly SharedContentItem[] = [
     description: "Career outreach is also about meeting people where they are through talks, open days, school connections, and accessible starting points.",
     details: ["The aim is to make technology feel possible, practical, and connected to a person’s own ambitions.", "Community is the bridge between a program and the wider ecosystem it is meant to strengthen."],
     facts: [{ label: "Focus", value: "Access and belonging" }, { label: "Format", value: "Talks and programs" }],
-    media: { kind: "image", src: "/images/fieldwork.jpg", alt: "SAN TECH team engaging with a community" },
+    media: { kind: "image", src: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(80).jpg", alt: "Tech Forward Live summit gathering hundreds of students, partners, and community members" },
   },
 ];
 

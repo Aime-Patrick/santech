@@ -13,7 +13,7 @@ export const JOURNEY_MILESTONES: readonly JourneyMilestone[] = [
   { id: "2023-market", year: "2023", title: "Market validation", description: "SAN HUB officially launched; E-Visitors adopted by National Bank of Rwanda (BNR).", image: "/images/team.jpg", imageAlt: "SAN TECH team members in Kigali" },
   { id: "2024-partnerships", year: "2024", title: "Partnerships", description: "International partnerships and innovators from multiple countries.", image: "/images/summit.jpg", imageAlt: "Technology partners gathered in Rwanda" },
   { id: "2025-scaling", year: "2025", title: "Scaling", description: "SAN HUB expands; international and continental ambitions grow.", image: "/images/graduates.jpg", imageAlt: "Learners and innovators at a SAN HUB program" },
-  { id: "2026-vision", year: "2026", title: "African tech vision", description: "SAN TECH expands its technology, training, innovation, and systems-integration ecosystem.", image: "/images/ch10-redbull-education-bytes.jpg", imageAlt: "African technology and learning ecosystem" },
+  { id: "2026-vision", year: "2026", title: "Best Exhibitor & African Tech Vision", description: "SAN TECH recognized as Best Exhibitor in ICT & Innovation at Expo 2026, hosting Tech Forward Live to expand its African technology, skills, and innovation ecosystem.", image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(172).jpg", imageAlt: "SAN TECH leadership and partners holding the Best Exhibitor in ICT & Innovation award on stage at Expo 2026 and Tech Forward Live" },
 ];
 
 export function JourneyPanel() {

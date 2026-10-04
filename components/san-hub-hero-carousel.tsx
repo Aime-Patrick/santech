@@ -13,8 +13,8 @@ const slides = [
     title: "Build the skills behind useful systems.",
     description: "Practical learning in software engineering, AI, cybersecurity, IoT, embedded systems, and digital literacy.",
     tags: ["Software engineering", "AI & cybersecurity", "IoT & embedded systems"],
-    image: "/images/ch10-datacenter.jpg",
-    alt: "Technology team working in a modern data center",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg",
+    alt: "Emerging youth and STEM students learning practical technology in a SAN HUB cohort",
   },
   {
     id: "innovation-development",
@@ -22,8 +22,8 @@ const slides = [
     title: "Turn a difficult question into a tested idea.",
     description: "Move from ideation and prototyping to product development, research, pitching, and commercialization.",
     tags: ["Ideation", "Prototyping", "Product development"],
-    image: "/images/ch10-redbull-education-bytes.jpg",
-    alt: "Innovation and performance concept with a racing car",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg",
+    alt: "SAN HUB innovator presenting AI and digital solutions on stage during Tech Forward Live pitch day",
   },
   {
     id: "career-development",
@@ -31,8 +31,8 @@ const slides = [
     title: "Move from learning into meaningful technology work.",
     description: "Create clearer routes through apprenticeships, internships, mentorship, career guidance, and industry exposure.",
     tags: ["Apprenticeships", "Internships", "Mentorship"],
-    image: "/images/ch12-curriculum.jpg",
-    alt: "Learner working through a technology curriculum",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg",
+    alt: "SAN TECH leadership and partners awarding official certificates to SAN HUB program graduates",
   },
 ] as const;
 
