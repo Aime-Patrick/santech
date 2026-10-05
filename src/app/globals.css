@@ -163,11 +163,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   letter-spacing: .04em;
 }
 
-/* The platform showcase uses the reusable dashboard mockup component. */
-#platform-console .pb-9 {
-  display: none !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

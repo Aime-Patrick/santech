@@ -25,7 +25,7 @@ type StorySlide = {
   items?: string[];
 };
 
-type PartnerBrand = {
+export type PartnerBrand = {
   label: string;
   src: string;
   href?: string;
@@ -342,7 +342,7 @@ const socialLinks = [
   { label: "Instagram", href: "https://www.instagram.com/santechinnovate", icon: FaInstagram },
 ];
 
-const partnerBrands: PartnerBrand[] = [
+export const partnerBrands: PartnerBrand[] = [
   { label: "Pallotti Presse Ltd", src: "/palloti.png", href: "https://pallottipresse.com/", showLabel: true },
   { label: "RICH Ubuzima", src: "/richubuzima.png", href: "https://richubuzima.rw/" },
   { label: "H&M Group", src: "/H&M-Logo.png", href: "https://handmgroup.rw/" },
@@ -382,11 +382,11 @@ function PartnerMark({ partner }: { partner: PartnerBrand }) {
   );
 }
 
-function PartnerMarquee() {
+export function PartnerMarquee({ partners = partnerBrands, direction: initialDirection = -1 }: { partners?: readonly PartnerBrand[]; direction?: 1 | -1 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
-  const direction = useRef(-1);
+  const direction = useRef(initialDirection);
   const [loopWidth, setLoopWidth] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -395,7 +395,11 @@ function PartnerMarquee() {
     const group = firstGroupRef.current;
     if (!group) return;
 
-    const updateWidth = () => setLoopWidth(group.getBoundingClientRect().width);
+    const updateWidth = () => {
+      const width = group.getBoundingClientRect().width;
+      setLoopWidth(width);
+      if (initialDirection === 1 && x.get() === 0) x.set(-width);
+    };
     updateWidth();
     const observer = new ResizeObserver(updateWidth);
     observer.observe(group);
@@ -432,8 +436,8 @@ function PartnerMarquee() {
         className="flex w-max select-none whitespace-nowrap"
       >
         {[0, 1].map((group) => (
-          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-5 pr-5 sm:gap-6 sm:pr-6 2xl:gap-8 2xl:pr-8">
-            {partnerBrands.map((partner) => (
+          <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-3 pr-3 sm:gap-4 sm:pr-4 2xl:gap-5 2xl:pr-5">
+            {partners.map((partner) => (
               <PartnerMark key={`${group}-${partner.label}`} partner={partner} />
             ))}
           </div>

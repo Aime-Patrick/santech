@@ -1,6 +1,7 @@
 import { PublicPage } from "@/components/public-page";
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 const legacyMenu = [
   { key: "who-we-are", label: "Who we are", href: "/our-legacy" },
@@ -82,8 +83,29 @@ export default async function OurLegacyPage({ searchParams }: { searchParams: Pr
     <PublicPage>
       <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" />
       <section className="border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
-        <div className="mx-auto max-w-7xl rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
-          <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl />
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+          <div className="relative z-10">
+            <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl />
+          </div>
+          <BorderBeam
+            size={120}
+            duration={8}
+            initialOffset={12}
+            borderWidth={1.5}
+            colorFrom="#09bce7"
+            colorTo="#0a1f44"
+            className="from-transparent via-brand-cyan to-transparent opacity-75"
+          />
+          <BorderBeam
+            size={120}
+            duration={8}
+            delay={4}
+            initialOffset={62}
+            borderWidth={1}
+            colorFrom="#0a1f44"
+            colorTo="#4d8dff"
+            className="from-transparent via-[#4d8dff] to-transparent opacity-60"
+          />
         </div>
       </section>
     </PublicPage>
