@@ -1,4 +1,4 @@
-import { PublicPage } from "@/components/public-page";
+﻿import { PublicPage } from "@/components/public-page";
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 import { BorderBeam } from "@/components/ui/border-beam";
@@ -9,6 +9,7 @@ const legacyMenu = [
   { key: "focus", label: "Our focus", href: "/our-legacy?section=focus" },
   { key: "mission", label: "Mission & vision", href: "/our-legacy?section=mission" },
   { key: "recognition", label: "Recognition", href: "/our-legacy?section=recognition" },
+  { key: "certificate", label: "Certificate", href: "/our-legacy?section=certificate" },
   { key: "leadership", label: "Leadership", href: "/our-legacy?section=leadership&view=executive" },
   { key: "profile", label: "Company profile", href: "/our-legacy?section=profile" },
 ] as const;
@@ -50,6 +51,13 @@ const legacyItems: SharedContentItem[] = [
     content: "recognition",
   },
   {
+    id: "certificate",
+    label: "Certificate",
+    title: "SAN TECH Certificate",
+    description: "SAN TECH Certificate",
+    content: "certificate",
+  },
+  {
     id: "leadership",
     label: "Leadership",
     title: "The people behind useful progress.",
@@ -82,7 +90,7 @@ export default async function OurLegacyPage({ searchParams }: { searchParams: Pr
   return (
     <PublicPage>
       <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" />
-      <section className="border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
+      <section className="border-t border-slate-200 px-6 pb-5 pt-2 sm:px-10 lg:px-16 lg:pb-5 lg:pt-4">
         <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
           <div className="relative z-10">
             <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl />

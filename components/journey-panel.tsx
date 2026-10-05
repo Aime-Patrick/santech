@@ -5,7 +5,7 @@ import { StoryTimeline, type StoryTimelineItem } from "./ui/story-timeline";
 export type JourneyMilestone = StoryTimelineItem;
 
 export const JOURNEY_MILESTONES: readonly JourneyMilestone[] = [
-  { id: "2018-idea", year: "2018", title: "Idea", description: "Founders identify problems with manual visitor management.", image: "/images/ch10-datacenter.jpg", imageAlt: "Technology infrastructure in Rwanda" },
+  { id: "2018-idea", year: "2018", title: "Idea", description: "Founders identify problems with manual visitor management.", image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(5).jpg", imageAlt: "SAN TECH team at a technology and innovation event" },
   { id: "2019-inception-validation", year: "2019", title: "Inception & validation", description: "SAN TECH founded, the E-Visitors prototype and IP journey begins, and the product is recognized through NIRDA Innovate for Industry.", image: "/images/summit.jpg", imageAlt: "SAN TECH team at a technology event" },
   { id: "2020-testing", year: "2020", title: "Testing", description: "Prototype moves toward real users and institutional applications.", image: "/images/Testing.JPG", imageAlt: "SAN TECH E-Visitors testing environment" },
   { id: "2021-resilience", year: "2021", title: "Institutionalization", description: "Technology supports institutional resilience and digital processes.", image: "/images/fieldwork.jpg", imageAlt: "Technology being used in a community setting" },

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LeadershipBrowser } from "@/components/leadership-browser";
 import { SplitFeaturePanel, type CoreFeature, type SplitFeatureFact, type SplitFeatureMedia, type SplitFeatureTimelineItem } from "@/components/split-feature-panel";
-import { CompanyProfilePanel, FocusPanel, IdentityPanel, JourneyPanel, MissionPanel, RecognitionPanel } from "@/components/legacy-sections";
+import { CertificatePanel, CompanyProfilePanel, FocusPanel, IdentityPanel, JourneyPanel, MissionPanel, RecognitionPanel } from "@/components/legacy-sections";
 
 export type SharedContentItem = {
   id: string;
@@ -17,7 +17,7 @@ export type SharedContentItem = {
   timeline?: SplitFeatureTimelineItem[];
   coreFeatures?: CoreFeature[];
   media?: SplitFeatureMedia;
-  content?: "leadership" | "identity" | "mission" | "focus" | "profile" | "journey" | "recognition";
+  content?: "leadership" | "identity" | "mission" | "focus" | "profile" | "journey" | "recognition" | "certificate";
 };
 
 export function SharedContentBrowser({ items, initialItemId, initialLeadershipView = "executive", syncUrl = false, showSidebar = true, combinedPanel = false }: { items: readonly SharedContentItem[]; initialItemId?: string; initialLeadershipView?: "executive" | "team"; syncUrl?: boolean; showSidebar?: boolean; combinedPanel?: boolean }) {
@@ -49,7 +49,7 @@ export function SharedContentBrowser({ items, initialItemId, initialLeadershipVi
 
   return (
     <div className={showSidebar ? "grid gap-8 lg:grid-cols-[185px_minmax(0,1fr)] lg:items-start lg:gap-7" : "block"}>
-      {showSidebar && <aside className="lg:sticky lg:top-32">
+      {showSidebar && <aside className="lg:self-start">
         <div className="border-l border-slate-300 pl-4">
           {items.map((item, index) => {
             const active = item.id === selected.id;
@@ -65,7 +65,7 @@ export function SharedContentBrowser({ items, initialItemId, initialLeadershipVi
 
       <AnimatePresence mode="wait">
         <motion.div key={selected.id} initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}>
-          {selected.content === "leadership" ? <LeadershipBrowser key={initialLeadershipView} initialView={initialLeadershipView} /> : selected.content === "identity" ? <IdentityPanel /> : selected.content === "mission" ? <MissionPanel /> : selected.content === "focus" ? <FocusPanel /> : selected.content === "profile" ? <CompanyProfilePanel /> : selected.content === "journey" ? <JourneyPanel /> : selected.content === "recognition" ? <RecognitionPanel /> : <SplitFeaturePanel title={selected.title} description={selected.description} details={timeline ? [] : selected.details} facts={selected.facts} timeline={timeline} coreFeatures={selected.coreFeatures} media={selected.media} combined={combinedPanel} />}
+          {selected.content === "leadership" ? <LeadershipBrowser key={initialLeadershipView} initialView={initialLeadershipView} /> : selected.content === "identity" ? <IdentityPanel /> : selected.content === "mission" ? <MissionPanel /> : selected.content === "focus" ? <FocusPanel /> : selected.content === "profile" ? <CompanyProfilePanel /> : selected.content === "journey" ? <JourneyPanel /> : selected.content === "recognition" ? <RecognitionPanel /> : selected.content === "certificate" ? <CertificatePanel /> : <SplitFeaturePanel title={selected.title} description={selected.description} details={timeline ? [] : selected.details} facts={selected.facts} timeline={timeline} coreFeatures={selected.coreFeatures} media={selected.media} combined={combinedPanel} />}
         </motion.div>
       </AnimatePresence>
     </div>

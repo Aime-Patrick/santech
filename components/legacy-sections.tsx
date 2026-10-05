@@ -3,7 +3,10 @@
 import Image from "next/image";
 import { ArrowUpRight, BrainCircuit, ChevronDown, Code2, Compass, Cpu, Eye, FlaskConical, GraduationCap, Lightbulb, Network, Radio, Rocket, ShieldCheck, Target, Workflow, X, type LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
+import BubbleMenu from "./BubbleMenu";
+import { CompanyProfilePdf } from "@/components/company-profile-pdf";
 
 const identity = [
   ["Founded", "1 August 2019"],
@@ -17,12 +20,11 @@ const identity = [
 const values = [
   { label: "Innovation", description: "We transform ideas, challenges, and opportunities into practical technological solutions." },
   { label: "Excellence", description: "We pursue high standards in technology, service delivery, engineering, and customer experience." },
-  { label: "Integrity", description: "We operate with honesty, transparency, accountability, confidentiality, and professional ethics." },
+  { label: "Integrity & Ownership", description: "We act with honesty, take responsibility for our work, and follow through on commitments to our people, clients, and communities." },
   { label: "Customer Centricity", description: "We understand our clients and end users and design solutions around their real needs." },
   { label: "Impact", description: "We measure success by the positive economic, institutional, social, and technological results our work creates." },
   { label: "Collaboration", description: "We work with clients, government, academia, innovators, communities, and technology partners to achieve shared objectives." },
   { label: "Continuous Learning", description: "We continuously develop our people, adopt emerging technologies, conduct research, and improve our solutions." },
-  { label: "Ownership", description: "We believe our engineers and innovators can design, develop, own, and scale world-class technology for African challenges and global markets." },
   { label: "Security & Responsibility", description: "We build technology with cybersecurity, privacy, reliability, safety, and responsible technology use at its foundation." },
   { label: "Empowerment", description: "Through SAN HUB and other initiatives, we equip young people, professionals, entrepreneurs, and organizations with knowledge and opportunities to create value." },
 ] as const;
@@ -173,8 +175,8 @@ export function IdentityPanel() {
     <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Who we are</p>
-        <p className="mt-6 max-w-xl text-base leading-7 text-[#68718a]">SAN TECH is a technological company focused on digital transformation and innovation. We develop smart digital products and integrated technology solutions while building the human talent and innovation ecosystem needed to create and deploy them.</p>
-        <p className="mt-5 max-w-xl text-base leading-7 text-[#68718a]">SAN TECH connects people, ideas and technology — helping organizations solve real problems while helping the next generation develop the skills and products needed to create new innovative solutions.</p>
+        <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH is a technological company focused on digital transformation and innovation. We develop smart digital products and integrated technology solutions while building the human talent and innovation ecosystem needed to create and deploy them.</p>
+        <p className="mt-5 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH connects people, ideas and technology — helping organizations solve real problems while helping the next generation develop the skills and products needed to create new innovative solutions.</p>
       </div>
       <aside className="border-l border-slate-300 pl-6 lg:pl-10">
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core identity</p>
@@ -205,14 +207,14 @@ export function MissionPanel() {
               <span className="grid size-9 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Target className="size-5" aria-hidden="true" /></span>
               <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Mission</p><p className="text-xs font-bold text-[#0a1f44]">Build useful capability</p></div>
             </div>
-            <p className="mt-4 text-sm leading-6 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
+            <p className="mt-4 text-base leading-7 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
           </article>
           <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-5 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-[#0a1f44] shadow-sm"><Eye className="size-5" aria-hidden="true" /></span>
               <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Vision</p><p className="text-xs font-bold text-[#0a1f44]">Widen what is possible</p></div>
             </div>
-            <p className="mt-4 text-sm leading-6 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
+            <p className="mt-4 text-base leading-7 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
           </article>
         </div>
       </div>
@@ -223,7 +225,7 @@ export function MissionPanel() {
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={activeValue.label} initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }} className="mt-4 rounded-xl border border-[#bdeaf3] bg-[#f2fcfe] p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{activeValue.label}</p>
-            <p className="mt-2 text-sm leading-6 text-[#526989]">{activeValue.description}</p>
+            <p className="mt-2 line-clamp-3 text-sm leading-6 text-[#526989]">{activeValue.description}</p>
           </motion.div>
         </AnimatePresence>
         <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3" role="list" aria-label="SAN TECH core values">
@@ -294,8 +296,8 @@ export function RecognitionPanel() {
         ))}
       </div>
 
-      <AnimatePresence>
-        {selectedRecognition && (
+      {selectedRecognition && createPortal(
+        <AnimatePresence>
           <motion.div
             className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/55 p-4 backdrop-blur-sm"
             role="dialog"
@@ -350,8 +352,9 @@ export function RecognitionPanel() {
               <p className="mt-4 text-base leading-7 text-[#68718a]">{selectedRecognition.description}</p>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 }
@@ -359,6 +362,7 @@ export function RecognitionPanel() {
 export function FocusPanel() {
   const [selectedArea, setSelectedArea] = useState<{ area: string; description: string; Icon: LucideIcon } | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const focusRotations = [-6, 4, -3, 5, -5, 3, -4, 6, -2, 4, -5, 2] as const;
 
   useEffect(() => {
     if (!selectedArea) return;
@@ -370,46 +374,35 @@ export function FocusPanel() {
   }, [selectedArea]);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(260px,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-10">
-      {/* Light Overview Card on Left */}
-      <aside className="rounded-2xl border border-slate-200 bg-[#f8faff] p-6 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-7">
-        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our focus</p>
-        <h2 className="font-exo mt-3 text-2xl font-bold leading-tight tracking-[-0.035em] text-[#0a1f44] sm:text-3xl">
-          From challenge to working solution.
-        </h2>
-        <p className="mt-4 text-sm leading-6 text-[#526989]">
-          From software and AI to training and deployment, SAN TECH brings the end-to-end capabilities needed to move an idea into useful, working technology.
-        </p>
-      </aside>
-
-      {/* Rich 2-Column Capability Showcase Grid */}
-      <div>
-        <div role="list" aria-label="SAN TECH areas of focus" className="grid gap-4 sm:grid-cols-2">
-          {focusAreas.map(([area, description], index) => {
-            const Icon = focusIcons[index] ?? Code2;
-
-            return (
-              <button
-                key={area}
-                type="button"
-                onClick={() => setSelectedArea({ area, description, Icon })}
-                className="group relative flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 text-left shadow-[0_4px_16px_rgba(10,31,68,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-secondary/40 hover:bg-[#fafcff] hover:shadow-[0_14px_30px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
-              >
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#edf4fa] text-brand-secondary shadow-sm transition-colors group-hover:bg-brand-secondary group-hover:text-white">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
-                <h3 className="font-exo text-base font-bold leading-snug text-[#0a1f44] transition-colors group-hover:text-brand-secondary">
-                  {area}
-                </h3>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+    <div className="focus-bubble-section relative min-h-0 overflow-hidden p-0">
+      <BubbleMenu
+        logo={<span className="font-exo text-xs font-black uppercase tracking-[0.16em]">Our focus</span>}
+        items={focusAreas.map(([area], index) => ({
+          label: area,
+          href: `#focus-${index + 1}`,
+          ariaLabel: `View ${area} capability details`,
+          rotation: focusRotations[index] ?? 0,
+          hoverStyles: { bgColor: "#0a1f44", textColor: "#ffffff" },
+        }))}
+        menuAriaLabel="Toggle SAN TECH focus areas"
+        menuBg="#ffffff"
+        menuContentColor="#0a1f44"
+        useFixedPosition={false}
+        openOnView
+        animationEase="back.out(1.5)"
+        animationDuration={0.5}
+        staggerDelay={0.08}
+        className="focus-bubble-menu"
+        onItemClick={(_, index) => {
+          const [area, description] = focusAreas[index];
+          const Icon = focusIcons[index] ?? Code2;
+          setSelectedArea({ area, description, Icon });
+        }}
+      />
 
       {/* Focus Area Dialog */}
-      <AnimatePresence>
-        {selectedArea && (
+      {selectedArea && typeof document !== "undefined" && createPortal(
+        (
           <motion.div
             className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/55 p-4 backdrop-blur-sm"
             role="dialog"
@@ -454,46 +447,58 @@ export function FocusPanel() {
               </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+          ),
+          document.body,
+      )}
     </div>
   );
 }
 
-export function CompanyProfilePanel() {
-  const prefersReducedMotion = useReducedMotion();
+export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE (1).pdf" }: { pdfUrl?: string }) {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Company profile</p>
         <h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">From Ideation to Transformative Impact.</h1>
-        <p className="mt-6 max-w-xl text-base leading-7 text-[#68718a]">SAN TECH stands for Smart Applications and Networking Technology. Founded in Rwanda in 2019, with a branch in Bamako, Mali, we develop practical digital solutions, technology products, and technical capacity for organizations, businesses, institutions, and communities.</p>
+        <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH stands for Smart Applications and Networking Technology. Founded in Rwanda in 2019, with a branch in Bamako, Mali, we develop practical digital solutions, technology products, and technical capacity for organizations, businesses, institutions, and communities.</p>
       </div>
       <div className="border-l border-slate-300 pl-6 lg:pl-10">
-        <div className="py-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Our model</p>
-          <div className="mt-3 flex flex-wrap items-center gap-1.5" role="list" aria-label="SAN TECH delivery model">
-            {modelStages.map(([stage], index) => (
-              <motion.span
-                key={stage}
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                transition={{ duration: prefersReducedMotion ? 0.01 : 0.24, delay: prefersReducedMotion ? 0 : index * 0.04, ease: "easeOut" }}
-                className="inline-flex items-center rounded-full border border-[#d4def0] bg-[#f8faff] px-2.5 py-1.5 text-[10px] font-bold text-[#0a1f44] transition-colors hover:border-brand-secondary/50 hover:bg-white"
-              >
-                {stage}
-              </motion.span>
-            ))}
-          </div>
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Company profile document</p>
+          <a href={pdfUrl} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+            Open full profile <ArrowUpRight className="size-3.5" aria-hidden="true" />
+          </a>
         </div>
-        <div className="mt-5 grid gap-4 border-t border-slate-300 pt-4 sm:grid-cols-2">
+        <div className="mt-4 overflow-hidden border border-slate-200 bg-slate-100">
+          <CompanyProfilePdf url={pdfUrl} />
+        </div>
+        <div className="hidden mt-5 grid gap-4 border-t border-slate-300 pt-4 sm:grid-cols-2">
           <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Established</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">2019 · Rwanda</p></div>
           <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Footprint</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Kigali · Bamako</p></div>
           <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Impact</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">47+ institutions · 2,550+ beneficiaries</p></div>
           <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Compliance</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Certified Data Controller &amp; Processor</p></div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function CertificatePanel() {
+  const pdfUrl = "/images/SAN TECH COMPANY PROFILE (1).pdf";
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[0.7fr_1.3fr] lg:gap-10">
+      <div>
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Certificate</p>
+        <h1 className="font-exo mt-4 max-w-md text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">SAN TECH company profile.</h1>
+        <p className="mt-6 max-w-md text-justify text-base leading-7 text-[#68718a]">View the official SAN TECH company profile directly on this page, or open the full document in a separate tab.</p>
+        <a href={pdfUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+          Open full PDF <ArrowUpRight className="size-3.5" aria-hidden="true" />
+        </a>
+      </div>
+      <div className="overflow-hidden border border-slate-200 bg-slate-100">
+        <CompanyProfilePdf url={pdfUrl} />
       </div>
     </div>
   );

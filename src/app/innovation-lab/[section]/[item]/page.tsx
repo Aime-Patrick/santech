@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
-import { ComputerScreenFrame } from "@/components/computer-screen-frame";
+import { Safari } from "@/components/ui/safari";
 import { getInnovationItem, innovationItems, type InnovationSection } from "@/lib/innovation-data";
 
 const sections: InnovationSection[] = ["product", "services", "solutions"];
@@ -41,7 +41,12 @@ export default async function InnovationDetailPage({ params }: { params: Promise
               <p className="mt-6 max-w-xl text-base leading-7 text-[#68718a] sm:text-lg">{item.description}</p>
             </div>
 
-            <ComputerScreenFrame kind={item.media.kind} src={item.media.src} alt={item.media.alt} priority label={`SAN TECH / ${item.label}`} />
+            <Safari
+              url={`${item.id}.santech.rw`}
+              imageSrc={item.media.src}
+              className="mx-auto w-full max-w-[760px]"
+              aria-label={`${item.label} product preview`}
+            />
           </div>
         </div>
       </section>

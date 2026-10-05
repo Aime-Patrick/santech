@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Code2 } from "lucide-react";
 import { FaAws, FaCss3Alt, FaJava, FaMicrosoft, FaWindows } from "react-icons/fa6";
-import { SiAndroid, SiAngular, SiArduino, SiApache, SiC, SiCplusplus, SiDart, SiDjango, SiDocker, SiDotnet, SiEspressif, SiExpress, SiFastapi, SiFigma, SiFirebase, SiFlutter, SiGit, SiGithub, SiGitlab, SiGnubash, SiGooglecloud, SiGraphql, SiHtml5, SiIntellijidea, SiJavascript, SiJira, SiKotlin, SiLaravel, SiLinux, SiMongodb, SiMqtt, SiMysql, SiNfc, SiNextdotjs, SiNginx, SiNodedotjs, SiOpencv, SiPhp, SiPostgresql, SiPostman, SiPwa, SiPytorch, SiPython, SiRaspberrypi, SiReact, SiRedis, SiScikitlearn, SiSqlite, SiSpringboot, SiStmicroelectronics, SiTensorflow, SiTrello, SiTypescript, SiVuedotjs, SiKubernetes } from "react-icons/si";
+import { SiAda, SiAndroid, SiAngular, SiArduino, SiApache, SiC, SiClojure, SiCommonlisp, SiCplusplus, SiCrystal, SiD, SiDart, SiDjango, SiDocker, SiDotnet, SiElixir, SiElm, SiErlang, SiEspressif, SiExpress, SiFastapi, SiFigma, SiFirebase, SiFlutter, SiFortran, SiFsharp, SiGit, SiGithub, SiGitlab, SiGnubash, SiGo, SiGooglecloud, SiGraphql, SiHaskell, SiHaxe, SiHtml5, SiIntellijidea, SiJavascript, SiJulia, SiJira, SiKotlin, SiLaravel, SiLinux, SiLua, SiMongodb, SiMqtt, SiMysql, SiNfc, SiNextdotjs, SiNim, SiNginx, SiNodedotjs, SiOcaml, SiOpencv, SiPerl, SiPhp, SiPostgresql, SiPostman, SiPwa, SiPytorch, SiPython, SiR, SiRaspberrypi, SiReact, SiRedis, SiRuby, SiRust, SiScala, SiScikitlearn, SiSass, SiSolidity, SiSqlite, SiSpringboot, SiStmicroelectronics, SiSwift, SiTensorflow, SiTrello, SiTypescript, SiVuedotjs, SiWebassembly, SiZig, SiKubernetes } from "react-icons/si";
 import { DiVisualstudio } from "react-icons/di";
 import { TbBrandCSharp, TbBrandPowershell, TbBrandWindows, TbSql } from "react-icons/tb";
 import { VscVscode } from "react-icons/vsc";
@@ -14,6 +14,12 @@ const programmingLanguages = technologyCategories[0];
 
 const technologyIcons: Record<string, { Icon: IconType; color: string }> = {
   Python: { Icon: SiPython, color: "#3776ab" },
+  Go: { Icon: SiGo, color: "#00add8" },
+  Rust: { Icon: SiRust, color: "#000000" },
+  Swift: { Icon: SiSwift, color: "#f05138" },
+  Ruby: { Icon: SiRuby, color: "#cc342d" },
+  R: { Icon: SiR, color: "#276dc3" },
+  Scala: { Icon: SiScala, color: "#dc322f" },
   Java: { Icon: FaJava, color: "#ed8b00" },
   JavaScript: { Icon: SiJavascript, color: "#d6a900" },
   TypeScript: { Icon: SiTypescript, color: "#3178c6" },
@@ -23,6 +29,27 @@ const technologyIcons: Record<string, { Icon: IconType; color: string }> = {
   "C#": { Icon: TbBrandCSharp, color: "#239120" },
   Kotlin: { Icon: SiKotlin, color: "#7f52ff" },
   Dart: { Icon: SiDart, color: "#0175c2" },
+  Sass: { Icon: SiSass, color: "#cc6699" },
+  Ada: { Icon: SiAda, color: "#02f88c" },
+  Fortran: { Icon: SiFortran, color: "#734f96" },
+  "F#": { Icon: SiFsharp, color: "#378bba" },
+  Haskell: { Icon: SiHaskell, color: "#5e5086" },
+  Clojure: { Icon: SiClojure, color: "#5881d8" },
+  "Common Lisp": { Icon: SiCommonlisp, color: "#3fb68b" },
+  Elixir: { Icon: SiElixir, color: "#4b275f" },
+  Erlang: { Icon: SiErlang, color: "#a90533" },
+  Elm: { Icon: SiElm, color: "#60b5cc" },
+  Julia: { Icon: SiJulia, color: "#9558b2" },
+  Lua: { Icon: SiLua, color: "#000080" },
+  Perl: { Icon: SiPerl, color: "#39457e" },
+  OCaml: { Icon: SiOcaml, color: "#ec6813" },
+  Crystal: { Icon: SiCrystal, color: "#000000" },
+  D: { Icon: SiD, color: "#ba595e" },
+  Nim: { Icon: SiNim, color: "#ffe953" },
+  Zig: { Icon: SiZig, color: "#f7a41d" },
+  Solidity: { Icon: SiSolidity, color: "#363636" },
+  Haxe: { Icon: SiHaxe, color: "#ea8220" },
+  WebAssembly: { Icon: SiWebassembly, color: "#654ff0" },
   SQL: { Icon: TbSql, color: "#336791" },
   HTML5: { Icon: SiHtml5, color: "#e34f26" },
   CSS3: { Icon: FaCss3Alt, color: "#1572b6" },
@@ -91,7 +118,7 @@ function TechnologyChip({ item, card = false }: { item: string; card?: boolean }
 
   return (
     <span className={card ? "group flex min-h-12 items-center gap-2.5 rounded-xl border border-[#e1e8f0] bg-white px-2.5 py-2 text-[11px] font-semibold text-[#0a1f44] shadow-[0_3px_10px_rgba(10,31,68,0.025)] transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-[#a9c9df] hover:shadow-[0_6px_14px_rgba(10,31,68,0.06)]" : "inline-flex items-center gap-1.5 rounded-full border border-[#e1e8f0] bg-[#f8fafc] px-2.5 py-1 text-[11px] font-semibold text-[#0a1f44]"}>
-      {Icon ? <span className={card ? "grid size-7 shrink-0 place-items-center rounded-lg bg-[#f1f6fb]" : "inline-flex shrink-0"}><Icon className="size-3.5" style={{ color: technology.color }} aria-hidden="true" /></span> : card ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-[#f1f6fb] text-xs text-brand-secondary" aria-hidden="true">+</span> : null}
+      {Icon ? <span className={card ? "grid size-7 shrink-0 place-items-center rounded-lg bg-[#f1f6fb]" : "inline-flex shrink-0"}><Icon className="size-3.5" style={{ color: technology.color }} aria-hidden="true" /></span> : <span className="inline-flex shrink-0 text-brand-secondary"><Code2 className="size-3.5" aria-hidden="true" /></span>}
       {item}
     </span>
   );
@@ -140,7 +167,11 @@ function ProgrammingLanguagesPanel() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[0.68fr_1.32fr] lg:gap-14">
-      <div><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Programming languages</p><p className="mt-6 max-w-md text-base leading-7 text-[#68718a]">The languages SAN TECH uses to build software, automate work, work with data, and connect technology to real environments.</p></div>
+      <div>
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Programming languages</p>
+        <p className="mt-6 max-w-md text-base leading-7 text-[#68718a] text-justify">The languages SAN TECH uses to build software, automate work, work with data, and connect technology to real environments.</p>
+        <p className="mt-6 max-w-md text-base leading-7 text-[#68718a] text-justify">SAN TECH in software engineering, AI, IoT, cybersecurity, web/mobile development and embedded systems programs, the most important languages to prioritize are Python, JavaScript/TypeScript, Java, C, C++, C#, Kotlin, Swift, Dart, PHP, SQL, Go, Rust and Solidity.</p>
+      </div>
       <div className="border-y border-slate-300"><div className="flex items-center gap-4 border-b border-slate-200 py-4"><span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[#d9eafa] text-brand-secondary"><ProgrammingLanguagesIcon className="size-4" strokeWidth={1.8} aria-hidden="true" /></span><span className="text-sm font-bold text-[#0a1f44]">{programmingLanguages.label}</span></div><div className="flex flex-wrap gap-2 py-5">{programmingLanguages.items.map((item) => <TechnologyChip key={item} item={item} />)}</div></div>
     </div>
   );

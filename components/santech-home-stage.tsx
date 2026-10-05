@@ -68,7 +68,7 @@ const legacyStorySlides: StorySlide[] = [
     detail: "We develop technology from the ground up—from identifying a problem and researching the context to prototyping, testing, deploying, and supporting systems in real environments.",
     facts: [
       { label: "Explore", value: "AI & data systems" },
-      { label: "Connect", value: "IoT & devices" },
+      { label: "Connect with us", value: "IoT & devices" },
       { label: "Protect", value: "People & information" },
     ],
   },
@@ -515,11 +515,11 @@ export function SantechHomeStage() {
   }
 
   return (
-    <div className="lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden">
-      <section className="bg-transparent px-3 py-3 text-[#0c1230] sm:px-5 sm:py-5 lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:px-7 lg:py-3">
-        <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col lg:h-full">
-          <div className="grid min-h-0 gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.68fr)] lg:gap-4">
-            <div className="relative flex aspect-[16/10] min-h-0 flex-col overflow-hidden bg-[#111735] sm:aspect-video lg:h-full lg:aspect-auto">
+    <div className="home-stage lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden">
+      <section className="home-stage__content bg-transparent px-3 py-3 text-[#0c1230] sm:px-5 sm:py-5 lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:px-7 lg:py-3">
+        <div className="home-stage__inner relative z-10 mx-auto flex min-h-0 w-full max-w-[1440px] flex-col lg:h-full">
+          <div className="home-stage__grid grid min-h-0 gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.68fr)] lg:gap-4">
+            <div className="home-stage__video relative flex aspect-[16/10] min-h-0 flex-col overflow-hidden bg-[#111735] sm:aspect-video lg:h-full lg:aspect-auto">
               <div className="relative min-h-0 flex-1 overflow-hidden">
                 <video
                   ref={videoRef}
@@ -552,6 +552,7 @@ export function SantechHomeStage() {
             </div>
 
             <article
+              data-home-story
               className="relative flex min-h-[360px] flex-col overflow-hidden border border-slate-300/80 bg-white p-4 sm:min-h-[420px] sm:p-5 lg:h-full lg:min-h-0 2xl:p-6"
               onMouseEnter={() => setStoryHovered(true)}
               onMouseLeave={() => setStoryHovered(false)}
@@ -704,7 +705,7 @@ export function SantechHomeStage() {
         })()}
       </AnimatePresence>
 
-      <div className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[64px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
+      <div data-home-metrics className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[64px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
@@ -722,8 +723,7 @@ export function SantechHomeStage() {
       <footer className="relative flex min-h-[68px] shrink-0 flex-col items-center justify-center gap-1 overflow-hidden bg-[#0c1230] px-4 py-2 pb-3 text-center text-[11px] text-white sm:h-12.5 sm:min-h-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-7 sm:pb-1 sm:text-left sm:text-xs lg:h-[42px]">
         <span>© 2026 SAN TECH. All rights reserved.</span>
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/connect" className="hidden transition-colors hover:text-white sm:inline-flex">Connect</Link>
-          <a href="mailto:info@santechinnovate.com" className="hidden transition-colors hover:text-white sm:inline">info@santechinnovate.com</a>
+          <span className="hidden transition-colors hover:text-white sm:inline">Turning Ideas into Technology, Technology into Impact.</span>
           <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />
           <div className="flex items-center gap-2" aria-label="SAN TECH social media">
             {socialLinks.map(({ label, href, icon: Icon }) => (

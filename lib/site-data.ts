@@ -6,7 +6,7 @@ export const navigation = [
   { label: "E-VISITORS", href: "/e-visitors", iconName: "ScanLine" },
   { label: "SAN HUB", href: "/san-hub", iconName: "GraduationCap" },
   { label: "TECH PULSE", href: "/tech-pulse", iconName: "Radio" },
-  { label: "CONNECT", href: "/connect", iconName: "Mail" },
+  { label: "CONNECT WITH US", href: "/connect", iconName: "Mail" },
 ];
 
 export const heroCTAs = [

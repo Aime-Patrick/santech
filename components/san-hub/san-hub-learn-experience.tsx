@@ -27,7 +27,7 @@ type FeaturedSlide = {
 
 const featuredSlides: readonly FeaturedSlide[] = [
   {
-    eyebrow: "SAN HUB / LEARN",
+    eyebrow: "SAN HUB / COURSES",
     title: "Learn technology that becomes useful capability.",
     description: "Courses, guided practice, and real projects for people ready to build.",
     cta: "Explore courses",
@@ -57,7 +57,7 @@ const featuredSlides: readonly FeaturedSlide[] = [
 
 const learningGoals = [
   { label: "Start my career", href: "/san-hub/explore/work", Icon: Rocket },
-  { label: "Change my career", href: "/san-hub/explore/learn", Icon: Shuffle },
+  { label: "Change my career", href: "/san-hub/courses", Icon: Shuffle },
   { label: "Grow in my current role", href: "/san-hub/explore/build", Icon: TrendingUp },
   { label: "Explore technology beyond my work", href: "/san-hub/explore/research", Icon: Compass },
 ] as const;

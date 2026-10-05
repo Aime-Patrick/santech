@@ -1,14 +1,13 @@
 "use client";
 
-import { ArrowUpRight, Handshake, MessageCircle, Send, Users } from "lucide-react";
+import { ArrowUpRight, Handshake, MessageCircle, Send } from "lucide-react";
 import { FormEvent, useState } from "react";
 
-type ConnectTopic = "talk" | "partnership" | "training";
+type ConnectTopic = "talk" | "partnership";
 
 const topicCopy: Record<ConnectTopic, { label: string; title: string; description: string; button: string }> = {
-  talk: { label: "Talk with us", title: "Tell us what you are trying to move forward.", description: "Share the context and we will route your message to the right SAN TECH team.", button: "Send message" },
+  talk: { label: "Connect with us", title: "Tell us what you are trying to move forward.", description: "Share the context and we will route your message to the right SAN TECH team.", button: "Send message" },
   partnership: { label: "Partner with us", title: "Build a useful partnership.", description: "Tell us what you want to create, support, sponsor, or scale with SAN TECH.", button: "Start request" },
-  training: { label: "Organizational training", title: "Build capability inside your organization.", description: "Share the skills, team, and format you need for a focused training conversation.", button: "Request training" },
 };
 
 const inputClass = "h-9 rounded-lg border border-slate-200 bg-slate-50 px-2.5 text-xs font-normal text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary focus:bg-white";
@@ -25,16 +24,10 @@ export function ConnectRequestForm({ initialTopic = "talk" }: { initialTopic?: C
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_10px_28px_rgba(10,31,68,0.06)] sm:p-5" aria-labelledby="contact-form-title">
-      <div className="grid grid-cols-2 gap-1.5 border-b border-slate-200 pb-3 sm:grid-cols-4" aria-label="Conversation type">
-        {(Object.keys(topicCopy) as ConnectTopic[]).map((id) => {
-          const active = id === topic;
-          return (
-            <button key={id} type="button" onClick={() => { setTopic(id); setSubmitted(false); }} className={`rounded-lg px-2 py-2 text-[11px] font-bold leading-4 transition-colors ${active ? "bg-[#0a1f44] text-white" : "bg-slate-50 text-slate-600 hover:bg-[#edf1f7] hover:text-[#0a1f44]"}`}>
-              {topicCopy[id].label}
-            </button>
-          );
-        })}
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6" aria-labelledby="contact-form-title">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-3" aria-label="Conversation type">
+        <span className="rounded-lg bg-[#0a1f44] px-3 py-2 text-[11px] font-bold leading-4 text-white">Connect with us</span>
+        {topic === "talk" && <button type="button" onClick={() => { setTopic("partnership"); setSubmitted(false); }} className="rounded-lg bg-slate-50 px-3 py-2 text-[11px] font-bold leading-4 text-slate-600 transition-colors hover:bg-[#edf1f7] hover:text-[#0a1f44]">Partner with us</button>}
       </div>
 
       {submitted ? (
@@ -67,4 +60,4 @@ export function ConnectRequestForm({ initialTopic = "talk" }: { initialTopic?: C
   );
 }
 
-export const connectTopicIcons = { talk: MessageCircle, partnership: Handshake, training: Users } as const;
+export const connectTopicIcons = { talk: MessageCircle, partnership: Handshake } as const;

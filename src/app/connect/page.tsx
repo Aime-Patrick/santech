@@ -1,6 +1,7 @@
 import { AtSign, ArrowUpRight, Globe2, Mail, MapPin, MessageCircle, Phone, Radio } from "lucide-react";
 import { PublicPage } from "@/components/public-page";
-import { ConnectRequestForm } from "@/components/connect-request-form";
+import { ConnectDialog } from "@/components/connect-dialog";
+import { CalendlyDialog } from "@/components/calendly-dialog";
 
 const contactDetails = [
   { label: "Phone", value: "+250 783 250 033 / +250 780 309 833", href: "tel:+250783250033", icon: Phone },
@@ -10,11 +11,7 @@ const contactDetails = [
   { label: "Website", value: "santechinnovate.com", href: "https://santechinnovate.com", icon: Globe2 },
 ] as const;
 
-export default async function ConnectPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
-  const { topic } = await searchParams;
-  const normalizedTopic = topic?.toLowerCase().replace(/\s+/g, "-");
-  const initialTopic = normalizedTopic === "partnership" || normalizedTopic === "training" ? normalizedTopic : "talk";
-
+export default function ConnectPage() {
   return (
     <PublicPage>
       <section className="san-hub-graphic-section border-y border-slate-200 py-2 sm:px-4 lg:px-8 lg:py-3">
@@ -59,21 +56,20 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
                 </div>
 
                 <div className="mt-3 flex items-center gap-2 text-[11px] text-[#303755]"><Radio className="size-3.5 shrink-0 text-brand-secondary" aria-hidden="true" /><span><span className="font-black uppercase tracking-[0.13em] text-slate-400">SAN TECH Radio</span><span className="ml-2">Zeno.FM — SAN TECH</span></span></div>
-              </section>
-
-              <section className="mt-4 rounded-2xl bg-[#edf1f7] p-2.5" aria-labelledby="map-title">
-                <div className="flex items-center justify-between gap-3 px-1.5 pb-2">
-                  <div><p id="map-title" className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Find us in Kigali</p></div>
-                  <MapPin className="size-4 text-brand-secondary" aria-hidden="true" />
-                </div>
-                <div className="overflow-hidden rounded-xl bg-slate-200">
-                  <iframe title="SAN TECH location at Sofaru Building in Kigali" src="https://www.google.com/maps?q=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda&output=embed" className="h-[205px] w-full border-0 sm:h-[225px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-                </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 px-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">Get directions <ArrowUpRight className="size-3.5" aria-hidden="true" /></a>
+                <ConnectDialog initialTopic="talk" />
+                <CalendlyDialog />
               </section>
             </div>
-
-            <ConnectRequestForm initialTopic={initialTopic} />
+            <section aria-label="SAN TECH location map">
+              <div className="relative overflow-hidden rounded-xl">
+                <iframe title="SAN TECH location at Sofaru Building in Kigali" src="https://www.google.com/maps?q=SAN+TECH,+Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda&z=17&output=embed" className="h-[250px] w-full border-0 sm:h-[300px] lg:h-[340px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-2 rounded-lg bg-white/95 px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-[#0a1f44] shadow-md ring-1 ring-slate-200">
+                  <span className="size-2 rounded-full bg-red-500 shadow-[0_0_0_4px_rgba(239,68,68,0.18)]" aria-hidden="true" />
+                  SAN TECH · Sofaru Building
+                </div>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.13em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">Get directions <ArrowUpRight className="size-3.5" aria-hidden="true" /></a>
+            </section>
           </div>
         </div>
       </section>

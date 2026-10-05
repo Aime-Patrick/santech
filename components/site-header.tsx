@@ -153,10 +153,10 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
             <Mail className="size-4" />
             <span className="truncate">info@santechinnovate.com</span>
           </a>
-          <span className="hidden items-center gap-2 2xl:inline-flex">
+          <Link href="https://zeno.fm/radio/san-tech/" target="_blank" className="hidden items-center gap-2 2xl:inline-flex">
             <Radio className="size-4" />
             <span>santech</span>
-          </span>
+          </Link>
         </div>
       </div>
 

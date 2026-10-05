@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 
-export type SanHubSectionId = "about" | "explore" | "impact" | "programs" | "traction" | "insights" | "library" | "testimonials";
+export type SanHubSectionId = "about" | "courses" | "explore" | "impact" | "programs" | "traction" | "insights" | "library" | "testimonials";
 
 const menuItems: readonly { id: SanHubSectionId; label: string; href: string }[] = [
   { id: "about", label: "About", href: "/san-hub?section=about" },
+  { id: "courses", label: "Courses", href: "/san-hub/courses" },
   { id: "explore", label: "Explore", href: "/san-hub?section=explore" },
   { id: "impact", label: "Impact", href: "/san-hub?section=impact" },
   { id: "programs", label: "Programs", href: "/san-hub?section=programs" },

@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   BrainCircuit,
+  BarChart3,
   Boxes,
   Code2,
   Cpu,
@@ -9,11 +10,13 @@ import {
   Globe2,
   GraduationCap,
   LockKeyhole,
+  MapPin,
   Network,
   Radar,
   ScanLine,
   ShieldCheck,
   Smartphone,
+  Users,
   Workflow,
 } from "lucide-react";
 
@@ -29,6 +32,7 @@ export type InnovationMedia = {
   kind: "image" | "video";
   src: string;
   alt: string;
+  images?: string[];
 };
 
 export type InnovationItem = {
@@ -53,6 +57,24 @@ function innovationSlug(value: string) {
 
 const productItems: InnovationItem[] = [
   {
+    id: "e-visitors",
+    label: "E-VISITORS",
+    title: "Make every arrival safer, clearer, and more useful.",
+    description: "Manage visitor registration, approvals, access, attendance, and institutional security in one traceable system.",
+    coreFeatures: [
+      { label: "Visitor registration", description: "Capture visitor, host, appointment, purpose, and identity details in one record.", icon: Users },
+      { label: "Identity verification", description: "Use ID and passport checks, OCR, watchlists, and visit rules to support faster decisions.", icon: ScanLine },
+      { label: "Access control", description: "Route requests to hosts and security teams before issuing passes or gate instructions.", icon: ShieldCheck },
+      { label: "Activity reports", description: "Turn arrivals, departures, movements, and exceptions into accountable records.", icon: BarChart3 },
+    ],
+    media: {
+      kind: "image",
+      src: "/images/e-visitor1.png",
+      images: ["/images/e-visitor1.png", "/images/e-visitor2.png", "/images/e-visitor3.png"],
+      alt: "E-Visitors visitor management screen",
+    },
+  },
+  {
     id: "san-track",
     label: "SAN TRACK",
     title: "See operations as they move.",
@@ -63,7 +85,7 @@ const productItems: InnovationItem[] = [
       { label: "Location intelligence", description: "Turn location data into a clearer view of field activity and operational patterns.", icon: Globe2 },
       { label: "Operations dashboards", description: "Bring live operational signals into one view for faster, better-informed decisions.", icon: Workflow },
     ],
-    media: { kind: "image", src: "/images/summit.jpg", alt: "SAN TECH operations and innovation" },
+    media: { kind: "image", src: "/images/santrack.png", alt: "SAN TRACK operations and asset tracking view" },
   },
   {
     id: "san-book",
@@ -115,7 +137,6 @@ const serviceItems: InnovationItem[] = [
   ["Digital Transformation", "Automation, integration, consultancy, modernization, business-process digitization, paperless workflows, and enterprise modernization.", Workflow],
   ["Business Digital Intelligence (BDI)", "ERP, management information systems, CRM, inventory, agriculture, finance, payroll, visitor management, document management, workflow automation, asset management, procurement, attendance, reporting, and analytics.", Database],
   ["Innovation & R&D", "Prototyping, research, product development, testing, and scale.", Boxes],
-  ["SAN HUB: Capacity Building & Employment", "Training, internships, mentorship, project development, career guidance, and innovation development programs.", GraduationCap],
   ["Technology Consultancy", "IT strategy, business analysis, system requirements, technology architecture, digital transformation consulting, ICT project management, technical feasibility studies, technology procurement advisory, system audits, and IT policy and documentation.", Globe2],
 ].map(([label, description, icon]) => ({
   id: innovationSlug(String(label)),

@@ -622,7 +622,7 @@ export function HeroVisual() {
                 href="/connect"
                 className="inline-flex items-center gap-1 text-xs font-bold text-[#333292] transition-colors hover:text-[#1519ad]"
               >
-                <span>{language === "rw" ? "Twandikire" : "Contact Us"}</span>
+                <span>{language === "rw" ? "Twandikire" : "Connect with Us"}</span>
                 <ExternalLink className="size-3" />
               </Link>
             </div>

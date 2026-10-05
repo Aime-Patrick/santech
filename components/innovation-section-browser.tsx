@@ -32,7 +32,7 @@ export function InnovationSectionBrowser({ section }: { section: InnovationSecti
 
       <AnimatePresence mode="wait">
         <motion.div key={selected.id} initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}>
-          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} media={selected.media} detailHref={`/innovation-lab/${section}/${selected.id}`} />
+          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} media={selected.media} detailHref={`/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
         </motion.div>
       </AnimatePresence>
     </div>

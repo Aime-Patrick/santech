@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { PublicPage } from "@/components/public-page";
 import { SanHubCatalog } from "@/components/san-hub-catalog";
@@ -70,6 +70,8 @@ function RouteNextStep({ route }: { route: NonNullable<ReturnType<typeof getSanH
 
 export default async function SanHubExploreRoutePage({ params }: { params: Promise<{ route: string }> }) {
   const { route: routeId } = await params;
+  if (routeId === "learn") redirect("/san-hub/courses");
+
   const route = getSanHubExploreRoute(routeId);
   if (!route) notFound();
 

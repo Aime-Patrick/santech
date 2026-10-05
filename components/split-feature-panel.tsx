@@ -3,8 +3,10 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
+import { useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ComputerScreenFrame } from "@/components/computer-screen-frame";
+import { Safari } from "@/components/ui/safari";
 
 export type CoreFeature = {
   label: string;
@@ -18,6 +20,7 @@ export type SplitFeatureMedia = {
   alt: string;
   fit?: "cover" | "contain";
   transparent?: boolean;
+  images?: string[];
 };
 
 export type SplitFeatureFact = {
@@ -40,6 +43,8 @@ export function SplitFeaturePanel({
   coreFeatures,
   media,
   detailHref,
+  browser = "computer",
+  browserUrl = "santech.rw",
   combined = false,
 }: {
   title: string;
@@ -51,10 +56,26 @@ export function SplitFeaturePanel({
   coreFeatures?: CoreFeature[];
   media?: SplitFeatureMedia;
   detailHref?: string;
+  browser?: "computer" | "safari";
+  browserUrl?: string;
   combined?: boolean;
 }) {
   const [expandedFeature, setExpandedFeature] = useState<string | null>(coreFeatures?.[0]?.label ?? null);
+  const mediaImages = media?.images?.length ? media.images : media ? [media.src] : [];
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    setActiveMediaIndex(0);
+  }, [media?.src]);
+
+  useEffect(() => {
+    if (mediaImages.length < 2) return;
+    const timer = window.setInterval(() => {
+      setActiveMediaIndex((current) => (current + 1) % mediaImages.length);
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [mediaImages.length]);
 
   return (
     <div className={`grid ${combined ? "gap-4 lg:gap-5" : "gap-7 lg:gap-10"} lg:items-start ${media ? "lg:grid-cols-[0.82fr_1.18fr]" : combined ? "lg:grid-cols-1" : "lg:grid-cols-[0.9fr_1.1fr]"}`}>
@@ -119,7 +140,16 @@ export function SplitFeaturePanel({
       </div>
 
       {media ? (
-        <ComputerScreenFrame kind={media.kind} src={media.src} alt={media.alt} fit={media.fit} priority compact label="SAN TECH / PRODUCT VIEW" />
+        browser === "safari" ? (
+          <Safari
+            url={browserUrl}
+            imageSrc={mediaImages[activeMediaIndex] ?? media.src}
+            className="mx-auto w-full max-w-[760px]"
+            aria-label={`${title} product preview`}
+          />
+        ) : (
+          <ComputerScreenFrame kind={media.kind} src={media.src} alt={media.alt} fit={media.fit} priority compact label="SAN TECH / PRODUCT VIEW" />
+        )
       ) : (
         <div className={combined ? "pl-0" : "border-l border-slate-300 pl-6 lg:pl-10"}>
           {description && <p className="max-w-2xl text-lg leading-8 text-[#68718a] sm:text-xl">{description}</p>}

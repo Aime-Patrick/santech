@@ -163,6 +163,95 @@ button, a { -webkit-tap-highlight-color: transparent; }
   letter-spacing: .04em;
 }
 
+/* Keep the home experience inside the viewport on tablet and larger landscape screens. */
+@media (min-width: 768px) and (orientation: landscape) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .home-viewport {
+    position: fixed;
+    inset-inline: 0;
+    top: 112px;
+    bottom: 0;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+    padding-top: 0;
+  }
+
+  /* The circuit wrapper sits between the fixed home viewport and the stage.
+     Give it a definite height so the stage footer reaches the viewport edge. */
+  .home-viewport > .relative {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .home-stage {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .home-stage__content {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0.75rem 1rem;
+  }
+
+  .home-stage__inner {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .home-stage__grid {
+    display: grid;
+    min-height: 0;
+    flex: 1 1 0%;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.68fr);
+    gap: 0.75rem;
+  }
+
+  .home-stage__video,
+  [data-home-story] {
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+
+  [data-home-story] {
+    padding: 0.75rem;
+  }
+
+  [data-home-metrics] {
+    min-height: 0;
+    height: 48px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .home-stage > footer {
+    min-height: 0;
+    height: 34px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
+@media (max-width: 767px), (orientation: portrait) {
+  .home-viewport {
+    min-height: 100svh;
+    overflow-x: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

@@ -13,6 +13,8 @@ const executives = [
 ];
 
 const teamMembers = [
+  { name: "Felix", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/felix  santech.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Placide", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/placide.png", profile: "https://www.linkedin.com/company/santechinnovate" },
   { name: "SAN TECH Software Team", position: "Software Engineering Team", department: "Software Engineering", expertise: "Full-stack systems, APIs, product delivery", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/team.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
   { name: "SAN TECH Product Team", position: "Product and Design Team", department: "Product and Design", expertise: "User research, service design, product thinking", bio: "People shaping useful experiences around real users and institutions.", image: "/images/fieldwork.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
   { name: "SAN TECH Innovation Team", position: "Innovation and Research Team", department: "Research & Development", expertise: "Research, prototyping, digital systems", bio: "Researchers and problem-solvers testing what can work next.", image: "/images/summit.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
@@ -21,11 +23,11 @@ const teamMembers = [
 
 function TeamProfileCard({ member }: { member: (typeof teamMembers)[number] }) {
   return (
-    <article className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_16px_36px_rgba(10,31,68,0.08)]">
-      <div className="relative h-72 overflow-hidden bg-[#dceaf8] sm:h-72">
+    <article className="relative min-w-0">
+      <div className="relative h-80 overflow-hidden bg-[#dceaf8] sm:h-[360px]">
         <Image src={member.image} alt={`${member.position} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-cover" />
       </div>
-      <div className="flex items-end justify-between gap-4 p-3.5 sm:p-4">
+      <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-4 bg-white/95 p-3.5 backdrop-blur-sm sm:p-4">
         <div>
           <p className="text-[11px] font-black uppercase tracking-[0.14em] text-brand-secondary sm:text-xs">{member.name}</p>
           <h3 className="font-exo mt-1 text-sm font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{member.position}</h3>
@@ -67,16 +69,16 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
         </div>
       </div>
 
-      <div className="min-w-0">
+      <div className="min-w-0 lg:w-full lg:max-w-[820px] lg:justify-self-end">
         <AnimatePresence mode="wait">
           {view === "executive" ? (
             <motion.section key="executive-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }} className="grid gap-4 sm:grid-cols-2">
               {executives.map((executive) => (
-                <article key={executive.role} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_16px_36px_rgba(10,31,68,0.08)]">
-                  <div className={`relative h-72 overflow-hidden sm:h-72 ${executive.name === "Claudine Niyonzima" ? "bg-white" : "bg-[#2d79c7]"}`}>
-                    <Image src={executive.image} alt={`${executive.title} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-contain object-center" />
-                  </div>
-                  <div className="flex items-end justify-between gap-4 p-3.5 sm:p-4">
+                  <article key={executive.role} className="relative min-w-0">
+                    <div className={`relative h-80 overflow-hidden sm:h-[360px] ${executive.name === "Claudine Niyonzima" ? "bg-white" : "bg-[#2d79c7]"}`}>
+                      <Image src={executive.image} alt={`${executive.title} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-contain object-center" />
+                    </div>
+                  <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-4 bg-white/95 p-3.5 backdrop-blur-sm sm:p-4">
                     <div>
                       <p className="text-[11px] font-black uppercase tracking-[0.14em] text-brand-secondary sm:text-xs">{executive.name ?? executive.role}</p>
                       <h3 className="font-exo mt-1.5 text-sm font-bold leading-tight tracking-[-0.025em] text-[#0a1f44]">{executive.title}</h3>
