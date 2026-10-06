@@ -234,7 +234,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
   [data-home-metrics] {
     min-height: 0;
-    height: 48px;
+    height: 84px;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 

@@ -201,9 +201,9 @@ export function CompanyProfilePdf({
           })}
         </div>
       ) : (
-        <div className="relative flex h-[370px] flex-col items-center justify-between bg-slate-100 p-3">
+        <div className="relative flex h-[410px] flex-col items-center justify-between bg-slate-100 p-3">
           {/* Active Page Image */}
-          <div className="relative h-[300px] aspect-[1/1.414] overflow-hidden border border-slate-300 bg-white shadow-sm">
+          <div className="relative h-[340px] aspect-[1/1.414] overflow-hidden border border-slate-300 bg-white shadow-sm">
             <Image
               src={PAGES[currentPage - 1].src}
               alt={`SAN TECH Company Profile - Page ${currentPage}`}

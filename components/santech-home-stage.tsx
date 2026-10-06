@@ -18,6 +18,7 @@ type StorySlide = {
   body: string;
   detail: string;
   additional?: string;
+  note?: string;
   variant?: "services";
   facts: { label: string; value: string }[];
   flow?: string[];
@@ -34,7 +35,8 @@ export type PartnerBrand = {
   government?: boolean;
 };
 
-const storyCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] 2xl:text-[18px]";
+const regularStoryCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] 2xl:text-[18px]";
+const compactStoryCopyClass = "max-w-none text-[14px] leading-[1.35] tracking-[0.003em] text-justify text-slate-600 sm:text-[15px] 2xl:text-[16px]";
 
 function ecosystemEmoji(item: string) {
   if (item.startsWith("SAN TECH")) return "⚙️";
@@ -149,6 +151,7 @@ const storySlides: StorySlide[] = [
     body: "SAN TECH (Smart Applications and Networking Technology) provides end-to-end technology services focused on digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, innovation, and capacity building. SAN TECH focused on digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, research, innovation, and technology capacity building.",
     detail: "SAN TECH Service Model",
     additional: "SAN TECH \u2014 From Ideation to Transformative Impact.",
+    note: "We bring strategy, engineering, and capacity building together so solutions can keep working after launch.",
     flow: ["Ideate", "Design", "Develop", "Integrate", "Deploy", "Train", "Support", "Scale"],
     facts: [],
   },
@@ -161,6 +164,7 @@ const storySlides: StorySlide[] = [
     detail: "Our approach follows:",
     flow: ["Ideate", "Design", "Develop", "Test", "Deploy", "Integrate", "Train", "Scale", "Impact"],
     additional: "We work closely with clients and partners to understand their challenges, design appropriate solutions, develop and test the technology, deploy it within their operational environment, train users, and provide continuous technical support.",
+    note: "Each stage gives the next one a stronger foundation: evidence improves design, testing improves trust, and training improves adoption.",
     facts: [],
   },
   {
@@ -169,6 +173,7 @@ const storySlides: StorySlide[] = [
     eyebrow: "SAN TECH / ECOSYSTEM",
     body: "SAN TECH develops an ecosystem that connects ideas, technology, talent, research, investment, institutions, businesses, and end users.",
     detail: "Our ecosystem includes:",
+    note: "The ecosystem works as a connected network: learning develops talent, research informs solutions, partners open opportunities, and deployed products create evidence for the next idea.",
     items: ["SAN TECH — technology solutions and digital transformation", "SAN HUB — learning, innovation, research, entrepreneurship, and talent development", "E-VISITORS — visitor and access-management technology", "Tech Forward Live — technology and innovation events", "SAN CITY — a long-term vision for an integrated technology, innovation, research, demonstration, and commercialization ecosystem", "Custom Enterprise Platforms — systems designed around the operational requirements of institutions and businesses."],
     facts: [],
   },
@@ -178,6 +183,12 @@ const storySlides: StorySlide[] = [
     eyebrow: "SAN TECH / VALUE PROPOSITION",
     body: "SAN TECH transforms ideas, operational challenges and research concepts into practical technology products and scalable digital solutions.",
     detail: "SAN TECH combines engineering + innovation + training + implementation + ecosystem development so that technology can move from an idea to a deployed and measurable solution.",
+    note: "This combination helps us respond to immediate operational needs while also supporting longer-term transformation goals.",
+    groups: [
+      { label: "Engineering", items: "Software, platforms, integrations" },
+      { label: "Innovation", items: "Research, prototypes, new possibilities" },
+      { label: "Capability", items: "Training, implementation, adoption" },
+    ],
     facts: [
       { label: "Core positioning", value: "From Ideation to Transformative Impact" },
       { label: "Motto", value: "Innovate • Empower • Deliver" },
@@ -190,6 +201,7 @@ const storySlides: StorySlide[] = [
     title: "Build the African technology ecosystem.",
     body: "Our broader ambition is to connect inventors, researchers, developers, industry, government, investors, decision makers, and end users.",
     detail: "The objective is more locally developed technology, stronger digital capabilities, and more employment and entrepreneurship opportunities with less dependence on imported solutions.",
+    note: "We are building toward an ecosystem where African talent and institutions can create, own, and scale technology that responds to local realities.",
     flow: ["Inventors", "Researchers", "Developers", "Industry", "Government", "Investors", "Decision makers", "End users"],
     facts: [
       { label: "Direction", value: "Locally developed technology" },
@@ -204,6 +216,7 @@ const storySlides: StorySlide[] = [
     title: "Work across the complete technology lifecycle.",
     body: "Our implementation cycle carries each solution from an early idea through research, delivery, adoption, and measurable impact.",
     detail: "This allows SAN TECH to work across the complete technology lifecycle rather than only supplying software or hardware.",
+    note: "Staying involved across the lifecycle keeps teams close to the work after launch, using feedback and evidence to improve what already exists.",
     flow: ["Ideate", "Research", "Design", "Develop", "Test", "Pilot", "Implement", "Train", "Scale", "Measure impact"],
     facts: [
       { label: "Method", value: "Lifecycle delivery" },
@@ -218,6 +231,7 @@ const storySlides: StorySlide[] = [
     title: "Technology grows through shared ownership.",
     body: "We work with the institutions, organizations, and people who shape the environments where technology must create value.",
     detail: "Our stakeholders bring context, expertise, resources, questions, and lived experience that make solutions more useful and ready for adoption.",
+    note: "We listen to each stakeholder group early so the final solution reflects real constraints, responsibilities, and opportunities.",
     items: ["Government institutions", "Banks and financial institutions", "Corporates and SMEs", "Hospitals", "Schools and universities", "NGOs and development organizations", "Industrial companies", "Property and estate managers", "Entrepreneurs and startups", "Researchers and innovators", "Youth and technology learners", "Communities and end users"],
     facts: [],
   },
@@ -456,12 +470,37 @@ export function SantechHomeStage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const slideArrowRef = useRef<HTMLSpanElement>(null);
   const [ecosystemDialogItem, setEcosystemDialogItem] = useState<string | null>(null);
+  const [storyCompact, setStoryCompact] = useState(false);
   const activeStory = storySlides[activeStoryIndex];
   const isApproachStory = activeStory.id === "approach";
   const isEcosystemStory = activeStory.id === "ecosystem";
   const isStakeholderStory = activeStory.id === "stakeholders";
   const isEcosystemDialogOpen = isEcosystemStory && ecosystemDialogItem !== null;
   const prefersReducedMotion = useReducedMotion();
+  const storyPanelRef = useRef<HTMLElement>(null);
+  const storyBodyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const panel = storyPanelRef.current;
+    if (!panel) return;
+
+    const checkStoryFit = () => {
+      const body = storyBodyRef.current;
+      if (!body) return;
+      const isOverflowing = body.scrollHeight > body.clientHeight + 24;
+      setStoryCompact((current) => current === isOverflowing ? current : isOverflowing);
+    };
+
+    const observer = new ResizeObserver(checkStoryFit);
+    observer.observe(panel);
+    const timer = window.setTimeout(checkStoryFit, 520);
+    checkStoryFit();
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, [activeStoryIndex]);
 
   useEffect(() => {
     if (!isEcosystemDialogOpen) return;
@@ -553,6 +592,8 @@ export function SantechHomeStage() {
 
             <article
               data-home-story
+              data-story-compact={storyCompact ? "true" : "false"}
+              ref={storyPanelRef}
               className="relative flex min-h-[360px] flex-col overflow-hidden border border-slate-300/80 bg-white p-4 sm:min-h-[420px] sm:p-5 lg:h-full lg:min-h-0 2xl:p-6"
               onMouseEnter={() => setStoryHovered(true)}
               onMouseLeave={() => setStoryHovered(false)}
@@ -580,7 +621,7 @@ export function SantechHomeStage() {
                 </div>
               </div>
 
-              <div className="min-h-0 flex-1">
+              <div ref={storyBodyRef} className="flex min-h-0 flex-1 flex-col">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeStory.id}
@@ -588,15 +629,15 @@ export function SantechHomeStage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex min-h-0 flex-col pb-10 pt-1"
+                    className="flex min-h-full flex-1 flex-col pb-10 pt-1"
                   >
-                  {activeStory.title && <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.2rem,1.55vw,2.1rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>}
+                  {activeStory.title && <h1 className={`font-exo mt-2 max-w-3xl font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230] ${storyCompact ? "text-[clamp(1.1rem,1.4vw,1.8rem)]" : "text-[clamp(1.2rem,1.55vw,2.1rem)]"}`}>{activeStory.title}</h1>}
                   {activeStory.variant === "services" ? (
                     <div className="mt-2 w-full max-w-none self-start">
-                      <p className={`w-full ${storyCopyClass} text-slate-700`}>
+                      <p className={`w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} text-slate-700`}>
                         <strong>SAN TECH (Smart Applications and Networking Technology)</strong> provides end-to-end technology services focused on <strong>digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, innovation, and capacity building.</strong> SAN TECH focused on <strong>digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, research, innovation, and technology capacity building.</strong>
                       </p>
-                      <p className={`mt-5 w-full ${storyCopyClass} text-brand-secondary`}>{activeStory.detail}</p>
+                      <p className={`mt-5 w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} text-brand-secondary`}>{activeStory.detail}</p>
                       {activeStory.flow && <div className="mt-4 flex w-full max-w-none flex-wrap items-center justify-start gap-x-2 gap-y-1 text-left">
                         {activeStory.flow.map((step, index) => (
                           <Fragment key={step}>
@@ -605,16 +646,18 @@ export function SantechHomeStage() {
                           </Fragment>
                         ))}
                       </div>}
-                      {activeStory.additional && <p className={`mt-5 w-full ${storyCopyClass} font-bold text-[#0a1f44]`}>{activeStory.additional}</p>}
+                      {activeStory.additional && <p className={`mt-5 w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} font-bold text-[#0a1f44]`}>{activeStory.additional}</p>}
+                      {activeStory.note && <p className={`mt-4 w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} text-slate-600`}>{activeStory.note}</p>}
                     </div>
                   ) : (
                     <>
-                      <p className={`mt-2 ${storyCopyClass}`}>{activeStory.body}</p>
-                      <p className={`mt-3 ${storyCopyClass}`}>{activeStory.detail}</p>
+                      <p className={`mt-2 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.body}</p>
+                      <p className={`mt-3 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.detail}</p>
                       {isApproachStory && activeStory.flow && <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2">
                         {activeStory.flow.map((step, index) => <span key={step} className="inline-flex items-center gap-1"><span className="px-0.5 py-1 text-[11px] font-bold uppercase tracking-[0.04em] text-[#0a1f44] sm:text-[12px]">{step}</span>{index < activeStory.flow!.length - 1 && <span className="text-[12px] text-[#0a1f44]" aria-hidden="true">{"\u2192"}</span>}</span>)}
                       </div>}
-                      {activeStory.additional && <p className={`mt-3 ${storyCopyClass}`}>{activeStory.additional}</p>}
+                      {activeStory.additional && <p className={`mt-3 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.additional}</p>}
+                      {activeStory.note && <p className={`mt-3 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.note}</p>}
                       {!isApproachStory && activeStory.flow && <div className="mt-3 flex flex-wrap gap-1.5">
                         {activeStory.flow.map((step, index) => <span key={step} className="inline-flex items-center gap-1"><span className="px-0.5 py-1 text-[11px] font-bold uppercase tracking-[0.04em] text-[#0a1f44] sm:text-[12px]">{step}</span>{index < activeStory.flow!.length - 1 && <span className="text-[12px] text-[#0a1f44]" aria-hidden="true">{"\u2192"}</span>}</span>)}
                       </div>}
@@ -625,8 +668,8 @@ export function SantechHomeStage() {
                     <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-3 py-1">
                       {activeStory.groups.map((group) => (
                         <div key={group.label} className="min-w-0">
-                          <p className="text-[10px] font-black uppercase tracking-[0.12em] text-brand-secondary sm:text-[11px]">{group.label}</p>
-                          <p className="mt-0.5 text-[11px] leading-[1.3] text-slate-500 sm:text-[12px]">{group.items}</p>
+                          <p className="text-[11px] font-black uppercase tracking-[0.12em] text-brand-secondary sm:text-[12px]">{group.label}</p>
+                          <p className="mt-0.5 text-[13px] leading-[1.35] text-slate-500 sm:text-[14px]">{group.items}</p>
                         </div>
                       ))}
                     </div>
@@ -705,7 +748,7 @@ export function SantechHomeStage() {
         })()}
       </AnimatePresence>
 
-      <div data-home-metrics className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[64px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
+      <div data-home-metrics className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[84px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
