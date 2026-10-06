@@ -118,60 +118,75 @@ function ImpactCounter({ value, count, suffix = "", reducedMotion }: { value: st
   return <motion.span ref={counterRef}>{count === undefined ? value : displayValue}</motion.span>;
 }
 
+function EVisitorsImpactCard({ stats, reducedMotion }: { stats: readonly EVisitorsImpactStat[]; reducedMotion: boolean }) {
+  const reveal = reducedMotion ? false : { opacity: 0, y: 14 };
+
+  return (
+    <motion.div
+      initial={reducedMotion ? false : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+      transition={{ duration: reducedMotion ? 0.01 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-2xl border border-white/80 bg-white px-5 py-8 shadow-[0_24px_70px_rgba(10,31,68,0.18)] sm:px-8 sm:py-9 lg:px-10 lg:py-10"
+    >
+      <motion.div
+        initial={reveal}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: reducedMotion ? 0.01 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto max-w-3xl text-center"
+      >
+        <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">Impact in the field</p>
+        <h2 className="font-exo mt-3 text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">Built with institutions. Proven in operations.</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#68718a]">E-Visitors helps teams make arrivals safer, movements clearer, and institutional records easier to trust.</p>
+      </motion.div>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        {stats.map((stat, index) => (
+          <motion.div
+            key={`${stat.label}-${index}`}
+            initial={reveal}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: reducedMotion ? 0.01 : 0.4, delay: reducedMotion ? 0 : index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            className="relative overflow-hidden rounded-xl border border-[#dbe8f1] bg-gradient-to-br from-[#f7fbfd] to-[#eaf5fa] p-4"
+          >
+            <div className="flex items-end gap-2">
+              <strong className="font-exo text-3xl font-bold tracking-[-0.05em] text-[#0a1f44]"><ImpactCounter value={stat.value} count={stat.count} suffix={stat.suffix} reducedMotion={reducedMotion} /></strong>
+              <span className="pb-1 text-xs font-black uppercase tracking-[0.14em] text-brand-secondary">{stat.label}</span>
+            </div>
+            <p className="mt-1 text-xs leading-5 text-[#68718a]">{stat.detail}</p>
+            <BorderBeam
+              size={52}
+              duration={7}
+              delay={index * 1.2}
+              initialOffset={index * 18}
+              borderWidth={1}
+              colorFrom="#09bce7"
+              colorTo="#0a1f44"
+              className="from-transparent via-brand-cyan to-transparent opacity-60"
+            />
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 export function EVisitorsImpactSection({
   stats = defaultEVisitorsImpactStats,
   partners,
 }: EVisitorsImpactSectionProps) {
   const prefersReducedMotion = useReducedMotion();
-  const reveal = prefersReducedMotion ? false : { opacity: 0, y: 14 };
   const marqueePartners = partners ?? partnerBrands;
   const partnerRows = [marqueePartners, marqueePartners, marqueePartners];
 
   return (
-    <section id="impact" className="border-b border-slate-200 bg-white px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12">
+    <section id="impact" className="relative z-20 -mt-8 border-b border-slate-200 bg-transparent px-6 pb-8 pt-0 sm:-mt-10 sm:px-10 sm:pb-10 lg:-mt-12 lg:px-16 lg:pb-12">
       <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial={reveal}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: prefersReducedMotion ? 0.01 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto max-w-3xl text-center"
-        >
-          <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">Impact in the field</p>
-          <h2 className="font-exo mt-3 text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">Built with institutions. Proven in operations.</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#68718a]">E-Visitors helps teams make arrivals safer, movements clearer, and institutional records easier to trust.</p>
-        </motion.div>
+        <EVisitorsImpactCard stats={stats} reducedMotion={Boolean(prefersReducedMotion)} />
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={`${stat.label}-${index}`}
-              initial={reveal}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.4, delay: prefersReducedMotion ? 0 : index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="relative overflow-hidden rounded-xl border border-[#dbe8f1] bg-gradient-to-br from-[#f7fbfd] to-[#eaf5fa] p-4"
-            >
-              <div className="flex items-end gap-2">
-                <strong className="font-exo text-3xl font-bold tracking-[-0.05em] text-[#0a1f44]"><ImpactCounter value={stat.value} count={stat.count} suffix={stat.suffix} reducedMotion={Boolean(prefersReducedMotion)} /></strong>
-                <span className="pb-1 text-xs font-black uppercase tracking-[0.14em] text-brand-secondary">{stat.label}</span>
-              </div>
-              <p className="mt-1 text-xs leading-5 text-[#68718a]">{stat.detail}</p>
-              <BorderBeam
-                size={52}
-                duration={7}
-                delay={index * 1.2}
-                initialOffset={index * 18}
-                borderWidth={1}
-                colorFrom="#09bce7"
-                colorTo="#0a1f44"
-                className="from-transparent via-brand-cyan to-transparent opacity-60"
-              />
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-8">
+        <div className="mt-10">
           <div className="text-center">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Partners and clients</p>
             <h3 className="font-exo mt-1 text-xl font-bold tracking-[-0.04em] text-[#0a1f44]">A growing institutional footprint.</h3>

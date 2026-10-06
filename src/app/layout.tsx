@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={exo.variable} style={{ fontFamily: "var(--font-exo), 'Exo', sans-serif" }} data-scroll-behavior="smooth">
-      <body className={exo.className} style={{ fontFamily: "var(--font-exo), 'Exo', sans-serif" }}>
+    <html lang="en" className={exo.variable} data-scroll-behavior="smooth">
+      <body className={exo.className}>
         {children}
       </body>
     </html>

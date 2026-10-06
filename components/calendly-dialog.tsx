@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { CalendarDays, X } from "lucide-react";
 
 const calendlyUrl = "https://calendly.com/d/dz7h-n6m-tsp/e-visitors-demo?hide_gdpr_banner=1&background_color=ffffff&text_color=0a1f44&primary_color=08c6e7";
 
 export function CalendlyDialog({
   className,
+  label = "Book with our Team",
 }: {
   className?: string;
+  label?: string;
 } = {}) {
   const [open, setOpen] = useState(false);
 
@@ -40,12 +43,12 @@ export function CalendlyDialog({
         }
       >
         <CalendarDays className="size-3.5" aria-hidden="true" />
-        Book with our Team
+        {label}
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
-          className="fixed inset-0 z-[100] grid overflow-y-auto bg-[#0a1f44]/55 p-3 backdrop-blur-sm sm:p-6"
+          className="fixed inset-0 z-[9999] grid overflow-y-auto bg-[#0a1f44]/55 p-3 backdrop-blur-sm sm:p-6"
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setOpen(false);
@@ -60,7 +63,7 @@ export function CalendlyDialog({
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 sm:px-5">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN TECH / Book a time</p>
-                <h2 id="calendly-dialog-title" className="font-exo mt-1 text-lg font-bold tracking-[-0.035em] text-[#0a1f44]">Book with our Team</h2>
+                <h2 id="calendly-dialog-title" className="font-exo mt-1 text-lg font-bold tracking-[-0.035em] text-[#0a1f44]">{label}</h2>
               </div>
               <button
                 type="button"
@@ -78,9 +81,9 @@ export function CalendlyDialog({
               loading="lazy"
             />
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
 }
-
