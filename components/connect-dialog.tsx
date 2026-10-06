@@ -6,7 +6,13 @@ import { ConnectRequestForm } from "@/components/connect-request-form";
 
 type ConnectTopic = "talk" | "partnership";
 
-export function ConnectDialog({ initialTopic = "talk" }: { initialTopic?: ConnectTopic }) {
+export function ConnectDialog({
+  initialTopic = "talk",
+  className,
+}: {
+  initialTopic?: ConnectTopic;
+  className?: string;
+}) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,7 +37,10 @@ export function ConnectDialog({ initialTopic = "talk" }: { initialTopic?: Connec
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-4 inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#0a1f44] px-4 text-xs font-bold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+        className={
+          className ||
+          "inline-flex h-10 items-center justify-center gap-2 bg-[#0a1f44] px-5 text-xs font-bold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
+        }
       >
         Connect with us
       </button>

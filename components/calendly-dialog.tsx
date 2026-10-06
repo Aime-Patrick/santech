@@ -5,7 +5,11 @@ import { CalendarDays, X } from "lucide-react";
 
 const calendlyUrl = "https://calendly.com/d/dz7h-n6m-tsp/e-visitors-demo?hide_gdpr_banner=1&background_color=ffffff&text_color=0a1f44&primary_color=08c6e7";
 
-export function CalendlyDialog() {
+export function CalendlyDialog({
+  className,
+}: {
+  className?: string;
+} = {}) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -30,7 +34,10 @@ export function CalendlyDialog() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-2 inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#0a1f44] px-4 text-xs font-bold text-[#0a1f44] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[#0a1f44] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+        className={
+          className ||
+          "inline-flex h-10 items-center justify-center gap-2 border border-[#0a1f44] bg-white px-5 text-xs font-bold text-[#0a1f44] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[#0a1f44] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
+        }
       >
         <CalendarDays className="size-3.5" aria-hidden="true" />
         Book with our Team

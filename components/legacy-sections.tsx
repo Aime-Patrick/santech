@@ -7,6 +7,8 @@ import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 import BubbleMenu from "./BubbleMenu";
 import { CompanyProfilePdf } from "@/components/company-profile-pdf";
+import { CertificatePanel as CertificatePanelContent } from "@/components/certificate-panel";
+import { getInlinePdfUrl } from "@/lib/pdf-utils";
 
 const identity = [
   ["Founded", "1 August 2019"],
@@ -250,14 +252,75 @@ function LegacyJourneyGrid() {
   );
 }
 
+function RecognitionCarousel({ items, prefersReducedMotion, onSelect }: { items: readonly RecognitionItem[]; prefersReducedMotion: boolean | null; onSelect: (item: RecognitionItem) => void }) {
+  const cardsPerSlide = 3;
+  const [activeSlide, setActiveSlide] = useState(0);
+  const slideCount = Math.max(1, Math.ceil(items.length / cardsPerSlide));
+  const visibleItems = items.slice(activeSlide * cardsPerSlide, activeSlide * cardsPerSlide + cardsPerSlide);
+
+  useEffect(() => {
+    if (prefersReducedMotion || slideCount < 2) return;
+    const timer = window.setInterval(() => setActiveSlide((current) => (current + 1) % slideCount), 5200);
+    return () => window.clearInterval(timer);
+  }, [prefersReducedMotion, slideCount]);
+
+  return (
+    <>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div key={activeSlide} initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -16 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {visibleItems.map((item) => {
+            const image = item.image ?? "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg";
+            return (
+              <motion.button key={item.title} type="button" onClick={() => onSelect(item)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-[0_8px_22px_rgba(10,31,68,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2" aria-label={`View details for ${item.title}`}>
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                  <Image src={image} alt={item.imageAlt ?? item.title} fill sizes="(min-width: 1280px) 240px, (min-width: 640px) 50vw, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]" />
+                  <span className="absolute left-3 top-3 rounded-md bg-white/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]">{item.year || "Recognition"}</span>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-bold leading-4 text-[#0a1f44]">{item.title}</h3>
+                  <p className="mt-1 line-clamp-3 text-sm leading-5 text-[#68718a]">{item.description}</p>
+                  <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-500">
+                    <span>Recognition · SAN TECH</span>
+                    <span className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary">View details <ArrowUpRight className="size-3.5" aria-hidden="true" /></span>
+                  </div>
+                </div>
+              </motion.button>
+            );
+          })}
+        </motion.div>
+      </AnimatePresence>
+      <div className="mt-4 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-1.5" aria-label={`Recognition group ${activeSlide + 1} of ${slideCount}`}>
+          {Array.from({ length: slideCount }, (_, index) => <button key={index} type="button" onClick={() => setActiveSlide(index)} aria-label={`Show recognition group ${index + 1}`} aria-current={activeSlide === index ? "true" : undefined} className={`h-1.5 rounded-full transition-all ${activeSlide === index ? "w-8 bg-[#0a1f44]" : "w-1.5 bg-slate-300 hover:bg-slate-400"}`} />)}
+        </div>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => setActiveSlide((activeSlide - 1 + slideCount) % slideCount)} aria-label="Previous recognition group" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ArrowUpRight className="size-4 rotate-[225deg]" aria-hidden="true" /></button>
+          <button type="button" onClick={() => setActiveSlide((activeSlide + 1) % slideCount)} aria-label="Next recognition group" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ArrowUpRight className="size-4 rotate-[-45deg]" aria-hidden="true" /></button>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function RecognitionPanel() {
   const [selectedRecognition, setSelectedRecognition] = useState<RecognitionItem | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
   const orderedRecognitions = [...recognitionItems].sort((a, b) => {
     const yearA = a.year ? Number(a.year) : -1;
     const yearB = b.year ? Number(b.year) : -1;
     return yearB - yearA;
   });
+  const activeRecognition = orderedRecognitions[activeIndex] ?? orderedRecognitions[0];
+  const recognitionImage = activeRecognition.image ?? "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg";
+
+  useEffect(() => {
+    if (prefersReducedMotion || orderedRecognitions.length < 2) return;
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % orderedRecognitions.length);
+    }, 5200);
+    return () => window.clearInterval(timer);
+  }, [orderedRecognitions.length, prefersReducedMotion]);
 
   useEffect(() => {
     if (!selectedRecognition) return;
@@ -270,30 +333,48 @@ export function RecognitionPanel() {
 
   return (
     <div className="relative" role="list" aria-label="SAN TECH recognitions and awards">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {orderedRecognitions.map((item, index) => (
-          <motion.button
-            key={item.title}
-            type="button"
-            onClick={() => setSelectedRecognition(item)}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, delay: prefersReducedMotion ? 0 : index * 0.025, ease: "easeOut" }}
-            className="group relative flex min-h-[108px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 pl-5 text-left shadow-[0_6px_18px_rgba(10,31,68,0.05)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-secondary/50 hover:shadow-[0_16px_32px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
-          >
-            <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-brand-cyan via-brand-secondary to-[#0a1f44]" aria-hidden="true" />
-            <span className="pointer-events-none absolute -right-7 -top-7 size-20 rounded-full bg-[#e8f8fc] transition-transform duration-300 group-hover:scale-150" aria-hidden="true" />
-            <div className="relative flex items-center justify-between gap-3">
-              <span className="inline-flex rounded-full bg-[#e8f1fc] px-2 py-1 text-[10px] font-black tracking-[0.12em] text-brand-secondary">{item.year || "DATE N/A"}</span>
-              <span className="text-[10px] font-black tracking-[0.16em] text-slate-400">{String(index + 1).padStart(2, "0")}</span>
+      <RecognitionCarousel items={orderedRecognitions} prefersReducedMotion={prefersReducedMotion} onSelect={setSelectedRecognition} />
+      <div className="hidden">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.button
+          key={activeRecognition.title}
+          type="button"
+          onClick={() => setSelectedRecognition(activeRecognition)}
+          initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={prefersReducedMotion ? undefined : { opacity: 0, x: -16 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}
+          className="group block w-full max-w-xs overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-[0_8px_22px_rgba(10,31,68,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+          aria-label={`View details for ${activeRecognition.title}`}
+        >
+          <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+            <Image src={recognitionImage} alt={activeRecognition.imageAlt ?? activeRecognition.title} fill sizes="(min-width: 1024px) 384px, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]" />
+            <span className="absolute left-3 top-3 rounded-md bg-white/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]">{activeRecognition.year || "Recognition"}</span>
+          </div>
+          <div className="p-4 sm:p-5">
+            <h3 className="text-sm font-bold leading-4 text-[#0a1f44] sm:text-base">{activeRecognition.title}</h3>
+            <p className="mt-1 line-clamp-3 text-sm leading-5 text-[#68718a]">{activeRecognition.description}</p>
+            <div className="mt-3 flex items-center justify-between gap-4 text-xs text-slate-500">
+              <span>Recognition · SAN TECH</span>
+              <span className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary">View details <ArrowUpRight className="size-3.5" aria-hidden="true" /></span>
             </div>
-            <h3 className="relative mt-3 text-sm font-bold leading-4 text-[#0a1f44]">{item.title}</h3>
-            <span className="relative mt-auto inline-flex items-center gap-2 pt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#0a1f44] transition-colors group-hover:text-brand-secondary">
-              View details
-              <ArrowUpRight className="size-3.5" aria-hidden="true" />
-            </span>
-          </motion.button>
-        ))}
+          </div>
+        </motion.button>
+      </AnimatePresence>
+      </div>
+
+      <div className="hidden">
+      <div className="mt-4 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-1.5" aria-label={`Recognition ${activeIndex + 1} of ${orderedRecognitions.length}`}>
+          {orderedRecognitions.map((item, index) => (
+            <button key={item.title} type="button" onClick={() => setActiveIndex(index)} aria-label={`Show ${item.title}`} aria-current={activeIndex === index ? "true" : undefined} className={`h-1.5 rounded-full transition-all ${activeIndex === index ? "w-8 bg-[#0a1f44]" : "w-1.5 bg-slate-300 hover:bg-slate-400"}`} />
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => setActiveIndex((activeIndex - 1 + orderedRecognitions.length) % orderedRecognitions.length)} aria-label="Previous recognition" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ArrowUpRight className="size-4 rotate-[225deg]" aria-hidden="true" /></button>
+          <button type="button" onClick={() => setActiveIndex((activeIndex + 1) % orderedRecognitions.length)} aria-label="Next recognition" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ArrowUpRight className="size-4 rotate-[-45deg]" aria-hidden="true" /></button>
+        </div>
+      </div>
       </div>
 
       {selectedRecognition && createPortal(
@@ -457,20 +538,14 @@ export function FocusPanel() {
 export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE (1).pdf" }: { pdfUrl?: string }) {
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
+    <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-8">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Company profile</p>
         <h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">From Ideation to Transformative Impact.</h1>
         <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH stands for Smart Applications and Networking Technology. Founded in Rwanda in 2019, with a branch in Bamako, Mali, we develop practical digital solutions, technology products, and technical capacity for organizations, businesses, institutions, and communities.</p>
       </div>
-      <div className="border-l border-slate-300 pl-6 lg:pl-10">
-        <div className="flex items-center justify-between gap-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Company profile document</p>
-          <a href={pdfUrl} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
-            Open full profile <ArrowUpRight className="size-3.5" aria-hidden="true" />
-          </a>
-        </div>
-        <div className="mt-4 overflow-hidden border border-slate-200 bg-slate-100">
+      <div className="border-l border-slate-300 pl-4 lg:pl-6">
+        <div>
           <CompanyProfilePdf url={pdfUrl} />
         </div>
         <div className="hidden mt-5 grid gap-4 border-t border-slate-300 pt-4 sm:grid-cols-2">
@@ -484,22 +559,68 @@ export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE
   );
 }
 
-export function CertificatePanel() {
-  const pdfUrl = "/images/SAN TECH COMPANY PROFILE (1).pdf";
+type CertificateItem = {
+  title: string;
+  issuer: string;
+  image: string;
+  file?: string;
+  orientation: "portrait" | "landscape" | "square";
+};
+
+const certificateItems: readonly CertificateItem[] = [
+  { title: "Data Processor Certificate", issuer: "National Cyber Security Authority · Data Protection and Privacy Office", image: "/images/SAN TECH Data Processor Certificate_page-0001.jpg", file: "/images/SAN TECH Data Processor Certificate.pdf", orientation: "portrait" },
+  { title: "EdTech Trust Seal", issuer: "Digital Bridge Institute", image: "/certificates/edtech-trust-seal.png", orientation: "square" },
+  { title: "Digital Innovation Recognition", issuer: "SAN TECH innovation ecosystem", image: "/certificates/recognition-digital-innovation.png", orientation: "square" },
+];
+
+function CertificateGallery() {
+  const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
+
+  useEffect(() => {
+    if (!selectedCertificate) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedCertificate(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedCertificate]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[0.7fr_1.3fr] lg:gap-10">
-      <div>
-        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Certificate</p>
-        <h1 className="font-exo mt-4 max-w-md text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">SAN TECH company profile.</h1>
-        <p className="mt-6 max-w-md text-justify text-base leading-7 text-[#68718a]">View the official SAN TECH company profile directly on this page, or open the full document in a separate tab.</p>
-        <a href={pdfUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
-          Open full PDF <ArrowUpRight className="size-3.5" aria-hidden="true" />
-        </a>
+    <>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {certificateItems.map((certificate) => (
+          <button key={certificate.title} type="button" onClick={() => setSelectedCertificate(certificate)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-[0_8px_22px_rgba(10,31,68,0.05)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+            <div className={`relative overflow-hidden bg-[#eef4fa] ${certificate.orientation === "portrait" ? "aspect-[3/4]" : "aspect-square"}`}>
+              <Image src={certificate.image} alt={certificate.title} fill sizes="(min-width: 640px) 260px, 100vw" className="object-contain p-3 transition-transform duration-500 group-hover:scale-[1.03]" />
+            </div>
+            <div className="p-4">
+              <p className="text-sm font-bold leading-5 text-[#0a1f44]">{certificate.title}</p>
+              <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#68718a]">{certificate.issuer}</p>
+              <span className="mt-3 inline-flex text-[10px] font-black uppercase tracking-[0.14em] text-brand-secondary">View certificate <ArrowUpRight className="ml-1 size-3.5" aria-hidden="true" /></span>
+            </div>
+          </button>
+        ))}
       </div>
-      <div className="overflow-hidden border border-slate-200 bg-slate-100">
-        <CompanyProfilePdf url={pdfUrl} />
-      </div>
-    </div>
+
+      {selectedCertificate && createPortal(
+        <AnimatePresence>
+          <motion.div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/65 p-3 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-labelledby="certificate-dialog-title" onMouseDown={() => setSelectedCertificate(null)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div className="relative flex max-h-[94svh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-[0_24px_70px_rgba(7,21,45,0.3)]" onMouseDown={(event) => event.stopPropagation()} initial={{ opacity: 0, y: 14, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.98 }} transition={{ duration: 0.22, ease: "easeOut" }}>
+              <div className="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
+                <div><p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">Certificate</p><h2 id="certificate-dialog-title" className="font-exo mt-1 text-lg font-bold leading-tight text-[#0a1f44] sm:text-xl">{selectedCertificate.title}</h2><p className="mt-1 text-xs text-slate-500">{selectedCertificate.issuer}</p></div>
+                <button type="button" onClick={() => setSelectedCertificate(null)} aria-label="Close certificate viewer" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" aria-hidden="true" /></button>
+              </div>
+              <div className="min-h-0 flex-1 overflow-auto bg-[#eef4fa] p-3 sm:p-6"><div className={`relative mx-auto w-full ${selectedCertificate.orientation === "landscape" ? "h-[52svh] max-w-5xl" : selectedCertificate.orientation === "portrait" ? "h-[70svh] max-w-xl" : "h-[65svh] max-w-2xl"}`}><Image src={selectedCertificate.image} alt={selectedCertificate.title} fill sizes="(min-width: 1024px) 960px, 100vw" className="object-contain" /></div></div>
+              {selectedCertificate.file && <div className="flex shrink-0 justify-end border-t border-slate-200 px-5 py-3 sm:px-6"><a href={getInlinePdfUrl(selectedCertificate.file)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">Open PDF <ArrowUpRight className="size-3.5" aria-hidden="true" /></a></div>}
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>,
+        document.body,
+      )}
+    </>
   );
+}
+
+export function CertificatePanel() {
+  return <CertificatePanelContent />;
 }

@@ -138,7 +138,7 @@ export function SanHubInsightsSection() {
                     src={article.image ?? `https://i.ytimg.com/vi/${article.videoId}/hqdefault.jpg`}
                     alt=""
                     loading={index === 0 ? "eager" : "lazy"}
-                    className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                   {article.videoId && <span className="absolute bottom-3 left-3 bg-[#0a1f44] px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-white">Watch video</span>}
                 </div>

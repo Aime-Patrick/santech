@@ -56,7 +56,7 @@ export function SanHubAboutMoments() {
         {visibleMoments.map((moment) => (
           <figure key={moment.title} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_8px_24px_rgba(10,31,68,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-secondary/40 hover:shadow-[0_16px_36px_rgba(10,31,68,0.12)]">
             <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-              <Image src={moment.image} alt={moment.alt} fill loading={page === 0 ? "eager" : "lazy"} sizes="(min-width: 640px) 33vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              <Image src={moment.image} alt={moment.alt} fill loading={page === 0 ? "eager" : "lazy"} sizes="(min-width: 640px) 33vw, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-105" />
               <span className="absolute left-3 top-3 rounded-full bg-[#07152d]/80 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-white backdrop-blur-sm">{moment.category}</span>
             </div>
             <figcaption className="p-4">

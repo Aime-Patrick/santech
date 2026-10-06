@@ -1,79 +1,60 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import "react-pdf/dist/Page/TextLayer.css";
-import "react-pdf/dist/Page/AnnotationLayer.css";
+import { useState } from "react";
+import { FileText, AlertCircle, ExternalLink } from "lucide-react";
+import { getInlinePdfUrl } from "@/lib/pdf-utils";
 
-type PdfModule = typeof import("react-pdf");
-
+/**
+ * Displays a PDF using the browser's built-in PDF viewer via an iframe.
+ * 
+ * Why not react-pdf?
+ * - react-pdf requires exact pdfjs-dist version matching (worker ↔ core mismatch = silent failure)
+ * - ESM/CJS conflicts with Next.js Turbopack
+ * - Large PDFs (~19MB) crash the ArrayBuffer fetch approach
+ * - Every modern browser already has a built-in PDF viewer that handles all of this
+ */
 export function PdfDocumentViewer({ url }: { url: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [pdfModule, setPdfModule] = useState<PdfModule | null>(null);
-  const [loadError, setLoadError] = useState(false);
-  const [pageWidth, setPageWidth] = useState(640);
-  const [numPages, setNumPages] = useState(0);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [iframeError, setIframeError] = useState(false);
+  const inlineUrl = getInlinePdfUrl(url);
 
-  useEffect(() => {
-    let active = true;
-    import("react-pdf").then((module) => {
-      module.pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${module.pdfjs.version}/build/pdf.worker.min.mjs`;
-      if (active) setPdfModule(module);
-    }).catch(() => {
-      if (active) setLoadError(true);
-    });
-
-    return () => { active = false; };
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || typeof ResizeObserver === "undefined") return;
-
-    const updateWidth = () => setPageWidth(Math.max(280, Math.min(container.clientWidth - 24, 760)));
-    updateWidth();
-    const observer = new ResizeObserver(updateWidth);
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
-
-  if (loadError) {
-    return <div className="grid min-h-[300px] place-items-center bg-slate-100 p-6 text-center text-xs text-red-600 sm:min-h-[380px]">Unable to initialize the PDF viewer.</div>;
+  if (iframeError) {
+    return (
+      <div className="grid min-h-[420px] place-items-center gap-4 bg-slate-50 p-8 text-center">
+        <div className="flex flex-col items-center gap-3">
+          <AlertCircle className="size-8 text-slate-400" />
+          <p className="text-sm font-medium text-slate-600">
+            Your browser could not display this PDF inline.
+          </p>
+          <a
+            href={inlineUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+          >
+            Open company profile
+            <ExternalLink className="size-3.5" aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    );
   }
-
-  if (!pdfModule) {
-    return <div className="grid min-h-[300px] place-items-center bg-slate-100 text-xs text-slate-500 sm:min-h-[380px]">Loading company profile…</div>;
-  }
-
-  const { Document, Page } = pdfModule;
 
   return (
-    <div ref={containerRef} className="overflow-hidden bg-slate-100 p-3">
-      <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-3 text-[10px] font-black uppercase tracking-[0.12em] text-[#0a1f44]">
-        <span>Company profile</span>
-        <span>{numPages > 0 ? `Page ${pageNumber} of ${numPages}` : "Loading PDF"}</span>
-      </div>
-
-      <div className="mt-3 flex min-h-[300px] justify-center overflow-auto bg-slate-200 p-3 sm:min-h-[380px]">
-        <Document
-          file={url}
-          onLoadSuccess={({ numPages: loadedPages }) => {
-            setNumPages(loadedPages);
-            setPageNumber(1);
-          }}
-          loading={<p className="self-center text-xs text-slate-500">Loading company profile…</p>}
-          error={<p className="self-center text-xs text-red-600">Unable to load the company profile PDF.</p>}
-        >
-          <Page pageNumber={pageNumber} width={pageWidth} renderTextLayer={false} renderAnnotationLayer={false} />
-        </Document>
-      </div>
-
-      {numPages > 1 && (
-        <div className="mt-3 flex items-center justify-between gap-3">
-          <button type="button" disabled={pageNumber <= 1} onClick={() => setPageNumber((current) => Math.max(1, current - 1))} className="rounded-md border border-slate-300 px-3 py-1.5 text-[10px] font-bold text-[#0a1f44] transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
-          <button type="button" disabled={pageNumber >= numPages} onClick={() => setPageNumber((current) => Math.min(numPages, current + 1))} className="rounded-md border border-slate-300 px-3 py-1.5 text-[10px] font-bold text-[#0a1f44] transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-40">Next</button>
+    <div className="relative min-h-[420px] bg-slate-100 sm:min-h-[520px]">
+      {/* Loading state shown behind the iframe */}
+      <div className="absolute inset-0 z-0 grid place-items-center">
+        <div className="flex flex-col items-center gap-3 text-slate-400">
+          <FileText className="size-8 animate-pulse" />
+          <p className="text-xs font-medium">Loading company profile…</p>
         </div>
-      )}
+      </div>
+
+      <iframe
+        src={inlineUrl}
+        title="SAN TECH Company Profile"
+        className="relative z-10 h-full min-h-[420px] w-full border-0 sm:min-h-[520px]"
+        onError={() => setIframeError(true)}
+      />
     </div>
   );
 }

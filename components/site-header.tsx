@@ -94,7 +94,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
 
   useEffect(() => {
     const savedLang = localStorage.getItem("santech_lang") as Language | null;
-    if (savedLang === "en" || savedLang === "rw" || savedLang === "fr" || savedLang === "sw") {
+    if (savedLang && languageOptions.some((option) => option.code === savedLang)) {
       setLanguage(savedLang);
     }
   }, []);
@@ -206,7 +206,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
 
             <div className="relative z-[110] flex items-center gap-1.5 border-l border-slate-200 pl-1.5 2xl:gap-2.5 2xl:pl-2">
               {/* Language Selector Dropdown */}
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative" ref={dropdownRef} data-no-translate>
                 <button
                   type="button"
                   onClick={() => setLangDropdownOpen(!langDropdownOpen)}
@@ -253,7 +253,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 xl:hidden">
-            <div ref={mobileDropdownRef} className="relative">
+            <div ref={mobileDropdownRef} className="relative" data-no-translate>
               <button
                 type="button"
                 onClick={() => setLangDropdownOpen((open) => !open)}

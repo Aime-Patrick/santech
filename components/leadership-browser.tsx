@@ -25,7 +25,7 @@ function TeamProfileCard({ member }: { member: (typeof teamMembers)[number] }) {
   return (
     <article className="relative min-w-0">
       <div className="relative h-80 overflow-hidden bg-[#dceaf8] sm:h-[360px]">
-        <Image src={member.image} alt={`${member.position} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-cover" />
+        <Image src={member.image} alt={`${member.position} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-cover object-top" />
       </div>
       <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-4 bg-white/95 p-3.5 backdrop-blur-sm sm:p-4">
         <div>

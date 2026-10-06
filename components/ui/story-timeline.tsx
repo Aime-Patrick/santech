@@ -134,7 +134,7 @@ export function StoryTimeline({ items, ariaLabel = "Story timeline" }: StoryTime
               <div className="grid gap-5 border-y border-[#d8e4ef] py-5 sm:grid-cols-[210px_minmax(0,1fr)] sm:items-center sm:gap-8">
                 {activeItem.image && (
                   <figure className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#dce8f2]">
-                    <Image src={activeItem.image} alt={activeItem.imageAlt ?? `${activeItem.title} milestone`} fill sizes="(min-width: 640px) 210px, 100vw" className="object-cover" />
+                    <Image src={activeItem.image} alt={activeItem.imageAlt ?? `${activeItem.title} milestone`} fill sizes="(min-width: 640px) 210px, 100vw" className="object-cover object-top" />
                     <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0a1f44]/75 to-transparent px-3 pb-2 pt-7 text-[9px] font-black uppercase tracking-[0.16em] text-white/90">SAN TECH / {activeItem.year}</figcaption>
                   </figure>
                 )}

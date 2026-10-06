@@ -417,7 +417,7 @@ export function HeroVisual() {
                         src={slide.image}
                         alt={slide.titleEn}
                         fill
-                        className="object-cover object-center"
+                        className="object-cover object-top"
                         priority
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
@@ -502,7 +502,7 @@ export function HeroVisual() {
                     src={image.src}
                     alt={image.alt}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 1024px) 30vw, 20vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />

@@ -5,17 +5,20 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Tiles } from "@/components/ui/tiles";
 import { CircuitBackground } from "@/components/ui/circuit-background";
+import { TranslationProvider } from "@/components/translation-provider";
 
 type Action = { label: string; href: string; tone?: "primary" | "secondary" };
 
 export function PublicPage({ children }: { children: ReactNode }) {
   return (
     <CircuitBackground className="text-slate-900">
-      <div className="flex min-h-svh flex-col">
-        <SiteHeader />
-        <main className="min-h-0 flex-1 pt-28">{children}</main>
-        <SiteFooter />
-      </div>
+      <TranslationProvider>
+        <div className="flex min-h-svh flex-col">
+          <SiteHeader />
+          <main className="min-h-0 flex-1 pt-28">{children}</main>
+          <SiteFooter />
+        </div>
+      </TranslationProvider>
     </CircuitBackground>
   );
 }
