@@ -570,7 +570,6 @@ type CertificateItem = {
 const certificateItems: readonly CertificateItem[] = [
   { title: "Data Processor Certificate", issuer: "National Cyber Security Authority · Data Protection and Privacy Office", image: "/images/SAN TECH Data Processor Certificate_page-0001.jpg", file: "/images/SAN TECH Data Processor Certificate.pdf", orientation: "portrait" },
   { title: "EdTech Trust Seal", issuer: "Digital Bridge Institute", image: "/certificates/edtech-trust-seal.png", orientation: "square" },
-  { title: "Digital Innovation Recognition", issuer: "SAN TECH innovation ecosystem", image: "/certificates/recognition-digital-innovation.png", orientation: "square" },
 ];
 
 function CertificateGallery() {

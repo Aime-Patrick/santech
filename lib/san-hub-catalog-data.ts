@@ -10,6 +10,17 @@ export const sanHubCategories = [
 
 export type SanHubCategory = (typeof sanHubCategories)[number];
 
+export const sanHubCourseFocusAreas = [
+  "Web development",
+  "Artificial intelligence",
+  "Cybersecurity",
+  "IoT & connected devices",
+  "Embedded technology",
+  "Digital transformation",
+] as const;
+
+export type SanHubCourseFocus = (typeof sanHubCourseFocusAreas)[number];
+
 export type SanHubCatalogItem = {
   id: string;
   category: SanHubCategory;
@@ -20,14 +31,15 @@ export type SanHubCatalogItem = {
   format: string;
   duration: string;
   level: string;
+  focus?: SanHubCourseFocus;
   badge?: string;
   href: string;
 };
 
 export const sanHubCatalogItems: readonly SanHubCatalogItem[] = [
-  { id: "full-stack-software-engineering", category: "Courses", title: "Full-Stack Software Engineering", provider: "SAN TECH / SAN HUB", description: "Build reliable web and platform experiences from user needs to deployment.", image: "/images/team.jpg", format: "Cohort", duration: "16 weeks", level: "Intermediate", badge: "Featured pathway", href: "/san-hub/course/full-stack-software-engineering" },
-  { id: "applied-ai-machine-learning", category: "Courses", title: "Applied AI & Machine Learning", provider: "SAN TECH / SAN HUB", description: "Use computer vision, analytics, and responsible AI to solve practical problems.", image: "/images/summit.jpg", format: "Weekend labs", duration: "12 weeks", level: "All levels", href: "/san-hub/course/applied-ai-machine-learning" },
-  { id: "cybersecurity-defense", category: "Courses", title: "Cybersecurity & Threat Intelligence", provider: "SAN TECH / SAN HUB", description: "Learn the habits, tools, and thinking needed to protect systems and information.", image: "/images/fieldwork.jpg", format: "Intensive labs", duration: "10 weeks", level: "Intermediate", href: "/san-hub/course/cybersecurity-defense" },
+  { id: "full-stack-software-engineering", category: "Courses", focus: "Web development", title: "Full-Stack Software Engineering", provider: "SAN TECH / SAN HUB", description: "Build reliable web and platform experiences from user needs to deployment.", image: "/images/team.jpg", format: "Cohort", duration: "16 weeks", level: "Intermediate", badge: "Featured pathway", href: "/san-hub/course/full-stack-software-engineering" },
+  { id: "applied-ai-machine-learning", category: "Courses", focus: "Artificial intelligence", title: "Applied AI & Machine Learning", provider: "SAN TECH / SAN HUB", description: "Use computer vision, analytics, and responsible AI to solve practical problems.", image: "/images/summit.jpg", format: "Weekend labs", duration: "12 weeks", level: "All levels", href: "/san-hub/course/applied-ai-machine-learning" },
+  { id: "cybersecurity-defense", category: "Courses", focus: "Cybersecurity", title: "Cybersecurity & Threat Intelligence", provider: "SAN TECH / SAN HUB", description: "Learn the habits, tools, and thinking needed to protect systems and information.", image: "/images/fieldwork.jpg", format: "Intensive labs", duration: "10 weeks", level: "Intermediate", href: "/san-hub/course/cybersecurity-defense" },
   { id: "build-with-ai", category: "Upcoming training", title: "Build with AI: practical problem solving", provider: "SAN HUB learning calendar", description: "A guided cohort for turning everyday challenges into useful, testable AI workflows.", image: "/images/graduates.jpg", format: "Evening cohort", duration: "Starts 14 Oct 2026", level: "Beginner friendly", badge: "Next cohort", href: "/connect?topic=upcoming-training" },
   { id: "digital-product-workshop", category: "Upcoming training", title: "Designing a useful digital product", provider: "SAN HUB learning calendar", description: "A focused workshop on research, prototyping, and making a product easier to use.", image: "/images/team.jpg", format: "One-day workshop", duration: "03 Nov 2026", level: "Open to all", href: "/connect?topic=upcoming-training" },
   { id: "innovation-challenge-lab", category: "Innovation programs", title: "Innovation Challenge Lab", provider: "SAN TECH innovation team", description: "Move a promising question from research and prototyping toward a tested possibility.", image: "/images/summit.jpg", format: "Challenge lab", duration: "8-week cycle", level: "Teams and innovators", badge: "Build with us", href: "/innovation-lab" },

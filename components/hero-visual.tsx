@@ -42,9 +42,6 @@ const heroImageItems = [
   { src: "/images/fieldwork.jpg", alt: "SAN TECH community fieldwork" },
   { src: "/images/summit.jpg", alt: "SAN TECH innovation summit" },
   { src: "/images/graduates.jpg", alt: "SAN TECH graduates and learners" },
-  { src: "/certificates/recognition-digital-innovation.png", alt: "SAN TECH digital innovation recognition" },
-  { src: "/certificates/recognition-community-impact.png", alt: "SAN TECH community impact recognition" },
-  { src: "/certificates/recognition-technology-excellence.png", alt: "SAN TECH technology excellence recognition" },
   { src: "/troph.jpg", alt: "SAN TECH Best Exhibitor recognition" },
   { src: "/certificates/edtech-trust-seal.png", alt: "SAN TECH EdTech trust seal" },
 ] as const;
@@ -121,7 +118,7 @@ const heroSlides: SlideData[] = [
   },
   {
     id: "e-visitors",
-    gallery: [heroImageItems[7], heroImageItems[8], heroImageItems[6]],
+    gallery: [heroImageItems[4], heroImageItems[5], heroImageItems[0]],
     eyebrowEn: "E-VISITORS · FLAGSHIP PRODUCT",
     eyebrowRw: "E-VISITORS · SISITEMU Y'ABASHYITSI",
     titleEn: "Smart Visitor, Access & Attendance Management Platform",
@@ -143,7 +140,7 @@ const heroSlides: SlideData[] = [
   },
   {
     id: "software-dev",
-    gallery: [heroImageItems[6], heroImageItems[4], heroImageItems[2]],
+    gallery: [heroImageItems[5], heroImageItems[4], heroImageItems[2]],
     eyebrowEn: "SOFTWARE DEVELOPMENT & AI · SHIP",
     eyebrowRw: "IKORANABUHANGA & AI · POROGARAMU",
     titleEn: "Engineering Resilient Software, AI Systems & Embedded IoT",
@@ -165,7 +162,7 @@ const heroSlides: SlideData[] = [
   },
   {
     id: "san-hub",
-    gallery: [heroImageItems[3], heroImageItems[5], heroImageItems[7]],
+    gallery: [heroImageItems[3], heroImageItems[5], heroImageItems[1]],
     eyebrowEn: "SAN HUB · DIGITAL ECOSYSTEM",
     eyebrowRw: "SAN HUB · GUHANGA UDUSHYA",
     titleEn: "Practical Capacity Building for the Next Generation of African Creators",

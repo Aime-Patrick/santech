@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, BarChart3, Building2, ChevronDown, Hospital, Landmark, Pause, Play, ScanLine, School, ShieldCheck, Users, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ArrowUp, BarChart3, Building2, ChevronDown, Hospital, Landmark, Pause, Play, ScanLine, School, ShieldCheck, Users, Volume2, VolumeX } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -91,6 +91,7 @@ export function EVisitorsProductPage() {
   const [activeJourney, setActiveJourney] = useState(0);
   const [activeEnvironment, setActiveEnvironment] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -107,6 +108,13 @@ export function EVisitorsProductPage() {
 
     return () => window.clearInterval(journeyTimer);
   }, [activeJourneySteps.length, prefersReducedMotion]);
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 480);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useGSAP(() => {
     if (prefersReducedMotion) return;
@@ -155,6 +163,11 @@ export function EVisitorsProductPage() {
   function selectEnvironment(index: number) {
     setActiveEnvironment(index);
     setActiveJourney(0);
+  }
+
+  function scrollToTop() {
+    setShowScrollTop(false);
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
   }
 
   return (
@@ -261,6 +274,25 @@ export function EVisitorsProductPage() {
           </div>
         </div>
       </section>
+
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            type="button"
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 10, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={prefersReducedMotion ? undefined : { opacity: 0, y: 10, scale: 0.9 }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }}
+            whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+            className="fixed bottom-6 right-6 z-[110] grid size-12 place-items-center rounded-full bg-brand-cyan text-[#07152d] shadow-[0_12px_30px_rgba(0,163,224,0.32)] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 sm:bottom-8 sm:right-8"
+          >
+            <ArrowUp className="size-5" aria-hidden="true" />
+          </motion.button>
+        )}
+      </AnimatePresence>
       </div>
     </PublicPage>
   );

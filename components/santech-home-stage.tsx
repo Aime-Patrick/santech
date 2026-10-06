@@ -35,8 +35,7 @@ export type PartnerBrand = {
   government?: boolean;
 };
 
-const regularStoryCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] 2xl:text-[18px]";
-const compactStoryCopyClass = "max-w-none text-[14px] leading-[1.35] tracking-[0.003em] text-justify text-slate-600 sm:text-[15px] 2xl:text-[16px]";
+const storyCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] 2xl:text-[18px]";
 
 function ecosystemEmoji(item: string) {
   if (item.startsWith("SAN TECH")) return "⚙️";
@@ -200,12 +199,12 @@ const storySlides: StorySlide[] = [
     eyebrow: "SAN TECH / LONG-TERM DIRECTION",
     title: "Build the African technology ecosystem.",
     body: "Our broader ambition is to connect inventors, researchers, developers, industry, government, investors, decision makers, and end users.",
-    detail: "The objective is more locally developed technology, stronger digital capabilities, and more employment and entrepreneurship opportunities with less dependence on imported solutions.",
+    detail: "The objective is more Local Innovation, stronger digital capabilities, and more Work & Enterprise opportunities with less dependence on imported solutions.",
     note: "We are building toward an ecosystem where African talent and institutions can create, own, and scale technology that responds to local realities.",
     flow: ["Inventors", "Researchers", "Developers", "Industry", "Government", "Investors", "Decision makers", "End users"],
     facts: [
-      { label: "Direction", value: "Locally developed technology" },
-      { label: "Opportunity", value: "Employment and entrepreneurship" },
+      { label: "Direction", value: "Local Innovation" },
+      { label: "Opportunity", value: "Work & Enterprise" },
       { label: "Result", value: "Stronger digital capability" },
     ],
   },
@@ -470,7 +469,7 @@ export function SantechHomeStage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const slideArrowRef = useRef<HTMLSpanElement>(null);
   const [ecosystemDialogItem, setEcosystemDialogItem] = useState<string | null>(null);
-  const [storyCompact, setStoryCompact] = useState(false);
+  const [storyScale, setStoryScale] = useState(1);
   const activeStory = storySlides[activeStoryIndex];
   const isApproachStory = activeStory.id === "approach";
   const isEcosystemStory = activeStory.id === "ecosystem";
@@ -479,6 +478,7 @@ export function SantechHomeStage() {
   const prefersReducedMotion = useReducedMotion();
   const storyPanelRef = useRef<HTMLElement>(null);
   const storyBodyRef = useRef<HTMLDivElement>(null);
+  const storyContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const panel = storyPanelRef.current;
@@ -486,13 +486,21 @@ export function SantechHomeStage() {
 
     const checkStoryFit = () => {
       const body = storyBodyRef.current;
-      if (!body) return;
-      const isOverflowing = body.scrollHeight > body.clientHeight + 24;
-      setStoryCompact((current) => current === isOverflowing ? current : isOverflowing);
+      const content = storyContentRef.current;
+      if (!body || !content || body.clientHeight <= 0) return;
+
+      const availableHeight = body.clientHeight - 8;
+      const contentHeight = content.scrollHeight;
+      const nextScale = contentHeight > availableHeight
+        ? Math.max(0.72, Math.min(1, availableHeight / contentHeight))
+        : 1;
+
+      setStoryScale((current) => Math.abs(current - nextScale) < 0.01 ? current : nextScale);
     };
 
     const observer = new ResizeObserver(checkStoryFit);
     observer.observe(panel);
+    if (storyBodyRef.current) observer.observe(storyBodyRef.current);
     const timer = window.setTimeout(checkStoryFit, 520);
     checkStoryFit();
 
@@ -522,6 +530,7 @@ export function SantechHomeStage() {
     if (!storyPlaying || storyHovered) return;
     const timer = window.setTimeout(() => {
       setEcosystemDialogItem(null);
+      setStoryScale(1);
       setActiveStoryIndex((current) => (current + 1) % storySlides.length);
     }, 6800);
 
@@ -592,7 +601,7 @@ export function SantechHomeStage() {
 
             <article
               data-home-story
-              data-story-compact={storyCompact ? "true" : "false"}
+              data-story-scale={storyScale.toFixed(2)}
               ref={storyPanelRef}
               className="relative flex min-h-[360px] flex-col overflow-hidden border border-slate-300/80 bg-white p-4 sm:min-h-[420px] sm:p-5 lg:h-full lg:min-h-0 2xl:p-6"
               onMouseEnter={() => setStoryHovered(true)}
@@ -609,7 +618,7 @@ export function SantechHomeStage() {
                       <button
                         key={slide.id}
                         type="button"
-                        onClick={() => { setActiveStoryIndex(index); setEcosystemDialogItem(null); }}
+                        onClick={() => { setStoryScale(1); setActiveStoryIndex(index); setEcosystemDialogItem(null); }}
                         aria-label={`Show slide ${slide.index}: ${slide.eyebrow}`}
                         aria-current={index === activeStoryIndex ? "true" : undefined}
                         className={`px-1 text-[11px] font-black tracking-[0.12em] transition-colors duration-200 ${index === activeStoryIndex ? "text-[#0a1f44]" : "text-slate-400 hover:text-[#0a1f44]"}`}
@@ -631,13 +640,14 @@ export function SantechHomeStage() {
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     className="flex min-h-full flex-1 flex-col pb-10 pt-1"
                   >
-                  {activeStory.title && <h1 className={`font-exo mt-2 max-w-3xl font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230] ${storyCompact ? "text-[clamp(1.1rem,1.4vw,1.8rem)]" : "text-[clamp(1.2rem,1.55vw,2.1rem)]"}`}>{activeStory.title}</h1>}
+                  <div ref={storyContentRef} className="flex min-h-full flex-1 flex-col" style={{ transform: `scale(${storyScale})`, transformOrigin: "top left", width: `${100 / storyScale}%` }}>
+                  {activeStory.title && <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.2rem,1.55vw,2.1rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>}
                   {activeStory.variant === "services" ? (
                     <div className="mt-2 w-full max-w-none self-start">
-                      <p className={`w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} text-slate-700`}>
+                      <p className={`w-full ${storyCopyClass} text-slate-700`}>
                         <strong>SAN TECH (Smart Applications and Networking Technology)</strong> provides end-to-end technology services focused on <strong>digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, innovation, and capacity building.</strong> SAN TECH focused on <strong>digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, research, innovation, and technology capacity building.</strong>
                       </p>
-                      <p className={`mt-5 w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} text-brand-secondary`}>{activeStory.detail}</p>
+                      <p className={`mt-2 w-full ${storyCopyClass} text-brand-secondary`}>{activeStory.detail}</p>
                       {activeStory.flow && <div className="mt-4 flex w-full max-w-none flex-wrap items-center justify-start gap-x-2 gap-y-1 text-left">
                         {activeStory.flow.map((step, index) => (
                           <Fragment key={step}>
@@ -646,18 +656,18 @@ export function SantechHomeStage() {
                           </Fragment>
                         ))}
                       </div>}
-                      {activeStory.additional && <p className={`mt-5 w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} font-bold text-[#0a1f44]`}>{activeStory.additional}</p>}
-                      {activeStory.note && <p className={`mt-4 w-full ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass} text-slate-600`}>{activeStory.note}</p>}
+                      {activeStory.additional && <p className={`mt-2 w-full ${storyCopyClass} font-bold text-[#0a1f44]`}>{activeStory.additional}</p>}
+                      {activeStory.note && <p className={`mt-2 w-full ${storyCopyClass} text-slate-600`}>{activeStory.note}</p>}
                     </div>
                   ) : (
                     <>
-                      <p className={`mt-2 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.body}</p>
-                      <p className={`mt-3 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.detail}</p>
+                      <p className={`mt-2 ${storyCopyClass}`}>{activeStory.body}</p>
+                      <p className={`mt-3 ${storyCopyClass}`}>{activeStory.detail}</p>
                       {isApproachStory && activeStory.flow && <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2">
                         {activeStory.flow.map((step, index) => <span key={step} className="inline-flex items-center gap-1"><span className="px-0.5 py-1 text-[11px] font-bold uppercase tracking-[0.04em] text-[#0a1f44] sm:text-[12px]">{step}</span>{index < activeStory.flow!.length - 1 && <span className="text-[12px] text-[#0a1f44]" aria-hidden="true">{"\u2192"}</span>}</span>)}
                       </div>}
-                      {activeStory.additional && <p className={`mt-3 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.additional}</p>}
-                      {activeStory.note && <p className={`mt-3 ${storyCompact ? compactStoryCopyClass : regularStoryCopyClass}`}>{activeStory.note}</p>}
+                      {activeStory.additional && <p className={`mt-3 ${storyCopyClass}`}>{activeStory.additional}</p>}
+                      {activeStory.note && <p className={`mt-3 ${storyCopyClass}`}>{activeStory.note}</p>}
                       {!isApproachStory && activeStory.flow && <div className="mt-3 flex flex-wrap gap-1.5">
                         {activeStory.flow.map((step, index) => <span key={step} className="inline-flex items-center gap-1"><span className="px-0.5 py-1 text-[11px] font-bold uppercase tracking-[0.04em] text-[#0a1f44] sm:text-[12px]">{step}</span>{index < activeStory.flow!.length - 1 && <span className="text-[12px] text-[#0a1f44]" aria-hidden="true">{"\u2192"}</span>}</span>)}
                       </div>}
@@ -694,6 +704,7 @@ export function SantechHomeStage() {
                     </div>
                   )}
 
+                  </div>
                   </motion.div>
                 </AnimatePresence>
               </div>

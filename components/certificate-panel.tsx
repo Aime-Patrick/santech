@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ type CertificateOrientation = "portrait" | "landscape" | "square";
 type CertificateItem = {
   title: string;
   issuer: string;
+  description: string;
   image: string;
   file?: string;
   orientation: CertificateOrientation;
@@ -24,31 +25,15 @@ const certificateItems: readonly CertificateItem[] = [
     title: "Data Processor Certificate",
     issuer: "National Cyber Security Authority · Data Protection and Privacy Office",
     image: "/images/SAN TECH Data Processor Certificate_page-0001.jpg",
+    description: "A formal data protection certification recognizing SAN TECH's responsibility in handling and processing information securely.",
     file: "/images/SAN TECH Data Processor Certificate.pdf",
     orientation: "portrait",
-  },
-  {
-    title: "Technology Excellence Recognition",
-    issuer: "SAN TECH innovation ecosystem",
-    image: "/certificates/recognition-technology-excellence.png",
-    orientation: "square",
-  },
-  {
-    title: "Digital Innovation Recognition",
-    issuer: "SAN TECH innovation ecosystem",
-    image: "/certificates/recognition-digital-innovation.png",
-    orientation: "square",
-  },
-  {
-    title: "Community Impact Recognition",
-    issuer: "SAN TECH innovation ecosystem",
-    image: "/certificates/recognition-community-impact.png",
-    orientation: "square",
   },
   {
     title: "EdTech Trust Seal",
     issuer: "Digital Bridge Institute",
     image: "/certificates/edtech-trust-seal.png",
+    description: "A trust mark reflecting SAN TECH's contribution to practical digital learning and education technology.",
     orientation: "square",
   },
 ];
@@ -67,7 +52,21 @@ const modalImageSize: Record<CertificateOrientation, string> = {
 
 export function CertificatePanel() {
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+  const cardsPerSlide = 3;
+  const slideCount = Math.max(1, Math.ceil(certificateItems.length / cardsPerSlide));
+  const visibleCertificates = certificateItems.slice(activeSlide * cardsPerSlide, activeSlide * cardsPerSlide + cardsPerSlide);
+
+  useEffect(() => {
+    if (prefersReducedMotion || selectedCertificate || slideCount < 2) return;
+
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % slideCount);
+    }, 5200);
+
+    return () => window.clearInterval(timer);
+  }, [prefersReducedMotion, selectedCertificate, slideCount]);
 
   useEffect(() => {
     if (!selectedCertificate) return;
@@ -87,39 +86,52 @@ export function CertificatePanel() {
   }, [selectedCertificate]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="max-w-2xl">
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Certificates &amp; trust</p>
-        <h1 className="font-exo mt-4 text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">Proof behind the work.</h1>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {certificateItems.map((certificate) => (
-          <button
-            key={certificate.title}
-            type="button"
-            onClick={() => setSelectedCertificate(certificate)}
-            className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-[0_8px_22px_rgba(10,31,68,0.05)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
-            aria-label={`View ${certificate.title}`}
-          >
-            <div className={`relative overflow-hidden bg-[#eef4fa] ${cardAspect[certificate.orientation]}`}>
-              <Image
-                src={certificate.image}
-                alt={certificate.title}
-                fill
-                sizes="(min-width: 1280px) 300px, (min-width: 640px) 45vw, 100vw"
-                className="object-contain p-3 transition-transform duration-500 group-hover:scale-[1.02]"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-sm font-bold leading-5 text-[#0a1f44]">{certificate.title}</p>
-              <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#68718a]">{certificate.issuer}</p>
-              <span className="mt-3 inline-flex items-center text-[10px] font-black uppercase tracking-[0.14em] text-brand-secondary">
-                View certificate <ArrowUpRight className="ml-1 size-3.5" aria-hidden="true" />
-              </span>
-            </div>
-          </button>
-        ))}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeSlide}
+          initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={prefersReducedMotion ? undefined : { opacity: 0, x: -16 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}
+          className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+        >
+          {visibleCertificates.map((certificate) => (
+            <button
+              key={certificate.title}
+              type="button"
+              onClick={() => setSelectedCertificate(certificate)}
+              className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-[0_8px_22px_rgba(10,31,68,0.05)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+              aria-label={`View ${certificate.title}`}
+            >
+              <div className={`relative overflow-hidden bg-[#eef4fa] ${cardAspect[certificate.orientation]}`}>
+                <Image
+                  src={certificate.image}
+                  alt={certificate.title}
+                  fill
+                  sizes="(min-width: 1280px) 300px, (min-width: 640px) 45vw, 100vw"
+                  className="object-contain p-3 transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </div>
+            </button>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-1.5" role="tablist" aria-label={`Certificate slide ${activeSlide + 1} of ${slideCount}`}>
+          {Array.from({ length: slideCount }, (_, index) => (
+            <button key={index} type="button" onClick={() => setActiveSlide(index)} role="tab" aria-selected={activeSlide === index} aria-label={`Show certificate slide ${index + 1}`} className={`h-1.5 rounded-full transition-all ${activeSlide === index ? "w-8 bg-[#0a1f44]" : "w-1.5 bg-slate-300 hover:bg-slate-400"}`} />
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => setActiveSlide((activeSlide - 1 + slideCount) % slideCount)} aria-label="Previous certificates" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ArrowLeft className="size-4" aria-hidden="true" /></button>
+          <button type="button" onClick={() => setActiveSlide((activeSlide + 1) % slideCount)} aria-label="Next certificates" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ArrowRight className="size-4" aria-hidden="true" /></button>
+        </div>
       </div>
 
       {typeof document !== "undefined" && createPortal(
@@ -148,6 +160,7 @@ export function CertificatePanel() {
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">SAN TECH / CERTIFICATE</p>
                     <h2 id="certificate-dialog-title" className="font-exo mt-1 text-lg font-bold leading-tight text-[#0a1f44] sm:text-xl">{selectedCertificate.title}</h2>
                     <p className="mt-1 text-xs text-slate-500">{selectedCertificate.issuer}</p>
+                    <p className="mt-3 max-w-2xl text-sm leading-6 text-[#68718a]">{selectedCertificate.description}</p>
                   </div>
                   <button
                     type="button"
