@@ -76,7 +76,7 @@ const legacyItems: SharedContentItem[] = [
   {
     id: "profile",
     label: "Company profile",
-    title: "From ideation to transformative impact.",
+    title: "Turning Ideas into Impact.",
     description: "SAN TECH is a Kigali-based technology and innovation company that connects people, ideas, and technology to create digital products, strengthen organizations, and grow the next generation of builders.",
     content: "profile",
   },

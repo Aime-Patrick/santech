@@ -15,7 +15,7 @@ const identity = [
   ["Founder & CEO", "Mr. Shema Pacifique"],
   ["Co-founder & COO/CFO", "Claudine Niyonzima"],
   ["Head office", "Kigali, Rwanda"],
-  ["Core philosophy", "From Ideation to Transformative Impact"],
+  ["Core philosophy", "Turning Ideas into Impact"],
   ["Stamp motto", "Innovate · Empower · Deliver"],
 ] as const;
 
@@ -107,7 +107,7 @@ const recognitionItems: readonly RecognitionItem[] = [
   {
     year: "2026",
     title: "Tech Forward Live 2026 Summit",
-    description: "SAN TECH convened Tech Forward Live 2026 under the theme 'From Ideation to Transformative Impact', bringing together youth innovators, government leaders, university partners, and industry experts to champion technology adoption, prototype incubation, and youth tech employment across Africa.",
+    description: "SAN TECH convened Tech Forward Live 2026 under the theme 'Turning Ideas into Impact', bringing together youth innovators, government leaders, university partners, and industry experts to champion technology adoption, prototype incubation, and youth tech employment across Africa.",
     image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(80).jpg",
     imageAlt: "Tech Forward Live 2026 summit hall packed with delegates, partners, and innovators",
     badge: "Flagship Summit",
@@ -196,8 +196,8 @@ export function MissionPanel() {
   const activeValue = values.find((value) => value.label === selectedValue) ?? values[0];
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
-      <div className="relative">
+    <div className="grid items-start gap-8 overflow-visible lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+      <div className="relative min-w-0 overflow-visible">
         <div className="mb-5 flex items-center gap-3">
           <span className="grid size-8 place-items-center rounded-full bg-[#e8f1fc] text-[10px] font-black text-brand-secondary">01</span>
           <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our direction</p>
@@ -209,18 +209,18 @@ export function MissionPanel() {
               <span className="grid size-9 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Target className="size-5" aria-hidden="true" /></span>
               <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Mission</p><p className="text-xs font-bold text-[#0a1f44]">Build useful capability</p></div>
             </div>
-            <p className="mt-4 text-base leading-7 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
+            <p className="mt-4 text-[14px] leading-7 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
           </article>
           <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-5 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-[#0a1f44] shadow-sm"><Eye className="size-5" aria-hidden="true" /></span>
               <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Vision</p><p className="text-xs font-bold text-[#0a1f44]">Widen what is possible</p></div>
             </div>
-            <p className="mt-4 text-base leading-7 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
+            <p className="mt-4 text-[14px] leading-7 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
           </article>
         </div>
       </div>
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-6">
+      <div className="min-w-0 overflow-visible rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-6">
         <div>
           <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core values</p>
         </div>
@@ -541,7 +541,7 @@ export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE
     <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-8">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Company profile</p>
-        <h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">From Ideation to Transformative Impact.</h1>
+        <h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">Turning Ideas into Impact.</h1>
         <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH stands for Smart Applications and Networking Technology. Founded in Rwanda in 2019, with a branch in Bamako, Mali, we develop practical digital solutions, technology products, and technical capacity for organizations, businesses, institutions, and communities.</p>
       </div>
       <div className="border-l border-slate-300 pl-4 lg:pl-6">

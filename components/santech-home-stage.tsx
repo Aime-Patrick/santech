@@ -149,7 +149,7 @@ const storySlides: StorySlide[] = [
     variant: "services",
     body: "SAN TECH (Smart Applications and Networking Technology) provides end-to-end technology services focused on digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, innovation, and capacity building. SAN TECH focused on digital transformation, software engineering, artificial intelligence, cybersecurity, IoT, infrastructure, research, innovation, and technology capacity building.",
     detail: "SAN TECH Service Model",
-    additional: "SAN TECH \u2014 From Ideation to Transformative Impact.",
+    additional: "SAN TECH \u2014 Turning Ideas into Impact.",
     note: "We bring strategy, engineering, and capacity building together so solutions can keep working after launch.",
     flow: ["Ideate", "Design", "Develop", "Integrate", "Deploy", "Train", "Support", "Scale"],
     facts: [],
@@ -189,7 +189,7 @@ const storySlides: StorySlide[] = [
       { label: "Capability", items: "Training, implementation, adoption" },
     ],
     facts: [
-      { label: "Core positioning", value: "From Ideation to Transformative Impact" },
+      { label: "Core positioning", value: "Turning Ideas into Impact" },
       { label: "Motto", value: "Innovate • Empower • Deliver" },
     ],
   },
@@ -205,7 +205,7 @@ const storySlides: StorySlide[] = [
     facts: [
       { label: "Direction", value: "Local Innovation" },
       { label: "Opportunity", value: "Work & Enterprise" },
-      { label: "Result", value: "Stronger digital capability" },
+      { label: "Result", value: "Digital Capability" },
     ],
   },
   {
@@ -675,7 +675,7 @@ export function SantechHomeStage() {
                   )}
 
                   {activeStory.groups && (
-                    <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-3 py-1">
+                    <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2">
                       {activeStory.groups.map((group) => (
                         <div key={group.label} className="min-w-0">
                           <p className="text-[11px] font-black uppercase tracking-[0.12em] text-brand-secondary sm:text-[12px]">{group.label}</p>
@@ -688,7 +688,11 @@ export function SantechHomeStage() {
                   {activeStory.items && (
                     <div className={`${isEcosystemStory ? "mt-5 gap-3 border-0 py-0" : isStakeholderStory ? "mt-4 gap-x-6 gap-y-2.5 border-y border-slate-200 py-3" : "mt-3 gap-x-3 gap-y-1.5 border-y border-slate-200 py-2"} grid grid-cols-1 sm:grid-cols-2`}>
                       {activeStory.items.map((item) => (
-                        isEcosystemStory ? (() => { const [label] = item.split(/\s+[—–-]\s+/); return <button key={item} type="button" onClick={() => { setStoryPlaying(false); setEcosystemDialogItem(item); }} aria-haspopup="dialog" className="group flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand-cyan hover:bg-white hover:shadow-[0_8px_18px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-white text-base leading-none shadow-sm" aria-hidden="true">{ecosystemEmoji(item)}</span><span className="flex-1 text-[12px] font-bold leading-5 text-[#0a1f44] sm:text-[13px] 2xl:text-[14px]">{label}</span><ChevronRight className="size-3.5 shrink-0 text-brand-secondary transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></button>; })() : <p key={item} className={`${isStakeholderStory ? "text-[12px] leading-[1.35] sm:text-[13px] 2xl:text-[14px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
+                        isEcosystemStory ? (() => { const [label] = item.split(/\s+[—–-]\s+/); return <button key={item} type="button" onClick={() => { setStoryPlaying(false); setEcosystemDialogItem(item); }} aria-haspopup="dialog" className="group flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand-cyan hover:bg-white hover:shadow-[0_8px_18px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-white text-base leading-none shadow-sm" aria-hidden="true">
+                          {ecosystemEmoji(item)}</span>
+                          <span className="flex-1 text-[13px] font-bold leading-5 text-[#0a1f44] sm:text-[14px] 2xl:text-[15px]">{label}</span>
+                          <ChevronRight className="size-3.5 shrink-0 text-brand-secondary transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                          </button>; })() : <p key={item} className={`${isStakeholderStory ? "text-[13px] leading-[1.35] sm:text-[14px] 2xl:text-[15px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
                       ))}
                     </div>
                   )}

@@ -33,7 +33,7 @@ export default function ConnectPage() {
               <section className="p-0" aria-labelledby="contact-details-title">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Contact details</p>
                 <p id="contact-details-title" className="mt-1 text-xs leading-5 text-slate-600">
-                  From ideation to transformative impact.
+                  Turning Ideas into Impact.
                 </p>
 
                 {/* Physical Address */}
