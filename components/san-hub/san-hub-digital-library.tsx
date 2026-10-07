@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowLeft, ArrowUpRight, BookOpen, Bookmark, Maximize2 } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, ArrowUpRight, Bookmark, Maximize2, Search, X } from "lucide-react";
+import { useMemo, useState } from "react";
 
 type LibraryBook = {
   id: string;
@@ -91,26 +91,70 @@ export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigit
 }
 
 function BookShelf({ onOpen }: { onOpen: (book: LibraryBook) => void }) {
+  const [activeCategory, setActiveCategory] = useState("All books");
+  const [query, setQuery] = useState("");
+  const categories = useMemo(() => ["All books", ...new Set(libraryBooks.map((book) => book.category))], []);
+  const visibleBooks = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    if (normalizedQuery) {
+      return libraryBooks.filter((book) => `${book.title} ${book.category} ${book.description}`.toLowerCase().includes(normalizedQuery));
+    }
+
+    return activeCategory === "All books" ? libraryBooks : libraryBooks.filter((book) => book.category === activeCategory);
+  }, [activeCategory, query]);
+
   return (
     <>
-      <div className="mb-4 flex flex-col justify-between gap-2.5 border-b border-[#0a1f44]/15 pb-4 sm:flex-row sm:items-end">
-        <div>
-          <h1 className="font-exo max-w-3xl text-lg font-bold leading-[1.05] tracking-[-0.04em] text-[#0a1f44] sm:text-xl lg:text-2xl">
-            Choose a book and start reading.
-          </h1>
-          <p className="mt-1 max-w-2xl text-[11px] leading-4 text-slate-600">
-            Browse the SAN HUB collection, then open one title in the reading room.
-          </p>
+      <div className="space-y-5 px-2 py-5 sm:px-4 lg:px-6 lg:py-7">
+        <div className="relative max-w-2xl">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#0a1f44]/50" aria-hidden="true" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search books across all categories"
+            aria-label="Search books across all categories"
+            className="w-full rounded-lg border border-[#0a1f44]/20 bg-[#f8fbfd] py-3 pl-10 pr-10 text-sm text-[#0a1f44] outline-none transition-colors placeholder:text-slate-500 focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/20"
+          />
+          {query && (
+            <button type="button" onClick={() => setQuery("")} aria-label="Clear book search" className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0a1f44]/55 transition-colors hover:text-[#0a1f44]">
+              <X className="size-4" aria-hidden="true" />
+            </button>
+          )}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="mr-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#0a1f44]/55">{libraryBooks.length} titles</span>
-        </div>
-      </div>
 
-      <div className="px-2 py-5 sm:px-4 lg:px-6 lg:py-7">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6" aria-label="SAN HUB book collection">
-          {libraryBooks.map((book) => <div key={book.id} className="min-w-0 snap-start"><BookCover book={book} onOpen={onOpen} /></div>)}
+        <div className="-mx-2 overflow-x-auto border-b border-[#0a1f44]/15 px-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="Book categories">
+          <div className="flex min-w-max gap-6">
+            {categories.map((category) => {
+              const active = activeCategory === category && !query;
+
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => { setActiveCategory(category); setQuery(""); }}
+                  className={`border-b-2 px-1 pb-3 text-xs font-bold transition-colors ${active ? "border-[#0a1f44] text-[#0a1f44]" : "border-transparent text-slate-500 hover:border-[#0a1f44]/30 hover:text-[#0a1f44]"}`}
+                >
+                  {category}
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {visibleBooks.length > 0 ? (
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6" aria-label="SAN HUB book collection">
+            {visibleBooks.map((book) => <div key={book.id} className="min-w-0 snap-start"><BookCover book={book} onOpen={onOpen} /></div>)}
+          </div>
+        ) : (
+          <div className="rounded-xl border border-dashed border-[#0a1f44]/20 bg-[#f8fbfd] px-5 py-10 text-center">
+            <p className="text-sm font-bold text-[#0a1f44]">No books found.</p>
+            <p className="mt-1 text-xs text-slate-600">Try another title, category, or search term.</p>
+          </div>
+        )}
       </div>
     </>
   );

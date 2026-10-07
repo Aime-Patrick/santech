@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type InsightArticle = {
   title: string;
@@ -99,11 +99,34 @@ const insightArticles: readonly InsightArticle[] = [
 
 export function SanHubInsightsSection() {
   const [activeCategory, setActiveCategory] = useState("All stories");
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const availableCategories = useMemo(() => [...new Set(insightArticles.map((article) => article.category))], []);
   const filteredArticles = activeCategory === "All stories"
     ? insightArticles
     : insightArticles.filter((article) => article.category === activeCategory);
+  const cardsPerSlide = 3;
+  const slideCount = Math.max(1, Math.ceil(filteredArticles.length / cardsPerSlide));
+  const visibleArticles = filteredArticles.slice(activeSlide * cardsPerSlide, activeSlide * cardsPerSlide + cardsPerSlide);
+
+  useEffect(() => {
+    setActiveSlide(0);
+  }, [activeCategory]);
+
+  useEffect(() => {
+    if (prefersReducedMotion || isPaused || slideCount <= 1) return;
+
+    const interval = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % slideCount);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [activeCategory, isPaused, prefersReducedMotion, slideCount]);
+
+  const moveSlide = (direction: number) => {
+    setActiveSlide((current) => (current + direction + slideCount) % slideCount);
+  };
 
   return (
     <section className="san-hub-graphic-section border-b border-slate-200 py-1 sm:px-4 lg:px-8 lg:py-2">
@@ -122,44 +145,86 @@ export function SanHubInsightsSection() {
           ))}
         </div>
 
-        <div className="columns-1 gap-4 pt-5 sm:columns-2 lg:columns-3">
-          {filteredArticles.map((article, index) => (
-            <motion.article
-              key={article.href}
-              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, delay: prefersReducedMotion ? 0 : Math.min(index, 5) * 0.03, ease: "easeOut" }}
-              className={`group mb-4 break-inside-avoid flex flex-col overflow-hidden rounded-xl border border-slate-200 p-5 shadow-[0_4px_18px_rgba(10,31,68,0.04)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-brand-secondary hover:shadow-[0_14px_32px_rgba(10,31,68,0.1)] ${index === 0 ? "bg-[#f7fafc]" : "bg-white"}`}
-            >
-              {(article.image || article.videoId) && (
-                <div className="relative -mx-5 -mt-5 mb-5 aspect-[16/8] overflow-hidden border-b border-slate-200 bg-[#eaf1f6]">
-                  <img
-                    src={article.image ?? `https://i.ytimg.com/vi/${article.videoId}/hqdefault.jpg`}
-                    alt=""
-                    loading={index === 0 ? "eager" : "lazy"}
-                    className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+        <div
+          className="pt-5"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
+        >
+          <motion.div
+            key={`${activeCategory}-${activeSlide}`}
+            initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.24, ease: "easeOut" }}
+          >
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {visibleArticles.map((article, index) => (
+                <motion.article
+                  key={article.href}
+                  initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, delay: prefersReducedMotion ? 0 : index * 0.04, ease: "easeOut" }}
+                  className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-[0_4px_18px_rgba(10,31,68,0.04)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-brand-secondary hover:shadow-[0_14px_32px_rgba(10,31,68,0.1)]"
+                >
+                  {(article.image || article.videoId) && (
+                    <div className="relative -mx-5 -mt-5 mb-5 aspect-[16/8] overflow-hidden border-b border-slate-200 bg-[#eaf1f6]">
+                      <img
+                        src={article.image ?? `https://i.ytimg.com/vi/${article.videoId}/hqdefault.jpg`}
+                        alt=""
+                        loading={index === 0 && activeSlide === 0 ? "eager" : "lazy"}
+                        className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                      />
+                      {article.videoId && <span className="absolute bottom-3 left-3 bg-[#0a1f44] px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-white">Watch video</span>}
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[11px] font-black uppercase tracking-[0.16em] text-brand-secondary">{article.category}</span>
+                    <span className="text-xs font-bold text-slate-400">{article.type}</span>
+                  </div>
+                  <h2 className="font-exo mt-4 text-xl font-bold leading-tight text-[#0a1f44]">{article.title}</h2>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{article.description}</p>
+                  <div className="mt-auto flex items-end justify-between gap-4 pt-6">
+                    <div>
+                      <p className="text-xs font-bold text-[#0a1f44]">{article.source}</p>
+                      {article.date && <p className="mt-1 text-xs text-slate-500">{article.date}</p>}
+                    </div>
+                    <a href={article.href} target="_blank" rel="noreferrer" className="group/source inline-flex shrink-0 items-center gap-2 rounded-md border border-transparent px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-[#0a1f44] transition-[background-color,color,transform] duration-200 hover:-translate-y-0.5 hover:bg-[#0a1f44] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary" aria-label={`Read ${article.title}`}>
+                      Open source <ArrowUpRight className="size-4 transition-transform duration-200 group-hover/source:translate-x-0.5 group-hover/source:-translate-y-0.5" aria-hidden="true" />
+                    </a>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </motion.div>
+
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-4">
+            <div className="flex items-center gap-3" aria-live="polite">
+              <span className="text-xs font-bold text-slate-500">
+                Showing {filteredArticles.length === 0 ? 0 : activeSlide * cardsPerSlide + 1}–{Math.min((activeSlide + 1) * cardsPerSlide, filteredArticles.length)} of {filteredArticles.length}
+              </span>
+              <div className="flex items-center gap-1.5" aria-label="Insight slides">
+                {Array.from({ length: slideCount }, (_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => setActiveSlide(index)}
+                    aria-label={`Go to insight slide ${index + 1}`}
+                    aria-current={activeSlide === index ? "true" : undefined}
+                    className={`h-1.5 rounded-full transition-all ${activeSlide === index ? "w-6 bg-[#0a1f44]" : "w-1.5 bg-slate-300 hover:bg-brand-secondary"}`}
                   />
-                  {article.videoId && <span className="absolute bottom-3 left-3 bg-[#0a1f44] px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-white">Watch video</span>}
-                </div>
-              )}
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-[11px] font-black uppercase tracking-[0.16em] text-brand-secondary">{article.category}</span>
-                <span className="text-xs font-bold text-slate-400">{article.type}</span>
+                ))}
               </div>
-              <h2 className={`font-exo mt-4 font-bold leading-tight text-[#0a1f44] ${index === 0 ? "text-2xl" : "text-xl"}`}>{article.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{article.description}</p>
-              <div className="flex items-end justify-between gap-4 pt-6">
-                <div>
-                  <p className="text-xs font-bold text-[#0a1f44]">{article.source}</p>
-                  {article.date && <p className="mt-1 text-xs text-slate-500">{article.date}</p>}
-                </div>
-                <a href={article.href} target="_blank" rel="noreferrer" className="group/source inline-flex shrink-0 items-center gap-2 rounded-md border border-transparent px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-[#0a1f44] transition-[background-color,color,transform] duration-200 hover:-translate-y-0.5 hover:bg-[#0a1f44] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary" aria-label={`Read ${article.title}`}>
-                  Open source <ArrowUpRight className="size-4 transition-transform duration-200 group-hover/source:translate-x-0.5 group-hover/source:-translate-y-0.5" aria-hidden="true" />
-                </a>
-              </div>
-            </motion.article>
-          ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <button type="button" onClick={() => moveSlide(-1)} disabled={slideCount <= 1} aria-label="Previous insight slide" className="inline-flex size-9 items-center justify-center rounded-full border border-slate-200 text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-[#eef7fb] disabled:cursor-not-allowed disabled:opacity-40">
+                <ChevronLeft className="size-4" aria-hidden="true" />
+              </button>
+              <button type="button" onClick={() => moveSlide(1)} disabled={slideCount <= 1} aria-label="Next insight slide" className="inline-flex size-9 items-center justify-center rounded-full border border-slate-200 text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-[#eef7fb] disabled:cursor-not-allowed disabled:opacity-40">
+                <ChevronRight className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 border-t border-slate-200 pt-6">

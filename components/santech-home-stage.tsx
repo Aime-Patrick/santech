@@ -571,7 +571,7 @@ export function SantechHomeStage() {
               <div className="relative min-h-0 flex-1 overflow-hidden">
                 <video
                   ref={videoRef}
-                  src="/E-VS.mp4"
+                  src="/images/santech_final_video.mp4"
                   className="size-full object-cover"
                   autoPlay
                   muted

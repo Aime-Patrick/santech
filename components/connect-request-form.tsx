@@ -2,6 +2,7 @@
 
 import { ArrowUpRight, Handshake, MessageCircle, Send } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { PhoneNumberField } from "@/components/phone-number-field";
 
 type ConnectTopic = "talk" | "partnership";
 
@@ -48,7 +49,7 @@ export function ConnectRequestForm({ initialTopic = "talk" }: { initialTopic?: C
           <label className={labelClass}>Name<input required minLength={2} name="name" className={inputClass} placeholder="Your full name" /></label>
           <label className={labelClass}>Email<input required type="email" name="email" className={inputClass} placeholder="you@example.com" /></label>
           <label className={labelClass}>Organization<input required={topic !== "talk"} minLength={2} name="organization" className={inputClass} placeholder="Company or institution" /></label>
-          <label className={labelClass}>Phone<input required type="tel" pattern="\\+?[0-9\\s().-]{7,}" title="Enter a valid phone number" name="phone" className={inputClass} placeholder="+250 7xx xxx xxx" /></label>
+          <PhoneNumberField label="Phone" required numberName="phone" labelClassName={labelClass} inputClassName={inputClass} selectClassName={inputClass} />
 
           {topic === "partnership" && <label className={`${labelClass} sm:col-span-2`}>Partnership type<select required defaultValue="" name="partnershipType" className={inputClass}><option value="" disabled>Select partnership type</option><option>Program partnership</option><option>Sponsorship</option><option>Technology partnership</option><option>Research collaboration</option></select></label>}
 

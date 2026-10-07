@@ -8,7 +8,7 @@ const calendlyUrl = "https://calendly.com/d/dz7h-n6m-tsp/e-visitors-demo?hide_gd
 
 export function CalendlyDialog({
   className,
-  label = "Book with our Team",
+  label = "Book with Us",
 }: {
   className?: string;
   label?: string;

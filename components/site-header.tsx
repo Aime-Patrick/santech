@@ -16,35 +16,12 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { navigation } from "@/lib/site-data";
+import { languageOptions, manualHeaderCopy, type SupportedLanguage } from "@/lib/manual-translations";
 import santechLogo from "@/src/assets/santech.png";
 
-type Language = "en" | "rw" | "fr" | "sw" | "ar" | "ch" | "hi" | "ur" | "br";
+type Language = SupportedLanguage;
 
-const languageLabels: Record<Language, string> = {
-  en: "English",
-  rw: "Kinyarwanda",
-  fr: "Français",
-  sw: "Kiswahili",
-  ch: "Chinese",
-  ar: "Arabic",
-  hi: "Hindi",
-  ur: "Urdu",
-  br: "Bambara",
-};
-
-const languageOptions: { code: Language; label: string; flag: string }[] = [
-  { code: "en", label: "English", flag: "gb" },
-  { code: "rw", label: "Kinyarwanda", flag: "rw" },
-  { code: "fr", label: "Français", flag: "fr" },
-  { code: "sw", label: "Kiswahili", flag: "tz" },
-  { code: "ar", label: "Arabic", flag: "sa" },
-  { code: "ch", label: "Chinese", flag: "cn" },
-  { code: "hi", label: "Hindi", flag: "in" },
-  { code: "ur", label: "Urdu", flag: "pk" },
-  { code: "br", label: "Bambara", flag: "ml" },
-];
-
-function CommunityCta({ mobile = false, onClick }: { mobile?: boolean; onClick?: () => void }) {
+function CommunityCta({ mobile = false, onClick, label }: { mobile?: boolean; onClick?: () => void; label: string }) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -77,7 +54,7 @@ function CommunityCta({ mobile = false, onClick }: { mobile?: boolean; onClick?:
             : { duration: 2.8, ease: "easeInOut", repeat: Infinity }
         }
       />
-      <span className="relative z-10">JOIN THE COMMUNITY</span>
+      <span className="relative z-10">{label}</span>
     </Link>
   );
 }
@@ -91,11 +68,17 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const selectedLanguage = languageOptions.find((option) => option.code === language) ?? languageOptions[0];
+  const copy = manualHeaderCopy[language];
+
+  useEffect(() => {
+    document.documentElement.lang = language === "ch" ? "zh-CN" : language;
+  }, [language]);
 
   useEffect(() => {
     const savedLang = localStorage.getItem("santech_lang") as Language | null;
     if (savedLang && languageOptions.some((option) => option.code === savedLang)) {
-      setLanguage(savedLang);
+      const stateTimer = window.setTimeout(() => setLanguage(savedLang), 0);
+      return () => window.clearTimeout(stateTimer);
     }
   }, []);
 
@@ -138,7 +121,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[100] transition-all">
+    <header data-landing={landing || undefined} className="fixed inset-x-0 top-0 z-[100] transition-all">
       <div className="relative overflow-hidden bg-[#0a1f44] text-white">
         <div className="mx-auto flex min-h-9 min-w-0 max-w-[1600px] items-center justify-between gap-2 px-4 py-1 text-[10px] font-semibold sm:px-6 sm:text-xs 2xl:px-8">
           <a href="tel:+250780309833" className="inline-flex min-w-0 flex-1 items-center gap-1.5 transition-colors hover:text-[#00A3E0] xl:flex-none xl:gap-2">
@@ -195,7 +178,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                     aria-current={active ? "page" : undefined}
                     className={linkClassName}
                   >
-                    {item.label}
+                    {copy.navigation[item.label] ?? item.label}
                     {active && (
                       <span className="absolute bottom-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-[#0a1f44]" />
                     )}
@@ -212,10 +195,10 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                   onClick={() => setLangDropdownOpen(!langDropdownOpen)}
                   className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[11px] font-semibold text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50 2xl:gap-1.5 2xl:px-2.5 2xl:text-xs"
                   aria-expanded={langDropdownOpen}
-                  aria-label="Select language"
+                  aria-label={copy.selectLanguage}
                 >
                   <img src={`https://flagcdn.com/w20/${selectedLanguage.flag}.png`} alt="" aria-hidden="true" className="h-3.5 w-5 object-cover" />
-                  <span>{languageLabels[language]}</span>
+                  <span>{copy.languageName}</span>
                   <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${langDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
 
@@ -247,7 +230,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
               </div>
 
               {/* Visually Prominent CTA Button: JOIN THE COMMUNITY */}
-              <CommunityCta />
+              <CommunityCta label={copy.joinCommunity} />
             </div>
           </div>
 
@@ -258,7 +241,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                 type="button"
                 onClick={() => setLangDropdownOpen((open) => !open)}
                 aria-expanded={langDropdownOpen}
-                aria-label="Select language"
+                aria-label={copy.selectLanguage}
                 className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold text-[#333292]"
               >
                 <img src={`https://flagcdn.com/w20/${selectedLanguage.flag}.png`} alt="" aria-hidden="true" className="h-3.5 w-5 object-cover" />
@@ -336,14 +319,14 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                         : "text-slate-700 hover:bg-slate-50 hover:text-[#333292]"
                     }`}
                   >
-                    <span>{item.label}</span>
+                    <span>{copy.navigation[item.label] ?? item.label}</span>
                     {active && <span className="size-1.5 rounded-full bg-[#333292]" />}
                   </Link>
                 );
               })}
 
               <div className="mt-2 w-full">
-                <CommunityCta mobile onClick={() => setOpen(false)} />
+                <CommunityCta mobile onClick={() => setOpen(false)} label={copy.joinCommunity} />
               </div>
             </div>
           </motion.nav>

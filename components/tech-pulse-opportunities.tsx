@@ -328,6 +328,7 @@ export function TechPulseOpportunities() {
   const [applicantData, setApplicantData] = useState({
     fullName: "",
     email: "",
+    phoneCountryCode: "+250",
     phone: "",
     portfolio: "",
     coverNote: "",
@@ -416,6 +417,7 @@ export function TechPulseOpportunities() {
     setApplicantData({
       fullName: "",
       email: "",
+      phoneCountryCode: "+250",
       phone: "",
       portfolio: "",
       coverNote: "",
@@ -857,13 +859,23 @@ export function TechPulseOpportunities() {
                             <label className="block text-[10px] font-black uppercase tracking-wider text-slate-600">
                               Phone / WhatsApp (Optional)
                             </label>
-                            <input
-                              type="tel"
-                              value={applicantData.phone}
-                              onChange={(e) => setApplicantData({ ...applicantData, phone: e.target.value })}
-                              placeholder="+250 78X XXX XXX"
-                              className="mt-1 w-full border border-slate-300 bg-white px-3 py-1.5 text-xs text-[#0a1f44] focus:border-[#0a1f44] focus:outline-none"
-                            />
+                            <div className="mt-1 grid grid-cols-[5.5rem_minmax(0,1fr)] gap-2">
+                              <select
+                                value={applicantData.phoneCountryCode}
+                                onChange={(e) => setApplicantData({ ...applicantData, phoneCountryCode: e.target.value })}
+                                aria-label="Phone country code"
+                                className="w-full border border-slate-300 bg-white px-2 py-1.5 text-xs text-[#0a1f44] focus:border-[#0a1f44] focus:outline-none"
+                              >
+                                {['+250', '+223', '+254', '+255', '+256', '+234', '+27', '+44', '+1'].map((code) => <option key={code}>{code}</option>)}
+                              </select>
+                              <input
+                                type="tel"
+                                value={applicantData.phone}
+                                onChange={(e) => setApplicantData({ ...applicantData, phone: e.target.value })}
+                                placeholder="7X XXX XXX"
+                                className="w-full border border-slate-300 bg-white px-3 py-1.5 text-xs text-[#0a1f44] focus:border-[#0a1f44] focus:outline-none"
+                              />
+                            </div>
                           </div>
 
                           <div>

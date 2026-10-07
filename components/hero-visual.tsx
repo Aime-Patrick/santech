@@ -136,7 +136,7 @@ const heroSlides: SlideData[] = [
     statLabelRw: "Ibigo bya Leta n'Ibyigenga",
     statValueEn: "47+ Institutions",
     statValueRw: "47+ Ibigo",
-    video: "/E-VS.mp4",
+    video: "/images/santech_final_video.mp4",
   },
   {
     id: "software-dev",

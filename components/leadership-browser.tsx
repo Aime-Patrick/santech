@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { FaLinkedinIn } from "react-icons/fa6";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { OrganizationChart } from "@/components/organization-chart";
@@ -9,17 +10,22 @@ import { OrganizationChart } from "@/components/organization-chart";
 type LeadershipView = "executive" | "team" | "organization";
 
 const executives = [
-  { name: "Shema Pacifique", role: "Founder & CEO", title: "Founder & Chief Executive Officer", image: "/images/CEO.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Claudine Niyonzima", role: "Co-founder & COO/CFO", title: "Co-founder & Chief Operating / Financial Officer", image: "/images/Niyonzima_Claudine-removebg.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Shema Pacifique", role: "Founder & CEO", title: "Founder & Chief Executive Officer", image: "/images/CEO.jpeg", profile: "https://www.linkedin.com/in/shema-pacifique-6b9321164/" },
+  { name: "Claudine Niyonzima", role: "Co-founder & COO/CFO", title: "Co-founder & Chief Operating / Financial Officer", image: "/images/claudine.png", profile: "https://www.linkedin.com/in/claudine-niyonzima-3584a6240/" },
 ];
 
 const teamMembers = [
   { name: "Felix", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/felix  santech.png", profile: "https://www.linkedin.com/company/santechinnovate" },
   { name: "Placide", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/placide.png", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "SAN TECH Software Team", position: "Software Engineering Team", department: "Software Engineering", expertise: "Full-stack systems, APIs, product delivery", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/team.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "SAN TECH Product Team", position: "Product and Design Team", department: "Product and Design", expertise: "User research, service design, product thinking", bio: "People shaping useful experiences around real users and institutions.", image: "/images/fieldwork.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "SAN TECH Innovation Team", position: "Innovation and Research Team", department: "Research & Development", expertise: "Research, prototyping, digital systems", bio: "Researchers and problem-solvers testing what can work next.", image: "/images/summit.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "SAN TECH Programs Team", position: "Community and Programs Team", department: "Training & Capacity Building", expertise: "Mentorship, learning, ecosystem programs", bio: "Coordinators connecting learning, opportunity, and participation.", image: "/images/graduates.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Aime Patrick", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Builders turning practical requirements into reliable digital systems at SAN TECH.", image: "/images/patrick.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "KAMI", position: "IOT & Hardware", department: "IOT & Hardware", expertise: "IOT & Hardware", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/kami.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Ndayishimiye G. Bonheur", position: "Software developer", department: "Software Engineering", expertise: "Full-stack systems, APIs, product delivery", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/bonheur.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Mbabazi Sarah", position: "Software developer", department: "Software Engineering", expertise: "Full-stack systems, APIs, product delivery", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/Sarah.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Chris Umurerwa", position: "Sales & Marketing Lead", department: "Sales & Marketing", expertise: "Sales & Marketing", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/chris.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "CYUSA Saleh", position: "Sales & Marketing Lead", department: "Sales & Marketing", expertise: "Sales & Marketing", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/saleh.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Emmanuel", position: "IOT & Hardware Lead", department: "IOT & Hardware", expertise: "IOT & Hardware", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/emmanuel.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Hertilan", position: "Software Developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/Hertilan.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Yves", position: "Software Developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/Yvan.png", profile: "https://www.linkedin.com/company/santechinnovate" },
 ];
 
 function TeamProfileCard({ member }: { member: (typeof teamMembers)[number] }) {
@@ -58,7 +64,7 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
   }, [prefersReducedMotion, view]);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.58fr_1.42fr] lg:items-stretch lg:gap-10">
+    <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch lg:gap-4">
       <div className="flex min-w-0 flex-col">
         <div className="border-l border-slate-300 pl-4" role="tablist" aria-label="Leadership sections">
           {([["executive", "Executive direction"], ["team", "Our team"], ["organization", "Organization"]] as const).map(([key, label]) => (
@@ -70,7 +76,7 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
         </div>
       </div>
 
-      <div className="min-w-0 lg:w-full lg:max-w-[820px] lg:justify-self-end">
+      <div className="min-w-0 lg:w-full">
         <AnimatePresence mode="wait">
           {view === "executive" ? (
             <motion.section key="executive-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }} className="grid gap-4 sm:grid-cols-2">
@@ -98,6 +104,14 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
                   {visibleMembers.map((member) => <TeamProfileCard key={member.name} member={member} />)}
                 </motion.div>
               </AnimatePresence>
+              <div className="mt-4 flex items-center justify-end gap-2">
+                <button type="button" onClick={() => setTeamIndex((current) => (current - 1 + teamMembers.length) % teamMembers.length)} aria-label="Previous team members" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-[#eef7fb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+                  <ChevronLeft className="size-4" aria-hidden="true" />
+                </button>
+                <button type="button" onClick={() => setTeamIndex((current) => (current + 1) % teamMembers.length)} aria-label="Next team members" className="grid size-9 place-items-center rounded-full border border-slate-200 bg-white text-[#0a1f44] transition-colors hover:border-brand-secondary hover:bg-[#eef7fb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+                  <ChevronRight className="size-4" aria-hidden="true" />
+                </button>
+              </div>
             </motion.section>
           ) : (
             <motion.section key="organization-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }}>

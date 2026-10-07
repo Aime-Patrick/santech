@@ -22,7 +22,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={exo.variable} data-scroll-behavior="smooth">
+    <html lang="en" translate="no" className={exo.variable} data-scroll-behavior="smooth">
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
       <body className={exo.className}>
         {children}
       </body>

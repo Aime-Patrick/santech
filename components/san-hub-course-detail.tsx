@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Award, CalendarDays, Check, ChevronRight, House, Languages, ShieldCheck, Star, Users } from "lucide-react";
+import { Award, CalendarDays, Check, ChevronRight, House, Languages, ShieldCheck, Star, Users } from "lucide-react";
 import type { IconType } from "react-icons";
 import { SiFigma, SiGithub, SiGit, SiNextdotjs, SiPostgresql, SiReact, SiTypescript, SiVercel } from "react-icons/si";
 import { TbApi, TbCloudComputing, TbCode, TbTestPipe } from "react-icons/tb";
 import { VscVscode } from "react-icons/vsc";
 import { PublicPage } from "@/components/public-page";
 import { CourseSectionNav } from "@/components/san-hub-course-section-nav";
+import { SanHubCourseEnrollButton } from "@/components/san-hub-course-enroll-button";
 import { SanHubCourseJourney } from "@/components/san-hub/san-hub-course-journey";
 import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 
@@ -168,18 +169,18 @@ function CourseTechnologyChip({ item }: { item: string }) {
 export function SanHubCourseDetail({ course }: { course: SanHubCourse }) {
   return (
     <PublicPage>
-      <div className="mx-3 bg-white shadow-[0_0_24px_rgba(10,31,68,0.03)] sm:mx-5 lg:mx-8 2xl:mx-auto 2xl:max-w-[1600px]">
-      <section className="bg-white px-6 pb-12 pt-5 sm:px-10 sm:pb-14 lg:px-16 lg:pb-16">
-        <div className="mx-auto max-w-7xl">
+      <div className="mx-3 shadow-[0_0_24px_rgba(10,31,68,0.03)] sm:mx-8 lg:mx-12 2xl:mx-auto 2xl:max-w-[1600px]">
+      <section className="px-4 pb-10 pt-3 sm:px-8 sm:pb-12 sm:pt-4 lg:px-12 lg:pb-14 lg:pt-5">
+        <div className="mx-auto max-w-7xl bg-white p-4 sm:p-6 lg:p-7">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-slate-500"><Link href="/san-hub" className="transition-colors hover:text-brand-secondary"><House className="size-4" aria-label="SAN HUB home" /></Link><ChevronRight className="size-3.5" /><Link href="/san-hub" className="hover:text-brand-secondary">SAN HUB</Link><ChevronRight className="size-3.5" /><span className="truncate text-[#0a1f44]">{course.title}</span></nav>
 
-          <div className="mt-7 grid gap-7 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-9">
-            <div>
+          <div className="mt-7 grid items-start gap-7 lg:grid-cols-[1.1fr_0.9fr] lg:gap-9">
+            <div className="self-start">
               <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">SAN HUB / {course.category}</p>
               <h1 className="font-exo mt-5 max-w-3xl text-3xl font-bold leading-[1] tracking-[-0.045em] text-[#0a1f44] sm:text-4xl lg:text-5xl">{course.title}</h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-700">{course.subtitle}</p>
               <div className="mt-5 flex items-center gap-3 text-sm text-slate-700"><span className="grid size-8 place-items-center rounded-full bg-white text-brand-secondary shadow-sm"><Users className="size-3.5" /></span><span>Instructor: <span className="font-bold text-[#0a1f44]">{course.instructor}</span></span></div>
-              <Link href={`/join-the-community?course=${encodeURIComponent(course.title)}`} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-secondary px-6 py-3 text-sm font-bold text-white shadow-[0_10px_20px_rgba(11,14,135,0.16)] transition-all hover:-translate-y-0.5 hover:bg-[#1519ad]">Enroll for SAN HUB <ArrowUpRight className="size-4" /></Link>
+              <SanHubCourseEnrollButton courseTitle={course.title} />
             </div>
             <div className="relative aspect-[1.2/1] overflow-hidden rounded-2xl bg-[#dceaf8] shadow-[0_20px_45px_rgba(10,31,68,0.1)] sm:aspect-[1.35/1] lg:aspect-[1.15/1]">
               <Image src={course.image} alt="" fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover" priority />
@@ -196,7 +197,7 @@ export function SanHubCourseDetail({ course }: { course: SanHubCourse }) {
 
       <CourseSectionNav course={course} />
 
-      <main className="mx-auto max-w-7xl px-6 pb-16 pt-5 sm:px-10 lg:px-16">
+      <main className="mx-auto max-w-7xl bg-white px-6 pb-16 pt-5 sm:px-10 lg:px-16">
         <section id="about" className="scroll-mt-48 border-b border-slate-200 pb-10">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-brand-secondary">About this pathway</p>
           <div className="mt-3 grid gap-7 lg:grid-cols-[0.75fr_1.25fr]">

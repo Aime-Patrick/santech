@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, BriefcaseBusiness, GraduationCap, Handshake, Lightbulb, Users, X } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import { ArrowUpRight, BriefcaseBusiness, Check, ChevronDown, GraduationCap, Handshake, Lightbulb, Search, Users, X } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { PhoneNumberField } from "@/components/phone-number-field";
 
 type JoinPath = "training" | "internship" | "community" | "innovation";
 
@@ -13,12 +14,335 @@ const peoplePaths: { id: JoinPath; label: string; description: string; icon: typ
   { id: "innovation", label: "Innovation programs", description: "Turn a difficult question or early idea into something tested and useful.", icon: Lightbulb },
 ];
 
+const workActions = [
+  { label: "Partner with us", href: "/connect?topic=partnership", icon: Handshake },
+  { label: "Book a demo", href: "/connect?topic=e-visitors-demo", icon: ArrowUpRight },
+  { label: "Talk with us", href: "/connect?topic=talk", icon: Users },
+];
+
 const pathCopy: Record<JoinPath, { eyebrow: string; title: string; description: string; prompt: string; placeholder: string }> = {
   training: { eyebrow: "Training application", title: "Tell us what you want to learn.", description: "We will use your interests and experience to guide you toward the right SAN HUB learning pathway.", prompt: "Which skills or topics do you want to develop?", placeholder: "For example: full-stack development, AI, cybersecurity, or digital skills..." },
   internship: { eyebrow: "Internship application", title: "Start with a real contribution.", description: "Share your background and the kind of work you want to experience inside a SAN TECH delivery team.", prompt: "What would you like to work on?", placeholder: "Tell us about your skills, project experience, and the kind of team you want to join..." },
   community: { eyebrow: "Community registration", title: "Find your place in the ecosystem.", description: "Join the SAN HUB network for events, mentorship, conversations, and opportunities to contribute.", prompt: "How would you like to participate?", placeholder: "Tell us what you want to learn, share, or contribute..." },
   innovation: { eyebrow: "Innovation program", title: "Move an idea toward impact.", description: "Tell us about the problem, prototype, or research question you want to explore with SAN HUB.", prompt: "What are you working on?", placeholder: "Describe the problem, idea, prototype, or research question..." },
 };
+
+const labelClass = "grid gap-1.5 text-xs font-bold text-[#07152d]";
+const inputClass = "h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary";
+const selectClass = "h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none focus:border-brand-secondary";
+const textareaClass = "resize-y rounded-lg border border-slate-200 bg-white p-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary";
+
+const trainingCourses = [
+  "Full-Stack Software Engineering",
+  "Applied AI & Machine Learning",
+  "Cybersecurity & Threat Intelligence",
+  "Digital Transformation",
+  "IoT & Embedded Systems",
+  "Data and Digital Skills",
+];
+
+const countryCodes = "AF AL DZ AS AD AO AI AQ AG AR AM AW AU AT AZ BS BH BD BB BY BE BZ BJ BM BT BO BQ BA BW BV BR IO BN BG BF BI CV KH CM CA KY CF TD CL CN CX CC CO KM CG CD CK CR CI HR CU CW CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FK FO FJ FI FR GF PF TF GA GM GE DE GH GI GR GL GD GP GU GT GG GN GW GY HT HM VA HN HK HU IS IN ID IR IQ IE IM IL IT JM JP JE JO KZ KE KI KP KR KW KG LA LV LB LS LR LY LI LT LU MO MG MW MY MV ML MT MH MQ MR MU YT MX FM MD MC MN ME MS MA MZ MM NA NR NP NL NC NZ NI NE NG NU NF MK MP NO OM PK PW PS PA PG PY PE PH PN PL PT PR QA RE RO RU RW BL SH KN LC MF PM VC WS SM ST SA SN RS SC SL SG SX SK SI SB SO ZA GS SS ES LK SD SR SJ SE CH SY TW TJ TZ TH TL TG TK TO TT TN TR TM TC TV UG UA AE GB US UM UY UZ VU VE VN VG VI WF EH YE ZM ZW".split(" ");
+
+function CountrySelect() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [value, setValue] = useState("");
+  const countries = useMemo(() => {
+    const displayNames = new Intl.DisplayNames(["en"], { type: "region" });
+    return countryCodes.map((code) => ({ code, name: displayNames.of(code) ?? code })).sort((a, b) => a.name.localeCompare(b.name));
+  }, []);
+  const filteredCountries = countries.filter((country) => country.name.toLowerCase().includes(query.trim().toLowerCase()));
+
+  function selectCountry(country: string) {
+    setValue(country);
+    setQuery("");
+    setIsOpen(false);
+  }
+
+  return (
+    <div className="relative">
+      <input tabIndex={-1} required name="nationality" value={value} readOnly className="sr-only" aria-hidden="true" />
+      <button type="button" role="combobox" aria-expanded={isOpen} aria-haspopup="listbox" onClick={() => setIsOpen((open) => !open)} className="flex h-10 w-full items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 text-left font-normal outline-none transition-colors hover:border-brand-secondary focus:border-brand-secondary focus:ring-2 focus:ring-brand-secondary/15">
+        <span className={value ? "truncate text-sm text-[#07152d]" : "text-sm text-slate-400"}>{value || "Select your nationality"}</span>
+        <ChevronDown className={`size-4 shrink-0 text-slate-500 transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+      </button>
+
+      {isOpen && (
+        <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-lg border border-slate-200 bg-white p-1.5 shadow-[0_16px_35px_rgba(7,21,45,0.16)]">
+          <div className="relative p-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+            <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search countries..." aria-label="Search countries" className="h-9 w-full rounded-md border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm text-[#07152d] outline-none focus:border-brand-secondary focus:ring-2 focus:ring-brand-secondary/15" />
+          </div>
+          <div className="max-h-64 overflow-y-auto" role="listbox" aria-label="Countries">
+            {filteredCountries.length > 0 ? filteredCountries.map((country) => (
+              <button key={country.code} type="button" role="option" aria-selected={value === country.name} onClick={() => selectCountry(country.name)} className="flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-sm text-[#07152d] transition-colors hover:bg-slate-50">
+                <span>{country.name}</span>
+                {value === country.name && <Check className="size-4 text-brand-secondary" aria-hidden="true" />}
+              </button>
+            )) : <p className="px-2.5 py-3 text-sm text-slate-500">No country found.</p>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CourseMultiSelect({ initialCourse = "" }: { initialCourse?: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedCourses, setSelectedCourses] = useState<string[]>(initialCourse ? [initialCourse] : []);
+
+  function toggleCourse(course: string) {
+    setSelectedCourses((current) => current.includes(course) ? current.filter((item) => item !== course) : [...current, course]);
+  }
+
+  function removeCourse(course: string) {
+    setSelectedCourses((current) => current.filter((item) => item !== course));
+  }
+
+  return (
+    <div className="relative">
+      <input type="hidden" name="courses" value={selectedCourses.join(", ")} />
+      <div role="combobox" aria-expanded={isOpen} aria-haspopup="listbox" tabIndex={0} onClick={() => setIsOpen((value) => !value)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") setIsOpen((value) => !value); }} className="flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-left text-sm font-normal text-[#07152d] outline-none transition-colors hover:border-brand-secondary focus:border-brand-secondary focus:ring-2 focus:ring-brand-secondary/15">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+          {selectedCourses.length > 0 ? selectedCourses.map((course) => (
+            <span key={course} className="inline-flex max-w-full items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-[#07152d]">
+              <span className="truncate">{course}</span>
+              <button type="button" aria-label={`Remove ${course}`} onClick={(event) => { event.stopPropagation(); removeCourse(course); }} className="grid size-4 shrink-0 place-items-center rounded-sm text-slate-500 transition-colors hover:bg-slate-200 hover:text-[#07152d]">
+                <X className="size-3" aria-hidden="true" />
+              </button>
+            </span>
+          )) : <span className="text-slate-400">Select courses</span>}
+        </div>
+        <ChevronDown className={`size-4 shrink-0 text-slate-500 transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+      </div>
+
+      {isOpen && (
+        <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-lg border border-slate-200 bg-white p-1.5 shadow-[0_16px_35px_rgba(7,21,45,0.16)]" role="listbox" aria-label="Choose courses" onClick={(event) => event.stopPropagation()}>
+          <div>
+            {trainingCourses.map((course) => {
+              const selected = selectedCourses.includes(course);
+              return (
+                <label key={course} className="flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm text-[#07152d] transition-colors hover:bg-slate-50">
+                  <input type="checkbox" checked={selected} onChange={() => toggleCourse(course)} className="peer sr-only" />
+                  <span className={`grid size-4 shrink-0 place-items-center rounded border ${selected ? "border-brand-secondary bg-brand-secondary text-white" : "border-slate-300 bg-white"}`} aria-hidden="true">
+                    {selected && <Check className="size-3" />}
+                  </span>
+                  <span>{course}</span>
+                </label>
+              );
+            })}
+          </div>
+          <div className="border-t border-slate-100 p-1.5">
+            <button type="button" onClick={() => setIsOpen(false)} className="flex h-9 w-full items-center justify-center rounded-md bg-[#07152d] text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Done</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InternshipFields() {
+  return (
+    <>
+      <label className={labelClass}>
+        Gender
+        <select required name="gender" defaultValue="" className={selectClass}>
+          <option value="" disabled>Select your gender</option>
+          <option>Female</option>
+          <option>Male</option>
+          <option>Prefer not to say</option>
+        </select>
+      </label>
+
+      <PhoneNumberField required numberName="phoneNumber" labelClassName={labelClass} inputClassName={inputClass} selectClassName={selectClass} />
+
+      <label className={labelClass}>
+        Other contact
+        <input required name="otherContact" placeholder="WhatsApp, LinkedIn, or alternate contact" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        School
+        <input required minLength={2} name="school" placeholder="School, university, or institution" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        Trade / faculty
+        <input required minLength={2} name="tradeFaculty" placeholder="Faculty, department, or trade" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        Timeline from
+        <input required type="date" name="timelineFrom" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        Timeline to
+        <input required type="date" name="timelineTo" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        Nationality
+        <CountrySelect />
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Upload CV or supporting document <span className="font-normal text-slate-500">(optional — can be added later)</span>
+        <input type="file" name="upload" accept=".pdf,.doc,.docx" className="h-10 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-normal text-slate-600 file:mr-3 file:border-0 file:bg-transparent file:p-0 file:font-bold file:text-[#07152d]" />
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Gap you wish to cover
+        <textarea required minLength={10} name="gapToCover" rows={3} className={textareaClass} placeholder="What knowledge, skills, or experience would you like to gain?" />
+      </label>
+    </>
+  );
+}
+
+function TrainingFields({ initialCourse = "" }: { initialCourse?: string }) {
+  return (
+    <>
+      <PhoneNumberField required labelClassName={labelClass} inputClassName={inputClass} selectClassName={selectClass} />
+
+      <label className={labelClass}>
+        Gender
+        <select required name="gender" defaultValue="" className={selectClass}>
+          <option value="" disabled>Select your gender</option>
+          <option>Female</option>
+          <option>Male</option>
+          <option>Prefer not to say</option>
+        </select>
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Courses
+        <CourseMultiSelect initialCourse={initialCourse} />
+        <span className="font-normal text-slate-500">Choose one or more courses from the dropdown.</span>
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Other
+        <textarea name="other" rows={2} className={textareaClass} placeholder="Tell us anything else about your learning needs..." />
+      </label>
+
+      <label className={labelClass}>
+        School / institution
+        <input required name="schoolInstitution" placeholder="School or institution" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        Location
+        <input required name="location" placeholder="City or district" className={inputClass} />
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Nationality
+        <CountrySelect />
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Which skills or topics do you want to develop?
+        <textarea required minLength={10} name="skillsTopics" rows={4} className={textareaClass} placeholder="Tell us which skills or topics you want to develop..." />
+      </label>
+    </>
+  );
+}
+
+export function TrainingApplicationDialog({ isOpen, onClose, initialCourse = "" }: { isOpen: boolean; onClose: () => void; initialCourse?: string }) {
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
+  }, [initialCourse, isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitted(true);
+  }
+
+  return (
+    <motion.div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/65 p-4 backdrop-blur-sm sm:p-6" role="presentation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onMouseDown={(event) => { if (event.currentTarget === event.target) onClose(); }}>
+      <motion.div role="dialog" aria-modal="true" aria-labelledby="training-application-title" className="max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/60 bg-[#f7faff] shadow-[0_30px_90px_rgba(7,21,45,0.28)]" initial={{ opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}>
+        <div className="flex items-start justify-between gap-5 border-b border-slate-200 bg-white px-5 py-4 sm:px-7">
+          <div><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Training application</p><h2 id="training-application-title" className="font-exo mt-1 text-xl font-bold leading-tight tracking-[-0.035em] text-[#07152d] sm:text-2xl">Tell us what you want to learn.</h2></div>
+          <button type="button" onClick={onClose} aria-label="Close training application" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" /></button>
+        </div>
+        <div className="p-5 sm:p-7">
+          {submitted ? (
+            <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">Thank you for starting the conversation.</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your training application is ready. The SAN HUB team will follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={onClose} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">Close</button></div></div>
+          ) : (
+            <>
+              <p className="mb-5 max-w-2xl text-sm leading-6 text-slate-600">We will use your interests and experience to guide you toward the right SAN HUB learning pathway.</p>
+              <form onSubmit={handleSubmit} className="grid gap-3 sm:grid-cols-2">
+                <label className={labelClass}>Full name<input required minLength={2} name="name" placeholder="Your full name" className={inputClass} /></label>
+                <label className={labelClass}>Email address<input required type="email" name="email" placeholder="you@example.com" className={inputClass} /></label>
+                <TrainingFields initialCourse={initialCourse} />
+                <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#07152d] px-5 text-sm font-bold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary sm:col-span-2">Continue with training <ArrowUpRight className="size-4" /></button>
+              </form>
+            </>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function InnovationFields() {
+  return (
+    <>
+      <PhoneNumberField required labelClassName={labelClass} inputClassName={inputClass} selectClassName={selectClass} />
+
+      <label className={labelClass}>
+        Gender
+        <select required name="gender" defaultValue="" className={selectClass}>
+          <option value="" disabled>Select your gender</option>
+          <option>Female</option>
+          <option>Male</option>
+          <option>Prefer not to say</option>
+        </select>
+      </label>
+
+      <label className={labelClass}>
+        ID (optional)
+        <input name="identification" placeholder="National ID or passport number" className={inputClass} />
+      </label>
+
+      <label className={labelClass}>
+        Join date
+        <input required type="date" name="joinDate" className={inputClass} />
+      </label>
+
+      <label className={`${labelClass} sm:col-span-2`}>
+        Idea
+        <textarea required minLength={20} name="idea" rows={4} className={textareaClass} placeholder="Describe the idea, problem, or opportunity you want to explore..." />
+      </label>
+
+      <label className={labelClass}>
+        Services
+        <select required name="services" defaultValue="" className={selectClass}>
+          <option value="" disabled>Select a service</option>
+          <option>Learning</option>
+          <option>IP registration</option>
+          <option>Product development</option>
+          <option>Both learning and product development</option>
+          <option>Other</option>
+        </select>
+      </label>
+
+      <label className={labelClass}>
+        Upload document (optional)
+        <input type="file" name="document" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" className="h-10 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-normal text-slate-600 file:mr-3 file:border-0 file:bg-transparent file:p-0 file:font-bold file:text-[#07152d]" />
+      </label>
+    </>
+  );
+}
 
 export function JoinCommunityPage({ initialPath = "community", course = "", openInitially = false }: { initialPath?: JoinPath; course?: string; openInitially?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
@@ -51,18 +375,17 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
     <>
       <section className="relative overflow-hidden px-6 py-7 sm:px-10 sm:py-9 lg:px-16 lg:py-10">
         <div className="mx-auto max-w-7xl">
-          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12">
-            <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN TECH / Join us</p><h1 className="font-exo mt-2 max-w-2xl text-2xl font-bold leading-[1] tracking-[-0.05em] text-[#07152d] sm:text-3xl lg:text-4xl">Choose the way you want to move forward.</h1></div>
-          <motion.article initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="rounded-2xl bg-[#07152d] p-5 text-white shadow-[0_16px_35px_rgba(7,11,36,0.14)] sm:p-6">
-            <div><h2 className="font-exo text-xl font-bold tracking-[-0.04em] sm:text-2xl">Work with SAN TECH.</h2></div>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">Partner, sponsor a pathway, explore E-Visitors, or bring a technology challenge to our team.</p>
-            <div className="mt-4 grid gap-2 sm:grid-cols-3">{[{ label: "Partner with us", href: "/connect?topic=partnership", icon: Handshake }, { label: "Book a demo", href: "/connect?topic=e-visitors-demo", icon: ArrowUpRight }, { label: "Talk with us", href: "/connect?topic=talk", icon: Users }].map(({ label, href, icon: Icon }, index) => <motion.a key={label} href={href} initial={{ opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -2, boxShadow: "0 12px 26px rgba(8,198,231,0.22)" }} whileTap={{ scale: 0.98 }} transition={{ opacity: { duration: 0.25, delay: 0.12 + index * 0.08 }, y: { duration: 0.2, delay: 0.12 + index * 0.08 }, boxShadow: { duration: 0.2 } }} className="group relative flex min-h-12 items-center justify-between gap-2 overflow-hidden rounded-xl border border-brand-cyan bg-white px-2.5 py-2 text-left text-[#07152d] shadow-[0_8px_20px_rgba(8,198,231,0.14)] transition-shadow"><motion.span aria-hidden="true" className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-brand-cyan/25 to-transparent" initial={{ x: "-30%" }} animate={prefersReducedMotion ? { x: "-30%" } : { x: ["-30%", "420%"] }} transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 4, delay: index * 0.65, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }} /><span className="relative z-10 text-sm font-bold">{label}</span><motion.span className="relative z-10 shrink-0 text-brand-secondary" whileHover={{ scale: 1.12, rotate: 8 }} transition={{ type: "spring", stiffness: 500, damping: 24 }}><Icon className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></motion.span></motion.a>)}</div>
-          </motion.article>
-          </div>
-
-          <div className="mt-7 border-t border-slate-200 pt-6">
-            <article className="rounded-2xl border-t-4 border-brand-cyan bg-white p-5 shadow-[0_16px_35px_rgba(7,11,36,0.08)] sm:p-6">
-              <div className="flex items-start justify-between gap-4"><div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">For people</p><h2 className="font-exo mt-2 text-xl font-bold tracking-[-0.04em] text-[#07152d] sm:text-2xl">Join the SAN HUB ecosystem.</h2></div><Users className="size-6 text-brand-secondary" aria-hidden="true" /></div>
+          <div>
+            <article className="flex min-h-[520px] flex-col justify-center rounded-2xl border-t-4 border-brand-cyan bg-white p-5 shadow-[0_16px_35px_rgba(7,11,36,0.08)] sm:min-h-[560px] sm:p-6">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">For people</p><h2 className="font-exo mt-2 text-xl font-bold tracking-[-0.04em] text-[#07152d] sm:text-2xl">Join the SAN HUB ecosystem.</h2></div>
+                <div className="flex items-start gap-2 xl:max-w-[48rem]">
+                  <div className="grid w-full gap-2 sm:grid-cols-3">
+                    {workActions.map(({ label, href, icon: Icon }, index) => <motion.a key={label} href={href} initial={{ opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -2, boxShadow: "0 12px 26px rgba(8,198,231,0.22)" }} whileTap={{ scale: 0.98 }} transition={{ opacity: { duration: 0.25, delay: 0.12 + index * 0.08 }, y: { duration: 0.2, delay: 0.12 + index * 0.08 }, boxShadow: { duration: 0.2 } }} className="group relative flex min-h-11 items-center justify-between gap-2 overflow-hidden rounded-xl border border-brand-cyan bg-white px-3 py-2 text-left text-[#07152d] shadow-[0_8px_20px_rgba(8,198,231,0.14)] transition-shadow"><motion.span aria-hidden="true" className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-brand-cyan/25 to-transparent" initial={{ x: "-30%" }} animate={prefersReducedMotion ? { x: "-30%" } : { x: ["-30%", "420%"] }} transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 4, delay: index * 0.65, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }} /><span className="relative z-10 text-xs font-bold sm:text-sm">{label}</span><Icon className="relative z-10 size-4 shrink-0 text-brand-secondary" aria-hidden="true" /></motion.a>)}
+                  </div>
+                  <Users className="mt-2 size-6 shrink-0 text-brand-secondary" aria-hidden="true" />
+                </div>
+              </div>
               <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">Learn, contribute, find mentorship, and build the experience needed to create useful technology.</p>
               <div className="mt-5 grid gap-2 sm:grid-cols-2">{peoplePaths.map(({ id, label, description, icon: Icon }) => <button key={id} type="button" onClick={() => openPath(id)} className="group rounded-xl border border-brand-cyan bg-white p-3.5 text-left shadow-[0_8px_20px_rgba(8,198,231,0.14)] transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(8,198,231,0.22)]"><span className="flex items-center justify-between gap-3"><span className="flex items-center gap-2 text-sm font-bold text-[#07152d]"><Icon className="size-4 text-brand-secondary" aria-hidden="true" />{label}</span><ArrowUpRight className="size-4 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></span><span className="mt-1.5 block text-xs leading-5 text-slate-500">{description}</span></button>)}</div>
             </article>
@@ -74,7 +397,24 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
         {isDialogOpen && <motion.div key="join-dialog" className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/65 p-4 backdrop-blur-sm sm:p-6" role="presentation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} onMouseDown={(event) => { if (event.currentTarget === event.target) setIsDialogOpen(false); }}>
           <motion.div role="dialog" aria-modal="true" aria-labelledby="join-dialog-title" className="max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/60 bg-[#f7faff] shadow-[0_30px_90px_rgba(7,21,45,0.28)]" initial={{ opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.98 }} transition={{ duration: 0.24, ease: "easeOut" }}>
             <div className="flex items-start justify-between gap-5 border-b border-slate-200 bg-white px-5 py-4 sm:px-7"><div><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{copy.eyebrow}</p><h2 id="join-dialog-title" className="font-exo mt-1 text-xl font-bold leading-tight tracking-[-0.035em] text-[#07152d] sm:text-2xl">{copy.title}</h2></div><button type="button" onClick={() => setIsDialogOpen(false)} aria-label="Close application form" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" /></button></div>
-            <div className="p-5 sm:p-7">{submitted ? <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">Thank you for starting the conversation.</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your {copy.eyebrow.toLowerCase()} details are ready for the SAN HUB team. We will use the contact information you provided to follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={() => setIsDialogOpen(false)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">Close</button></div></div> : <><p className="mb-5 max-w-2xl text-sm leading-6 text-slate-600">{copy.description}</p><form onSubmit={handleSubmit} className="grid gap-3 sm:grid-cols-2"><label className="grid gap-1.5 text-xs font-bold text-[#07152d]">Full name<input required minLength={2} name="name" placeholder="Your full name" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" /></label><label className="grid gap-1.5 text-xs font-bold text-[#07152d]">Email address<input required type="email" name="email" placeholder="you@example.com" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" /></label><label className="grid gap-1.5 text-xs font-bold text-[#07152d]">Phone number<input required type="tel" name="phone" pattern="\\+?[0-9\\s().-]{7,}" title="Enter a valid phone number" placeholder="+250 7xx xxx xxx" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" /></label><label className="grid gap-1.5 text-xs font-bold text-[#07152d]">Country<input required defaultValue="Rwanda" name="country" placeholder="Rwanda" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" /></label>{path === "training" && <label className="grid gap-1.5 text-xs font-bold text-[#07152d] sm:col-span-2">Learning format<select required defaultValue="" name="format" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none focus:border-brand-secondary"><option value="" disabled>Select a learning format</option><option>In-person</option><option>Online</option><option>Either</option></select></label>}{path === "internship" && <label className="grid gap-1.5 text-xs font-bold text-[#07152d] sm:col-span-2">School or institution<input required minLength={2} name="institution" placeholder="School, university, or organization" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" /></label>}<label className="grid gap-1.5 text-xs font-bold text-[#07152d] sm:col-span-2">{path === "training" ? "Preferred course or programme" : path === "internship" ? "Area of interest" : "Experience or organization"}<input required minLength={2} defaultValue={course} name="focus" className="h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" placeholder={path === "training" ? "Course or skill area" : "What should we know?"} /></label><label className="grid gap-1.5 text-xs font-bold text-[#07152d] sm:col-span-2">{copy.prompt}<textarea required minLength={20} name="message" rows={4} className="resize-y rounded-lg border border-slate-200 bg-white p-3 font-normal outline-none transition-colors placeholder:text-slate-400 focus:border-brand-secondary" placeholder={copy.placeholder} /></label><button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#07152d] px-5 text-sm font-bold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary sm:col-span-2">Continue with {peoplePaths.find((item) => item.id === path)?.label.toLowerCase()} <ArrowUpRight className="size-4" /></button></form></>}</div>
+            <div className="p-5 sm:p-7">
+              {submitted ? <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">Thank you for starting the conversation.</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your {copy.eyebrow.toLowerCase()} details are ready for the SAN HUB team. We will use the contact information you provided to follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={() => setIsDialogOpen(false)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">Close</button></div></div> : <>
+                <p className="mb-5 max-w-2xl text-sm leading-6 text-slate-600">{copy.description}</p>
+                <form onSubmit={handleSubmit} className="grid gap-3 sm:grid-cols-2">
+                  <label className={labelClass}>Full name<input required minLength={2} name="name" placeholder="Your full name" className={inputClass} /></label>
+                  {path !== "innovation" && <label className={labelClass}>Email address<input required type="email" name="email" placeholder="you@example.com" className={inputClass} /></label>}
+
+                  {path === "internship" ? <InternshipFields /> : path === "training" ? <TrainingFields initialCourse={course} /> : path === "innovation" ? <InnovationFields /> : <>
+                    <PhoneNumberField required labelClassName={labelClass} inputClassName={inputClass} selectClassName={selectClass} />
+                    <label className={labelClass}>Country<input required defaultValue="Rwanda" name="country" placeholder="Rwanda" className={inputClass} /></label>
+                    <label className={`${labelClass} sm:col-span-2`}>Experience or organization<input required minLength={2} defaultValue={course} name="focus" className={inputClass} placeholder="What should we know?" /></label>
+                    <label className={`${labelClass} sm:col-span-2`}>{copy.prompt}<textarea required minLength={20} name="message" rows={4} className={textareaClass} placeholder={copy.placeholder} /></label>
+                  </>}
+
+                  <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#07152d] px-5 text-sm font-bold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary sm:col-span-2">Continue with {peoplePaths.find((item) => item.id === path)?.label.toLowerCase()} <ArrowUpRight className="size-4" /></button>
+                </form>
+              </>}
+            </div>
           </motion.div>
         </motion.div>}
       </AnimatePresence>

@@ -158,15 +158,29 @@ export function EVisitorsProductPage() {
         />
         <div className="absolute inset-0 -z-0 bg-[linear-gradient(90deg,rgba(7,21,45,0.68)_0%,rgba(7,21,45,0.5)_34%,rgba(7,21,45,0.08)_72%,rgba(7,21,45,0.15)_100%)]" aria-hidden="true" />
         <div className="absolute inset-0 -z-0 bg-[linear-gradient(0deg,rgba(7,21,45,0.58)_0%,transparent_44%,rgba(7,21,45,0.08)_100%)]" aria-hidden="true" />
+        <div
+          className="pointer-events-none absolute inset-0 z-[1] overflow-hidden bg-[#07152d]/95 [clip-path:polygon(88%_0,100%_0,100%_100%,48%_100%)]"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-0 z-[2] overflow-hidden bg-white"
+          style={{ clipPath: "polygon(88% 0, 89.2% 0, 49.2% 100%, 48% 100%)" }}
+          aria-hidden="true"
+        >
+          <div
+            className="absolute -inset-1/2 bg-[url('/imingogo-trimmed.png')] bg-center bg-repeat"
+            style={{ backgroundPosition: "center bottom", backgroundSize: "44px 22px", backgroundRepeat: "repeat", transform: "rotate(-45deg)" }}
+            aria-hidden="true"
+          />
+        </div>
 
-        <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-7xl items-center px-6 pb-28 pt-16 sm:px-10 sm:pb-32 sm:pt-20 lg:px-16">
-          <div className="max-w-2xl">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-cyan">SAN TECH / Flagship product</p>
-            <h1 className="font-exo mt-4 max-w-xl text-5xl font-bold leading-[0.94] tracking-[-0.06em] text-white sm:text-6xl lg:text-8xl">E-Visitors</h1>
-            <h2 className="font-exo mt-5 max-w-xl text-xl leading-tight tracking-[-0.035em] text-white/90 sm:text-2xl">Built in Rwanda for safer, more visible institutions.</h2>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base">A connected visitor and access-management platform for the people, places, and institutions that keep Rwanda moving.</p>
-            <div className="mt-7 flex flex-wrap gap-3"><CalendlyDialog label="Request a demo" className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-5 py-3 text-sm font-bold text-[#07152d] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]" /><a href="#platform-console" className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]">See the platform <ArrowRight className="size-4" aria-hidden="true" /></a></div>
-            <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/20 pt-5">
+        <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-6 pb-28 pt-16 sm:px-10 sm:pb-32 sm:pt-20 sm:px-16">
+          <div className="absolute bottom-7 left-[60%] right-0 w-[40%] max-w-none pr-6 text-right sm:pr-8 lg:pr-10">
+            <h1 className="font-exo ml-auto mt-4 max-w-xl text-5xl font-bold leading-[0.94] tracking-[-0.06em] text-white sm:text-6xl lg:text-8xl">E-Visitors</h1>
+            <h2 className="font-exo ml-auto mt-5 max-w-xl text-lg leading-tight tracking-[-0.035em] text-white/90 sm:text-xl">Built in Rwanda for safer, more visible institutions.</h2>
+            <p className="ml-auto mt-4 max-w-sm text-sm leading-6 text-white/70 sm:text-base">A connected visitor and access-management platform for the people, places, and institutions that keep Rwanda moving.</p>
+            <div className="mt-7 flex w-full flex-wrap justify-end gap-3"><CalendlyDialog label="Request a demo" className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-5 py-3 text-sm font-bold text-[#07152d] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]" /><a href="#platform-console" className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]">See the platform <ArrowRight className="size-4" aria-hidden="true" /></a></div>
+            <div className="mt-8 flex w-full flex-wrap items-center justify-end gap-4 border-t border-white/20 pt-5">
               <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.2em] text-white sm:text-xs">Testimonials</p>
               <div className="flex items-center pl-2" aria-label="E-Visitors testimonials">
                 {testimonialAvatars.map((avatar, index) => (
@@ -182,7 +196,7 @@ export function EVisitorsProductPage() {
           </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-end gap-4 px-6 pb-5 sm:px-10 sm:pb-7 lg:px-16">
+        <div className="absolute bottom-5 left-6 z-20 flex items-end gap-4 sm:bottom-7 sm:left-10 lg:left-16">
           <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-white/20 bg-[#07152d]/45 p-1.5 backdrop-blur-md"><button type="button" onClick={toggleVideoPlayback} aria-label={isVideoPlaying ? "Pause E-Visitors video" : "Play E-Visitors video"} aria-pressed={!isVideoPlaying} className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">{isVideoPlaying ? <Pause className="size-4" aria-hidden="true" /> : <Play className="size-4 translate-x-px" aria-hidden="true" />}</button><button type="button" onClick={toggleVideoMute} aria-label={isVideoMuted ? "Unmute E-Visitors video" : "Mute E-Visitors video"} aria-pressed={!isVideoMuted} className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">{isVideoMuted ? <VolumeX className="size-4" aria-hidden="true" /> : <Volume2 className="size-4" aria-hidden="true" />}</button></div>
         </div>
       </section>
