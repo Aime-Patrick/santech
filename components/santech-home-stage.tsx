@@ -35,7 +35,7 @@ export type PartnerBrand = {
   government?: boolean;
 };
 
-const storyCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] 2xl:text-[18px]";
+const storyCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] min-[1440px]:text-[17px] 2xl:text-[18px]";
 
 function ecosystemEmoji(item: string) {
   if (item.startsWith("SAN TECH")) return "⚙️";
@@ -305,10 +305,10 @@ function ImpactMarquee() {
           <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-5 pr-5 sm:gap-7 sm:pr-7 2xl:gap-10 2xl:pr-10">
             {impactStats.map(([value, suffix, label]) => (
               <div key={`${group}-${label}`} className="min-w-[96px] shrink-0 sm:min-w-[116px] 2xl:min-w-[130px]">
-                <p className="font-exo text-[clamp(1.15rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44]">
+                <p className="font-exo text-[clamp(1.15rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44] min-[1440px]:text-[2.15rem]">
                   <ImpactCount value={value} suffix={suffix} />
                 </p>
-                <p className="mt-1 max-w-[140px] whitespace-normal text-[8px] font-bold uppercase leading-tight tracking-[0.02em] text-slate-500 sm:text-[9px]">{label}</p>
+                <p className="mt-1 max-w-[140px] whitespace-normal text-[8px] font-bold uppercase leading-tight tracking-[0.02em] text-slate-500 sm:text-[9px] min-[1440px]:text-[10px]">{label}</p>
               </div>
             ))}
           </div>
@@ -608,7 +608,7 @@ export function SantechHomeStage() {
               onMouseLeave={() => setStoryHovered(false)}
             >
                 <div className="flex min-w-0 items-center justify-between gap-3 border-b border-slate-200 pb-3">
-                <p className="min-w-0 truncate text-[10px] font-black uppercase tracking-[0.2em] text-[#0a1f44]">{activeStory.eyebrow}</p>
+                <p className="min-w-0 truncate text-[10px] font-black uppercase tracking-[0.2em] text-[#0a1f44] min-[1440px]:text-[11px]">{activeStory.eyebrow}</p>
                 <div className="flex shrink-0 items-center gap-1.5" aria-label="SAN TECH story slides">
                   <span ref={slideArrowRef} className="inline-flex shrink-0" aria-hidden="true">
                     <Image src="/undraw_arrow.svg" alt="" width={62} height={17} className="h-auto w-8 sm:w-12 2xl:w-[62px]" />
@@ -621,7 +621,7 @@ export function SantechHomeStage() {
                         onClick={() => { setStoryScale(1); setActiveStoryIndex(index); setEcosystemDialogItem(null); }}
                         aria-label={`Show slide ${slide.index}: ${slide.eyebrow}`}
                         aria-current={index === activeStoryIndex ? "true" : undefined}
-                        className={`px-1 text-[11px] font-black tracking-[0.12em] transition-colors duration-200 ${index === activeStoryIndex ? "text-[#0a1f44]" : "text-slate-400 hover:text-[#0a1f44]"}`}
+                        className={`px-1 text-[11px] font-black tracking-[0.12em] transition-colors duration-200 min-[1440px]:text-[12px] ${index === activeStoryIndex ? "text-[#0a1f44]" : "text-slate-400 hover:text-[#0a1f44]"}`}
                       >
                         {slide.index}
                       </button>
@@ -641,7 +641,7 @@ export function SantechHomeStage() {
                     className="flex min-h-full flex-1 flex-col pb-10 pt-1"
                   >
                   <div ref={storyContentRef} className="flex min-h-full flex-1 flex-col" style={{ transform: `scale(${storyScale})`, transformOrigin: "top left", width: `${100 / storyScale}%` }}>
-                  {activeStory.title && <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.2rem,1.55vw,2.1rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230]">{activeStory.title}</h1>}
+                  {activeStory.title && <h1 className="font-exo mt-2 max-w-3xl text-[clamp(1.2rem,1.55vw,2.1rem)] font-bold leading-[1.08] tracking-[-0.025em] text-[#0c1230] min-[1440px]:text-[1.5rem]">{activeStory.title}</h1>}
                   {activeStory.variant === "services" ? (
                     <div className="mt-2 w-full max-w-none self-start">
                       <p className={`w-full ${storyCopyClass} text-slate-700`}>
@@ -678,8 +678,8 @@ export function SantechHomeStage() {
                     <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2">
                       {activeStory.groups.map((group) => (
                         <div key={group.label} className="min-w-0">
-                          <p className="text-[11px] font-black uppercase tracking-[0.12em] text-brand-secondary sm:text-[12px]">{group.label}</p>
-                          <p className="mt-0.5 text-[13px] leading-[1.35] text-slate-500 sm:text-[14px]">{group.items}</p>
+                          <p className="text-[11px] font-black uppercase tracking-[0.12em] text-brand-secondary sm:text-[12px] min-[1440px]:text-[13px]">{group.label}</p>
+                          <p className="mt-0.5 text-[13px] leading-[1.35] text-slate-500 sm:text-[14px] min-[1440px]:text-[15px]">{group.items}</p>
                         </div>
                       ))}
                     </div>
@@ -690,9 +690,9 @@ export function SantechHomeStage() {
                       {activeStory.items.map((item) => (
                         isEcosystemStory ? (() => { const [label] = item.split(/\s+[—–-]\s+/); return <button key={item} type="button" onClick={() => { setStoryPlaying(false); setEcosystemDialogItem(item); }} aria-haspopup="dialog" className="group flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand-cyan hover:bg-white hover:shadow-[0_8px_18px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-white text-base leading-none shadow-sm" aria-hidden="true">
                           {ecosystemEmoji(item)}</span>
-                          <span className="flex-1 text-[13px] font-bold leading-5 text-[#0a1f44] sm:text-[14px] 2xl:text-[15px]">{label}</span>
+                          <span className="flex-1 text-[13px] font-bold leading-5 text-[#0a1f44] sm:text-[14px] min-[1440px]:text-[15px] 2xl:text-[15px]">{label}</span>
                           <ChevronRight className="size-3.5 shrink-0 text-brand-secondary transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                          </button>; })() : <p key={item} className={`${isStakeholderStory ? "text-[13px] leading-[1.35] sm:text-[14px] 2xl:text-[15px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
+                          </button>; })() : <p key={item} className={`${isStakeholderStory ? "text-[13px] leading-[1.35] sm:text-[14px] min-[1440px]:text-[15px] 2xl:text-[15px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
                       ))}
                     </div>
                   )}
@@ -763,16 +763,16 @@ export function SantechHomeStage() {
         })()}
       </AnimatePresence>
 
-      <div data-home-metrics className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[84px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)]">
+      <div data-home-metrics className="grid w-full min-h-[150px] shrink-0 grid-cols-1 border-t border-slate-300/80 bg-white text-[11px] font-semibold text-slate-500 sm:min-h-[120px] lg:h-[84px] lg:min-h-0 lg:grid-cols-[minmax(350px,1.15fr)_minmax(0,1.35fr)] min-[1440px]:text-[12px]">
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-            <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
+            <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em] min-[1440px]:text-[12px]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
             <ImpactMarquee />
           </div>
         </div>
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 overflow-hidden px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-            <span className="z-10 w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em]"><span className="block">Partners</span><span className="block">/ Clients</span></span>
+            <span className="z-10 w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em] min-[1440px]:text-[12px]"><span className="block">Partners</span><span className="block">/ Clients</span></span>
             <PartnerMarquee />
           </div>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -10,7 +10,10 @@ import {
   Download, 
   ArrowUpRight,
   FileText,
-  LayoutGrid
+  LayoutGrid,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw
 } from "lucide-react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
@@ -23,6 +26,13 @@ const PAGES = Array.from({ length: TOTAL_PAGES }, (_, i) => ({
   src: `/images/company-profile/page-${i + 1}.jpg`,
 }));
 
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 2.5;
+const ZOOM_STEP = 0.25;
+const subscribeToHydration = () => () => {};
+const getClientHydrationSnapshot = () => true;
+const getServerHydrationSnapshot = () => false;
+
 export function CompanyProfilePdf({
   url = "/images/SAN TECH COMPANY PROFILE (1).pdf",
 }: {
@@ -32,23 +42,25 @@ export function CompanyProfilePdf({
   const [currentPage, setCurrentPage] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showThumbnails, setShowThumbnails] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [zoom, setZoom] = useState(MIN_ZOOM);
+  const mounted = useSyncExternalStore(subscribeToHydration, getClientHydrationSnapshot, getServerHydrationSnapshot);
 
-  useEffect(() => {
-    setMounted(true);
+  const goToPage = useCallback((page: number) => {
+    setCurrentPage(Math.min(TOTAL_PAGES, Math.max(1, page)));
+    setZoom(MIN_ZOOM);
   }, []);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (isExternalUrl) return;
 
     if (e.key === "ArrowRight") {
-      setCurrentPage((p) => Math.min(TOTAL_PAGES, p + 1));
+      goToPage(currentPage + 1);
     } else if (e.key === "ArrowLeft") {
-      setCurrentPage((p) => Math.max(1, p - 1));
+      goToPage(currentPage - 1);
     } else if (e.key === "Escape" && isFullscreen) {
       setIsFullscreen(false);
     }
-  }, [isExternalUrl, isFullscreen]);
+  }, [currentPage, goToPage, isExternalUrl, isFullscreen]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -65,6 +77,14 @@ export function CompanyProfilePdf({
   }, [isFullscreen]);
 
   const inlinePdfUrl = getInlinePdfUrl(url);
+
+  function adjustZoom(amount: number) {
+    setZoom((current) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current + amount)));
+  }
+
+  function resetZoom() {
+    setZoom(MIN_ZOOM);
+  }
 
   // If viewing an external PDF link
   if (isExternalUrl) {
@@ -134,6 +154,43 @@ export function CompanyProfilePdf({
         </div>
 
         <div className="flex items-center gap-1">
+          {!showThumbnails && (
+            <div className="mr-1 flex items-center gap-0.5 border border-slate-300 bg-white p-0.5" aria-label="Image zoom controls">
+              <button
+                type="button"
+                onClick={() => adjustZoom(-ZOOM_STEP)}
+                disabled={zoom <= MIN_ZOOM}
+                title="Zoom out"
+                aria-label="Zoom out"
+                className="grid size-6 place-items-center text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#0a1f44] disabled:cursor-not-allowed disabled:opacity-35"
+              >
+                <ZoomOut className="size-3.5" />
+              </button>
+              <span className="min-w-10 px-1 text-center text-[10px] font-black text-[#0a1f44]" aria-live="polite">
+                {Math.round(zoom * 100)}%
+              </span>
+              <button
+                type="button"
+                onClick={() => adjustZoom(ZOOM_STEP)}
+                disabled={zoom >= MAX_ZOOM}
+                title="Zoom in"
+                aria-label="Zoom in"
+                className="grid size-6 place-items-center text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#0a1f44] disabled:cursor-not-allowed disabled:opacity-35"
+              >
+                <ZoomIn className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={resetZoom}
+                disabled={zoom === MIN_ZOOM}
+                title="Reset zoom"
+                aria-label="Reset zoom"
+                className="grid size-6 place-items-center text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#0a1f44] disabled:cursor-not-allowed disabled:opacity-35"
+              >
+                <RotateCcw className="size-3" />
+              </button>
+            </div>
+          )}
           <button
             type="button"
             onClick={() => setShowThumbnails((v) => !v)}
@@ -170,7 +227,7 @@ export function CompanyProfilePdf({
                 key={page.pageNumber}
                 type="button"
                 onClick={() => {
-                  setCurrentPage(page.pageNumber);
+                  goToPage(page.pageNumber);
                   setShowThumbnails(false);
                 }}
                 className={`group relative flex flex-col border bg-white p-1 text-left transition-all ${
@@ -210,7 +267,8 @@ export function CompanyProfilePdf({
               fill
               priority={currentPage === 1}
               sizes="450px"
-              className="object-contain"
+              className="object-contain transition-transform duration-200"
+              style={{ transform: `scale(${zoom})` }}
             />
           </div>
 
@@ -219,7 +277,7 @@ export function CompanyProfilePdf({
             <button
               type="button"
               disabled={currentPage <= 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              onClick={() => goToPage(currentPage - 1)}
               className="flex items-center gap-1 border border-slate-300 bg-white px-3 py-1 text-[11px] font-bold text-[#0a1f44] transition-all hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft className="size-3.5" />
@@ -237,7 +295,7 @@ export function CompanyProfilePdf({
             <button
               type="button"
               disabled={currentPage >= TOTAL_PAGES}
-              onClick={() => setCurrentPage((p) => Math.min(TOTAL_PAGES, p + 1))}
+              onClick={() => goToPage(currentPage + 1)}
               className="flex items-center gap-1 border border-slate-300 bg-white px-3 py-1 text-[11px] font-bold text-[#0a1f44] transition-all hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
@@ -300,6 +358,41 @@ export function CompanyProfilePdf({
               </div>
 
               <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0.5 border border-white/15 bg-white/10 p-0.5" aria-label="Image zoom controls">
+                  <button
+                    type="button"
+                    onClick={() => adjustZoom(-ZOOM_STEP)}
+                    disabled={zoom <= MIN_ZOOM}
+                    title="Zoom out"
+                    aria-label="Zoom out"
+                    className="grid size-7 place-items-center text-white transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-35"
+                  >
+                    <ZoomOut className="size-3.5" />
+                  </button>
+                  <span className="min-w-11 px-1 text-center text-[10px] font-black text-white" aria-live="polite">
+                    {Math.round(zoom * 100)}%
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => adjustZoom(ZOOM_STEP)}
+                    disabled={zoom >= MAX_ZOOM}
+                    title="Zoom in"
+                    aria-label="Zoom in"
+                    className="grid size-7 place-items-center text-white transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-35"
+                  >
+                    <ZoomIn className="size-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetZoom}
+                    disabled={zoom === MIN_ZOOM}
+                    title="Reset zoom"
+                    aria-label="Reset zoom"
+                    className="grid size-7 place-items-center text-white/70 transition-colors hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                  >
+                    <RotateCcw className="size-3" />
+                  </button>
+                </div>
                 <a
                   href={inlinePdfUrl}
                   target="_blank"
@@ -329,7 +422,8 @@ export function CompanyProfilePdf({
                   alt={`SAN TECH Company Profile - Page ${currentPage}`}
                   fill
                   sizes="1000px"
-                  className="object-contain"
+                  className="object-contain transition-transform duration-200"
+                  style={{ transform: `scale(${zoom})` }}
                 />
               </div>
             </div>
@@ -339,7 +433,7 @@ export function CompanyProfilePdf({
               <button
                 type="button"
                 disabled={currentPage <= 1}
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                onClick={() => goToPage(currentPage - 1)}
                 className="flex items-center gap-1.5 bg-white/10 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ChevronLeft className="size-4" />
@@ -353,7 +447,7 @@ export function CompanyProfilePdf({
               <button
                 type="button"
                 disabled={currentPage >= TOTAL_PAGES}
-                onClick={() => setCurrentPage((p) => Math.min(TOTAL_PAGES, p + 1))}
+                onClick={() => goToPage(currentPage + 1)}
                 className="flex items-center gap-1.5 bg-white/10 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 Next Page

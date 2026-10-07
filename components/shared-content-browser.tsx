@@ -48,8 +48,8 @@ export function SharedContentBrowser({ items, initialItemId, initialLeadershipVi
   }
 
   return (
-    <div className={showSidebar ? "grid gap-8 lg:grid-cols-[185px_minmax(0,1fr)] lg:items-start lg:gap-7" : "block"}>
-      {showSidebar && <aside className="lg:self-start">
+    <div className={showSidebar ? "grid gap-8 min-[1020px]:grid-cols-[185px_minmax(0,1fr)] min-[1020px]:items-start min-[1020px]:gap-7" : "block"}>
+      {showSidebar && <aside className="min-[1020px]:self-start">
         <div className="border-l border-slate-300 pl-4">
           {items.map((item, index) => {
             const active = item.id === selected.id;

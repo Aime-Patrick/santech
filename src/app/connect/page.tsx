@@ -31,13 +31,13 @@ export default function ConnectPage() {
             {/* Left: Contact Info & Action Buttons */}
             <div className="min-w-0">
               <section className="p-0" aria-labelledby="contact-details-title">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">Contact details</p>
-                <p id="contact-details-title" className="mt-1 text-xs leading-5 text-slate-600">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary lg:text-[11px]">Contact details</p>
+                <p id="contact-details-title" className="mt-1 text-xs leading-5 text-slate-600 lg:text-sm lg:leading-6">
                   Turning Ideas into Impact.
                 </p>
 
                 {/* Physical Address */}
-                <address className="mt-3.5 flex gap-2.5 text-xs leading-5 text-[#303755] not-italic">
+                <address className="mt-3.5 flex gap-2.5 text-xs leading-5 text-[#303755] not-italic lg:text-sm lg:leading-6">
                   <MapPin className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
                   <span className="font-medium">Plot 48, KN 1 Road, Sofaru Building, 3rd Floor, Muhima, Kigali, Rwanda</span>
                 </address>
@@ -55,10 +55,10 @@ export default function ConnectPage() {
                       <span className="flex items-start gap-2">
                         <Icon className="mt-0.5 size-3.5 shrink-0 text-brand-secondary" aria-hidden="true" />
                         <span className="min-w-0">
-                          <span className="block text-[9px] font-black uppercase tracking-[0.13em] text-slate-400">{label}</span>
-                          <span className="mt-0.5 block break-words text-[11px] font-semibold leading-4 text-[#303755] group-hover:text-brand-secondary">
-                            {value}
-                          </span>
+                           <span className="block text-[9px] font-black uppercase tracking-[0.13em] text-slate-400 lg:text-[10px]">{label}</span>
+                            <span className="mt-0.5 block break-words text-[11px] font-semibold leading-4 text-[#303755] group-hover:text-brand-secondary lg:text-xs lg:leading-5">
+                             {label === "Phone" ? <><span className="block">+250 783 250 033 /</span><span className="block">+250 780 309 833</span></> : value}
+                           </span>
                         </span>
                       </span>
                     </a>
@@ -79,15 +79,15 @@ export default function ConnectPage() {
                     </span>
                     <Radio className="size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
                     <div>
-                      <span className="block text-[9px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      <span className="block text-[9px] font-black uppercase tracking-[0.14em] text-slate-400 lg:text-[10px]">
                         Live Stream
                       </span>
-                      <span className="text-xs font-bold text-[#0a1f44] group-hover:text-brand-secondary transition-colors">
+                      <span className="text-xs font-bold text-[#0a1f44] group-hover:text-brand-secondary transition-colors lg:text-sm">
                         SAN TECH Radio <span className="font-normal text-slate-500">· Zeno.FM</span>
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-[11px] font-bold text-brand-secondary">
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-brand-secondary lg:text-xs">
                     <span>Listen live</span>
                     <ArrowUpRight className="size-3.5" aria-hidden="true" />
                   </div>

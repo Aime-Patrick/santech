@@ -196,42 +196,42 @@ export function MissionPanel() {
   const activeValue = values.find((value) => value.label === selectedValue) ?? values[0];
 
   return (
-    <div className="grid items-start gap-8 overflow-visible lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+    <div className="grid items-start gap-6 overflow-visible min-[1020px]:grid-cols-[0.9fr_1.1fr] min-[1020px]:gap-7">
       <div className="relative min-w-0 overflow-visible">
-        <div className="mb-5 flex items-center gap-3">
+        <div className="mb-4 flex items-center gap-3">
           <span className="grid size-8 place-items-center rounded-full bg-[#e8f1fc] text-[10px] font-black text-brand-secondary">01</span>
           <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our direction</p>
         </div>
-        <div className="relative grid gap-3 pl-5">
+        <div className="relative grid gap-2.5 pl-5">
           <span className="absolute bottom-8 left-9 top-8 w-px bg-gradient-to-b from-brand-cyan via-brand-secondary to-[#0a1f44]" aria-hidden="true" />
-          <article className="relative rounded-2xl border border-[#bdeaf3] bg-[#f2fcfe] p-5 shadow-[0_8px_22px_rgba(8,198,231,0.08)]">
+          <article className="relative rounded-2xl border border-[#bdeaf3] bg-[#f2fcfe] p-4 shadow-[0_8px_22px_rgba(8,198,231,0.08)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Target className="size-5" aria-hidden="true" /></span>
               <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Mission</p><p className="text-xs font-bold text-[#0a1f44]">Build useful capability</p></div>
             </div>
-            <p className="mt-4 text-[14px] leading-7 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
+            <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
           </article>
-          <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-5 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
+          <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-4 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-[#0a1f44] shadow-sm"><Eye className="size-5" aria-hidden="true" /></span>
               <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Vision</p><p className="text-xs font-bold text-[#0a1f44]">Widen what is possible</p></div>
             </div>
-            <p className="mt-4 text-[14px] leading-7 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
+            <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
           </article>
         </div>
       </div>
-      <div className="min-w-0 overflow-visible rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-6">
+      <div className="min-w-0 overflow-visible rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-5">
         <div>
           <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core values</p>
         </div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={activeValue.label} initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }} className="mt-4 rounded-xl border border-[#bdeaf3] bg-[#f2fcfe] p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{activeValue.label}</p>
-            <p className="mt-2 line-clamp-3 text-sm leading-6 text-[#526989]">{activeValue.description}</p>
+            <p className="mt-2 line-clamp-3 text-sm leading-5.5 text-[#526989]">{activeValue.description}</p>
           </motion.div>
         </AnimatePresence>
-        <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3" role="list" aria-label="SAN TECH core values">
-          {values.map((value) => { const selected = selectedValue === value.label; return <button key={value.label} type="button" onClick={() => setSelectedValue(value.label)} aria-pressed={selected} className={`group min-h-14 rounded-xl border p-3 text-left transition-[transform,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 ${selected ? "border-[#0a1f44] bg-[#0a1f44] text-white shadow-[0_10px_20px_rgba(10,31,68,0.16)]" : "border-slate-200 bg-[#f8faff] text-[#0a1f44] hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:bg-white"}`}><span className="text-xs font-bold leading-4">{value.label}</span></button>; })}
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3" role="list" aria-label="SAN TECH core values">
+          {values.map((value) => { const selected = selectedValue === value.label; return <button key={value.label} type="button" onClick={() => setSelectedValue(value.label)} aria-pressed={selected} className={`group min-h-14 rounded-xl border px-3 py-2 text-left transition-[transform,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 ${selected ? "border-[#0a1f44] bg-[#0a1f44] text-white shadow-[0_10px_20px_rgba(10,31,68,0.16)]" : "border-slate-200 bg-[#f8faff] text-[#0a1f44] hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:bg-white"}`}><span className="text-xs font-bold leading-4">{value.label}</span></button>; })}
         </div>
       </div>
     </div>
