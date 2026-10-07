@@ -20,7 +20,7 @@ export type SharedContentItem = {
   content?: "leadership" | "identity" | "mission" | "focus" | "profile" | "journey" | "recognition" | "certificate";
 };
 
-export function SharedContentBrowser({ items, initialItemId, initialLeadershipView = "executive", syncUrl = false, showSidebar = true, combinedPanel = false }: { items: readonly SharedContentItem[]; initialItemId?: string; initialLeadershipView?: "executive" | "team"; syncUrl?: boolean; showSidebar?: boolean; combinedPanel?: boolean }) {
+export function SharedContentBrowser({ items, initialItemId, initialLeadershipView = "executive", syncUrl = false, showSidebar = true, combinedPanel = false }: { items: readonly SharedContentItem[]; initialItemId?: string; initialLeadershipView?: "executive" | "team" | "organization"; syncUrl?: boolean; showSidebar?: boolean; combinedPanel?: boolean }) {
   const [firstItem] = items;
   const [selectedId, setSelectedId] = useState(initialItemId ?? firstItem.id);
   const router = useRouter();

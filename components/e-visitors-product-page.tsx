@@ -6,8 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ArrowUp, BarChart3, Building2, ChevronDown, Hospital, Landmark, Pause, Play, ScanLine, School, ShieldCheck, Users, Volume2, VolumeX } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ArrowRight, ArrowUp, BarChart3, Building2, CalendarDays, ChevronDown, Pause, Play, ScanLine, ShieldCheck, Truck, Users, Volume2, VolumeX } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { PublicPage } from "@/components/public-page";
@@ -31,31 +30,14 @@ function ScrollReveal({ children, reducedMotion, className = "" }: { children: R
   );
 }
 
-const journeysByEnvironment = [
-  [
-    { number: "01", label: "Capture", title: "Create a complete visitor record.", description: "Register guests, hosts, appointments, purposes, and identity details before the visit begins.", panel: "Visitor capture", status: "Ready for review", icon: Users, screen: "/images/e-visitors-register.png", details: ["Guest: Dr. Alice Mukamana", "Host: Operations office", "Purpose: Partner meeting"] },
-    { number: "02", label: "Control", title: "Give the right people the right access.", description: "Route approvals and issue passes or gate instructions with clear rules for every visit.", panel: "Access control", status: "Approved by host", icon: ShieldCheck, screen: "/images/e-visitors-approve.png", details: ["Access zone: Main office", "Pass type: Visitor", "Valid until: 17:30"] },
-    { number: "03", label: "Protect", title: "Make identity and safety requirements visible.", description: "Use ID or passport OCR, watchlists, and visit rules to help authorized teams make faster decisions.", panel: "Identity protection", status: "Document verified", icon: ScanLine, screen: "/images/e-visitors-verify.png", details: ["Document: Rwanda national ID", "Match: Confirmed", "Risk check: Clear"] },
-    { number: "04", label: "Understand", title: "Turn movements into accountable insight.", description: "See who is inside, track exceptions, and use searchable reports to improve operations and decisions.", panel: "Operations insight", status: "Export ready", icon: BarChart3, screen: "/images/e-visitors-report.png", details: ["Current visitors: 38", "Open visits: 07", "Format: PDF / CSV"] },
-  ],
-  [
-    { number: "01", label: "Receive", title: "Make every institutional arrival traceable.", description: "Register visitors, official appointments, delegations, and access purposes in one accountable record.", panel: "Official reception", status: "Record created", icon: Users, screen: "/images/e-visitors-register.png", details: ["Visitor: Official delegation", "Host: Executive office", "Purpose: Institutional meeting"] },
-    { number: "02", label: "Authorize", title: "Apply clear approval and access rules.", description: "Route requests through the right host, department, or security team before access is granted.", panel: "Authorization queue", status: "Cleared for entry", icon: ShieldCheck, screen: "/images/e-visitors-approve.png", details: ["Access zone: Restricted floor", "Approval: Security desk", "Pass type: Official"] },
-    { number: "03", label: "Verify", title: "Protect sensitive institutional spaces.", description: "Verify identity, watchlists, documents, and visit conditions before a guest reaches a controlled area.", panel: "Security verification", status: "Identity confirmed", icon: ScanLine, screen: "/images/e-visitors-verify.png", details: ["Document: Official ID", "Watchlist: Clear", "Visit rule: Compliant"] },
-    { number: "04", label: "Audit", title: "Keep a dependable record of movement.", description: "Use searchable visit history and reports to support accountability, safety reviews, and institutional decisions.", panel: "Audit record", status: "Report ready", icon: BarChart3, screen: "/images/e-visitors-report.png", details: ["Report: Daily arrivals", "Period: September 2026", "Format: PDF / CSV"] },
-  ],
-  [
-    { number: "01", label: "Pre-register", title: "Prepare a safer welcome for every guest.", description: "Capture patient visitors, caregivers, contractors, and appointment details before they arrive.", panel: "Pre-registration", status: "Visit scheduled", icon: Users, screen: "/images/e-visitors-register.png", details: ["Visitor: Caregiver", "Host: Outpatient services", "Purpose: Patient support"] },
-    { number: "02", label: "Direct", title: "Guide visitors to the right care area.", description: "Use approval rules and access instructions to reduce confusion around sensitive hospital spaces.", panel: "Access direction", status: "Route approved", icon: ShieldCheck, screen: "/images/e-visitors-approve.png", details: ["Access zone: Outpatient wing", "Pass type: Visitor", "Escort: Required"] },
-    { number: "03", label: "Screen", title: "Keep identity and safety checks visible.", description: "Confirm documents and visit conditions while giving reception and security teams one shared record.", panel: "Safety screening", status: "Screening complete", icon: ScanLine, screen: "/images/e-visitors-verify.png", details: ["Document: National ID", "Visitor rule: Cleared", "Sensitive area: Restricted"] },
-    { number: "04", label: "Monitor", title: "Know who is inside each facility.", description: "Track arrivals, departures, vehicles, and exceptions when safety depends on accurate presence information.", panel: "Facility presence", status: "Live view active", icon: BarChart3, screen: "/images/e-visitors-monitor.png", details: ["Current visitors: 38", "Open visits: 07", "Active gate: Main reception"] },
-  ],
-  [
-    { number: "01", label: "Register", title: "Welcome guardians, guests, and campus partners.", description: "Capture the person, host, appointment, purpose, and campus location before arrival.", panel: "Campus registration", status: "Visit created", icon: Users, screen: "/images/e-visitors-register.png", details: ["Visitor: Parent / guardian", "Host: Student affairs", "Purpose: Campus visit"] },
-    { number: "02", label: "Approve", title: "Make campus access simple and accountable.", description: "Give hosts and security teams a clear way to approve visits, passes, events, and restricted areas.", panel: "Campus approval", status: "Host approved", icon: ShieldCheck, screen: "/images/e-visitors-approve.png", details: ["Access zone: Main campus", "Pass type: Guest", "Valid until: 17:30"] },
-    { number: "03", label: "Verify", title: "Keep every campus entry responsible.", description: "Check identity and visit rules for guardians, contractors, event guests, and other visitors.", panel: "Visitor verification", status: "Details verified", icon: ScanLine, screen: "/images/e-visitors-verify.png", details: ["Document: National ID", "Match: Confirmed", "Event rule: Compliant"] },
-    { number: "04", label: "Report", title: "Turn campus movement into useful insight.", description: "Review visitor history, attendance, and exceptions to improve safety and campus operations.", panel: "Campus report", status: "Export ready", icon: BarChart3, screen: "/images/e-visitors-report.png", details: ["Report: Campus activity", "Period: September 2026", "Format: PDF / CSV"] },
-  ],
+const platformFeatures = [
+  { number: "01", label: "Gate Movement Management", title: "Track every arrival and departure.", description: "Monitor gate activity, entries, exits, and exceptions with one dependable operational record.", panel: "Gate movement", status: "Live movement view", icon: BarChart3, screen: "/images/e-visitors-monitor.png", details: ["Gate entries: 02", "Current visitors: 38", "Status: Live"] },
+  { number: "02", label: "Appointment & VIP Management", title: "Prepare every important visit.", description: "Coordinate appointments, hosts, VIP guests, schedules, and visit purposes before arrival.", panel: "Appointments and VIPs", status: "Appointment ready", icon: Users, screen: "/images/e-visitors-register.png", details: ["Host: Executive office", "Visit type: VIP", "Status: Scheduled"] },
+  { number: "03", label: "Access Control", title: "Give the right people the right access.", description: "Route approvals, issue passes, and apply clear access rules for every person and location.", panel: "Access control", status: "Approved by host", icon: ShieldCheck, screen: "/images/e-visitors-approve.png", details: ["Access zone: Main office", "Pass type: Visitor", "Valid until: 17:30"] },
+  { number: "04", label: "Emergency & Safety Management", title: "Respond with a clearer view of people on site.", description: "Keep presence, safety checks, alerts, and exceptions visible when teams need to act quickly.", panel: "Emergency and safety", status: "Safety view active", icon: ScanLine, screen: "/images/e-visitors-verify.png", details: ["Identity: Verified", "Watchlist: Clear", "Risk check: Complete"] },
+  { number: "05", label: "Multi-Organization / Multi-Site Management", title: "Manage more than one environment.", description: "Connect organizations, branches, departments, and sites while keeping local teams and rules visible.", panel: "Multi-site operations", status: "Sites connected", icon: Building2, screen: "/images/e-visitors-report.png", details: ["Organizations: 04", "Sites: 12", "Report: Consolidated"] },
+  { number: "06", label: "Events & Meeting Management", title: "Make gatherings easier to coordinate.", description: "Plan event access, meeting attendance, guest lists, hosts, and venue entry from one place.", panel: "Events and meetings", status: "Event ready", icon: CalendarDays, screen: "/images/e-visitors-register.png", details: ["Event: Partner meeting", "Guests: 24", "Venue: Main hall"] },
+  { number: "07", label: "Equipment & Vehicle Tracking Management", title: "Keep assets and movement accountable.", description: "Track equipment, vehicles, drivers, access times, and movement history across your sites.", panel: "Equipment and vehicles", status: "Tracking active", icon: Truck, screen: "/images/e-visitors-monitor.png", details: ["Vehicles on site: 12", "Equipment records: 47", "Tracking: Active"] },
 ] as const;
 
 const testimonialAvatars = [
@@ -65,13 +47,6 @@ const testimonialAvatars = [
   "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(110).jpg",
   "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(111).jpg",
 ] as const;
-
-const environments: Array<{ label: string; description: string; icon: LucideIcon; details: string[] }> = [
-  { label: "Corporate offices", description: "Manage guests, meetings, contractors, and workplace access across a busy Kigali office environment.", icon: Building2, details: ["Host approvals", "Contractor records", "Workplace access"] },
-  { label: "Government and institutions", description: "Create clearer visitor records, approvals, and accountability for public-facing institutions.", icon: Landmark, details: ["Controlled entry", "Audit visibility", "Institutional reporting"] },
-  { label: "Hospitals and health facilities", description: "Support controlled access in sensitive environments where people, timing, and safety matter.", icon: Hospital, details: ["Sensitive areas", "Visitor history", "Exception tracking"] },
-  { label: "Schools and universities", description: "Coordinate visitors, guardians, staff, events, and campus access from one place.", icon: School, details: ["Guardian visits", "Campus events", "Campus security"] },
-];
 
 const milestones = [
   ["2019", "Inception", "E-Visitors prototype and IP journey begins; the product is recognized through NIRDA Innovate for Industry."],
@@ -89,7 +64,6 @@ const faqItems = [
 
 export function EVisitorsProductPage() {
   const [activeJourney, setActiveJourney] = useState(0);
-  const [activeEnvironment, setActiveEnvironment] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
@@ -97,7 +71,7 @@ export function EVisitorsProductPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const pageAnimationRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const activeJourneySteps = journeysByEnvironment[activeEnvironment];
+  const activeJourneySteps = platformFeatures;
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -160,11 +134,6 @@ export function EVisitorsProductPage() {
     setIsVideoMuted(video.muted);
   }
 
-  function selectEnvironment(index: number) {
-    setActiveEnvironment(index);
-    setActiveJourney(0);
-  }
-
   function scrollToTop() {
     setShowScrollTop(false);
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
@@ -221,9 +190,8 @@ export function EVisitorsProductPage() {
       <EVisitorsImpactSection />
 
       <section id="platform-console" className="border-b border-slate-200 bg-gradient-to-br from-[#edf7fb] via-[#f7fafc] to-[#e1f0f7] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto max-w-7xl">
-        <div className="mb-8 overflow-x-auto border-b border-[#d6e4f1] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"><div className="mx-auto flex w-max min-w-full justify-center gap-2">{environments.map((environment, index) => <button key={environment.label} type="button" onClick={() => selectEnvironment(index)} className={`shrink-0 border-b-2 px-4 py-3 text-sm font-bold transition-colors ${index === activeEnvironment ? "border-brand-secondary text-[#0a1f44]" : "border-transparent text-slate-500 hover:text-[#0a1f44]"}`}>{environment.label}</button>)}</div></div>
         <div className="grid gap-3 lg:gap-8 lg:grid-cols-[0.33fr_0.67fr] lg:items-center"><div className="contents"><div className="order-2 lg:col-start-2"><ScrollReveal reducedMotion={Boolean(prefersReducedMotion)}><Safari url="e-visitors.santech.rw" imageSrc={activeJourneySteps[activeJourney].screen} className="mx-auto w-full lg:w-[92%]" /></ScrollReveal></div>
-          <div className="border-l-2 border-[#d6e4f1] pl-4">{activeJourneySteps.map((step, index) => { const selected = index === activeJourney; return <motion.button key={step.label} type="button" onClick={() => setActiveJourney(index)} animate={prefersReducedMotion ? undefined : { scale: selected ? 1.025 : 1 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.35, ease: "easeOut" }} style={{ transformOrigin: "left center" }} whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }} className={selected ? "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-[#0a1f44] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2" : "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-slate-500 transition-colors hover:text-[#0a1f44] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"}><span className="pt-1 text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{step.number}</span><span><span className="block text-sm font-bold">{step.label}</span><span className="mt-1 block max-w-md text-xs leading-5 text-[#68718a]">{step.description}</span></span>{selected && <motion.span layoutId="evisitor-step" className="absolute -left-[18px] top-0 h-full w-0.5 bg-brand-secondary" />}</motion.button>; })}</div>
+          <div className="border-l-2 border-[#d6e4f1] pl-4">{activeJourneySteps.map((step, index) => { const selected = index === activeJourney; return <motion.button key={step.label} type="button" onClick={() => setActiveJourney(index)} animate={prefersReducedMotion ? undefined : { scale: selected ? 1.025 : 1 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.35, ease: "easeOut" }} style={{ transformOrigin: "left center" }} whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }} className={selected ? "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-[#0a1f44] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2" : "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-slate-500 transition-colors hover:text-[#0a1f44] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"}><span className="pt-1 text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{step.number}</span><span><span className="block text-sm font-bold">{step.label}</span>{selected && <span className="mt-1 block max-w-md text-xs leading-5 text-[#68718a]">{step.description}</span>}</span>{selected && <motion.span layoutId="evisitor-step" className="absolute -left-[18px] top-0 h-full w-0.5 bg-brand-secondary" />}</motion.button>; })}</div>
 
         </div></div>
       </div></section>

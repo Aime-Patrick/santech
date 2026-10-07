@@ -45,6 +45,7 @@ export function SplitFeaturePanel({
   detailHref,
   browser = "computer",
   browserUrl = "santech.rw",
+  showFeatureDescriptions = true,
   combined = false,
 }: {
   title: string;
@@ -58,6 +59,7 @@ export function SplitFeaturePanel({
   detailHref?: string;
   browser?: "computer" | "safari";
   browserUrl?: string;
+  showFeatureDescriptions?: boolean;
   combined?: boolean;
 }) {
   const [expandedFeature, setExpandedFeature] = useState<string | null>(coreFeatures?.[0]?.label ?? null);
@@ -107,9 +109,9 @@ export function SplitFeaturePanel({
                     <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
                   </span>
                   <span className="min-w-0 flex-1 pt-0.5">
-                    <span className={`block text-[11px] font-black uppercase tracking-[0.1em] transition-colors sm:text-xs ${expanded ? "text-[#0a1f44]" : "text-slate-500"}`}>{label}</span>
+                    <span className={`block text-[10px] font-black uppercase tracking-[0.1em] transition-colors sm:text-[11px] ${expanded ? "text-[#0a1f44]" : "text-slate-500"}`}>{label}</span>
                     <AnimatePresence initial={false} mode="wait">
-                      {expanded && (
+                      {expanded && showFeatureDescriptions && (
                         <motion.span
                           key={`${label}-description`}
                           initial={prefersReducedMotion ? false : { opacity: 0, y: -4 }}
@@ -129,27 +131,29 @@ export function SplitFeaturePanel({
           })}
         </motion.div>}
 
-        {detailHref && (
-          <Link
-            href={detailHref}
-            className="mt-6 inline-flex w-fit text-xs font-bold uppercase tracking-[0.1em] text-[#0a1f44] underline decoration-1 decoration-[#0a1f44]/55 underline-offset-4 transition-colors hover:text-brand-secondary hover:decoration-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 lg:mt-8"
-          >
-            <span>Explore more</span>
-          </Link>
-        )}
       </div>
 
       {media ? (
-        browser === "safari" ? (
-          <Safari
-            url={browserUrl}
-            imageSrc={mediaImages[activeMediaIndex] ?? media.src}
-            className="mx-auto w-full max-w-[760px]"
-            aria-label={`${title} product preview`}
-          />
-        ) : (
-          <ComputerScreenFrame kind={media.kind} src={media.src} alt={media.alt} fit={media.fit} priority compact label="SAN TECH / PRODUCT VIEW" />
-        )
+        <div className="min-w-0">
+          {browser === "safari" ? (
+            <Safari
+              url={browserUrl}
+              imageSrc={mediaImages[activeMediaIndex] ?? media.src}
+              className="mx-auto w-full max-w-[760px]"
+              aria-label={`${title} product preview`}
+            />
+          ) : (
+            <ComputerScreenFrame kind={media.kind} src={media.src} alt={media.alt} fit={media.fit} priority compact label="SAN TECH / PRODUCT VIEW" />
+          )}
+          {detailHref && (
+            <Link
+              href={detailHref}
+              className="mx-auto mt-3 flex w-fit text-xs font-bold uppercase tracking-[0.1em] text-[#0a1f44] underline decoration-1 decoration-[#0a1f44]/55 underline-offset-4 transition-colors hover:text-brand-secondary hover:decoration-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+            >
+              <span>Explore more</span>
+            </Link>
+          )}
+        </div>
       ) : (
         <div className={combined ? "pl-0" : "border-l border-slate-300 pl-6 lg:pl-10"}>
           {description && <p className="max-w-2xl text-lg leading-8 text-[#68718a] sm:text-xl">{description}</p>}

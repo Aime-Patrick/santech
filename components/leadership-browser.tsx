@@ -4,8 +4,9 @@ import Image from "next/image";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import { OrganizationChart } from "@/components/organization-chart";
 
-type LeadershipView = "executive" | "team";
+type LeadershipView = "executive" | "team" | "organization";
 
 const executives = [
   { name: "Shema Pacifique", role: "Founder & CEO", title: "Founder & Chief Executive Officer", image: "/images/CEO.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
@@ -60,7 +61,7 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
     <div className="grid gap-8 lg:grid-cols-[0.58fr_1.42fr] lg:items-stretch lg:gap-10">
       <div className="flex min-w-0 flex-col">
         <div className="border-l border-slate-300 pl-4" role="tablist" aria-label="Leadership sections">
-          {([["executive", "Executive direction"], ["team", "Our team"]] as const).map(([key, label]) => (
+          {([["executive", "Executive direction"], ["team", "Our team"], ["organization", "Organization"]] as const).map(([key, label]) => (
             <button key={key} type="button" role="tab" aria-selected={view === key} onClick={() => setView(key)} className={`relative flex w-full items-center py-2.5 text-left text-xs font-black uppercase tracking-[0.1em] transition-colors ${view === key ? "text-[#0a1f44]" : "text-slate-500 hover:text-[#0a1f44]"}`}>
               <span>{label}</span>
               {view === key && <span className="absolute -left-[17px] top-0 h-full w-0.5 bg-brand-secondary" />}
@@ -90,13 +91,17 @@ export function LeadershipBrowser({ initialView = "executive" }: { initialView?:
                 </article>
               ))}
             </motion.section>
-          ) : (
+          ) : view === "team" ? (
             <motion.section key="team-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }}>
               <AnimatePresence mode="wait">
                 <motion.div key={teamIndex} className="grid gap-4 sm:grid-cols-2" initial={prefersReducedMotion ? false : { opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -12 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }}>
                   {visibleMembers.map((member) => <TeamProfileCard key={member.name} member={member} />)}
                 </motion.div>
               </AnimatePresence>
+            </motion.section>
+          ) : (
+            <motion.section key="organization-panel" role="tabpanel" initial={prefersReducedMotion ? false : { opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, x: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }}>
+              <OrganizationChart />
             </motion.section>
           )}
         </AnimatePresence>

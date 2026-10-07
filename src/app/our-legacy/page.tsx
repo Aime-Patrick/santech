@@ -85,7 +85,7 @@ const legacyItems: SharedContentItem[] = [
 export default async function OurLegacyPage({ searchParams }: { searchParams: Promise<{ section?: string; view?: string }> }) {
   const params = await searchParams;
   const selectedSection = legacyMenu.find((item) => item.key === params.section)?.key ?? "who-we-are";
-  const leadershipView = params.view === "team" ? "team" : "executive";
+  const leadershipView = params.view === "organization" ? "organization" : params.view === "team" ? "team" : "executive";
 
   return (
     <PublicPage>

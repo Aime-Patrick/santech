@@ -2,7 +2,9 @@ import type { LucideIcon } from "lucide-react";
 import {
   BrainCircuit,
   BarChart3,
+  Building2,
   Boxes,
+  CalendarDays,
   Code2,
   Cpu,
   Database,
@@ -16,6 +18,7 @@ import {
   ScanLine,
   ShieldCheck,
   Smartphone,
+  Truck,
   Users,
   Workflow,
 } from "lucide-react";
@@ -59,13 +62,16 @@ const productItems: InnovationItem[] = [
   {
     id: "e-visitors",
     label: "E-VISITORS",
-    title: "Make every arrival safer, clearer, and more useful.",
-    description: "Manage visitor registration, approvals, access, attendance, and institutional security in one traceable system.",
+    title: "Make every arrival better",
+    description: "",
     coreFeatures: [
-      { label: "Visitor registration", description: "Capture visitor, host, appointment, purpose, and identity details in one record.", icon: Users },
-      { label: "Identity verification", description: "Use ID and passport checks, OCR, watchlists, and visit rules to support faster decisions.", icon: ScanLine },
-      { label: "Access control", description: "Route requests to hosts and security teams before issuing passes or gate instructions.", icon: ShieldCheck },
-      { label: "Activity reports", description: "Turn arrivals, departures, movements, and exceptions into accountable records.", icon: BarChart3 },
+      { label: "Gate Movement Management", description: "", icon: BarChart3 },
+      { label: "Appointment & VIP Management", description: "", icon: Users },
+      { label: "Access Control", description: "", icon: ShieldCheck },
+      { label: "Emergency & Safety Management", description: "", icon: ScanLine },
+      { label: "Multi-Organization / Multi-Site Management", description: "", icon: Building2 },
+      { label: "Events & Meeting Management", description: "", icon: CalendarDays },
+      { label: "Equipment & Vehicle Tracking Management", description: "", icon: Truck },
     ],
     media: {
       kind: "image",

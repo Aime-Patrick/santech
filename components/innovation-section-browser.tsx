@@ -13,6 +13,7 @@ export function InnovationSectionBrowser({ section }: { section: InnovationSecti
   const [selectedId, setSelectedId] = useState(items[0].id);
   const selected = items.find((item) => item.id === selectedId) ?? items[0];
   const prefersReducedMotion = useReducedMotion();
+  const isEVisitorsProduct = section === "product" && selected.id === "e-visitors";
 
   return (
     <div className={`grid gap-8 lg:items-start lg:gap-7 ${isCompactListing ? "lg:grid-cols-[215px_minmax(0,1fr)]" : "lg:grid-cols-[185px_minmax(0,1fr)]"}`}>
@@ -32,7 +33,7 @@ export function InnovationSectionBrowser({ section }: { section: InnovationSecti
 
       <AnimatePresence mode="wait">
         <motion.div key={selected.id} initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}>
-          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} media={selected.media} detailHref={`/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
+          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} showFeatureDescriptions={!isEVisitorsProduct} media={selected.media} detailHref={`/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
         </motion.div>
       </AnimatePresence>
     </div>
