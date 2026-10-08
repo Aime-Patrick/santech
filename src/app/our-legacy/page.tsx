@@ -2,7 +2,7 @@
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { fetchRecognitions, fetchTeamMembers, fetchJourneyStages, fetchCompanyValues, fetchFocusAreas } from "@/lib/strapi";
+import { fetchRecognitions, fetchTeamMembers, fetchJourneyStages, fetchCompanyValues, fetchFocusAreas, fetchStandards } from "@/lib/strapi";
 
 const legacyMenu = [
   { key: "who-we-are", label: "Who we are", href: "/our-legacy" },
@@ -13,6 +13,7 @@ const legacyMenu = [
   { key: "certificate", label: "Certificate", href: "/our-legacy?section=certificate" },
   { key: "leadership", label: "Leadership", href: "/our-legacy?section=leadership&view=executive" },
   { key: "profile", label: "Company profile", href: "/our-legacy?section=profile" },
+  { key: "standards", label: "Standards", href: "/our-legacy?section=standards" },
 ] as const;
 
 const legacyItems: SharedContentItem[] = [
@@ -81,6 +82,13 @@ const legacyItems: SharedContentItem[] = [
     description: "SAN TECH is a Kigali-based technology and innovation company that connects people, ideas, and technology to create digital products, strengthen organizations, and grow the next generation of builders.",
     content: "profile",
   },
+  {
+    id: "standards",
+    label: "Standards",
+    title: "Standards that make trust visible.",
+    description: "A growing collection of certifications and trust seals that reflect the standards behind SAN TECH's products and delivery.",
+    content: "standards",
+  },
 ];
 
 export default async function OurLegacyPage({ searchParams }: { searchParams: Promise<{ section?: string; view?: string }> }) {
@@ -89,21 +97,22 @@ export default async function OurLegacyPage({ searchParams }: { searchParams: Pr
   const leadershipView = params.view === "organization" ? "organization" : params.view === "team" ? "team" : "executive";
   const isLeadership = selectedSection === "leadership";
 
-  const [cmsRecognitions, cmsTeamMembers, cmsJourneyStages, cmsCompanyValues, cmsFocusAreas] = await Promise.all([
+  const [cmsRecognitions, cmsTeamMembers, cmsJourneyStages, cmsCompanyValues, cmsFocusAreas, cmsStandards] = await Promise.all([
     fetchRecognitions(),
     fetchTeamMembers(),
     fetchJourneyStages(),
     fetchCompanyValues(),
     fetchFocusAreas(),
+    fetchStandards(),
   ]);
 
   return (
     <PublicPage>
-      <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" />
+      <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" translationKey="legacy" />
       <section className={`border-t border-slate-200 px-6 pb-5 pt-2 sm:px-10 ${isLeadership ? "lg:px-16 lg:pb-5 lg:pt-4" : "min-[1020px]:px-12 min-[1020px]:pb-3 min-[1020px]:pt-2"}`}>
         <div className={`relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 ${isLeadership ? "lg:px-10 lg:py-12" : "min-[1020px]:px-8 min-[1020px]:py-6"}`}>
           <div className="relative z-10">
-            <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl cmsRecognitions={cmsRecognitions} cmsTeamMembers={cmsTeamMembers} cmsJourneyStages={cmsJourneyStages} cmsCompanyValues={cmsCompanyValues} cmsFocusAreas={cmsFocusAreas} />
+            <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl cmsRecognitions={cmsRecognitions} cmsTeamMembers={cmsTeamMembers} cmsJourneyStages={cmsJourneyStages} cmsCompanyValues={cmsCompanyValues} cmsFocusAreas={cmsFocusAreas} cmsStandards={cmsStandards} />
           </div>
           <BorderBeam
             size={120}

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BookOpen, ChevronLeft, ChevronRight, Clock3, Compass, Quote, Rocket, Shuffle, TrendingUp } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, ChevronLeft, ChevronRight, Clock3, Compass, Quote, Shuffle, TrendingUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
@@ -56,7 +56,6 @@ const featuredSlides: readonly FeaturedSlide[] = [
 ] as const;
 
 const learningGoals = [
-  { label: "Start my career", href: "/san-hub/explore/work", Icon: Rocket },
   { label: "Change my career", href: "/san-hub/courses", Icon: Shuffle },
   { label: "Grow in my current role", href: "/san-hub/explore/build", Icon: TrendingUp },
   { label: "Explore technology beyond my work", href: "/san-hub/explore/research", Icon: Compass },
@@ -85,7 +84,7 @@ function FeaturedCard({ slide, secondary = false }: { slide: FeaturedSlide; seco
   return (
     <article className={`relative isolate min-h-[260px] overflow-hidden rounded-[1.45rem] ${theme} ${secondary ? "hidden md:block" : ""}`}>
       <div className="absolute inset-y-0 right-0 w-[53%] overflow-hidden">
-        <Image src={slide.image} alt="" fill className="object-cover" sizes="(min-width: 1024px) 34vw, 55vw" />
+        <Image src={slide.image} alt="" fill loading={slide.image === "/images/graduates.jpg" ? "eager" : "lazy"} className="object-cover" sizes="(min-width: 1024px) 34vw, 55vw" />
         <div className={`absolute inset-0 ${slide.theme === "night" ? "bg-gradient-to-r from-[#07152d] via-[#07152dcc] to-transparent" : "bg-gradient-to-r from-[#f2e6d1] via-[#f2e6d180] to-transparent"}`} />
       </div>
       <div className="relative z-10 flex min-h-[260px] max-w-[58%] flex-col justify-center px-6 py-7 sm:px-8">
@@ -125,7 +124,13 @@ function CourseColumn({ title, items }: { title: string; items: readonly SanHubC
         <ArrowUpRight className="size-4 text-[#526989]" aria-hidden="true" />
       </div>
       <div className="grid gap-2.5">
-        {items.map((item) => <CourseRow key={item.id} item={item} />)}
+        {items.length > 0 ? items.map((item) => <CourseRow key={item.id} item={item} />) : (
+          <div className="grid min-h-[92px] place-items-center rounded-xl border border-dashed border-[#b8c9df] bg-white/65 px-4 py-4 text-center">
+            <span className="grid size-8 place-items-center rounded-full bg-[#e8f1fc] text-[#526989]"><BookOpen className="size-4" aria-hidden="true" /></span>
+            <p className="mt-2 text-xs font-bold text-[#07152d]">Nothing here yet</p>
+            <p className="mt-0.5 text-[10px] text-[#526989]">New learning options will appear soon.</p>
+          </div>
+        )}
       </div>
     </section>
   );

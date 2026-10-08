@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
-import { ArrowUpRight, BrainCircuit, ChevronDown, Code2, Compass, Cpu, Eye, FlaskConical, GraduationCap, Lightbulb, Network, Radio, Rocket, ShieldCheck, Target, Workflow, X, type LucideIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, BrainCircuit, ChevronDown, Code2, Compass, Cpu, Eye, ExternalLink, FlaskConical, GraduationCap, Lightbulb, Network, Radio, Rocket, ShieldCheck, Target, Workflow, X, type LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import BubbleMenu from "./BubbleMenu";
 import { CompanyProfilePdf } from "@/components/company-profile-pdf";
 import { CertificatePanel as CertificatePanelContent } from "@/components/certificate-panel";
 import { getInlinePdfUrl } from "@/lib/pdf-utils";
+import { useUiCopy } from "@/lib/use-ui-copy";
 
 const identity = [
   ["Founded", "1 August 2019"],
@@ -16,7 +17,7 @@ const identity = [
   ["Co-founder & COO/CFO", "Claudine Niyonzima"],
   ["Head office", "Kigali, Rwanda"],
   ["Core philosophy", "Turning Ideas into Impact"],
-  ["Stamp motto", "Innovate · Empower · Deliver"],
+  ["Stamp motto", "Innovate Â· Empower Â· Deliver"],
 ] as const;
 
 const values = [
@@ -100,7 +101,7 @@ const recognitionItems: readonly RecognitionItem[] = [
     year: "2026",
     title: "Best Exhibitor in ICT & Innovation",
     description: "SAN TECH was recognized as Best Exhibitor in ICT and Innovation at the 29th Rwanda International Trade Fair (Expo 2026), emerging top among 494 participating companies for outstanding technological innovation and ecosystem delivery.",
-    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(172).jpg",
+    image: "/images/trophy.png",
     imageAlt: "SAN TECH leadership and dignitaries holding the Best Exhibitor in ICT & Innovation trophy on stage",
     badge: "Expo 2026 Winner",
   },
@@ -115,7 +116,7 @@ const recognitionItems: readonly RecognitionItem[] = [
   {
     year: "2019",
     title: "Innovate for Industry Hackathon Winner",
-    description: "SAN TECH’s E-Visitors project emerged as one of the winners of the Innovate for Industry Hackathon organized by the National Industrial Research and Development Agency (NIRDA). NIRDA subsequently supported the product through incubation and product improvement.",
+    description: "SAN TECH's E-Visitors project emerged as one of the winners of the Innovate for Industry Hackathon organized by the National Industrial Research and Development Agency (NIRDA). NIRDA subsequently supported the product through incubation and product improvement.",
   },
   {
     year: "",
@@ -135,22 +136,22 @@ const recognitionItems: readonly RecognitionItem[] = [
   {
     year: "",
     title: "E-Visitors Intellectual Property",
-    description: "SAN TECH secured intellectual-property rights for its E-Visitors innovation, with the company’s innovation journey beginning around the development and registration of the E-Visitors prototype.",
+    description: "SAN TECH secured intellectual-property rights for its E-Visitors innovation, with the companyâ€™s innovation journey beginning around the development and registration of the E-Visitors prototype.",
   },
   {
     year: "",
     title: "Cybersecurity / Technical Verification",
-    description: "SAN TECH’s company profile states that E-Visitors was verified and approved by the relevant cybersecurity institution, identified in the profile as the National Cyber Security Authority (NCSA).",
+    description: "SAN TECHâ€™s company profile states that E-Visitors was verified and approved by the relevant cybersecurity institution, identified in the profile as the National Cyber Security Authority (NCSA).",
   },
   {
     year: "2025",
-    title: "Digital Bridge Institute – EdTech Recognition",
+    title: "Digital Bridge Institute EdTech Recognition",
     description: "A 2025 sustainability and impact profile reports that SAN TECH received an EdTech Seal from the Digital Bridge Institute.",
   },
   {
     year: "2025",
-    title: "Rwanda National Cyber Security Authority – Data Protection/Data Controller Certification",
-    description: "The same 2025 profile reports SAN TECH’s Data Protection and Data Controller certification from the Rwanda National Cyber Security Authority.",
+    title: "Rwanda National Cyber Security Authority Data Protection/Data Controller Certification",
+    description: "The same 2025 profile reports SAN TECH's Data Protection and Data Controller certification from the Rwanda National Cyber Security Authority.",
     image: "/images/SAN TECH Data Processor Certificate_page-0001.jpg",
     imageAlt: "SAN TECH Data Processor Certificate issued by Rwanda's National Cyber Security Authority",
     badge: "Data Processor Certificate",
@@ -158,11 +159,11 @@ const recognitionItems: readonly RecognitionItem[] = [
   {
     year: "2021",
     title: "National Recognition for COVID-19 Recovery Capacity",
-    description: "SAN TECH’s published achievements timeline records national recognition in 2021 for supporting institutional COVID-19 recovery and resilience through technology.",
+    description: "SAN TECHâ€™s published achievements timeline records national recognition in 2021 for supporting institutional COVID-19 recovery and resilience through technology.",
   },
   {
     year: "2023",
-    title: "Central Bank of Rwanda (BNR) – E-Visitors Institutional Adoption",
+    title: "Central Bank of Rwanda (BNR) E-Visitors Institutional Adoption",
     description: "In 2023, SAN TECH recorded a major industry-validation milestone when its E-Visitors System was adopted by the National Bank of Rwanda (BNR).",
   },
   {
@@ -173,15 +174,16 @@ const recognitionItems: readonly RecognitionItem[] = [
 ];
 
 export function IdentityPanel() {
+  const t = useUiCopy();
   return (
     <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
       <div>
-        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Who we are</p>
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.whoWeAre}</p>
         <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH is a technological company focused on digital transformation and innovation. We develop smart digital products and integrated technology solutions while building the human talent and innovation ecosystem needed to create and deploy them.</p>
-        <p className="mt-5 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH connects people, ideas and technology — helping organizations solve real problems while helping the next generation develop the skills and products needed to create new innovative solutions.</p>
+        <p className="mt-5 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH connects people, ideas and technology â€” helping organizations solve real problems while helping the next generation develop the skills and products needed to create new innovative solutions.</p>
       </div>
       <aside className="border-l border-slate-300 pl-6 lg:pl-10">
-        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core identity</p>
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.coreIdentity}</p>
         <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">
           {identity.map(([label, value]) => <div key={label} className="border-t border-slate-200 pt-3"><p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7c879d]">{label}</p><p className="mt-2 text-sm font-bold leading-5 text-[#0a1f44]">{value}</p></div>)}
         </div>
@@ -195,6 +197,7 @@ export function MissionPanel({ cmsValues }: { cmsValues?: import("@/lib/strapi")
     cmsValues && cmsValues.length > 0 ? cmsValues : values;
   const [selectedValue, setSelectedValue] = useState<string>(activeValues[0].label);
   const prefersReducedMotion = useReducedMotion();
+  const t = useUiCopy();
   const activeValue = activeValues.find((value) => value.label === selectedValue) ?? activeValues[0];
 
   return (
@@ -202,21 +205,21 @@ export function MissionPanel({ cmsValues }: { cmsValues?: import("@/lib/strapi")
       <div className="relative min-w-0 overflow-visible">
         <div className="mb-4 flex items-center gap-3">
           <span className="grid size-8 place-items-center rounded-full bg-[#e8f1fc] text-[10px] font-black text-brand-secondary">01</span>
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our direction</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.ourDirection}</p>
         </div>
         <div className="relative grid gap-2.5 pl-5">
           <span className="absolute bottom-8 left-9 top-8 w-px bg-gradient-to-b from-brand-cyan via-brand-secondary to-[#0a1f44]" aria-hidden="true" />
           <article className="relative rounded-2xl border border-[#bdeaf3] bg-[#f2fcfe] p-4 shadow-[0_8px_22px_rgba(8,198,231,0.08)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Target className="size-5" aria-hidden="true" /></span>
-              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Mission</p><p className="text-xs font-bold text-[#0a1f44]">Build useful capability</p></div>
+              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{t.mission}</p><p className="text-xs font-bold text-[#0a1f44]">{t.buildUsefulCapability}</p></div>
             </div>
             <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
           </article>
           <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-4 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-[#0a1f44] shadow-sm"><Eye className="size-5" aria-hidden="true" /></span>
-              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">Vision</p><p className="text-xs font-bold text-[#0a1f44]">Widen what is possible</p></div>
+              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{t.vision}</p><p className="text-xs font-bold text-[#0a1f44]">{t.widenWhatIsPossible}</p></div>
             </div>
             <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
           </article>
@@ -224,7 +227,7 @@ export function MissionPanel({ cmsValues }: { cmsValues?: import("@/lib/strapi")
       </div>
       <div className="min-w-0 overflow-visible rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_8px_24px_rgba(10,31,68,0.05)] sm:p-5">
         <div>
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Core values</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.coreValues}</p>
         </div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={activeValue.label} initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }} className="mt-4 rounded-xl border border-[#bdeaf3] bg-[#f2fcfe] p-4">
@@ -247,14 +250,15 @@ function LegacyJourneyGrid() {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.32fr_0.68fr] lg:gap-12">
       <div className="grid gap-3 sm:grid-cols-2">
-        {journeyStages.map(([year, stage, description], index) => <article key={`${year}-${stage}`} className="border border-slate-200 bg-slate-50/60 px-4 py-3 transition-colors hover:border-[#b7cbe3] hover:bg-white"><div className="flex items-start justify-between gap-3"><h3 className="text-sm font-bold leading-5 text-[#0a1f44]">{year} — {stage}</h3><span className="text-[10px] font-black tracking-[0.16em] text-brand-secondary/45">{String(index + 1).padStart(2, "0")}</span></div><p className="mt-2 text-xs leading-5 text-[#68718a]">{description}</p></article>)}
+        {journeyStages.map(([year, stage, description], index) => <article key={`${year}-${stage}`} className="border border-slate-200 bg-slate-50/60 px-4 py-3 transition-colors hover:border-[#b7cbe3] hover:bg-white"><div className="flex items-start justify-between gap-3"><h3 className="text-sm font-bold leading-5 text-[#0a1f44]">{year} â€” {stage}</h3><span className="text-[10px] font-black tracking-[0.16em] text-brand-secondary/45">{String(index + 1).padStart(2, "0")}</span></div><p className="mt-2 text-xs leading-5 text-[#68718a]">{description}</p></article>)}
       </div>
-      <div className="flex flex-col justify-center border-l border-slate-300 pl-6 lg:pl-8"><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our journey</p><h1 className="font-exo mt-4 max-w-md text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">SAN TECH Journey at a Glance</h1><p className="mt-6 max-w-md text-base leading-7 text-[#68718a]">A decade of turning practical problems into technology, capability, partnerships, and a growing African innovation ecosystem.</p><div className="mt-8 border-t border-slate-300 pt-4"><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">2018 — 2026</p><p className="mt-2 text-sm font-bold leading-6 text-[#0a1f44]">From first idea to African technology vision.</p></div></div>
+      <div className="flex flex-col justify-center border-l border-slate-300 pl-6 lg:pl-8"><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Our journey</p><h1 className="font-exo mt-4 max-w-md text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">SAN TECH Journey at a Glance</h1><p className="mt-6 max-w-md text-base leading-7 text-[#68718a]">A decade of turning practical problems into technology, capability, partnerships, and a growing African innovation ecosystem.</p><div className="mt-8 border-t border-slate-300 pt-4"><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">2018 â€” 2026</p><p className="mt-2 text-sm font-bold leading-6 text-[#0a1f44]">From first idea to African technology vision.</p></div></div>
     </div>
   );
 }
 
 function RecognitionCarousel({ items, prefersReducedMotion, onSelect }: { items: readonly RecognitionItem[]; prefersReducedMotion: boolean | null; onSelect: (item: RecognitionItem) => void }) {
+  const t = useUiCopy();
   const cardsPerSlide = 3;
   const [activeSlide, setActiveSlide] = useState(0);
   const slideCount = Math.max(1, Math.ceil(items.length / cardsPerSlide));
@@ -275,15 +279,15 @@ function RecognitionCarousel({ items, prefersReducedMotion, onSelect }: { items:
             return (
               <motion.button key={item.title} type="button" onClick={() => onSelect(item)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-[0_8px_22px_rgba(10,31,68,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:shadow-[0_14px_30px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2" aria-label={`View details for ${item.title}`}>
                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                  <Image src={image} alt={item.imageAlt ?? item.title} fill sizes="(min-width: 1280px) 240px, (min-width: 640px) 50vw, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]" />
+                  <Image src={image} alt={item.imageAlt ?? item.title} fill sizes="(min-width: 1280px) 240px, (min-width: 640px) 50vw, 100vw" className="object-contain object-center" />
                   <span className="absolute left-3 top-3 rounded-md bg-white/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]">{item.year || "Recognition"}</span>
                 </div>
                 <div className="p-4">
                   <h3 className="text-sm font-bold leading-4 text-[#0a1f44]">{item.title}</h3>
                   <p className="mt-1 line-clamp-3 text-sm leading-5 text-[#68718a]">{item.description}</p>
                   <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-500">
-                    <span>Recognition · SAN TECH</span>
-                    <span className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary">View details <ArrowUpRight className="size-3.5" aria-hidden="true" /></span>
+                    <span>{t.recognitionSanTech}</span>
+                    <span className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary">{t.viewDetailsLink} <ArrowUpRight className="size-3.5" aria-hidden="true" /></span>
                   </div>
                 </div>
               </motion.button>
@@ -309,6 +313,7 @@ export function RecognitionPanel({ items }: { items?: readonly RecognitionItem[]
   const [selectedRecognition, setSelectedRecognition] = useState<RecognitionItem | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+  const t = useUiCopy();
   const orderedRecognitions = [...recognitions].sort((a, b) => {
     const yearA = a.year ? Number(a.year) : -1;
     const yearB = b.year ? Number(b.year) : -1;
@@ -351,15 +356,15 @@ export function RecognitionPanel({ items }: { items?: readonly RecognitionItem[]
           aria-label={`View details for ${activeRecognition.title}`}
         >
           <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-            <Image src={recognitionImage} alt={activeRecognition.imageAlt ?? activeRecognition.title} fill sizes="(min-width: 1024px) 384px, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]" />
+            <Image src={recognitionImage} alt={activeRecognition.imageAlt ?? activeRecognition.title} fill sizes="(min-width: 1024px) 384px, 100vw" className="object-contain object-center" />
             <span className="absolute left-3 top-3 rounded-md bg-white/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]">{activeRecognition.year || "Recognition"}</span>
           </div>
           <div className="p-4 sm:p-5">
             <h3 className="text-sm font-bold leading-4 text-[#0a1f44] sm:text-base">{activeRecognition.title}</h3>
             <p className="mt-1 line-clamp-3 text-sm leading-5 text-[#68718a]">{activeRecognition.description}</p>
             <div className="mt-3 flex items-center justify-between gap-4 text-xs text-slate-500">
-              <span>Recognition · SAN TECH</span>
-              <span className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary">View details <ArrowUpRight className="size-3.5" aria-hidden="true" /></span>
+              <span>{t.recognitionSanTech}</span>
+              <span className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary">{t.viewDetailsLink} <ArrowUpRight className="size-3.5" aria-hidden="true" /></span>
             </div>
           </div>
         </motion.button>
@@ -452,6 +457,7 @@ export function FocusPanel({ cmsAreas }: { cmsAreas?: import("@/lib/strapi").Foc
     cmsAreas && cmsAreas.length > 0
       ? cmsAreas.map((_a) => Code2) // icon stays as code fallback
       : focusIcons;
+  const t = useUiCopy();
 
   const [selectedArea, setSelectedArea] = useState<{ area: string; description: string; Icon: LucideIcon } | null>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -469,7 +475,7 @@ export function FocusPanel({ cmsAreas }: { cmsAreas?: import("@/lib/strapi").Foc
   return (
     <div className="focus-bubble-section relative min-h-0 overflow-hidden p-0">
       <BubbleMenu
-        logo={<span className="font-exo text-xs font-black uppercase tracking-[0.16em]">Our focus</span>}
+        logo={<span className="font-exo text-xs font-black uppercase tracking-[0.16em]">{t.ourFocus}</span>}
         items={activeFocusAreas.map(([area], index) => ({
           label: area,
           href: `#focus-${index + 1}`,
@@ -561,9 +567,9 @@ export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE
           <CompanyProfilePdf url={pdfUrl} />
         </div>
         <div className="hidden mt-5 grid gap-4 border-t border-slate-300 pt-4 sm:grid-cols-2">
-          <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Established</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">2019 · Rwanda</p></div>
-          <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Footprint</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Kigali · Bamako</p></div>
-          <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Impact</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">47+ institutions · 2,550+ beneficiaries</p></div>
+          <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Established</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">2019 Â· Rwanda</p></div>
+          <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Footprint</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Kigali Â· Bamako</p></div>
+          <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Impact</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">47+ institutions Â· 2,550+ beneficiaries</p></div>
           <div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#7c879d]">Compliance</p><p className="mt-2 text-sm font-bold text-[#0a1f44]">Certified Data Controller &amp; Processor</p></div>
         </div>
       </div>
@@ -580,7 +586,7 @@ type CertificateItem = {
 };
 
 const certificateItems: readonly CertificateItem[] = [
-  { title: "Data Processor Certificate", issuer: "National Cyber Security Authority · Data Protection and Privacy Office", image: "/images/SAN TECH Data Processor Certificate_page-0001.jpg", file: "/images/SAN TECH Data Processor Certificate.pdf", orientation: "portrait" },
+  { title: "Data Processor Certificate", issuer: "National Cyber Security Authority Â· Data Protection and Privacy Office", image: "/images/SAN TECH Data Processor Certificate_page-0001.jpg", file: "/images/SAN TECH Data Processor Certificate.pdf", orientation: "portrait" },
   { title: "EdTech Trust Seal", issuer: "Digital Bridge Institute", image: "/certificates/edtech-trust-seal.png", orientation: "square" },
 ];
 
@@ -635,3 +641,133 @@ function CertificateGallery() {
 export function CertificatePanel() {
   return <CertificatePanelContent />;
 }
+
+type StandardItem = {
+  title: string;
+  issuer: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  url?: string;
+};
+
+const standardItems: readonly StandardItem[] = [
+  {
+    title: "EdTech Trust Seal",
+    issuer: "Digital Bridge Institute",
+    description: "A trust mark recognizing SAN TECH's contribution to practical digital learning and education technology.",
+    image: "/certificates/edtech-trust-seal.png",
+    imageAlt: "DBI Certified EdTech Trust Seal",
+  },
+];
+
+export function StandardsPanel({ cmsItems }: { cmsItems?: import("@/lib/strapi").Standard[] }) {
+  const t = useUiCopy();
+  const activeStandards: readonly StandardItem[] =
+    cmsItems && cmsItems.length > 0
+      ? cmsItems.map((s) => ({
+          title: s.title,
+          issuer: s.issuer,
+          description: s.description ?? "",
+          image: s.image || "/images/seal.png",
+          imageAlt: s.imageAlt ?? s.title,
+          url: s.url ?? undefined,
+        }))
+      : standardItems;
+
+  const [activeSlide, setActiveSlide] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+  const cardsPerSlide = 3;
+  const slideCount = Math.max(1, Math.ceil(activeStandards.length / cardsPerSlide));
+  const visibleStandards = activeStandards.slice(
+    activeSlide * cardsPerSlide,
+    activeSlide * cardsPerSlide + cardsPerSlide
+  );
+
+  // Auto-slide when more than 3 seals
+  useEffect(() => {
+    if (prefersReducedMotion || slideCount < 2) return;
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % slideCount);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [prefersReducedMotion, slideCount]);
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="max-w-2xl">
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.standardsTrust}</p>
+        <h2 className="font-exo mt-2 text-2xl font-bold tracking-[-0.04em] text-[#0a1f44] sm:text-3xl">
+          {t.trustBuiltIntoWork}
+        </h2>
+        <p className="mt-3 text-sm leading-6 text-[#68718a]">
+          Our standards and trust seals make the care behind our products, learning programs, and institutional work easier to see.
+        </p>
+      </div>
+
+      {/* Seals row â€” centered, no background */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeSlide}
+          initial={prefersReducedMotion ? false : { opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={prefersReducedMotion ? undefined : { opacity: 0, x: -24 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.35, ease: "easeOut" }}
+          className="flex flex-wrap items-center justify-center gap-10 sm:gap-16 lg:gap-20"
+        >
+          {visibleStandards.map((standard) => {
+            const sealImg = (
+              <div className="group relative h-[180px] w-[180px] transition-transform duration-300 hover:-translate-y-1.5 sm:h-[220px] sm:w-[220px]">
+                <Image
+                  src={standard.image}
+                  alt={standard.imageAlt}
+                  fill
+                  sizes="(min-width: 640px) 220px, 180px"
+                  className="object-contain drop-shadow-[0_12px_20px_rgba(10,31,68,0.15)] transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              </div>
+            );
+
+            return standard.url ? (
+              <a
+                key={standard.title}
+                href={standard.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${standard.title} â€” ${standard.issuer}`}
+                className="rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-4"
+              >
+                {sealImg}
+              </a>
+            ) : (
+              <div key={standard.title} aria-label={`${standard.title} â€” ${standard.issuer}`}>
+                {sealImg}
+              </div>
+            );
+          })}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Slide dot indicators â€” only shown when more than 3 seals */}
+      {slideCount > 1 && (
+        <div className="flex items-center justify-center gap-2" role="tablist" aria-label={`Standards page ${activeSlide + 1} of ${slideCount}`}>
+          {Array.from({ length: slideCount }, (_, index) => (
+            <button
+              key={index}
+              type="button"
+              role="tab"
+              aria-selected={activeSlide === index}
+              aria-label={`Show standards page ${index + 1}`}
+              onClick={() => setActiveSlide(index)}
+              className={`h-1.5 rounded-full transition-all ${
+                activeSlide === index ? "w-8 bg-[#0a1f44]" : "w-1.5 bg-slate-300 hover:bg-slate-400"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+

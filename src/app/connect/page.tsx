@@ -1,8 +1,9 @@
-import { AtSign, ArrowUpRight, Mail, MapPin, MessageCircle, Navigation, Phone, Radio } from "lucide-react";
+﻿import { AtSign, ArrowUpRight, Mail, MapPin, MessageCircle, Navigation, Phone, Radio } from "lucide-react";
 import { PublicPage } from "@/components/public-page";
 import { ConnectDialog } from "@/components/connect-dialog";
 import { CalendlyDialog } from "@/components/calendly-dialog";
 import { fetchContactInfo } from "@/lib/strapi";
+import { ContactDetailsLabel, TurningIdeasLabel, LiveStreamLabel, ListenLiveLabel, GetDirectionsLabel } from "@/components/connect-labels";
 
 const FALLBACK_CONTACT = {
   phone1: "+250 783 250 033",
@@ -58,10 +59,8 @@ export default async function ConnectPage() {
             {/* Left: Contact Info & Action Buttons */}
             <div className="min-w-0">
               <section className="p-0" aria-labelledby="contact-details-title">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary lg:text-[11px]">Contact details</p>
-                <p id="contact-details-title" className="mt-1 text-xs leading-5 text-slate-600 lg:text-sm lg:leading-6">
-                  Turning Ideas into Impact.
-                </p>
+                <ContactDetailsLabel />
+                <TurningIdeasLabel />
 
                 {/* Physical Address */}
                 <address className="mt-3.5 flex gap-2.5 text-xs leading-5 text-[#303755] not-italic lg:text-sm lg:leading-6">
@@ -106,16 +105,14 @@ export default async function ConnectPage() {
                     </span>
                     <Radio className="size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
                     <div>
-                      <span className="block text-[9px] font-black uppercase tracking-[0.14em] text-slate-400 lg:text-[10px]">
-                        Live Stream
-                      </span>
+                      <LiveStreamLabel />
                       <span className="text-xs font-bold text-[#0a1f44] group-hover:text-brand-secondary transition-colors lg:text-sm">
                         {c.radioLabel}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1 text-[11px] font-bold text-brand-secondary lg:text-xs">
-                    <span>Listen live</span>
+                    <ListenLiveLabel />
                     <ArrowUpRight className="size-3.5" aria-hidden="true" />
                   </div>
                 </a>
@@ -150,7 +147,7 @@ export default async function ConnectPage() {
                   className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
                 >
                   <Navigation className="size-3.5 text-brand-secondary" aria-hidden="true" />
-                  <span>Get directions on Google Maps</span>
+                  <GetDirectionsLabel />
                   <ArrowUpRight className="size-3.5" aria-hidden="true" />
                 </a>
 

@@ -23,7 +23,6 @@ export const defaultEVisitorsImpactStats: readonly EVisitorsImpactStat[] = [
 type EVisitorsImpactSectionProps = {
   stats?: readonly EVisitorsImpactStat[];
   partners?: readonly PartnerBrand[];
-  hidden?: boolean;
 };
 
 function EVisitorsPartnerMark({ partner }: { partner: PartnerBrand }) {
@@ -177,13 +176,10 @@ function EVisitorsImpactCard({ stats, reducedMotion }: { stats: readonly EVisito
 export function EVisitorsImpactSection({
   stats = defaultEVisitorsImpactStats,
   partners,
-  hidden = false,
 }: EVisitorsImpactSectionProps) {
   const prefersReducedMotion = useReducedMotion();
   const marqueePartners = partners ?? partnerBrands;
   const partnerRows = [marqueePartners, marqueePartners, marqueePartners];
-
-  if (hidden) return null;
 
   return (
     <section id="impact" className="relative z-20 -mt-8 border-b border-slate-200 bg-transparent px-6 pb-8 pt-0 sm:-mt-10 sm:px-10 sm:pb-10 lg:-mt-12 lg:px-16 lg:pb-12">

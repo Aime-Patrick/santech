@@ -9,6 +9,7 @@ import { useMotionValue, useTransform } from "motion/react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Fragment, useEffect, useRef, useState } from "react";
+import { useUiCopy } from "@/lib/use-ui-copy";
 
 type StorySlide = {
   id: string;
@@ -469,6 +470,7 @@ export function SantechHomeStage({
   partners?: readonly PartnerBrand[];
   slides?: readonly StorySlide[];
 }) {
+  const t = useUiCopy();
   const [activeStoryIndex, setActiveStoryIndex] = useState(0);
   const [storyPlaying, setStoryPlaying] = useState(true);
   const [storyHovered, setStoryHovered] = useState(false);
@@ -481,6 +483,7 @@ export function SantechHomeStage({
   const activeStory = slides[activeStoryIndex];
   const isApproachStory = activeStory.id === "approach";
   const isEcosystemStory = activeStory.id === "ecosystem";
+  const shouldHighlightStoryDetail = activeStory.id === "services" || isApproachStory || isEcosystemStory;
   const isStakeholderStory = activeStory.id === "stakeholders";
   const isEcosystemDialogOpen = isEcosystemStory && ecosystemDialogItem !== null;
   const prefersReducedMotion = useReducedMotion();
@@ -595,7 +598,7 @@ export function SantechHomeStage({
               <div className="flex shrink-0 items-center justify-between gap-4 bg-[#111735] px-4 py-3 text-white sm:px-6">
                 <div className="min-w-0">
                   <p className="truncate text-[9px] font-black uppercase tracking-[0.2em] text-white">FLAGSHIP PRODUCT: E-VISITOR SYSTEM</p>
-                  <p className="mt-1 truncate text-xs font-semibold leading-snug sm:text-sm">Front-desk check-ins management system and premises-access platform.</p>
+                  <p className="mt-1 truncate text-xs font-semibold leading-snug sm:text-sm">{t.bringEVisitors}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   <button type="button" onClick={toggleSound} className="grid size-8 place-items-center border border-white/30 text-white transition-colors hover:bg-white hover:text-[#111735]" aria-label={muted ? "Turn video sound on" : "Mute video sound"}>
@@ -671,7 +674,7 @@ export function SantechHomeStage({
                   ) : (
                     <>
                       <p className={`mt-2 ${storyCopyClass}`}>{activeStory.body}</p>
-                      <p className={`mt-3 ${storyCopyClass}`}>{activeStory.detail}</p>
+                      <p className={`mt-3 ${storyCopyClass} ${shouldHighlightStoryDetail ? "text-brand-secondary" : ""}`}>{activeStory.detail}</p>
                       {isApproachStory && activeStory.flow && <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2">
                         {activeStory.flow.map((step, index) => <span key={step} className="inline-flex items-center gap-1"><span className="px-0.5 py-1 text-[11px] font-bold uppercase tracking-[0.04em] text-[#0a1f44] sm:text-[12px]">{step}</span>{index < activeStory.flow!.length - 1 && <span className="text-[12px] text-[#0a1f44]" aria-hidden="true">{"\u2192"}</span>}</span>)}
                       </div>}
@@ -790,7 +793,7 @@ export function SantechHomeStage({
       <footer className="relative flex min-h-[68px] shrink-0 flex-col items-center justify-center gap-1 overflow-hidden bg-[#0c1230] px-4 py-2 pb-3 text-center text-[11px] text-white sm:h-12.5 sm:min-h-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-7 sm:pb-1 sm:text-left sm:text-xs lg:h-[42px]">
         <span>© 2026 SAN TECH. All rights reserved.</span>
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden transition-colors hover:text-white sm:inline">Turning Ideas into Technology, Technology into Impact.</span>
+          <span className="hidden transition-colors hover:text-white sm:inline">{t.turningIdeasIntoImpact}</span>
           <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />
           <div className="flex items-center gap-2" aria-label="SAN TECH social media">
             {socialLinks.map(({ label, href, icon: Icon }) => (

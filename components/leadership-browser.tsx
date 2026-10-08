@@ -16,23 +16,23 @@ const executives = [
 
 const teamMembers = [
   { name: "Felix", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/felix  santech.png", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Placide", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/placide.png", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Aime Patrick", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Builders turning practical requirements into reliable digital systems at SAN TECH.", image: "/images/patrick.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "KAMI", position: "IOT & Hardware", department: "IOT & Hardware", expertise: "IOT & Hardware", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/kami.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Placide", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/placide.png", profile: "https://www.linkedin.com/in/ikundabayo-placide-b63b07284/" },
+  { name: "Aime Patrick", position: "Software developer", department: "Software Engineering", expertise: "Software development", bio: "Builders turning practical requirements into reliable digital systems at SAN TECH.", image: "/images/patrick.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "KAMI", position: "IOT & Hardware", department: "IOT & Hardware", expertise: "IOT & Hardware", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/kami.png", profile: "https://www.linkedin.com/in/kami-pierre" },
   { name: "Ndayishimiye G. Bonheur", position: "Software developer", department: "Software Engineering", expertise: "Full-stack systems, APIs, product delivery", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/bobo1.png", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Mbabazi Sarah", position: "Software developer", department: "Software Engineering", expertise: "Full-stack systems, APIs, product delivery", bio: "Builders turning practical requirements into reliable digital systems.", image: "/images/Sarah.png", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Chris Umurerwa", position: "Sales & Marketing Lead", department: "Sales & Marketing", expertise: "Sales & Marketing", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/umurerwa.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Chris Umurerwa", position: "Sales & Marketing Lead", department: "Sales & Marketing", expertise: "Sales & Marketing", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/umurerwa.png", profile: "https://www.linkedin.com/in/umurerwa-christine-238125288/" },
   { name: "CYUSA Saleh", position: "Sales & Marketing Lead", department: "Sales & Marketing", expertise: "Sales & Marketing", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/saleh.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Emmanuel", position: "IOT & Hardware Lead", department: "IOT & Hardware", expertise: "IOT & Hardware", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/emmanuel.jpeg", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Emmanuel", position: "IOT & Hardware Lead", department: "IOT & Hardware", expertise: "IOT & Hardware", bio: "Driving growth through   strategic market engagement and client partnerships.", image: "/images/_SIM0884.png", profile: "https://www.linkedin.com/in/emmy6" },
   { name: "Hertilan", position: "Software Developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/Hertilan.jpg", profile: "https://www.linkedin.com/company/santechinnovate" },
-  { name: "Yves", position: "Software Developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/Yvan.png", profile: "https://www.linkedin.com/company/santechinnovate" },
+  { name: "Yves", position: "Software Developer", department: "Software Engineering", expertise: "Software development", bio: "Building practical digital products and reliable systems at SAN TECH.", image: "/images/yves.png", profile: "https://www.linkedin.com/company/santechinnovate" },
 ];
 
 function TeamProfileCard({ member }: { member: (typeof teamMembers)[number] }) {
   return (
     <article className="relative min-w-0">
       <div className="relative h-80 overflow-hidden bg-[#2d79c7] sm:h-[360px]">
-        <Image src={member.image} alt={`${member.position} at SAN TECH`} fill sizes="(max-width: 640px) 100vw, 28vw" className="object-cover object-top" />
+        
+      <Image src={member.image} alt={`${member.position} at SAN TECH`} fill sizes="(max-width: 620px) 100vw, 28vw" className="object-cover object-top" />
       </div>
       <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-4 bg-white/95 p-3.5 backdrop-blur-sm sm:p-4">
         <div>

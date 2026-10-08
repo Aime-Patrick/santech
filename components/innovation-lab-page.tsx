@@ -121,7 +121,7 @@ export default async function InnovationLabPage({ section }: { section: ExploreS
 
   return (
     <PublicPage>
-      <StickyPageMenu items={sectionMenu} activeKey={section} ariaLabel="Explore Solutions sections" />
+      <StickyPageMenu items={sectionMenu} activeKey={section} ariaLabel="Explore Solutions sections" translationKey="innovation" />
       <section className="border-t border-slate-200 px-6 pb-10 pt-2 sm:px-10 lg:px-16 lg:pb-16 lg:pt-4">
         <div className="mx-auto max-w-7xl rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
           {section === "technologies" ? (

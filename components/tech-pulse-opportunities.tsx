@@ -1,5 +1,5 @@
-"use client";
-
+﻿"use client";
+import { useUiCopy } from "@/lib/use-ui-copy";
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -314,7 +314,9 @@ export const allOpportunities: OpportunityItem[] = [
 
 const CARDS_PER_VIEW = 2;
 
+
 export function TechPulseOpportunities({ cmsOpportunities }: { cmsOpportunities?: import("@/lib/strapi").Opportunity[] }) {
+  const t= useUiCopy();
   const [activeTab, setActiveTab] = useState<OpportunityTabId>("featured");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -480,7 +482,7 @@ export function TechPulseOpportunities({ cmsOpportunities }: { cmsOpportunities?
             <button
               type="button"
               onClick={() => setSearchQuery("")}
-              aria-label="Clear search"
+              aria-label={t.clearSearch}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
             >
               <X className="size-3.5" />
@@ -576,7 +578,7 @@ export function TechPulseOpportunities({ cmsOpportunities }: { cmsOpportunities?
         {totalCards === 0 ? (
           <div className="flex flex-col items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 p-10 text-center">
             <Search className="size-8 text-slate-300" />
-            <p className="mt-2 text-sm font-bold text-[#0a1f44]">No matching opportunities found</p>
+            <p className="mt-2 text-sm font-bold text-[#0a1f44]">{t.noOpportunities}</p>
             <p className="mt-1 text-xs text-slate-500">
               Try adjusting your search query or selecting a different category tab.
             </p>

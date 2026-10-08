@@ -130,7 +130,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
           </a>
           <span className="inline-flex min-w-0 flex-1 items-center justify-end gap-1.5 text-right xl:flex-none xl:gap-2">
             <MapPin className="size-3 shrink-0 sm:size-3.5" />
-            <span className="truncate">Plot 48, KN 1 Road, Sofaru Building; Kigali-Rwanda</span>
+            <span className="truncate">Plot 48, KN 1 Road, Sofaru Building, 3rd Floor, Muhima-Kigali-Rwanda</span>
           </span>
           <a href="mailto:info@santechinnovate.com" className="hidden items-center gap-2 transition-colors hover:text-[#00A3E0] xl:inline-flex">
             <Mail className="size-4" />

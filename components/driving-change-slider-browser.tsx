@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
@@ -20,6 +20,7 @@ import {
   type DrivingChangeMenuKey,
 } from "@/lib/driving-change-data";
 import type { DrivingChangeStory as CmsDrivingChangeStory } from "@/lib/strapi";
+import { useUiCopy } from "@/lib/use-ui-copy";
 
 const CARDS_PER_VIEW = 3;
 
@@ -30,6 +31,7 @@ export function DrivingChangeSliderBrowser({
   sectionKey?: DrivingChangeMenuKey;
   stories?: CmsDrivingChangeStory[];
 }) {
+  const t = useUiCopy();
   const currentSection = useMemo(() => {
     return (
       drivingChangeSections.find((s) => s.key === sectionKey) ||
@@ -187,7 +189,7 @@ export function DrivingChangeSliderBrowser({
                 </span>
               </div>
               <p className="mt-0.5 text-xs text-slate-500">
-                Showing {totalCards} {totalCards === 1 ? "story" : "stories"} · Auto-sliding
+                Showing {totalCards} {totalCards === 1 ? "story" : "stories"} Â· Auto-sliding
               </p>
             </div>
 
@@ -208,7 +210,7 @@ export function DrivingChangeSliderBrowser({
                 type="button"
                 onClick={prevSlide}
                 disabled={totalCards <= CARDS_PER_VIEW}
-                aria-label="Previous story"
+                aria-label={t.previous}
                 className="grid size-8 place-items-center border border-slate-200 bg-white text-[#0a1f44] shadow-2xs transition-colors hover:border-[#0a1f44] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ArrowLeft className="size-4" />
@@ -218,7 +220,7 @@ export function DrivingChangeSliderBrowser({
                 type="button"
                 onClick={nextSlide}
                 disabled={totalCards <= CARDS_PER_VIEW}
-                aria-label="Next story"
+                aria-label={t.next}
                 className="grid size-8 place-items-center border border-slate-200 bg-white text-[#0a1f44] shadow-2xs transition-colors hover:border-[#0a1f44] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ArrowRight className="size-4" />
@@ -336,7 +338,7 @@ export function DrivingChangeSliderBrowser({
               </div>
 
               <div className="text-[11px] font-bold text-slate-500">
-                Card {cardOffset + 1}–{Math.min(cardOffset + CARDS_PER_VIEW, totalCards)} of {totalCards}
+                Card {cardOffset + 1}â€“{Math.min(cardOffset + CARDS_PER_VIEW, totalCards)} of {totalCards}
               </div>
             </div>
           )}
@@ -390,7 +392,7 @@ export function DrivingChangeSliderBrowser({
                 <button
                   type="button"
                   onClick={() => setActiveStoryModal(null)}
-                  aria-label="Close story"
+                  aria-label={t.close}
                   className="grid size-8 shrink-0 place-items-center border border-slate-200 text-slate-600 transition-colors hover:border-[#0a1f44] hover:bg-slate-100 hover:text-[#0a1f44]"
                 >
                   <X className="size-4" />

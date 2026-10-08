@@ -1,10 +1,12 @@
+﻿"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Clock3, Compass, Rocket, Shuffle, TrendingUp } from "lucide-react";
+import { ArrowUpRight, BookOpen, Clock3, Compass, Rocket, Shuffle, TrendingUp } from "lucide-react";
 import type { SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import { useUiCopy } from "@/lib/use-ui-copy";
 
 const learningGoals = [
-  { label: "Start my career", href: "/san-hub/explore/work", Icon: Rocket },
   { label: "Change my career", href: "/san-hub/courses", Icon: Shuffle },
   { label: "Grow in my current role", href: "/san-hub/explore/build", Icon: TrendingUp },
   { label: "Explore technology beyond my work", href: "/san-hub/explore/research", Icon: Compass },
@@ -33,13 +35,20 @@ function LearningColumn({ title, items }: { title: string; items: readonly SanHu
         <ArrowUpRight className="size-4 text-[#526989]" aria-hidden="true" />
       </div>
       <div className="grid gap-2.5">
-        {items.map((item) => <LearningCard key={item.id} item={item} />)}
+        {items.length > 0 ? items.map((item) => <LearningCard key={item.id} item={item} />) : (
+          <div className="grid min-h-[92px] place-items-center rounded-xl border border-dashed border-[#b8c9df] bg-white/65 px-4 py-4 text-center">
+            <span className="grid size-8 place-items-center rounded-full bg-[#e8f1fc] text-[#526989]"><BookOpen className="size-4" aria-hidden="true" /></span>
+            <p className="mt-2 text-xs font-bold text-[#07152d]">Nothing here yet</p>
+            <p className="mt-0.5 text-[10px] text-[#526989]">New learning options will appear soon.</p>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 export function SanHubAboutLearning({ items = [] }: { items?: readonly SanHubCatalogItem[] }) {
+  const t = useUiCopy();
   const popularItems = items.filter((item) => item.category === "Courses").slice(0, 3);
   const newItems = items.filter((item) => item.category === "Upcoming training").slice(0, 2);
   const aiItems = items.filter((item) => ["applied-ai-machine-learning", "build-with-ai", "ai-literacy-for-work"].includes(item.id));

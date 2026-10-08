@@ -1,12 +1,32 @@
-"use client";
+﻿"use client";
 
+import { useUiCopy } from "@/lib/use-ui-copy";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ArrowUp, BarChart3, Building2, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Pause, Play, ScanLine, ShieldCheck, Star, Truck, Users, Volume2, VolumeX, X } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUp,
+  BarChart3,
+  Building2,
+  CalendarDays,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  ScanLine,
+  ShieldCheck,
+  Star,
+  Truck,
+  Users,
+  Volume2,
+  VolumeX,
+  X,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { PublicPage } from "@/components/public-page";
@@ -16,13 +36,24 @@ import { CalendlyDialog } from "@/components/calendly-dialog";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-function ScrollReveal({ children, reducedMotion, className = "" }: { children: ReactNode; reducedMotion: boolean; className?: string }) {
+function ScrollReveal({
+  children,
+  reducedMotion,
+  className = "",
+}: {
+  children: ReactNode;
+  reducedMotion: boolean;
+  className?: string;
+}) {
   return (
     <motion.div
       initial={reducedMotion ? false : { opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: reducedMotion ? 0.01 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: reducedMotion ? 0.01 : 0.45,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className={className}
     >
       {children}
@@ -31,36 +62,195 @@ function ScrollReveal({ children, reducedMotion, className = "" }: { children: R
 }
 
 const platformFeatures = [
-  { number: "01", label: "Gate Movement Management", title: "Track every arrival and departure.", description: "Monitor gate activity, entries, exits, and exceptions with one dependable operational record.", panel: "Gate movement", status: "Live movement view", icon: BarChart3, screen: "/images/e-visitors-monitor.png", details: ["Gate entries: 02", "Current visitors: 38", "Status: Live"] },
-  { number: "02", label: "Appointment & VIP Management", title: "Prepare every important visit.", description: "Coordinate appointments, hosts, VIP guests, schedules, and visit purposes before arrival.", panel: "Appointments and VIPs", status: "Appointment ready", icon: Users, screen: "/images/e-visitors-register.png", details: ["Host: Executive office", "Visit type: VIP", "Status: Scheduled"] },
-  { number: "03", label: "Access Control", title: "Give the right people the right access.", description: "Route approvals, issue passes, and apply clear access rules for every person and location.", panel: "Access control", status: "Approved by host", icon: ShieldCheck, screen: "/images/e-visitors-approve.png", details: ["Access zone: Main office", "Pass type: Visitor", "Valid until: 17:30"] },
-  { number: "04", label: "Emergency & Safety Management", title: "Respond with a clearer view of people on site.", description: "Keep presence, safety checks, alerts, and exceptions visible when teams need to act quickly.", panel: "Emergency and safety", status: "Safety view active", icon: ScanLine, screen: "/images/e-visitors-verify.png", details: ["Identity: Verified", "Watchlist: Clear", "Risk check: Complete"] },
-  { number: "05", label: "Multi-Organization / Multi-Site Management", title: "Manage more than one environment.", description: "Connect organizations, branches, departments, and sites while keeping local teams and rules visible.", panel: "Multi-site operations", status: "Sites connected", icon: Building2, screen: "/images/e-visitors-report.png", details: ["Organizations: 04", "Sites: 12", "Report: Consolidated"] },
-  { number: "06", label: "Events & Meeting Management", title: "Make gatherings easier to coordinate.", description: "Plan event access, meeting attendance, guest lists, hosts, and venue entry from one place.", panel: "Events and meetings", status: "Event ready", icon: CalendarDays, screen: "/images/e-visitors-register.png", details: ["Event: Partner meeting", "Guests: 24", "Venue: Main hall"] },
-  { number: "07", label: "Equipment & Vehicle Tracking Management", title: "Keep assets and movement accountable.", description: "Track equipment, vehicles, drivers, access times, and movement history across your sites.", panel: "Equipment and vehicles", status: "Tracking active", icon: Truck, screen: "/images/e-visitors-monitor.png", details: ["Vehicles on site: 12", "Equipment records: 47", "Tracking: Active"] },
+  {
+    number: "01",
+    label: "Gate Movement Management",
+    title: "Track every arrival and departure.",
+    description:
+      "Monitor gate activity, entries, exits, and exceptions with one dependable operational record.",
+    panel: "Gate movement",
+    status: "Live movement view",
+    icon: BarChart3,
+    screen: "/images/e-visitors-monitor.png",
+    details: ["Gate entries: 02", "Current visitors: 38", "Status: Live"],
+  },
+  {
+    number: "02",
+    label: "Appointment & VIP Management",
+    title: "Prepare every important visit.",
+    description:
+      "Coordinate appointments, hosts, VIP guests, schedules, and visit purposes before arrival.",
+    panel: "Appointments and VIPs",
+    status: "Appointment ready",
+    icon: Users,
+    screen: "/images/e-visitors-register.png",
+    details: ["Host: Executive office", "Visit type: VIP", "Status: Scheduled"],
+  },
+  {
+    number: "03",
+    label: "Access Control",
+    title: "Give the right people the right access.",
+    description:
+      "Route approvals, issue passes, and apply clear access rules for every person and location.",
+    panel: "Access control",
+    status: "Approved by host",
+    icon: ShieldCheck,
+    screen: "/images/e-visitors-approve.png",
+    details: [
+      "Access zone: Main office",
+      "Pass type: Visitor",
+      "Valid until: 17:30",
+    ],
+  },
+  {
+    number: "04",
+    label: "Emergency & Safety Management",
+    title: "Respond with a clearer view of people on site.",
+    description:
+      "Keep presence, safety checks, alerts, and exceptions visible when teams need to act quickly.",
+    panel: "Emergency and safety",
+    status: "Safety view active",
+    icon: ScanLine,
+    screen: "/images/e-visitors-verify.png",
+    details: ["Identity: Verified", "Watchlist: Clear", "Risk check: Complete"],
+  },
+  {
+    number: "05",
+    label: "Multi-Organization / Multi-Site Management",
+    title: "Manage more than one environment.",
+    description:
+      "Connect organizations, branches, departments, and sites while keeping local teams and rules visible.",
+    panel: "Multi-site operations",
+    status: "Sites connected",
+    icon: Building2,
+    screen: "/images/e-visitors-report.png",
+    details: ["Organizations: 04", "Sites: 12", "Report: Consolidated"],
+  },
+  {
+    number: "06",
+    label: "Events & Meeting Management",
+    title: "Make gatherings easier to coordinate.",
+    description:
+      "Plan event access, meeting attendance, guest lists, hosts, and venue entry from one place.",
+    panel: "Events and meetings",
+    status: "Event ready",
+    icon: CalendarDays,
+    screen: "/images/e-visitors-register.png",
+    details: ["Event: Partner meeting", "Guests: 24", "Venue: Main hall"],
+  },
+  {
+    number: "07",
+    label: "Equipment & Vehicle Tracking Management",
+    title: "Keep assets and movement accountable.",
+    description:
+      "Track equipment, vehicles, drivers, access times, and movement history across your sites.",
+    panel: "Equipment and vehicles",
+    status: "Tracking active",
+    icon: Truck,
+    screen: "/images/e-visitors-monitor.png",
+    details: [
+      "Vehicles on site: 12",
+      "Equipment records: 47",
+      "Tracking: Active",
+    ],
+  },
 ] as const;
 
 const testimonials = [
-  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg", name: "Aline M.", role: "Institutional operations partner", quote: "E-Visitors gives reception and security one clear record from arrival to departure. The team can see what is happening and act faster.", rating: 4.9 },
-  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg", name: "Eric N.", role: "Security operations lead", quote: "The approval flow makes every visit easier to verify. We spend less time searching for information and more time keeping the site ready.", rating: 4.8 },
-  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg", name: "Diane U.", role: "Reception and access partner", quote: "Our teams now share the same view of guests, hosts, appointments, and access decisions. It has made daily coordination much clearer.", rating: 4.9 },
-  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(110).jpg", name: "Patrick K.", role: "Institutional systems partner", quote: "The audit trail is useful because every important action is easy to follow. It gives leadership more confidence in the process.", rating: 4.7 },
-  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(111).jpg", name: "Mugisha R.", role: "Visitor services partner", quote: "Visitors receive a more professional welcome, while our staff get a simpler way to manage people and movement on site.", rating: 4.8 },
+  {
+    image:
+      "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg",
+    name: "Aline M.",
+    role: "Institutional operations partner",
+    quote:
+      "E-Visitors gives reception and security one clear record from arrival to departure. The team can see what is happening and act faster.",
+    rating: 4.9,
+  },
+  {
+    image:
+      "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg",
+    name: "Eric N.",
+    role: "Security operations lead",
+    quote:
+      "The approval flow makes every visit easier to verify. We spend less time searching for information and more time keeping the site ready.",
+    rating: 4.8,
+  },
+  {
+    image:
+      "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg",
+    name: "Diane U.",
+    role: "Reception and access partner",
+    quote:
+      "Our teams now share the same view of guests, hosts, appointments, and access decisions. It has made daily coordination much clearer.",
+    rating: 4.9,
+  },
+  {
+    image:
+      "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(110).jpg",
+    name: "Patrick K.",
+    role: "Institutional systems partner",
+    quote:
+      "The audit trail is useful because every important action is easy to follow. It gives leadership more confidence in the process.",
+    rating: 4.7,
+  },
+  {
+    image:
+      "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(111).jpg",
+    name: "Mugisha R.",
+    role: "Visitor services partner",
+    quote:
+      "Visitors receive a more professional welcome, while our staff get a simpler way to manage people and movement on site.",
+    rating: 4.8,
+  },
 ] as const;
 
-
 const milestones = [
-  ["2019", "Inception", "E-Visitors prototype and IP journey begins; the product is recognized through NIRDA Innovate for Industry."],
-  ["2021", "Resilience", "Technology supports institutional digital processes and resilience during the COVID-19 recovery period."],
-  ["2023", "Institutional adoption", "E-Visitors reaches a major market-validation milestone through adoption by the National Bank of Rwanda."],
+  [
+    "2019",
+    "Inception",
+    "E-Visitors prototype and IP journey begins; the product is recognized through NIRDA Innovate for Industry.",
+  ],
+  [
+    "2021",
+    "Resilience",
+    "Technology supports institutional digital processes and resilience during the COVID-19 recovery period.",
+  ],
+  [
+    "2023",
+    "Institutional adoption",
+    "E-Visitors reaches a major market-validation milestone through adoption by the National Bank of Rwanda.",
+  ],
 ] as const;
 
 const faqItems = [
-  ["What is E-Visitors?", "E-Visitors is a visitor, access, and attendance management platform that helps institutions register guests, verify identities, approve access, monitor movement, and keep accountable records."],
-  ["Who is E-Visitors designed for?", "It supports corporate offices, government institutions, hospitals, schools, universities, and other environments that need a clearer and safer way to manage people entering their premises."],
-  ["What can the platform manage?", "Teams can manage visitor registration, appointments, ID or passport checks, approvals, QR or barcode passes, watchlists, vehicles, live presence, reports, and audit trails."],
-  ["Can E-Visitors fit our existing workflow?", "Yes. The platform is designed around the way reception, security, hosts, and operations teams already work, with configurable access rules and a rollout that can grow with your institution."],
-  ["How can we request a demonstration?", "Use the Request a demo button to book a conversation with SAN TECH. We can review your visitor, access, attendance, and institutional security requirements together."],
+  [
+    "What is E-Visitors?",
+    "E-Visitors is a visitor, access, and attendance management platform that helps institutions register guests, verify identities, approve access, monitor movement, and keep accountable records.",
+  ],
+  [
+    "Who is E-Visitors designed for?",
+    "It supports corporate offices, government institutions, hospitals, schools, universities, and other environments that need a clearer and safer way to manage people entering their premises.",
+  ],
+  [
+    "What can the platform manage?",
+    "Teams can manage visitor registration, appointments, ID or passport checks, approvals, QR or barcode passes, watchlists, vehicles, live presence, reports, and audit trails.",
+  ],
+  [
+    "Can E-Visitors fit our existing workflow?",
+    "Yes. The platform is designed around the way reception, security, hosts, and operations teams already work, with configurable access rules and a rollout that can grow with your institution.",
+  ],
+  [
+    "How can we request a demonstration?",
+    "Use the Request a demo button to book a conversation with SAN TECH. We can review your visitor, access, attendance, and institutional security requirements together.",
+  ],
+  [
+    "What happens after a visitor checks in?",
+    "The host and relevant teams can see the visitor's status, while the system keeps a clear record of the visit from arrival through departure.",
+  ],
+  [
+    "Can we review visitor activity later?",
+    "Yes. Searchable reports and audit trails make it easier to review arrivals, departures, approvals, exceptions, and other important activity.",
+  ],
 ] as const;
 
 export function EVisitorsProductPage({
@@ -74,54 +264,62 @@ export function EVisitorsProductPage({
   cmsMilestones?: import("@/lib/strapi").ProductMilestone[];
   cmsFaqs?: import("@/lib/strapi").FaqItem[];
 }) {
-  const activeTestimonials = cmsTestimonials && cmsTestimonials.length > 0
-    ? cmsTestimonials.map((t) => ({
-        image: t.avatar,
-        name: t.name,
-        role: t.role,
-        quote: t.quote,
-        rating: t.rating,
-      }))
-    : testimonials;
+  const activeTestimonials =
+    cmsTestimonials && cmsTestimonials.length > 0
+      ? cmsTestimonials.map((t) => ({
+          image: t.avatar,
+          name: t.name,
+          role: t.role,
+          quote: t.quote,
+          rating: t.rating,
+        }))
+      : testimonials;
 
   // Map CMS features to the shape platformFeatures uses
-  const activeFeatures = cmsFeatures && cmsFeatures.length > 0
-    ? cmsFeatures.map((f) => ({
-        number: f.number,
-        label: f.label,
-        title: f.title,
-        description: f.description,
-        panel: f.panel ?? f.label,
-        status: f.status ?? "Live",
-        icon: BarChart3, // icon stays as code; driven by iconName mapping if needed
-        screen: f.screen || "/images/e-visitors-monitor.png",
-        details: f.details ?? [],
-      }))
-    : platformFeatures;
+  const t = useUiCopy();
+  const activeFeatures =
+    cmsFeatures && cmsFeatures.length > 0
+      ? cmsFeatures.map((f) => ({
+          number: f.number,
+          label: f.label,
+          title: f.title,
+          description: f.description,
+          panel: f.panel ?? f.label,
+          status: f.status ?? "Live",
+          icon: BarChart3, // icon stays as code; driven by iconName mapping if needed
+          screen: f.screen || "/images/e-visitors-monitor.png",
+          details: f.details ?? [],
+        }))
+      : platformFeatures;
 
   // Map CMS milestones to [year, title, description] tuples
-  const activeMilestones = cmsMilestones && cmsMilestones.length > 0
-    ? cmsMilestones.map((m) => [m.year, m.title, m.description] as const)
-    : milestones;
+  const activeMilestones =
+    cmsMilestones && cmsMilestones.length > 0
+      ? cmsMilestones.map((m) => [m.year, m.title, m.description] as const)
+      : milestones;
 
   // Map CMS faqs to [question, answer] tuples
-  const activeFaqs = cmsFaqs && cmsFaqs.length > 0
-    ? cmsFaqs.map((f) => [f.question, f.answer] as const)
-    : faqItems;
+  const activeFaqs =
+    cmsFaqs && cmsFaqs.length > 0
+      ? cmsFaqs.map((f) => [f.question, f.answer] as const)
+      : faqItems;
 
   const [activeJourney, setActiveJourney] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [selectedTestimonial, setSelectedTestimonial] = useState<number | null>(null);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<number | null>(
+    null,
+  );
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
-  const [isHeroActive, setIsHeroActive] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
   const pageAnimationRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const activeJourneySteps = activeFeatures;
-  const selectedReview = selectedTestimonial === null ? null : activeTestimonials[selectedTestimonial];
+  const selectedReview =
+    selectedTestimonial === null
+      ? null
+      : activeTestimonials[selectedTestimonial];
   const testimonialAvatars = activeTestimonials.map(({ image }) => image);
 
   useEffect(() => {
@@ -142,25 +340,20 @@ export function EVisitorsProductPage({
   }, []);
 
   useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsHeroActive(entry.isIntersecting),
-      { threshold: 0 },
-    );
-    observer.observe(hero);
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
     if (selectedTestimonial === null) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSelectedTestimonial(null);
-      if (event.key === "ArrowLeft") setSelectedTestimonial((current) => current === null ? 0 : (current - 1 + testimonials.length) % testimonials.length);
-      if (event.key === "ArrowRight") setSelectedTestimonial((current) => current === null ? 0 : (current + 1) % testimonials.length);
+      if (event.key === "ArrowLeft")
+        setSelectedTestimonial((current) =>
+          current === null
+            ? 0
+            : (current - 1 + testimonials.length) % testimonials.length,
+        );
+      if (event.key === "ArrowRight")
+        setSelectedTestimonial((current) =>
+          current === null ? 0 : (current + 1) % testimonials.length,
+        );
     };
 
     const previousOverflow = document.body.style.overflow;
@@ -172,29 +365,36 @@ export function EVisitorsProductPage({
     };
   }, [selectedTestimonial]);
 
-  useGSAP(() => {
-    if (prefersReducedMotion) return;
+  useGSAP(
+    () => {
+      if (prefersReducedMotion) return;
 
-    const sections = gsap.utils.toArray<HTMLElement>("section");
-    sections.forEach((section) => {
-      gsap.fromTo(
-        section,
-        { opacity: 0, y: 22 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.65,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 88%",
-            toggleActions: "play none none none",
-            once: true,
+      const sections = gsap.utils.toArray<HTMLElement>("section");
+      sections.forEach((section) => {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 22 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 88%",
+              toggleActions: "play none none none",
+              once: true,
+            },
           },
-        },
-      );
-    });
-  }, { scope: pageAnimationRef, dependencies: [prefersReducedMotion], revertOnUpdate: true });
+        );
+      });
+    },
+    {
+      scope: pageAnimationRef,
+      dependencies: [prefersReducedMotion],
+      revertOnUpdate: true,
+    },
+  );
 
   function toggleVideoPlayback() {
     const video = videoRef.current;
@@ -218,185 +418,511 @@ export function EVisitorsProductPage({
 
   function scrollToTop() {
     setShowScrollTop(false);
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
   }
 
   return (
     <PublicPage>
       <div ref={pageAnimationRef}>
-      <section ref={heroRef} className="relative isolate min-h-[min(760px,calc(100svh-7rem))] overflow-hidden border-b border-[#0a1f44] bg-[#07152d] text-white">
-        <video
-          ref={videoRef}
-          src="/E-VS.mp4"
-          className="absolute inset-0 size-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label="E-Visitors visitor management platform"
-          onPlay={() => setIsVideoPlaying(true)}
-          onPause={() => setIsVideoPlaying(false)}
-        />
-        <div className="absolute inset-0 -z-0 bg-[linear-gradient(90deg,rgba(7,21,45,0.68)_0%,rgba(7,21,45,0.5)_34%,rgba(7,21,45,0.08)_72%,rgba(7,21,45,0.15)_100%)]" aria-hidden="true" />
-        <div className="absolute inset-0 -z-0 bg-[linear-gradient(0deg,rgba(7,21,45,0.58)_0%,transparent_44%,rgba(7,21,45,0.08)_100%)]" aria-hidden="true" />
-        <div
-          className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden bg-[#07152d]/95 xl:block [clip-path:polygon(88%_0,100%_0,100%_100%,48%_100%)]"
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-0 z-[2] hidden overflow-hidden bg-white xl:block"
-          style={{ clipPath: "polygon(88% 0, 89.2% 0, 49.2% 100%, 48% 100%)" }}
-          aria-hidden="true"
+        <section
+          className="relative isolate min-h-[min(760px,calc(100svh-7rem))] overflow-hidden border-b border-[#0a1f44] bg-[#07152d] text-white"
         >
+          <video
+            ref={videoRef}
+            src="/E-VS.mp4"
+            className="absolute inset-0 size-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="E-Visitors visitor management platform"
+            onPlay={() => setIsVideoPlaying(true)}
+            onPause={() => setIsVideoPlaying(false)}
+          />
           <div
-            className="absolute -inset-1/2 bg-[url('/imingogo-trimmed.png')] bg-center bg-repeat"
-            style={{ backgroundPosition: "center bottom", backgroundSize: "44px 22px", backgroundRepeat: "repeat", transform: "rotate(-45deg)" }}
+            className="absolute inset-0 -z-0 bg-[linear-gradient(90deg,rgba(7,21,45,0.68)_0%,rgba(7,21,45,0.5)_34%,rgba(7,21,45,0.08)_72%,rgba(7,21,45,0.15)_100%)]"
             aria-hidden="true"
           />
-        </div>
+          <div
+            className="absolute inset-0 -z-0 bg-[linear-gradient(0deg,rgba(7,21,45,0.58)_0%,transparent_44%,rgba(7,21,45,0.08)_100%)]"
+            aria-hidden="true"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden bg-[#07152d]/95 xl:block [clip-path:polygon(88%_0,100%_0,100%_100%,48%_100%)]"
+            aria-hidden="true"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 z-[2] hidden overflow-hidden bg-white xl:block"
+            style={{
+              clipPath: "polygon(88% 0, 89.2% 0, 49.2% 100%, 48% 100%)",
+            }}
+            aria-hidden="true"
+          >
+            <div
+              className="absolute -inset-1/2 bg-[url('/imingogo-trimmed.png')] bg-center bg-repeat"
+              style={{
+                backgroundPosition: "center bottom",
+                backgroundSize: "44px 22px",
+                backgroundRepeat: "repeat",
+                transform: "rotate(-45deg)",
+              }}
+              aria-hidden="true"
+            />
+          </div>
 
-        <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-20 lg:px-16 lg:pb-32">
-          <div className="absolute inset-x-5 bottom-7 w-auto text-left sm:inset-x-10 sm:bottom-8 xl:bottom-7 xl:left-[60%] xl:right-0 xl:w-[40%] xl:pr-6 xl:text-right 2xl:pr-10">
-            <h1 className="font-exo mt-4 max-w-xl text-[clamp(3rem,6vw,6.5rem)] font-bold leading-[0.94] tracking-[-0.06em] text-white xl:ml-auto">E-Visitors</h1>
-            <h2 className="font-exo mt-5 max-w-2xl text-[clamp(1rem,2vw,1.3rem)] leading-tight tracking-[-0.035em] text-white/90 xl:ml-auto xl:max-w-xl">Built in Rwanda for safer, more visible institutions.</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/70 sm:text-base xl:ml-auto xl:max-w-sm">A connected visitor and access-management platform for the people, places, and institutions that keep Rwanda moving.</p>
-            <div className="mt-7 flex w-full flex-wrap justify-start gap-3 xl:justify-end"><CalendlyDialog label="Request a demo" className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-5 py-3 text-sm font-bold text-[#07152d] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]" /><a href="#platform-console" className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]">See the platform <ArrowRight className="size-4" aria-hidden="true" /></a></div>
-            <div className="mt-8 flex w-full flex-wrap items-center justify-start gap-4 border-t border-white/20 pt-5 xl:justify-end">
-              <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.2em] text-white sm:text-xs">Testimonials</p>
-              <div className="flex items-center pl-2" aria-label="E-Visitors testimonials">
-                {testimonialAvatars.map((avatar, index) => (
-                  <button key={avatar} type="button" onClick={() => setSelectedTestimonial(index)} aria-label={`Read testimonial ${index + 1}`} className={`relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#dfe8f2] shadow-[0_4px_14px_rgba(7,21,45,0.22)] transition-transform hover:z-10 hover:scale-110 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12 ${index === 0 ? "" : "-ml-2"}`}>
-                    <Image src={avatar} alt="" fill className="object-cover" sizes="48px" />
-                  </button>
-                ))}
-                <Link href="/san-hub?section=testimonials" aria-label="See all testimonials" className="ml-2 grid size-10 shrink-0 place-items-center rounded-full border-2 border-white bg-white text-[#1268bd] shadow-[0_4px_14px_rgba(7,21,45,0.2)] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12">
-                  <ArrowRight className="size-5 sm:size-6" aria-hidden="true" />
-                </Link>
+          <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-20 lg:px-16 lg:pb-32">
+            <div className="absolute inset-x-5 bottom-7 w-auto text-left sm:inset-x-10 sm:bottom-8 xl:bottom-7 xl:left-[60%] xl:right-0 xl:w-[40%] xl:pr-6 xl:text-right 2xl:pr-10">
+              <h1 className="font-exo mt-4 max-w-xl text-[clamp(3rem,6vw,6.5rem)] xl:text-[clamp(2.5rem,3.2vw,3.5rem)] font-bold leading-[0.94] tracking-[-0.06em] text-white xl:ml-auto">
+                E-Visitors
+              </h1>
+              <h2 className="font-exo mt-5 max-w-2xl text-[clamp(1rem,2vw,1.3rem)] xl:text-[clamp(0.9rem,1vw,1.2rem)] leading-tight tracking-[-0.035em] text-white/90 xl:ml-auto xl:max-w-xl">
+                Built in Rwanda for safer, more visible institutions.
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-white/70 sm:text-base xl:ml-auto xl:max-w-sm">
+                A connected visitor and access-management platform for the
+                people, places, and institutions that keep Rwanda moving.
+              </p>
+              <div className="mt-7 flex w-full flex-wrap justify-start gap-3 xl:justify-end">
+                <CalendlyDialog
+                  label={t.requestDemo}
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-5 py-3 text-sm font-bold text-[#07152d] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]"
+                />
+                <a
+                  href="#platform-console"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]"
+                >
+                  See the platform{" "}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </a>
+              </div>
+              <div className="mb-8 flex w-full flex-wrap items-center justify-start gap-4 pt-5 xl:justify-end">
+                <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.2em] text-white sm:text-xs">
+                  {t.testimonials}
+                </p>
+                <div
+                  className="flex items-center pl-2"
+                  aria-label="E-Visitors testimonials"
+                >
+                  {testimonialAvatars.map((avatar, index) => (
+                    <button
+                      key={avatar}
+                      type="button"
+                      onClick={() => setSelectedTestimonial(index)}
+                      aria-label={`Read testimonial ${index + 1}`}
+                      className={`relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#dfe8f2] shadow-[0_4px_14px_rgba(7,21,45,0.22)] transition-transform hover:z-10 hover:scale-110 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12 ${index === 0 ? "" : "-ml-2"}`}
+                    >
+                      <Image
+                        src={avatar}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    </button>
+                  ))}
+                  <Link
+                    href="/san-hub?section=testimonials"
+                    aria-label="See all testimonials"
+                    className="ml-2 grid size-10 shrink-0 place-items-center rounded-full border-2 border-white bg-white text-[#1268bd] shadow-[0_4px_14px_rgba(7,21,45,0.2)] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12"
+                  >
+                    <ArrowRight
+                      className="size-5 sm:size-6"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="absolute bottom-5 left-6 z-20 flex items-end gap-4 sm:bottom-7 sm:left-10 lg:left-16">
-          <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-white/20 bg-[#07152d]/45 p-1.5 backdrop-blur-md"><button type="button" onClick={toggleVideoPlayback} aria-label={isVideoPlaying ? "Pause E-Visitors video" : "Play E-Visitors video"} aria-pressed={!isVideoPlaying} className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">{isVideoPlaying ? <Pause className="size-4" aria-hidden="true" /> : <Play className="size-4 translate-x-px" aria-hidden="true" />}</button><button type="button" onClick={toggleVideoMute} aria-label={isVideoMuted ? "Unmute E-Visitors video" : "Mute E-Visitors video"} aria-pressed={!isVideoMuted} className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan">{isVideoMuted ? <VolumeX className="size-4" aria-hidden="true" /> : <Volume2 className="size-4" aria-hidden="true" />}</button></div>
-        </div>
-      </section>
-
-      <AnimatePresence>
-        {selectedReview && (
-          <motion.div
-            className="fixed inset-0 z-[150] grid place-items-center bg-[#07152d]/70 p-4 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onMouseDown={() => setSelectedTestimonial(null)}
-          >
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="e-visitors-testimonial-title"
-              className="relative w-full max-w-xl rounded-2xl border border-white/80 bg-white p-6 text-[#0a1f44] shadow-[0_24px_80px_rgba(7,21,45,0.35)] sm:p-8"
-              initial={{ opacity: 0, y: 12, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.97 }}
-              onMouseDown={(event) => event.stopPropagation()}
-            >
-              <button type="button" onClick={() => setSelectedTestimonial(null)} aria-label="Close testimonial" className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
-                <X className="size-4" aria-hidden="true" />
+          <div className="absolute bottom-5 left-4 z-20 flex items-end gap-4 sm:bottom-7 sm:left-10 lg:left-16">
+            <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-white/20 bg-[#07152d]/45 p-1.5 backdrop-blur-md">
+              <button
+                type="button"
+                onClick={toggleVideoPlayback}
+                aria-label={
+                  isVideoPlaying
+                    ? "Pause E-Visitors video"
+                    : "Play E-Visitors video"
+                }
+                aria-pressed={!isVideoPlaying}
+                className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan"
+              >
+                {isVideoPlaying ? (
+                  <Pause className="size-4" aria-hidden="true" />
+                ) : (
+                  <Play className="size-4 translate-x-px" aria-hidden="true" />
+                )}
               </button>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">E-Visitors / Review</p>
-              <h2 id="e-visitors-testimonial-title" className="font-exo mt-2 max-w-sm text-2xl font-bold leading-tight tracking-[-0.04em]">What our partners say.</h2>
-              <blockquote className="mt-6 text-base leading-7 text-slate-600 sm:text-lg">&ldquo;{selectedReview.quote}&rdquo;</blockquote>
-              <div className="mt-6 flex items-center gap-3 border-t border-slate-200 pt-4">
-                <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-white bg-[#dfe8f2] shadow-sm"><Image src={selectedReview.image} alt="" fill className="object-cover" sizes="48px" /></span>
-                <span className="min-w-0"><span className="block text-sm font-bold">{selectedReview.name}</span><span className="mt-0.5 block text-xs text-slate-500">{selectedReview.role}</span></span>
-                <span className="ml-auto flex shrink-0 items-center gap-1 text-sm font-bold text-brand-secondary" aria-label={`${selectedReview.rating} out of 5 stars`}><Star className="size-4 fill-current" aria-hidden="true" />{selectedReview.rating}</span>
-              </div>
-              <div className="mt-6 flex items-center justify-between gap-3">
-                <button type="button" onClick={() => setSelectedTestimonial((current) => current === null ? 0 : (current - 1 + testimonials.length) % testimonials.length)} aria-label="Previous testimonial" className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ChevronLeft className="size-4" aria-hidden="true" />Previous</button>
-                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">{(selectedTestimonial ?? 0) + 1} / {testimonials.length}</span>
-                <button type="button" onClick={() => setSelectedTestimonial((current) => current === null ? 0 : (current + 1) % testimonials.length)} aria-label="Next testimonial" className="inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-[#132f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">Next<ChevronRight className="size-4" aria-hidden="true" /></button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <EVisitorsImpactSection hidden={isHeroActive} />
-
-      <section id="platform-console" className="border-b border-slate-200 bg-gradient-to-br from-[#edf7fb] via-[#f7fafc] to-[#e1f0f7] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto max-w-7xl">
-        <div className="grid gap-3 lg:gap-8 lg:grid-cols-[0.33fr_0.67fr] lg:items-center"><div className="contents"><div className="order-2 lg:col-start-2"><ScrollReveal reducedMotion={Boolean(prefersReducedMotion)}><Safari url="e-visitors.santech.rw" imageSrc={activeJourneySteps[activeJourney].screen} className="mx-auto w-full lg:w-[92%]" /></ScrollReveal></div>
-          <div className="border-l-2 border-[#d6e4f1] pl-4">{activeJourneySteps.map((step, index) => { const selected = index === activeJourney; return <motion.button key={step.label} type="button" onClick={() => setActiveJourney(index)} animate={prefersReducedMotion ? undefined : { scale: selected ? 1.025 : 1 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.35, ease: "easeOut" }} style={{ transformOrigin: "left center" }} whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }} className={selected ? "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-[#0a1f44] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2" : "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-slate-500 transition-colors hover:text-[#0a1f44] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"}><span className="pt-1 text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{step.number}</span><span><span className="block text-sm font-bold">{step.label}</span>{selected && <span className="mt-1 block max-w-md text-xs leading-5 text-[#68718a]">{step.description}</span>}</span>{selected && <motion.span layoutId="evisitor-step" className="absolute -left-[18px] top-0 h-full w-0.5 bg-brand-secondary" />}</motion.button>; })}</div>
-
-        </div></div>
-      </div></section>
-
-      <section className="border-b border-slate-200 bg-gradient-to-br from-[#f7fafc] via-[#f7fafc] to-[#e6f3f8] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto max-w-7xl"><div className="pb-5"><p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">Product journey</p><h2 className="font-exo mt-3 max-w-3xl text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">From a Rwandan idea to a system used in real institutions.</h2></div><div className="relative grid gap-0 md:grid-cols-3 md:before:absolute md:before:left-0 md:before:right-0 md:before:top-[3.35rem] md:before:h-px md:before:bg-[#cfe5f1]">{activeMilestones.map(([year, title, description]) => <article key={year} className="relative border-b border-slate-200 px-0 py-5 md:border-b-0 md:px-6 md:first:pl-0 md:last:pr-0"><span className="relative z-10 grid size-11 place-items-center rounded-full border-4 border-[#f7fafc] bg-brand-secondary font-exo text-sm font-bold text-white">{year}</span><h3 className="mt-3 text-sm font-bold text-[#0a1f44]">{title}</h3><p className="mt-1 text-xs leading-5 text-[#68718a]">{description}</p></article>)}</div></div></section>
-
-      <section className="bg-gradient-to-br from-[#081b3d] via-[#0a1f44] to-[#123365] px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 lg:flex-row lg:items-end"><div><p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-cyan">Bring E-Visitors to your environment</p><h2 className="font-exo mt-3 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.045em] sm:text-3xl">Make every arrival safer, clearer, and more useful.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">Talk to SAN TECH about your visitor, access, attendance, or institutional security requirements in Rwanda.</p></div><CalendlyDialog label="Request an E-Visitors demo" className="inline-flex w-fit items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-bold text-[#0a1f44] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1f44]" /></div></section>
-
-      <section id="faq" className="border-b border-slate-200 bg-white px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
-          <div>
-            <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">Frequently asked questions</p>
-            <h2 className="font-exo mt-3 max-w-md text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">A clearer answer before your next arrival.</h2>
-            <p className="mt-4 max-w-md text-sm leading-6 text-[#68718a]">Learn how E-Visitors supports safer access and more accountable visitor operations.</p>
+              <button
+                type="button"
+                onClick={toggleVideoMute}
+                aria-label={
+                  isVideoMuted
+                    ? "Unmute E-Visitors video"
+                    : "Mute E-Visitors video"
+                }
+                aria-pressed={!isVideoMuted}
+                className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan"
+              >
+                {isVideoMuted ? (
+                  <VolumeX className="size-4" aria-hidden="true" />
+                ) : (
+                  <Volume2 className="size-4" aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </div>
+        </section>
 
-          <div className="divide-y divide-slate-200 border-y border-slate-200">
-            {activeFaqs.map(([question, answer], index) => {
-              const isOpen = openFaq === index;
-
-              return (
-                <div key={question}>
+        <AnimatePresence>
+          {selectedReview && (
+            <motion.div
+              className="fixed inset-0 z-[150] grid place-items-center bg-[#07152d]/70 p-4 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onMouseDown={() => setSelectedTestimonial(null)}
+            >
+              <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="e-visitors-testimonial-title"
+                className="relative w-full max-w-xl rounded-2xl border border-white/80 bg-white p-6 text-[#0a1f44] shadow-[0_24px_80px_rgba(7,21,45,0.35)] sm:p-8"
+                initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                onMouseDown={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedTestimonial(null)}
+                  aria-label="Close testimonial"
+                  className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+                >
+                  <X className="size-4" aria-hidden="true" />
+                </button>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">
+                  E-Visitors / Review
+                </p>
+                <h2
+                  id="e-visitors-testimonial-title"
+                  className="font-exo mt-2 max-w-sm text-2xl font-bold leading-tight tracking-[-0.04em]"
+                >
+                  What our partners say.
+                </h2>
+                <blockquote className="mt-6 text-base leading-7 text-slate-600 sm:text-lg">
+                  &ldquo;{selectedReview.quote}&rdquo;
+                </blockquote>
+                <div className="mt-6 flex items-center gap-3 border-t border-slate-200 pt-4">
+                  <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-white bg-[#dfe8f2] shadow-sm">
+                    <Image
+                      src={selectedReview.image}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="48px"
+                    />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold">
+                      {selectedReview.name}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-slate-500">
+                      {selectedReview.role}
+                    </span>
+                  </span>
+                  <span
+                    className="ml-auto flex shrink-0 items-center gap-1 text-sm font-bold text-brand-secondary"
+                    aria-label={`${selectedReview.rating} out of 5 stars`}
+                  >
+                    <Star className="size-4 fill-current" aria-hidden="true" />
+                    {selectedReview.rating}
+                  </span>
+                </div>
+                <div className="mt-6 flex items-center justify-between gap-3">
                   <button
                     type="button"
-                    onClick={() => setOpenFaq(isOpen ? null : index)}
-                    aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-6 py-5 text-left text-sm font-bold text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"
+                    onClick={() =>
+                      setSelectedTestimonial((current) =>
+                        current === null
+                          ? 0
+                          : (current - 1 + testimonials.length) %
+                            testimonials.length,
+                      )
+                    }
+                    aria-label="Previous testimonial"
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
                   >
-                    <span>{question}</span>
-                    <ChevronDown className={`size-4 shrink-0 text-brand-secondary transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+                    <ChevronLeft className="size-4" aria-hidden="true" />
+                    Previous
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={prefersReducedMotion ? false : { opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }}
-                        transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }}
-                        className="pb-5 pr-8 text-sm leading-6 text-[#68718a]"
-                      >
-                        {answer}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
+                    {(selectedTestimonial ?? 0) + 1} / {testimonials.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedTestimonial((current) =>
+                        current === null
+                          ? 0
+                          : (current + 1) % testimonials.length,
+                      )
+                    }
+                    aria-label="Next testimonial"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-[#132f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+                  >
+                    Next
+                    <ChevronRight className="size-4" aria-hidden="true" />
+                  </button>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            type="button"
-            onClick={scrollToTop}
-            aria-label="Scroll to top"
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={prefersReducedMotion ? undefined : { opacity: 0, y: 10, scale: 0.9 }}
-            transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, ease: "easeOut" }}
-            whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-[110] grid size-12 place-items-center rounded-full bg-brand-cyan text-[#07152d] shadow-[0_12px_30px_rgba(0,163,224,0.32)] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 sm:bottom-8 sm:right-8"
-          >
-            <ArrowUp className="size-5" aria-hidden="true" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+        <EVisitorsImpactSection />
+
+        <section
+          id="platform-console"
+          className="border-b border-slate-200 bg-gradient-to-br from-[#edf7fb] via-[#f7fafc] to-[#e1f0f7] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-3 lg:gap-8 lg:grid-cols-[0.33fr_0.67fr] lg:items-center">
+              <div className="contents">
+                <div className="order-2 lg:col-start-2">
+                  <ScrollReveal reducedMotion={Boolean(prefersReducedMotion)}>
+                    <Safari
+                      url="e-visitors.santech.rw"
+                      imageSrc={activeJourneySteps[activeJourney].screen}
+                      className="mx-auto w-full lg:w-[92%]"
+                    />
+                  </ScrollReveal>
+                </div>
+                <div className="border-l-2 border-[#d6e4f1] pl-4">
+                  {activeJourneySteps.map((step, index) => {
+                    const selected = index === activeJourney;
+                    return (
+                      <motion.button
+                        key={step.label}
+                        type="button"
+                        onClick={() => setActiveJourney(index)}
+                        animate={
+                          prefersReducedMotion
+                            ? undefined
+                            : { scale: selected ? 1.025 : 1 }
+                        }
+                        transition={{
+                          duration: prefersReducedMotion ? 0.01 : 0.35,
+                          ease: "easeOut",
+                        }}
+                        style={{ transformOrigin: "left center" }}
+                        whileTap={
+                          prefersReducedMotion ? undefined : { scale: 0.99 }
+                        }
+                        className={
+                          selected
+                            ? "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-[#0a1f44] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+                            : "relative grid w-full grid-cols-[2.25rem_1fr] items-start gap-3 py-3 text-left text-slate-500 transition-colors hover:text-[#0a1f44] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+                        }
+                      >
+                        <span className="pt-1 text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">
+                          {step.number}
+                        </span>
+                        <span>
+                          <span className="block text-sm font-bold">
+                            {step.label}
+                          </span>
+                          {selected && (
+                            <span className="mt-1 block max-w-md text-xs leading-5 text-[#68718a]">
+                              {step.description}
+                            </span>
+                          )}
+                        </span>
+                        {selected && (
+                          <motion.span
+                            layoutId="evisitor-step"
+                            className="absolute -left-[18px] top-0 h-full w-0.5 bg-brand-secondary"
+                          />
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-slate-200 bg-gradient-to-br from-[#f7fafc] via-[#f7fafc] to-[#e6f3f8] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12">
+          <div className="mx-auto max-w-7xl">
+            <div className="pb-5">
+              <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">
+                Product journey
+              </p>
+              <h2 className="font-exo mt-3 max-w-3xl text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">
+                From a Rwandan idea to a system used in real institutions.
+              </h2>
+            </div>
+            <div className="relative grid gap-0 md:grid-cols-3 md:before:absolute md:before:left-0 md:before:right-0 md:before:top-[3.35rem] md:before:h-px md:before:bg-[#cfe5f1]">
+              {activeMilestones.map(([year, title, description]) => (
+                <article
+                  key={year}
+                  className="relative border-b border-slate-200 px-0 py-5 md:border-b-0 md:px-6 md:first:pl-0 md:last:pr-0"
+                >
+                  <span className="relative z-10 grid size-11 place-items-center rounded-full border-4 border-[#f7fafc] bg-brand-secondary font-exo text-sm font-bold text-white">
+                    {year}
+                  </span>
+                  <h3 className="mt-3 text-sm font-bold text-[#0a1f44]">
+                    {title}
+                  </h3>
+                  <p className="mt-1 text-xs leading-5 text-[#68718a]">
+                    {description}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gradient-to-br from-[#081b3d] via-[#0a1f44] to-[#123365] px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-16 lg:py-12">
+          <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-cyan">
+                Bring E-Visitors to your environment
+              </p>
+              <h2 className="font-exo mt-3 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.045em] sm:text-3xl">
+                Make every arrival safer, clearer, and more useful.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+                Talk to SAN TECH about your visitor, access, attendance, or
+                institutional security requirements in Rwanda.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-col items-start gap-3 lg:items-end">
+              <div className="relative h-40 w-full max-w-[300px] overflow-hidden sm:h-24 lg:w-[300px]">
+                <Image
+                  src="/images/fqa.jpeg"
+                  alt="E-Visitors visitor journey from check-in to check-out"
+                  fill
+                  sizes="(min-width: 1024px) 360px, 100vw"
+                  className="object-contain"
+                />
+              </div>
+              <CalendlyDialog
+                label={t.requestDemo}
+                className="inline-flex w-fit items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-bold text-[#0a1f44] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1f44]"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="faq"
+          className="border-b border-slate-200 bg-white px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-16"
+        >
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">
+                Frequently asked questions
+              </p>
+              <h2 className="font-exo mt-3 max-w-md text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">
+                A clearer answer before your next arrival.
+              </h2>
+              <p className="mt-4 max-w-md text-sm leading-6 text-[#68718a]">
+                Learn how E-Visitors supports safer access and more accountable
+                visitor operations.
+              </p>
+
+              <div className="relative mt-8 aspect-[16/9] w-full max-w-[520px] overflow-hidden rounded-xl bg-slate-100 lg:max-w-full">
+                <Image
+                  src="/images/fqa1.jpeg"
+                  alt="E-Visitors visitor journey from check-in to check-out"
+                  fill
+                  sizes="(min-width: 1024px) 520px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="divide-y divide-slate-200 border-y border-slate-200">
+              {activeFaqs.map(([question, answer], index) => {
+                const isOpen = openFaq === index;
+
+                return (
+                  <div key={question}>
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(isOpen ? null : index)}
+                      aria-expanded={isOpen}
+                      className="flex w-full items-center justify-between gap-6 py-5 text-left text-sm font-bold text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"
+                    >
+                      <span>{question}</span>
+                      <ChevronDown
+                        className={`size-4 shrink-0 text-brand-secondary transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                        aria-hidden="true"
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={
+                            prefersReducedMotion ? false : { opacity: 0, y: -6 }
+                          }
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={
+                            prefersReducedMotion
+                              ? undefined
+                              : { opacity: 0, y: -6 }
+                          }
+                          transition={{
+                            duration: prefersReducedMotion ? 0.01 : 0.2,
+                            ease: "easeOut",
+                          }}
+                          className="pb-5 pr-8 text-sm leading-6 text-[#68718a]"
+                        >
+                          {answer}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              type="button"
+              onClick={scrollToTop}
+              aria-label="Scroll to top"
+              initial={
+                prefersReducedMotion ? false : { opacity: 0, y: 10, scale: 0.9 }
+              }
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={
+                prefersReducedMotion
+                  ? undefined
+                  : { opacity: 0, y: 10, scale: 0.9 }
+              }
+              transition={{
+                duration: prefersReducedMotion ? 0.01 : 0.2,
+                ease: "easeOut",
+              }}
+              whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+              whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+              className="fixed bottom-6 right-6 z-[110] grid size-12 place-items-center rounded-full bg-brand-cyan text-[#07152d] shadow-[0_12px_30px_rgba(0,163,224,0.32)] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 sm:bottom-8 sm:right-8"
+            >
+              <ArrowUp className="size-5" aria-hidden="true" />
+            </motion.button>
+          )}
+        </AnimatePresence>
       </div>
     </PublicPage>
   );

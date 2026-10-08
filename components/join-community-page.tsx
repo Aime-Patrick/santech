@@ -1,8 +1,11 @@
-"use client";
+﻿"use client";
+import { useUiCopy } from "@/lib/use-ui-copy";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, BriefcaseBusiness, Check, ChevronDown, GraduationCap, Handshake, Lightbulb, Search, Users, X } from "lucide-react";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from "motion/react";
+import { ArrowUpRight, Award, BriefcaseBusiness, Check, ChevronDown, GraduationCap, Handshake, Lightbulb, Search, Users, X } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback } from "react";
 import { PhoneNumberField } from "@/components/phone-number-field";
 
 type JoinPath = "training" | "internship" | "community" | "innovation";
@@ -19,6 +22,102 @@ const workActions = [
   { label: "Book a demo", href: "/connect?topic=e-visitors-demo", icon: ArrowUpRight },
   { label: "Talk with us", href: "/connect?topic=talk", icon: Users },
 ];
+
+const traineeAwards = [
+  {
+    id: "best-performer-2026",
+    year: "2026",
+    title: "Best Performer",
+    recipient: "SAN HUB trainee",
+    image: "/images/222003819.jpg",
+    imageAlt: "SAN HUB trainee recognized for outstanding performance",
+    description: "Recognizing a trainee who stood out through commitment, practical work, and contribution during the SAN HUB learning journey.",
+    details: ["Outstanding participation", "Practical project contribution", "Commitment to continued learning"],
+  },
+] as const;
+
+type TraineeAward = (typeof traineeAwards)[number];
+
+function TraineeAwardCard({ award, reducedMotion, onOpen }: { award: TraineeAward; reducedMotion: boolean; onOpen: (award: TraineeAward) => void }) {
+  return (
+    <motion.button
+      type="button"
+      initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: reducedMotion ? 0.01 : 0.25, ease: "easeOut" }}
+      onClick={() => onOpen(award)}
+      aria-label={`View ${award.title} ${award.year} details`}
+      className="group flex w-[238px] shrink-0 items-center gap-3 rounded-xl border border-[#dbe5ef] bg-white p-2 text-left shadow-[0_8px_20px_rgba(10,31,68,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-cyan/70 hover:shadow-[0_12px_26px_rgba(10,31,68,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"
+    >
+      <span className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-[#e7eef8]">
+        <Image src={award.image} alt={award.imageAlt} fill className="object-contain transition-transform duration-300 group-hover:scale-105" sizes="64px" />
+      </span>
+      <span className="min-w-0">
+        <span className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.14em] text-brand-secondary"><Award className="size-3 text-brand-secondary" aria-hidden="true" />{award.year}</span>
+        <span className="mt-1 block truncate text-sm font-bold text-[#07152d]">{award.title}</span>
+        <span className="mt-0.5 block truncate text-[10px] text-slate-500">{award.recipient}</span>
+      </span>
+      <ArrowUpRight className="ml-auto size-4 shrink-0 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+    </motion.button>
+  );
+}
+
+function TraineeAwardMarquee({ reducedMotion, onOpen }: { reducedMotion: boolean; onOpen: (award: TraineeAward) => void }) {
+  const controls = useAnimationControls();
+  const row = [...traineeAwards, ...traineeAwards];
+  const firstGroupRef = useRef<HTMLDivElement>(null);
+  const [loopWidth, setLoopWidth] = useState(0);
+
+  useEffect(() => {
+    const group = firstGroupRef.current;
+    if (!group) return;
+
+    const updateLoopWidth = () => setLoopWidth(group.getBoundingClientRect().width);
+    updateLoopWidth();
+    const observer = new ResizeObserver(updateLoopWidth);
+    observer.observe(group);
+    return () => observer.disconnect();
+  }, []);
+
+  const startMarquee = useCallback(() => {
+    if (reducedMotion || loopWidth === 0) return;
+    void controls.start({
+      x: [0, -loopWidth],
+      transition: { duration: Math.max(12, loopWidth / 35), ease: "linear", repeat: Infinity, repeatType: "loop" },
+    });
+  }, [controls, loopWidth, reducedMotion]);
+
+  useEffect(() => {
+    if (reducedMotion || loopWidth === 0) {
+      controls.set({ x: 0 });
+      return;
+    }
+    startMarquee();
+    return () => controls.stop();
+  }, [controls, loopWidth, reducedMotion, startMarquee]);
+
+  return (
+    <div
+      className="relative min-w-0 overflow-hidden"
+      aria-label="SAN HUB trainee awards"
+      onMouseEnter={() => controls.stop()}
+      onMouseLeave={startMarquee}
+      onFocus={() => controls.stop()}
+      onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) startMarquee(); }}
+    >
+      <span className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-white via-white/85 to-transparent" aria-hidden="true" />
+      <motion.div className="flex w-max will-change-transform" initial={false} animate={controls}>
+        {[0, 1].map((copy) => (
+          <div ref={copy === 0 ? firstGroupRef : undefined} key={copy} className="flex gap-3 pr-3" aria-hidden={copy === 1}>
+            {row.map((award, index) => <TraineeAwardCard key={`${copy}-${index}-${award.id}`} award={award} reducedMotion={reducedMotion} onOpen={onOpen} />)}
+          </div>
+        ))}
+      </motion.div>
+      <span className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-white via-white/85 to-transparent" aria-hidden="true" />
+    </div>
+  );
+}
 
 const pathCopy: Record<JoinPath, { eyebrow: string; title: string; description: string; prompt: string; placeholder: string }> = {
   training: { eyebrow: "Training application", title: "Tell us what you want to learn.", description: "We will use your interests and experience to guide you toward the right SAN HUB learning pathway.", prompt: "Which skills or topics do you want to develop?", placeholder: "For example: full-stack development, AI, cybersecurity, or digital skills..." },
@@ -249,6 +348,7 @@ function TrainingFields({ initialCourse = "" }: { initialCourse?: string }) {
 }
 
 export function TrainingApplicationDialog({ isOpen, onClose, initialCourse = "" }: { isOpen: boolean; onClose: () => void; initialCourse?: string }) {
+  const t = useUiCopy();
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -276,7 +376,7 @@ export function TrainingApplicationDialog({ isOpen, onClose, initialCourse = "" 
         </div>
         <div className="p-5 sm:p-7">
           {submitted ? (
-            <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">Thank you for starting the conversation.</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your training application is ready. The SAN HUB team will follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={onClose} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">Close</button></div></div>
+            <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">{t.thankYouConversation}</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your training application is ready. The SAN HUB team will follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={onClose} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">{t.close}</button></div></div>
           ) : (
             <>
               <p className="mb-5 max-w-2xl text-sm leading-6 text-slate-600">We will use your interests and experience to guide you toward the right SAN HUB learning pathway.</p>
@@ -345,20 +445,26 @@ function InnovationFields() {
 }
 
 export function JoinCommunityPage({ initialPath = "community", course = "", openInitially = false }: { initialPath?: JoinPath; course?: string; openInitially?: boolean }) {
+  const t = useUiCopy();
   const prefersReducedMotion = useReducedMotion();
   const [path, setPath] = useState<JoinPath>(initialPath);
   const [isDialogOpen, setIsDialogOpen] = useState(openInitially);
+  const [selectedAward, setSelectedAward] = useState<TraineeAward | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const copy = pathCopy[path];
 
   useEffect(() => {
-    if (!isDialogOpen) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setIsDialogOpen(false); };
+    if (!isDialogOpen && !selectedAward) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setIsDialogOpen(false);
+      setSelectedAward(null);
+    };
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", closeOnEscape);
     return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
-  }, [isDialogOpen]);
+  }, [isDialogOpen, selectedAward]);
 
   function openPath(nextPath: JoinPath) {
     setPath(nextPath);
@@ -373,24 +479,30 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
 
   return (
     <>
-      <section className="relative flex min-h-[calc(100svh-7rem)] items-center overflow-hidden px-6 py-7 sm:px-10 sm:py-9 lg:px-16 lg:py-10">
+      <section className="relative overflow-hidden px-6 py-10 sm:px-10 sm:py-12 lg:px-16 lg:pt-15">
         <div className="mx-auto max-w-7xl">
           <div>
             <article className="flex flex-col rounded-2xl border-t-4 border-brand-cyan bg-white p-5 shadow-[0_16px_35px_rgba(7,11,36,0.08)] sm:p-6">
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">For people</p><h2 className="font-exo mt-2 text-xl font-bold tracking-[-0.04em] text-[#07152d] sm:text-2xl">Join the SAN HUB ecosystem.</h2></div>
-                <div className="flex items-start gap-2 xl:max-w-[48rem]">
+                <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.forPeople}</p><h2 className="font-exo mt-2 text-xl font-bold tracking-[-0.04em] text-[#07152d] sm:text-2xl">{t.joinEcosystem}</h2></div>
+                <div className="xl:max-w-[48rem]">
                   <div className="grid w-full gap-2 sm:grid-cols-3">
                     {workActions.map(({ label, href, icon: Icon }, index) => <motion.a key={label} href={href} initial={{ opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -2, boxShadow: "0 12px 26px rgba(8,198,231,0.22)" }} whileTap={{ scale: 0.98 }} transition={{ opacity: { duration: 0.25, delay: 0.12 + index * 0.08 }, y: { duration: 0.2, delay: 0.12 + index * 0.08 }, boxShadow: { duration: 0.2 } }} className="group relative flex min-h-11 items-center justify-between gap-2 overflow-hidden rounded-xl border border-brand-cyan bg-white px-3 py-2 text-left text-[#07152d] shadow-[0_8px_20px_rgba(8,198,231,0.14)] transition-shadow"><motion.span aria-hidden="true" className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-brand-cyan/25 to-transparent" initial={{ x: "-30%" }} animate={prefersReducedMotion ? { x: "-30%" } : { x: ["-30%", "420%"] }} transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 4, delay: index * 0.65, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }} /><span className="relative z-10 text-xs font-bold sm:text-sm">{label}</span><Icon className="relative z-10 size-4 shrink-0 text-brand-secondary" aria-hidden="true" /></motion.a>)}
                   </div>
-                  <Users className="mt-2 size-6 shrink-0 text-brand-secondary" aria-hidden="true" />
                 </div>
               </div>
               <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">Learn, contribute, find mentorship, and build the experience needed to create useful technology.</p>
               <div className="mt-5 grid gap-2 sm:grid-cols-2">{peoplePaths.map(({ id, label, description, icon: Icon }) => <button key={id} type="button" onClick={() => openPath(id)} className="group rounded-xl border border-brand-cyan bg-white p-3.5 text-left shadow-[0_8px_20px_rgba(8,198,231,0.14)] transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(8,198,231,0.22)]"><span className="flex items-center justify-between gap-3"><span className="flex items-center gap-2 text-sm font-bold text-[#07152d]"><Icon className="size-4 text-brand-secondary" aria-hidden="true" />{label}</span><ArrowUpRight className="size-4 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></span><span className="mt-1.5 block text-xs leading-5 text-slate-500">{description}</span></button>)}</div>
-              <div className="mt-5 flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs font-semibold text-slate-500">Choose a path and start participating.</p>
-                <div className="flex flex-wrap items-center gap-2" aria-label="SAN HUB pathways">
+              <div className="mt-5 border-t border-slate-200 pt-4">
+                <div className="grid gap-4 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">SAN HUB / Learner recognition</p>
+                    <h3 className="font-exo mt-1 text-base font-bold tracking-[-0.03em] text-[#07152d]">Best Performer Awarded</h3>
+                    <p className="mt-1 max-w-sm text-xs leading-5 text-slate-500">Celebrating trainees who turn learning into practical contribution.</p>
+                  </div>
+                  <TraineeAwardMarquee reducedMotion={Boolean(prefersReducedMotion)} onOpen={setSelectedAward} />
+                </div>
+                <div className="mt-4 flex flex-wrap items-center justify-end gap-2" aria-label="SAN HUB pathways">
                   {['Learn', 'Build', 'Connect'].map((pathLabel) => <span key={pathLabel} className="inline-flex items-center gap-1.5 rounded-full bg-[#edf7fb] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]"><Check className="size-3 text-brand-secondary" aria-hidden="true" />{pathLabel}</span>)}
                 </div>
               </div>
@@ -404,7 +516,7 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
           <motion.div role="dialog" aria-modal="true" aria-labelledby="join-dialog-title" className="max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/60 bg-[#f7faff] shadow-[0_30px_90px_rgba(7,21,45,0.28)]" initial={{ opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.98 }} transition={{ duration: 0.24, ease: "easeOut" }}>
             <div className="flex items-start justify-between gap-5 border-b border-slate-200 bg-white px-5 py-4 sm:px-7"><div><p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{copy.eyebrow}</p><h2 id="join-dialog-title" className="font-exo mt-1 text-xl font-bold leading-tight tracking-[-0.035em] text-[#07152d] sm:text-2xl">{copy.title}</h2></div><button type="button" onClick={() => setIsDialogOpen(false)} aria-label="Close application form" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" /></button></div>
             <div className="p-5 sm:p-7">
-              {submitted ? <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">Thank you for starting the conversation.</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your {copy.eyebrow.toLowerCase()} details are ready for the SAN HUB team. We will use the contact information you provided to follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={() => setIsDialogOpen(false)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">Close</button></div></div> : <>
+              {submitted ? <div className="rounded-xl border border-emerald-200 bg-white p-6"><p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600">Request prepared</p><h3 className="font-exo mt-3 text-2xl font-bold text-[#07152d]">{t.thankYouConversation}</h3><p className="mt-3 text-sm leading-6 text-slate-600">Your {copy.eyebrow.toLowerCase()} details are ready for the SAN HUB team. We will use the contact information you provided to follow up with the next steps.</p><div className="mt-6 flex flex-wrap gap-2"><button type="button" onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 rounded-lg bg-[#07152d] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary">Submit another request <ArrowUpRight className="size-4" /></button><button type="button" onClick={() => setIsDialogOpen(false)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#07152d] transition-colors hover:border-brand-secondary">{t.close}</button></div></div> : <>
                 <p className="mb-5 max-w-2xl text-sm leading-6 text-slate-600">{copy.description}</p>
                 <form onSubmit={handleSubmit} className="grid gap-3 sm:grid-cols-2">
                   <label className={labelClass}>Full name<input required minLength={2} name="name" placeholder="Your full name" className={inputClass} /></label>
@@ -423,6 +535,50 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
             </div>
           </motion.div>
         </motion.div>}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedAward && (
+          <motion.div
+            className="fixed inset-0 z-[110] grid place-items-center bg-[#07152d]/65 p-4 backdrop-blur-sm"
+            role="presentation"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.2 }}
+            onMouseDown={() => setSelectedAward(null)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="trainee-award-dialog-title"
+              className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/80 bg-white shadow-[0_24px_70px_rgba(7,21,45,0.28)]"
+              initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.94, y: prefersReducedMotion ? 0 : 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.97, y: prefersReducedMotion ? 0 : 8 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+              onMouseDown={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-secondary">SAN HUB / {selectedAward.year}</p>
+                  <h2 id="trainee-award-dialog-title" className="font-exo mt-1 text-xl font-bold leading-tight tracking-[-0.035em] text-[#07152d]">{selectedAward.title}</h2>
+                  <p className="mt-1 text-xs text-slate-500">{selectedAward.recipient}</p>
+                </div>
+                <button type="button" onClick={() => setSelectedAward(null)} aria-label="Close trainee award details" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" aria-hidden="true" /></button>
+              </div>
+              <div className="grid gap-5 p-5 sm:grid-cols-[150px_1fr] sm:p-6">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#e7eef8]"><Image src={selectedAward.image} alt={selectedAward.imageAlt} fill className="object-contain" sizes="150px" /></div>
+                <div>
+                  <p className="text-sm leading-6 text-slate-600">{selectedAward.description}</p>
+                  <ul className="mt-4 grid gap-2">
+                    {selectedAward.details.map((detail) => <li key={detail} className="flex items-center gap-2 text-xs font-semibold text-[#07152d]"><Check className="size-3.5 text-brand-secondary" aria-hidden="true" />{detail}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </>
   );

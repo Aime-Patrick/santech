@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import type { TechPulseCategory } from "@/lib/tech-pulse-data";
 import type { CmsArticle } from "@/lib/strapi";
+import { useUiCopy } from "@/lib/use-ui-copy";
 
 export type TechPulseTopic = {
   id: string;
@@ -100,6 +101,7 @@ export function TechPulseSliderBrowser({
   }, [categoryArticles, cardOffset, totalInCat]);
 
   const activeTopicObj = TOPICS.find((t) => t.category === selectedCategory) ?? TOPICS[0];
+  const ui = useUiCopy();
 
   return (
     <div 
@@ -176,7 +178,7 @@ export function TechPulseSliderBrowser({
                 <button
                   type="button"
                   onClick={() => setIsAutoPlaying((v) => !v)}
-                  title={isAutoPlaying ? "Pause auto-slide" : "Play auto-slide"}
+                  title={isAutoPlaying ? ui.previous : ui.next}
                   className="grid size-7 place-items-center rounded border border-slate-200 text-slate-600 transition-colors hover:border-[#0a1f44] hover:text-[#0a1f44]"
                 >
                   {isAutoPlaying ? <Pause className="size-3" /> : <Play className="size-3" />}
@@ -210,8 +212,8 @@ export function TechPulseSliderBrowser({
             <span className="grid size-14 place-items-center rounded-full bg-[#e8f3f8] text-brand-secondary">
               <Newspaper className="size-6" aria-hidden="true" />
             </span>
-            <h3 className="font-exo mt-5 text-xl font-bold tracking-[-0.03em] text-[#0a1f44]">No stories in this category yet</h3>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">New Tech Pulse stories and announcements will appear here as they are published.</p>
+            <h3 className="font-exo mt-5 text-xl font-bold tracking-[-0.03em] text-[#0a1f44]">{ui.noStoriesYet}</h3>
+            <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">{ui.noStoriesDesc}</p>
             <Link href="/tech-pulse" className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
               Return to Tech Pulse <ArrowUpRight className="size-4" aria-hidden="true" />
             </Link>
@@ -283,7 +285,7 @@ export function TechPulseSliderBrowser({
                     href={`/tech-pulse/${article.slug}`}
                     className="inline-flex items-center gap-1 text-xs font-bold text-[#0a1f44] transition-colors group-hover:text-brand-secondary"
                   >
-                    <span>Read story</span>
+                    <span>{ui.readStory}</span>
                     <ArrowUpRight className="size-3.5" />
                   </Link>
 
@@ -317,16 +319,16 @@ export function TechPulseSliderBrowser({
             </div>
           ) : totalInCat > 0 ? (
             <span className="text-[11px] font-semibold text-slate-500">
-              Showing all stories in {activeTopicObj.label}
+              {ui.stories} {activeTopicObj.label}
             </span>
           ) : (
             <span className="text-[11px] font-semibold text-slate-500">
-              No stories in {activeTopicObj.label} yet
+              {ui.noStoriesYet}
             </span>
           )}
 
           <div className="flex items-center gap-2 text-[11px] font-bold">
-            <span className="text-slate-400">Category:</span>
+            <span className="text-slate-400">{ui.category}:</span>
             <span className="font-black text-[#0a1f44] uppercase tracking-wider">
               {activeTopicObj.label}
             </span>
