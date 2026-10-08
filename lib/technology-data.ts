@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { BrainCircuit, Cloud, Code2, Database, GitBranch, Globe2, LockKeyhole, Network, Radio, Wrench } from "lucide-react";
 
-export type TechnologyCategory = { id: string; label: string; description: string; items: string[]; icon: LucideIcon };
+export type TechnologyCategory = { id: string; label: string; description: string; items: string[]; icon?: LucideIcon };
 
 export const technologyCategories: TechnologyCategory[] = [
   { id: "programming-languages", label: "Programming Languages", description: "A broad catalog of languages used across web, mobile, enterprise, systems, data, scientific, embedded, and emerging technology work.", items: [

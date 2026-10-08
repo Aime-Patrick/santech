@@ -8,11 +8,8 @@ import {
   fetchInnovationSolutions,
   fetchTechnologyCategories,
 } from "@/lib/strapi";
-import {
-  innovationItems,
-  type InnovationItem,
-} from "@/lib/innovation-data";
-import { technologyCategories, type TechnologyCategory } from "@/lib/technology-data";
+import type { InnovationItem } from "@/lib/innovation-data";
+import type { TechnologyCategory } from "@/lib/technology-data";
 
 export type ExploreSection = InnovationSection | "technologies" | "programming-languages";
 
@@ -36,8 +33,7 @@ function mapCmsInnovationItem(
     coreFeatures: (item.coreFeatures ?? []).map((f) => ({
       label: f.label,
       description: f.description,
-      // icon stays as a code-side fallback — not stored in CMS
-      icon: require("lucide-react").BarChart3,
+      // icon is a client-side concern — not stored in CMS
     })),
     media: {
       kind: item.mediaKind,
@@ -57,9 +53,9 @@ function mapCmsServiceItem(
     title: item.label,
     description: item.description,
     coreFeatures: [
-      { label: "Main services", description: item.description, icon: require("lucide-react").Code2 },
-      { label: "Delivery model", description: "Move from discovery and requirements through design, development, deployment, training, and support.", icon: require("lucide-react").Code2 },
-      { label: "Built for growth", description: "Create technology that fits real operational needs and can grow with the organization.", icon: require("lucide-react").Workflow },
+      { label: "Main services", description: item.description },
+      { label: "Delivery model", description: "Move from discovery and requirements through design, development, deployment, training, and support." },
+      { label: "Built for growth", description: "Create technology that fits real operational needs and can grow with the organization." },
     ],
     media: { kind: "image", src: "/images/team.jpg", alt: `SAN TECH ${item.label} team` },
   };
@@ -82,14 +78,12 @@ function mapCmsSolutionItem(
 function mapCmsTechCategory(
   item: Awaited<ReturnType<typeof fetchTechnologyCategories>>[number]
 ): TechnologyCategory {
-  // Find the matching hardcoded category to preserve the LucideIcon
-  const hardcoded = technologyCategories.find((c) => c.id === item.categoryId);
   return {
     id: item.categoryId,
     label: item.label,
     description: item.description,
     items: item.items,
-    icon: hardcoded?.icon ?? require("lucide-react").Code2,
+    // icon is resolved client-side from the hardcoded lookup — not passed from the server
   };
 }
 
@@ -102,18 +96,15 @@ export default async function InnovationLabPage({ section }: { section: ExploreS
     fetchTechnologyCategories(),
   ]);
 
-  // Map CMS → InnovationItem shape, fall back to hardcoded if empty
-  const products: readonly InnovationItem[] =
-    cmsProducts.length > 0 ? cmsProducts.map(mapCmsInnovationItem) : innovationItems.product;
-  const services: readonly InnovationItem[] =
-    cmsServices.length > 0 ? cmsServices.map(mapCmsServiceItem) : innovationItems.services;
-  const solutions: readonly InnovationItem[] =
-    cmsSolutions.length > 0 ? cmsSolutions.map(mapCmsSolutionItem) : innovationItems.solutions;
-  const techCategories: readonly TechnologyCategory[] =
-    cmsTechCategories.length > 0 ? cmsTechCategories.map(mapCmsTechCategory) : technologyCategories;
+  // Map CMS → InnovationItem shape. Pass undefined when CMS is empty so
+  // the client component handles its own fallback to hardcoded data (with icons).
+  const products = cmsProducts.length > 0 ? cmsProducts.map(mapCmsInnovationItem) : undefined;
+  const services = cmsServices.length > 0 ? cmsServices.map(mapCmsServiceItem) : undefined;
+  const solutions = cmsSolutions.length > 0 ? cmsSolutions.map(mapCmsSolutionItem) : undefined;
+  const techCategories = cmsTechCategories.length > 0 ? cmsTechCategories.map(mapCmsTechCategory) : undefined;
 
   // Pick the right items for the current section
-  const sectionItems: Record<InnovationSection, readonly InnovationItem[]> = {
+  const sectionItems: Record<InnovationSection, readonly InnovationItem[] | undefined> = {
     product: products,
     services: services,
     solutions: solutions,

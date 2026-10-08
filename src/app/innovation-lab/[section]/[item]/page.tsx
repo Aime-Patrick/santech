@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BarChart3 } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
 import { Safari } from "@/components/ui/safari";
@@ -63,7 +63,7 @@ export default async function InnovationDetailPage({ params }: { params: Promise
               <h2 className="font-exo mt-4 text-3xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-4xl">Built around the details that matter.</h2>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {item.coreFeatures.map(({ label, icon: Icon, description }) => (
+              {item.coreFeatures.map(({ label, icon: Icon = BarChart3, description }) => (
                 <article key={label} className="rounded-xl border border-slate-200 bg-white p-5 shadow-[0_14px_36px_rgba(10,31,68,0.05)]">
                   <span className="grid size-10 place-items-center rounded-xl bg-[#e3ebf7] text-brand-secondary">
                     <Icon className="size-5" strokeWidth={1.8} aria-hidden="true" />

@@ -10,7 +10,7 @@ import { Safari } from "@/components/ui/safari";
 
 export type CoreFeature = {
   label: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   description: string;
 };
 
@@ -106,7 +106,7 @@ export function SplitFeaturePanel({
                 className={`relative flex w-full items-start gap-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075eaa] focus-visible:ring-offset-2 ${expanded ? "text-[#0a1f44]" : "text-slate-500 hover:text-[#0a1f44]"}`}
               >
                   <span className={`grid size-8 shrink-0 place-items-center rounded-lg text-[#075eaa] transition-colors ${expanded ? "bg-[#d9eafa]" : "bg-[#e6eef8]"}`}>
-                    <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
+                    {Icon && <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />}
                   </span>
                   <span className="min-w-0 flex-1 pt-0.5">
                     <span className={`block text-[10px] font-black uppercase tracking-[0.1em] transition-colors sm:text-[11px] ${expanded ? "text-[#0a1f44]" : "text-slate-500"}`}>{label}</span>

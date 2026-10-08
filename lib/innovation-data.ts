@@ -27,7 +27,7 @@ export type InnovationSection = "product" | "services" | "solutions";
 
 export type InnovationFeature = {
   label: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   description: string;
 };
 

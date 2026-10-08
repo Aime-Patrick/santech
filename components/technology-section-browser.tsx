@@ -13,7 +13,12 @@ import { technologyCategories, type TechnologyCategory } from "@/lib/technology-
 const HARDCODED_PROG_LANG = technologyCategories[0];
 
 function resolveCategories(cmsCategories?: readonly TechnologyCategory[]) {
-  return cmsCategories && cmsCategories.length > 0 ? cmsCategories : technologyCategories;
+  if (!cmsCategories || cmsCategories.length === 0) return technologyCategories;
+  // Re-attach icons from the hardcoded lookup — icons can't travel from the server
+  return cmsCategories.map((cat) => ({
+    ...cat,
+    icon: cat.icon ?? technologyCategories.find((h) => h.id === cat.id)?.icon,
+  }));
 }
 
 const technologyIcons: Record<string, { Icon: IconType; color: string }> = {
@@ -146,7 +151,7 @@ function TechnologyAccordion({ allCategories, programmingLanguages }: { allCateg
   const categories = allCategories.filter((category) => category.id !== programmingLanguages.id);
   const [activeId, setActiveId] = useState<string>(categories[0].id);
   const activeCategory = categories.find((category) => category.id === activeId) ?? categories[0];
-  const ActiveIcon = activeCategory.icon;
+  const ActiveIcon = activeCategory.icon ?? Code2;
   const activeIndex = categories.findIndex((category) => category.id === activeCategory.id);
 
   return (
@@ -157,7 +162,7 @@ function TechnologyAccordion({ allCategories, programmingLanguages }: { allCateg
         <div className="mt-6 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1" role="tablist" aria-label="SAN TECH technology domains">
           {categories.map((category) => {
             const active = activeCategory.id === category.id;
-            const Icon = category.icon;
+            const Icon = category.icon ?? Code2;
             return <button key={category.id} type="button" role="tab" aria-selected={active} onClick={() => setActiveId(category.id)} className={`group flex min-w-0 items-center gap-2 rounded-xl border px-2 py-1.5 text-left transition-[background-color,color,transform,border-color] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 ${active ? "border-[#b8d7e6] bg-[#eef6fb] text-[#0a1f44]" : "border-transparent bg-[#f8fafc] text-[#0a1f44] hover:border-[#d8e5ef] hover:bg-[#f3f7fb]"}`}><span className={`grid size-6 shrink-0 place-items-center rounded-lg ${active ? "bg-white text-brand-secondary" : "bg-white text-slate-500"}`}><Icon className="size-3" strokeWidth={1.8} aria-hidden="true" /></span><span className="min-w-0 flex-1 truncate text-[11px] font-bold leading-4">{category.label}</span><ArrowUpRight className={`size-3 shrink-0 transition-transform ${active ? "text-brand-secondary" : "text-slate-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"}`} aria-hidden="true" /></button>;
           })}
         </div>
@@ -177,7 +182,7 @@ function TechnologyAccordion({ allCategories, programmingLanguages }: { allCateg
 }
 
 function ProgrammingLanguagesPanel({ programmingLanguages }: { programmingLanguages: TechnologyCategory }) {
-  const ProgrammingLanguagesIcon = programmingLanguages.icon;
+  const ProgrammingLanguagesIcon = programmingLanguages.icon ?? Code2;
 
   return (
     <div className="grid gap-10 lg:grid-cols-[0.68fr_1.32fr] lg:gap-14">
