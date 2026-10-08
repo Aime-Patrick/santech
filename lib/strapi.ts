@@ -12,6 +12,19 @@ import type { TechPulseCategory } from "./tech-pulse-data";
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL?.replace(/\/$/, "") ?? "http://localhost:1337";
 
+// ─── Safe fetch helper ───────────────────────────────────────────────────────
+// Wraps every Strapi call so a network error (ECONNREFUSED, timeout, etc.)
+// never crashes the Next.js build — it just returns null.
+
+async function safeFetch(url: string, init?: RequestInit): Promise<Response | null> {
+  try {
+    return await fetch(url, init);
+  } catch (err) {
+    console.warn(`[strapi] fetch failed (Strapi unreachable): ${url}`);
+    return null;
+  }
+}
+
 // ─── Raw Strapi 5 response shapes ────────────────────────────────────────────
 
 /** A single block node from Strapi's "blocks" rich-text field */
@@ -159,16 +172,16 @@ export async function fetchTechPulseArticles(
 
   const url = `${STRAPI_URL}/api/tech-pulse-articles?${params.toString()}`;
 
-  const res = await fetch(url, {
+  const res = await safeFetch(url, {
     next: { revalidate: 60 },
   });
 
-  if (!res.ok) {
-    console.error(`[strapi] fetchTechPulseArticles failed: ${res.status} ${res.statusText}`);
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchTechPulseArticles failed: ${res?.status} ${res?.statusText}`);
     return [];
   }
 
-  const json: StrapiListResponse = await res.json();
+  const json: StrapiListResponse = await res!.json();
   return (json.data ?? []).map(normalise);
 }
 
@@ -186,16 +199,16 @@ export async function fetchTechPulseArticleBySlug(
 
   const url = `${STRAPI_URL}/api/tech-pulse-articles?${params.toString()}`;
 
-  const res = await fetch(url, {
+  const res = await safeFetch(url, {
     next: { revalidate: 60 },
   });
 
-  if (!res.ok) {
-    console.error(`[strapi] fetchTechPulseArticleBySlug("${slug}") failed: ${res.status}`);
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchTechPulseArticleBySlug("${slug}") failed: ${res?.status}`);
     return null;
   }
 
-  const json: StrapiListResponse = await res.json();
+  const json: StrapiListResponse = await res!.json();
   const item = json.data?.[0];
   return item ? normalise(item) : null;
 }
@@ -210,10 +223,10 @@ export async function fetchAllTechPulseSlugs(): Promise<string[]> {
 
   const url = `${STRAPI_URL}/api/tech-pulse-articles?${params.toString()}`;
 
-  const res = await fetch(url, { next: { revalidate: 3600 } });
-  if (!res.ok) return [];
+  const res = await safeFetch(url, { next: { revalidate: 3600 } });
+  if (!res || !res.ok) return [];
 
-  const json: StrapiListResponse = await res.json();
+  const json: StrapiListResponse = await res!.json();
   return (json.data ?? []).map((item) => item.slug);
 }
 
@@ -232,12 +245,12 @@ export type SiteStat = {
 
 export async function fetchSiteStats(): Promise<SiteStat[]> {
   const url = `${STRAPI_URL}/api/site-stats?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchSiteStats failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchSiteStats failed: ${res?.status}`);
     return [];
   }
-  const json: { data: Array<{ id: number; value: number; suffix: string; label: string }> } = await res.json();
+  const json: { data: Array<{ id: number; value: number; suffix: string; label: string }> } = await res!.json();
   return json.data ?? [];
 }
 
@@ -255,9 +268,9 @@ export type PartnerBrand = {
 
 export async function fetchPartnerBrands(): Promise<PartnerBrand[]> {
   const url = `${STRAPI_URL}/api/partner-brands?sort[0]=sortOrder:asc&populate[logo][fields][0]=url&pagination[pageSize]=50`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchPartnerBrands failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchPartnerBrands failed: ${res?.status}`);
     return [];
   }
   const json: {
@@ -270,7 +283,7 @@ export async function fetchPartnerBrands(): Promise<PartnerBrand[]> {
       displayLabel: string | null;
       isGovernment: boolean;
     }>;
-  } = await res.json();
+  } = await res!.json();
   return (json.data ?? []).map((item) => ({
     id: item.id,
     label: item.label,
@@ -314,9 +327,9 @@ export async function fetchDrivingChangeStories(
   if (sectionKey) params.set("filters[sectionKey][$eq]", sectionKey);
 
   const url = `${STRAPI_URL}/api/driving-change-stories?${params.toString()}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchDrivingChangeStories failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 60 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchDrivingChangeStories failed: ${res?.status}`);
     return [];
   }
 
@@ -339,7 +352,7 @@ export async function fetchDrivingChangeStories(
       readingTime: string | null;
       publishedDate: string;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
@@ -373,8 +386,8 @@ export async function fetchDrivingChangeStoryBySlug(
   params.set("populate[coverImage][fields][1]", "alternativeText");
 
   const url = `${STRAPI_URL}/api/driving-change-stories?${params.toString()}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (!res.ok) return null;
+  const res = await safeFetch(url, { next: { revalidate: 60 } });
+  if (!res || !res.ok) return null;
 
   const json: {
     data: Array<{
@@ -395,7 +408,7 @@ export async function fetchDrivingChangeStoryBySlug(
       readingTime: string | null;
       publishedDate: string;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   const item = json.data?.[0];
   if (!item) return null;
@@ -451,9 +464,9 @@ export async function fetchSanHubCatalogItems(
   if (category) params.set("filters[category][$eq]", category);
 
   const url = `${STRAPI_URL}/api/san-hub-catalog-items?${params.toString()}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchSanHubCatalogItems failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 60 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchSanHubCatalogItems failed: ${res?.status}`);
     return [];
   }
 
@@ -473,7 +486,7 @@ export async function fetchSanHubCatalogItems(
       badge: string | null;
       href: string | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
@@ -507,9 +520,9 @@ export type Opportunity = {
 
 export async function fetchOpportunities(): Promise<Opportunity[]> {
   const url = `${STRAPI_URL}/api/opportunities?sort[0]=sortOrder:asc&populate[coverImage][fields][0]=url&pagination[pageSize]=50`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchOpportunities failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 60 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchOpportunities failed: ${res?.status}`);
     return [];
   }
 
@@ -524,7 +537,7 @@ export async function fetchOpportunities(): Promise<Opportunity[]> {
       href: string | null;
       coverImage: { url: string } | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
@@ -552,9 +565,9 @@ export type Recognition = {
 
 export async function fetchRecognitions(): Promise<Recognition[]> {
   const url = `${STRAPI_URL}/api/recognitions?sort[0]=year:desc&populate[image][fields][0]=url&pagination[pageSize]=50`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchRecognitions failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchRecognitions failed: ${res?.status}`);
     return [];
   }
 
@@ -568,7 +581,7 @@ export async function fetchRecognitions(): Promise<Recognition[]> {
       image: { url: string } | null;
       imageAlt: string | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
@@ -596,9 +609,9 @@ export type TeamMember = {
 
 export async function fetchTeamMembers(): Promise<TeamMember[]> {
   const url = `${STRAPI_URL}/api/team-members?sort[0]=sortOrder:asc&populate[photo][fields][0]=url&pagination[pageSize]=100`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchTeamMembers failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchTeamMembers failed: ${res?.status}`);
     return [];
   }
 
@@ -613,7 +626,7 @@ export async function fetchTeamMembers(): Promise<TeamMember[]> {
       photo: { url: string } | null;
       linkedIn: string | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
@@ -640,9 +653,9 @@ export type Testimonial = {
 
 export async function fetchTestimonials(): Promise<Testimonial[]> {
   const url = `${STRAPI_URL}/api/testimonials?sort[0]=sortOrder:asc&populate[avatar][fields][0]=url&pagination[pageSize]=50`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchTestimonials failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchTestimonials failed: ${res?.status}`);
     return [];
   }
 
@@ -655,7 +668,7 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
       rating: number;
       avatar: { url: string } | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
@@ -684,13 +697,13 @@ export type ContactInfo = {
 
 export async function fetchContactInfo(): Promise<ContactInfo | null> {
   const url = `${STRAPI_URL}/api/contact-info`;
-  const res = await fetch(url, { next: { revalidate: 3600 } });
-  if (!res.ok) {
-    console.error(`[strapi] fetchContactInfo failed: ${res.status}`);
+  const res = await safeFetch(url, { next: { revalidate: 3600 } });
+  if (!res || !res.ok) {
+    console.error(`[strapi] fetchContactInfo failed: ${res?.status}`);
     return null;
   }
 
-  const json: { data: ContactInfo | null } = await res.json();
+  const json: { data: ContactInfo | null } = await res!.json();
   return json.data;
 }
 
@@ -715,9 +728,9 @@ export type EVisitorsFeature = {
 
 export async function fetchEVisitorsFeatures(): Promise<EVisitorsFeature[]> {
   const url = `${STRAPI_URL}/api/e-visitors-features?sort[0]=sortOrder:asc&populate[screen][fields][0]=url&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchEVisitorsFeatures failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; number: string; label: string; title: string; description: string; panel: string | null; status: string | null; iconName: string; screen: { url: string } | null; details: string[] | null }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchEVisitorsFeatures failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; number: string; label: string; title: string; description: string; panel: string | null; status: string | null; iconName: string; screen: { url: string } | null; details: string[] | null }> } = await res!.json();
   return (json.data ?? []).map((item) => ({
     id: item.id,
     number: item.number,
@@ -748,9 +761,9 @@ export async function fetchProductMilestones(product?: string): Promise<ProductM
   params.set("pagination[pageSize]", "50");
   if (product) params.set("filters[product][$eq]", product);
   const url = `${STRAPI_URL}/api/product-milestones?${params.toString()}`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchProductMilestones failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; year: string; title: string; description: string; product: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchProductMilestones failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; year: string; title: string; description: string; product: string }> } = await res!.json();
   return json.data ?? [];
 }
 
@@ -769,9 +782,9 @@ export async function fetchFaqItems(product?: string): Promise<FaqItem[]> {
   params.set("pagination[pageSize]", "50");
   if (product) params.set("filters[product][$eq]", product);
   const url = `${STRAPI_URL}/api/faq-items?${params.toString()}`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchFaqItems failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; question: string; answer: string; product: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchFaqItems failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; question: string; answer: string; product: string }> } = await res!.json();
   return json.data ?? [];
 }
 
@@ -786,9 +799,9 @@ export type JourneyStage = {
 
 export async function fetchJourneyStages(): Promise<JourneyStage[]> {
   const url = `${STRAPI_URL}/api/journey-stages?sort[0]=sortOrder:asc&pagination[pageSize]=50`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchJourneyStages failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; year: string; stage: string; description: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchJourneyStages failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; year: string; stage: string; description: string }> } = await res!.json();
   return json.data ?? [];
 }
 
@@ -802,9 +815,9 @@ export type CompanyValue = {
 
 export async function fetchCompanyValues(): Promise<CompanyValue[]> {
   const url = `${STRAPI_URL}/api/company-values?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchCompanyValues failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; label: string; description: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchCompanyValues failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; label: string; description: string }> } = await res!.json();
   return json.data ?? [];
 }
 
@@ -819,9 +832,9 @@ export type FocusArea = {
 
 export async function fetchFocusAreas(): Promise<FocusArea[]> {
   const url = `${STRAPI_URL}/api/focus-areas?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchFocusAreas failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; label: string; description: string; iconName: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchFocusAreas failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; label: string; description: string; iconName: string }> } = await res!.json();
   return (json.data ?? []).map((item) => ({ ...item, iconName: item.iconName ?? "Code2" }));
 }
 
@@ -846,8 +859,8 @@ export type HomeStorySlide = {
 
 export async function fetchHomeStorySlides(): Promise<HomeStorySlide[]> {
   const url = `${STRAPI_URL}/api/home-story-slides?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchHomeStorySlides failed: ${res.status}`); return []; }
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchHomeStorySlides failed: ${res?.status}`); return []; }
   const json: {
     data: Array<{
       id: number;
@@ -865,7 +878,7 @@ export async function fetchHomeStorySlides(): Promise<HomeStorySlide[]> {
       groups: Array<{ label: string; items: string }> | null;
       items: string[] | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
   return (json.data ?? []).map((item) => ({
     ...item,
     facts: item.facts ?? [],
@@ -894,8 +907,8 @@ export async function fetchInnovationProducts(): Promise<InnovationProduct[]> {
   params.set("populate[mediaImages][fields][0]", "url");
   params.set("pagination[pageSize]", "20");
   const url = `${STRAPI_URL}/api/innovation-products?${params.toString()}`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchInnovationProducts failed: ${res.status}`); return []; }
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchInnovationProducts failed: ${res?.status}`); return []; }
   const json: {
     data: Array<{
       id: number;
@@ -909,7 +922,7 @@ export async function fetchInnovationProducts(): Promise<InnovationProduct[]> {
       mediaImages: Array<{ url: string }> | null;
       mediaAlt: string | null;
     }>;
-  } = await res.json();
+  } = await res!.json();
   return (json.data ?? []).map((item) => ({
     id: item.id,
     productId: item.productId,
@@ -936,9 +949,9 @@ export type InnovationService = {
 
 export async function fetchInnovationServices(): Promise<InnovationService[]> {
   const url = `${STRAPI_URL}/api/innovation-services?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchInnovationServices failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; serviceId: string; label: string; description: string; iconName: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchInnovationServices failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; serviceId: string; label: string; description: string; iconName: string }> } = await res!.json();
   return (json.data ?? []).map((item) => ({ ...item, iconName: item.iconName ?? "Code2" }));
 }
 
@@ -955,9 +968,9 @@ export type InnovationSolution = {
 
 export async function fetchInnovationSolutions(): Promise<InnovationSolution[]> {
   const url = `${STRAPI_URL}/api/innovation-solutions?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchInnovationSolutions failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; solutionId: string; label: string; description: string; subItems: string[] | null; iconName: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchInnovationSolutions failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; solutionId: string; label: string; description: string; subItems: string[] | null; iconName: string }> } = await res!.json();
   return (json.data ?? []).map((item) => ({
     ...item,
     subItems: item.subItems ?? [],
@@ -978,9 +991,9 @@ export type TechnologyCategory = {
 
 export async function fetchTechnologyCategories(): Promise<TechnologyCategory[]> {
   const url = `${STRAPI_URL}/api/technology-categories?sort[0]=sortOrder:asc&pagination[pageSize]=20`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
-  if (!res.ok) { console.error(`[strapi] fetchTechnologyCategories failed: ${res.status}`); return []; }
-  const json: { data: Array<{ id: number; categoryId: string; label: string; description: string | null; items: string[] | null; iconName: string }> } = await res.json();
+  const res = await safeFetch(url, { next: { revalidate: 300 } });
+  if (!res || !res.ok) { console.error(`[strapi] fetchTechnologyCategories failed: ${res?.status}`); return []; }
+  const json: { data: Array<{ id: number; categoryId: string; label: string; description: string | null; items: string[] | null; iconName: string }> } = await res!.json();
   return (json.data ?? []).map((item) => ({
     ...item,
     description: item.description ?? "",
