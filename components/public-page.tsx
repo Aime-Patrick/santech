@@ -10,7 +10,7 @@ type Action = { label: string; href: string; tone?: "primary" | "secondary" };
 
 export function PublicPage({ children }: { children: ReactNode }) {
   return (
-    <CircuitBackground className="text-slate-900">
+    <CircuitBackground className="overflow-x-hidden text-slate-900">
       <div className="flex min-h-svh flex-col">
         <SiteHeader />
         <main className="min-h-0 flex-1 pt-28">{children}</main>

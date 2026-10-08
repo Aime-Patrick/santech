@@ -269,7 +269,7 @@ function ImpactCount({ value, suffix }: { value: number; suffix: string }) {
   return <motion.span ref={counterRef}>{displayValue}</motion.span>;
 }
 
-function ImpactMarquee() {
+function ImpactMarquee({ stats }: { stats: readonly (readonly [number, string, string])[] }) {
   const firstGroupRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const [loopWidth, setLoopWidth] = useState(0);
@@ -303,7 +303,7 @@ function ImpactMarquee() {
       <motion.div style={{ x }} className="flex w-max select-none whitespace-nowrap">
         {[0, 1].map((group) => (
           <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-5 pr-5 sm:gap-7 sm:pr-7 2xl:gap-10 2xl:pr-10">
-            {impactStats.map(([value, suffix, label]) => (
+            {stats.map(([value, suffix, label]) => (
               <div key={`${group}-${label}`} className="min-w-[96px] shrink-0 sm:min-w-[116px] 2xl:min-w-[130px]">
                 <p className="font-exo text-[clamp(1.15rem,2vw,2rem)] font-black leading-none tracking-[-0.06em] text-[#0a1f44] min-[1440px]:text-[2.15rem]">
                   <ImpactCount value={value} suffix={suffix} />
@@ -460,7 +460,15 @@ export function PartnerMarquee({ partners = partnerBrands, direction: initialDir
   );
 }
 
-export function SantechHomeStage() {
+export function SantechHomeStage({
+  stats = impactStats as readonly (readonly [number, string, string])[],
+  partners = partnerBrands,
+  slides = storySlides,
+}: {
+  stats?: readonly (readonly [number, string, string])[];
+  partners?: readonly PartnerBrand[];
+  slides?: readonly StorySlide[];
+}) {
   const [activeStoryIndex, setActiveStoryIndex] = useState(0);
   const [storyPlaying, setStoryPlaying] = useState(true);
   const [storyHovered, setStoryHovered] = useState(false);
@@ -470,7 +478,7 @@ export function SantechHomeStage() {
   const slideArrowRef = useRef<HTMLSpanElement>(null);
   const [ecosystemDialogItem, setEcosystemDialogItem] = useState<string | null>(null);
   const [storyScale, setStoryScale] = useState(1);
-  const activeStory = storySlides[activeStoryIndex];
+  const activeStory = slides[activeStoryIndex];
   const isApproachStory = activeStory.id === "approach";
   const isEcosystemStory = activeStory.id === "ecosystem";
   const isStakeholderStory = activeStory.id === "stakeholders";
@@ -531,7 +539,7 @@ export function SantechHomeStage() {
     const timer = window.setTimeout(() => {
       setEcosystemDialogItem(null);
       setStoryScale(1);
-      setActiveStoryIndex((current) => (current + 1) % storySlides.length);
+      setActiveStoryIndex((current) => (current + 1) % slides.length);
     }, 6800);
 
     return () => window.clearTimeout(timer);
@@ -572,12 +580,13 @@ export function SantechHomeStage() {
                 <video
                   ref={videoRef}
                   src="/images/santech_final_video.mp4"
+                  poster="/images/image-when-video-loadings.png"
                   className="size-full object-cover"
                   autoPlay
                   muted
                   loop
                   playsInline
-                  preload="metadata"
+                  preload="auto"
                   onPlay={() => setVideoPlaying(true)}
                   onPause={() => setVideoPlaying(false)}
                   aria-label="E-Visitors visitor management platform"
@@ -614,7 +623,7 @@ export function SantechHomeStage() {
                     <Image src="/undraw_arrow.svg" alt="" width={62} height={17} className="h-auto w-8 sm:w-12 2xl:w-[62px]" />
                   </span>
                   <div className="flex items-center gap-1">
-                    {storySlides.map((slide, index) => (
+                    {slides.map((slide, index) => (
                       <button
                         key={slide.id}
                         type="button"
@@ -767,13 +776,13 @@ export function SantechHomeStage() {
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 border-b border-slate-300/80 px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:border-b-0 lg:border-r lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <p className="w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em] min-[1440px]:text-[12px]"><span className="block">SAN TECH</span><span className="block">Impacts</span></p>
-            <ImpactMarquee />
+            <ImpactMarquee stats={stats} />
           </div>
         </div>
         <div className="flex min-h-[74px] min-w-0 items-center gap-2 overflow-hidden px-2.5 py-2 sm:gap-3 sm:px-5 lg:min-h-0 lg:px-7">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
             <span className="z-10 w-[68px] shrink-0 whitespace-normal text-[9px] font-black uppercase leading-tight tracking-[0.14em] text-[#0a1f44] sm:w-20 sm:text-[11px] sm:tracking-[0.2em] min-[1440px]:text-[12px]"><span className="block">Partners</span><span className="block">/ Clients</span></span>
-            <PartnerMarquee />
+            <PartnerMarquee partners={partners} />
           </div>
         </div>
       </div>

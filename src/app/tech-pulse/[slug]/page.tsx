@@ -4,17 +4,51 @@ import { ArrowLeft, ArrowUpRight, CalendarDays, Clock3 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
 import { TechPulseShare } from "@/components/tech-pulse-share";
-import { getTechPulseArticle, techPulseArticles } from "@/lib/tech-pulse-data";
+import { TechPulseRelatedStories } from "@/components/tech-pulse-related-stories";
+import { techPulseArticles } from "@/lib/tech-pulse-data";
+import { fetchTechPulseArticleBySlug, fetchTechPulseArticles, fetchAllTechPulseSlugs } from "@/lib/strapi";
 
-export function generateStaticParams() {
+/**
+ * Pre-render all slugs that Strapi knows about.
+ * Falls back to the hardcoded list so the build never fails when Strapi is
+ * offline (e.g. CI/CD environments without a running CMS).
+ */
+export async function generateStaticParams() {
+  try {
+    const slugs = await fetchAllTechPulseSlugs();
+    if (slugs.length > 0) return slugs.map((slug) => ({ slug }));
+  } catch {
+    // Strapi unreachable — use hardcoded fallback
+  }
   return techPulseArticles.map((article) => ({ slug: article.slug }));
 }
 
 export default async function TechPulseArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = getTechPulseArticle(slug);
+  let cmsArticle: Awaited<ReturnType<typeof fetchTechPulseArticleBySlug>> = null;
+  try {
+    cmsArticle = await fetchTechPulseArticleBySlug(slug);
+  } catch {
+    // Use the bundled article when Strapi is unavailable during a build or request.
+  }
+  const article = cmsArticle ?? techPulseArticles.find((candidate) => candidate.slug === slug) ?? null;
 
   if (!article) notFound();
+
+  let cmsArticles: Awaited<ReturnType<typeof fetchTechPulseArticles>> = [];
+  try {
+    cmsArticles = await fetchTechPulseArticles();
+  } catch {
+    // Use the bundled stories when Strapi is unavailable during a build or request.
+  }
+  const availableArticles = cmsArticles.length > 0 ? cmsArticles : techPulseArticles;
+  const relatedArticles = [...availableArticles]
+    .filter((candidate) => candidate.slug !== article.slug)
+    .sort((a, b) => {
+      const categoryPriority = Number(b.category === article.category) - Number(a.category === article.category);
+      return categoryPriority || b.publishedAt.localeCompare(a.publishedAt);
+    })
+    .slice(0, 3);
 
   return (
     <PublicPage>
@@ -53,6 +87,7 @@ export default async function TechPulseArticlePage({ params }: { params: Promise
           </div>
         </div>
       </article>
+      <TechPulseRelatedStories stories={relatedArticles} />
     </PublicPage>
   );
 }

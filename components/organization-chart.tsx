@@ -32,7 +32,7 @@ export const defaultOrganizationMembers: OrganizationMember[] = [
     name: "Shema Pacifique",
     title: "Founder & Chief Executive Officer",
     department: "Executive direction",
-    image: "/images/CEO.jpeg",
+    image: "/images/ceo.png",
     description: "Sets SAN TECH's direction and keeps the ecosystem focused on useful, measurable technology impact.",
   },
   {
@@ -41,7 +41,7 @@ export const defaultOrganizationMembers: OrganizationMember[] = [
     title: "Co-founder & COO/CFO",
     department: "Operations and finance",
     managerId: "shema-pacifique",
-    image: "/images/Niyonzima_Claudine-removebg.png",
+    image: "/images/claudine.png",
     description: "Coordinates operational delivery, financial discipline, and the systems that help teams move together.",
   },
   {
@@ -131,8 +131,6 @@ function MemberNode({ data }: NodeProps<OrganizationNode>) {
   );
 }
 
-const nodeTypes = { organizationMember: MemberNode };
-
 function layoutOrganization(members: OrganizationMember[]) {
   const graph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
   graph.setGraph({ rankdir: "TB", nodesep: 34, ranksep: 64, marginx: 24, marginy: 24 });
@@ -165,6 +163,8 @@ function layoutOrganization(members: OrganizationMember[]) {
 
 function OrganizationChartContent({ members }: { members: OrganizationMember[] }) {
   const layout = useMemo(() => layoutOrganization(members), [members]);
+  const nodeTypes = useMemo(() => ({ organizationMember: MemberNode }), []);
+  const fitViewOptions = useMemo(() => ({ padding: 0.18, minZoom: 0.55, maxZoom: 1.1 }), []);
 
   return (
     <div className="space-y-4">
@@ -174,7 +174,7 @@ function OrganizationChartContent({ members }: { members: OrganizationMember[] }
           edges={layout.edges}
           nodeTypes={nodeTypes}
           fitView
-          fitViewOptions={{ padding: 0.18, minZoom: 0.55, maxZoom: 1.1 }}
+          fitViewOptions={fitViewOptions}
           nodesDraggable={false}
           nodesConnectable={false}
           elementsSelectable

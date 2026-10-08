@@ -16,6 +16,18 @@ export const JOURNEY_MILESTONES: readonly JourneyMilestone[] = [
   { id: "2026-vision", year: "2026", title: "Best Exhibitor & African Tech Vision", description: "SAN TECH recognized as Best Exhibitor in ICT & Innovation at Expo 2026, hosting Tech Forward Live to expand its African technology, skills, and innovation ecosystem.", image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(172).jpg", imageAlt: "SAN TECH leadership and partners holding the Best Exhibitor in ICT & Innovation award on stage at Expo 2026 and Tech Forward Live" },
 ];
 
-export function JourneyPanel() {
-  return <StoryTimeline items={JOURNEY_MILESTONES} ariaLabel="SAN TECH journey timeline" />;
+export function JourneyPanel({ cmsStages }: { cmsStages?: import("@/lib/strapi").JourneyStage[] }) {
+  const items: readonly JourneyMilestone[] =
+    cmsStages && cmsStages.length > 0
+      ? cmsStages.map((s) => ({
+          id: `${s.year}-${s.stage.toLowerCase().replace(/\s+/g, "-")}`,
+          year: s.year,
+          title: s.stage,
+          description: s.description,
+          image: "/images/summit.jpg",
+          imageAlt: `SAN TECH ${s.stage} milestone`,
+        }))
+      : JOURNEY_MILESTONES;
+
+  return <StoryTimeline items={items} ariaLabel="SAN TECH journey timeline" />;
 }

@@ -2,15 +2,42 @@ import { AtSign, ArrowUpRight, Mail, MapPin, MessageCircle, Navigation, Phone, R
 import { PublicPage } from "@/components/public-page";
 import { ConnectDialog } from "@/components/connect-dialog";
 import { CalendlyDialog } from "@/components/calendly-dialog";
+import { fetchContactInfo } from "@/lib/strapi";
 
-const contactDetails = [
-  { label: "Phone", value: "+250 783 250 033 / +250 780 309 833", href: "tel:+250783250033", icon: Phone },
-  { label: "WhatsApp", value: "+250 727 923 756", href: "https://wa.me/250727923756", icon: MessageCircle },
-  { label: "Email", value: "info@santechinnovate.com", href: "mailto:info@santechinnovate.com", icon: Mail },
-  { label: "Alternative email", value: "santechrw@gmail.com", href: "mailto:santechrw@gmail.com", icon: AtSign },
-] as const;
+const FALLBACK_CONTACT = {
+  phone1: "+250 783 250 033",
+  phone2: "+250 780 309 833",
+  whatsapp: "+250 727 923 756",
+  email: "info@santechinnovate.com",
+  emailAlt: "santechrw@gmail.com",
+  address: "Plot 48, KN 1 Road, Sofaru Building, 3rd Floor, Muhima, Kigali, Rwanda",
+  radioUrl: "https://zeno.fm/radio/san-tech/",
+  radioLabel: "SAN TECH Radio · Zeno.FM",
+  mapsEmbedUrl: "https://www.google.com/maps?q=SAN+TECH,+Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda&z=18&output=embed",
+  mapsDirectionsUrl: "https://www.google.com/maps/dir/?api=1&destination=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda",
+};
 
-export default function ConnectPage() {
+export default async function ConnectPage() {
+  const cms = await fetchContactInfo();
+  const c = {
+    phone1: cms?.phone1 ?? FALLBACK_CONTACT.phone1,
+    phone2: cms?.phone2 ?? FALLBACK_CONTACT.phone2,
+    whatsapp: cms?.whatsapp ?? FALLBACK_CONTACT.whatsapp,
+    email: cms?.email ?? FALLBACK_CONTACT.email,
+    emailAlt: cms?.emailAlt ?? FALLBACK_CONTACT.emailAlt,
+    address: cms?.address ?? FALLBACK_CONTACT.address,
+    radioUrl: cms?.radioUrl ?? FALLBACK_CONTACT.radioUrl,
+    radioLabel: cms?.radioLabel ?? FALLBACK_CONTACT.radioLabel,
+    mapsEmbedUrl: cms?.mapsEmbedUrl ?? FALLBACK_CONTACT.mapsEmbedUrl,
+    mapsDirectionsUrl: cms?.mapsDirectionsUrl ?? FALLBACK_CONTACT.mapsDirectionsUrl,
+  };
+
+  const contactDetails = [
+    { label: "Phone", value: `${c.phone1} / ${c.phone2}`, href: `tel:${c.phone1.replace(/\s/g, "")}`, icon: Phone },
+    { label: "WhatsApp", value: c.whatsapp, href: `https://wa.me/${c.whatsapp.replace(/[+\s]/g, "")}`, icon: MessageCircle },
+    { label: "Email", value: c.email, href: `mailto:${c.email}`, icon: Mail },
+    { label: "Alternative email", value: c.emailAlt, href: `mailto:${c.emailAlt}`, icon: AtSign },
+  ] as const;
   return (
     <PublicPage>
       <section className="san-hub-graphic-section border-y border-slate-200 py-2 sm:px-4 lg:px-8 lg:py-3">
@@ -39,7 +66,7 @@ export default function ConnectPage() {
                 {/* Physical Address */}
                 <address className="mt-3.5 flex gap-2.5 text-xs leading-5 text-[#303755] not-italic lg:text-sm lg:leading-6">
                   <MapPin className="mt-0.5 size-4 shrink-0 text-brand-secondary" aria-hidden="true" />
-                  <span className="font-medium">Plot 48, KN 1 Road, Sofaru Building, 3rd Floor, Muhima, Kigali, Rwanda</span>
+                  <span className="font-medium">{c.address}</span>
                 </address>
 
                 {/* Contact Badges Grid */}
@@ -56,8 +83,8 @@ export default function ConnectPage() {
                         <Icon className="mt-0.5 size-3.5 shrink-0 text-brand-secondary" aria-hidden="true" />
                         <span className="min-w-0">
                            <span className="block text-[9px] font-black uppercase tracking-[0.13em] text-slate-400 lg:text-[10px]">{label}</span>
-                            <span className="mt-0.5 block break-words text-[11px] font-semibold leading-4 text-[#303755] group-hover:text-brand-secondary lg:text-xs lg:leading-5">
-                             {label === "Phone" ? <><span className="block">+250 783 250 033 /</span><span className="block">+250 780 309 833</span></> : value}
+                           <span className="mt-0.5 block break-words text-[11px] font-semibold leading-4 text-[#303755] group-hover:text-brand-secondary lg:text-xs lg:leading-5">
+                             {label === "Phone" ? <><span className="block">{c.phone1} /</span><span className="block">{c.phone2}</span></> : value}
                            </span>
                         </span>
                       </span>
@@ -67,7 +94,7 @@ export default function ConnectPage() {
 
                 {/* SAN TECH Radio Link */}
                 <a
-                  href="https://zeno.fm/radio/san-tech/"
+                  href={c.radioUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="group mt-3 flex items-center justify-between border border-slate-200 bg-slate-50/80 px-3.5 py-2.5 transition-colors hover:border-brand-secondary hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"
@@ -83,7 +110,7 @@ export default function ConnectPage() {
                         Live Stream
                       </span>
                       <span className="text-xs font-bold text-[#0a1f44] group-hover:text-brand-secondary transition-colors lg:text-sm">
-                        SAN TECH Radio <span className="font-normal text-slate-500">· Zeno.FM</span>
+                        {c.radioLabel}
                       </span>
                     </div>
                   </div>
@@ -106,7 +133,7 @@ export default function ConnectPage() {
               <div className="relative overflow-hidden border border-slate-200 shadow-2xs">
                 <iframe
                   title="SAN TECH location at Sofaru Building in Kigali"
-                  src="https://www.google.com/maps?q=SAN+TECH,+Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda&z=18&output=embed"
+                  src={c.mapsEmbedUrl}
                   className="h-[270px] w-full border-0 sm:h-[320px] lg:h-[350px]"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -117,7 +144,7 @@ export default function ConnectPage() {
               {/* Get Directions Link */}
               <div className="mt-2.5 flex items-center justify-between">
                 <a
-                  href="https://www.google.com/maps/dir/?api=1&destination=Sofaru+Building,+Plot+48,+KN+1+Road,+Muhima,+Kigali,+Rwanda"
+                  href={c.mapsDirectionsUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#0a1f44] transition-colors hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"

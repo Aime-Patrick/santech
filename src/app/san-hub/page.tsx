@@ -9,7 +9,9 @@ import { SanHubSectionMenu, type SanHubSectionId } from "@/components/san-hub/sa
 import { SanHubSectionReveal } from "@/components/san-hub/san-hub-section-reveal";
 import { SanHubTractionSection } from "@/components/san-hub/san-hub-traction-section";
 import { SanHubTestimonialSection } from "@/components/san-hub/san-hub-testimonial-section";
+import { fetchSanHubCatalogItems } from "@/lib/strapi";
 import { sanHubProgramItems } from "@/lib/san-hub-catalog-data";
+import type { SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 
 function resolveSection(value: string | undefined): SanHubSectionId {
   return value === "explore" || value === "impact" || value === "programs" || value === "traction" || value === "insights" || value === "library" || value === "testimonials" ? value : "about";
@@ -19,17 +21,38 @@ export default async function SanHubPage({ searchParams }: { searchParams: Promi
   const params = await searchParams;
   const section = resolveSection(params.section);
 
+  // Fetch from Strapi; fall back to hardcoded program items if empty
+  const cmsItems = await fetchSanHubCatalogItems();
+  const catalogItems: readonly SanHubCatalogItem[] = cmsItems.length > 0
+    ? cmsItems.map((i) => ({
+        id: i.itemId,
+        category: i.category as SanHubCatalogItem["category"],
+        focus: i.focus as SanHubCatalogItem["focus"] | undefined,
+        title: i.title,
+        provider: i.provider ?? "",
+        description: i.description,
+        image: i.image,
+        format: i.format ?? "",
+        duration: i.duration ?? "",
+        level: i.level ?? "",
+        badge: i.badge ?? undefined,
+        href: i.href ?? "#",
+      }))
+    : sanHubProgramItems;
+
+  const programItems = catalogItems.filter((i) => i.category === "Programs");
+
   return (
     <PublicPage>
       <SanHubSectionMenu activeSection={section} />
 
-      {section === "about" && <SanHubSectionReveal><SanHubAboutSection /></SanHubSectionReveal>}
+      {section === "about" && <SanHubSectionReveal><SanHubAboutSection items={catalogItems} /></SanHubSectionReveal>}
 
       {section === "explore" && <SanHubSectionReveal><SanHubExploreSection /></SanHubSectionReveal>}
 
       {section === "impact" && <SanHubSectionReveal><SanHubImpactSection /></SanHubSectionReveal>}
 
-      {section === "programs" && <SanHubSectionReveal><SanHubCatalog compact items={sanHubProgramItems} showFilters={false} showCategoryFilter={false} showResultSummary={false} withTopPadding categories={["Programs"]} /></SanHubSectionReveal>}
+      {section === "programs" && <SanHubSectionReveal><SanHubCatalog compact items={programItems.length > 0 ? programItems : sanHubProgramItems} showFilters={false} showCategoryFilter={false} showResultSummary={false} withTopPadding categories={["Programs"]} /></SanHubSectionReveal>}
 
       {section === "traction" && <SanHubSectionReveal><SanHubTractionSection /></SanHubSectionReveal>}
 

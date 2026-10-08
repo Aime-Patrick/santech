@@ -8,9 +8,13 @@ import { TbBrandCSharp, TbBrandPowershell, TbBrandWindows, TbSql } from "react-i
 import { VscVscode } from "react-icons/vsc";
 import type { IconType } from "react-icons";
 import { useState } from "react";
-import { technologyCategories } from "@/lib/technology-data";
+import { technologyCategories, type TechnologyCategory } from "@/lib/technology-data";
 
-const programmingLanguages = technologyCategories[0];
+const HARDCODED_PROG_LANG = technologyCategories[0];
+
+function resolveCategories(cmsCategories?: readonly TechnologyCategory[]) {
+  return cmsCategories && cmsCategories.length > 0 ? cmsCategories : technologyCategories;
+}
 
 const technologyIcons: Record<string, { Icon: IconType; color: string }> = {
   Python: { Icon: SiPython, color: "#3776ab" },
@@ -124,12 +128,22 @@ function TechnologyChip({ item, card = false }: { item: string; card?: boolean }
   );
 }
 
-export function TechnologySectionBrowser({ mode = "technologies" }: { mode?: "technologies" | "programming-languages" }) {
-  return mode === "programming-languages" ? <ProgrammingLanguagesPanel /> : <TechnologyAccordion />;
+export function TechnologySectionBrowser({
+  mode = "technologies",
+  cmsCategories,
+}: {
+  mode?: "technologies" | "programming-languages";
+  cmsCategories?: readonly TechnologyCategory[];
+}) {
+  const allCategories = resolveCategories(cmsCategories);
+  const programmingLanguages = allCategories[0] ?? HARDCODED_PROG_LANG;
+  return mode === "programming-languages"
+    ? <ProgrammingLanguagesPanel programmingLanguages={programmingLanguages} />
+    : <TechnologyAccordion allCategories={allCategories} programmingLanguages={programmingLanguages} />;
 }
 
-function TechnologyAccordion() {
-  const categories = technologyCategories.filter((category) => category.id !== programmingLanguages.id);
+function TechnologyAccordion({ allCategories, programmingLanguages }: { allCategories: readonly TechnologyCategory[]; programmingLanguages: TechnologyCategory }) {
+  const categories = allCategories.filter((category) => category.id !== programmingLanguages.id);
   const [activeId, setActiveId] = useState<string>(categories[0].id);
   const activeCategory = categories.find((category) => category.id === activeId) ?? categories[0];
   const ActiveIcon = activeCategory.icon;
@@ -162,7 +176,7 @@ function TechnologyAccordion() {
   );
 }
 
-function ProgrammingLanguagesPanel() {
+function ProgrammingLanguagesPanel({ programmingLanguages }: { programmingLanguages: TechnologyCategory }) {
   const ProgrammingLanguagesIcon = programmingLanguages.icon;
 
   return (

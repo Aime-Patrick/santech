@@ -314,9 +314,34 @@ export const allOpportunities: OpportunityItem[] = [
 
 const CARDS_PER_VIEW = 2;
 
-export function TechPulseOpportunities() {
+export function TechPulseOpportunities({ cmsOpportunities }: { cmsOpportunities?: import("@/lib/strapi").Opportunity[] }) {
   const [activeTab, setActiveTab] = useState<OpportunityTabId>("featured");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Use CMS opportunities when available, mapped to OpportunityItem shape.
+  // Falls back to hardcoded allOpportunities when CMS returns nothing.
+  const opportunities: OpportunityItem[] = cmsOpportunities && cmsOpportunities.length > 0
+    ? cmsOpportunities.map((o) => ({
+        id: String(o.id),
+        category: (o.type.toLowerCase() === "fellowship" ? "featured"
+          : o.type.toLowerCase() === "job" ? "jobs"
+          : o.type.toLowerCase() === "internship" ? "internships"
+          : o.type.toLowerCase() === "grant" ? "featured"
+          : o.type.toLowerCase() === "tender" ? "others"
+          : "others") as OpportunityTabId,
+        label: o.type.toUpperCase(),
+        title: o.title,
+        description: o.description,
+        location: "",
+        date: o.deadline ?? "",
+        action: "View details",
+        type: o.type,
+        scope: "",
+        requirements: [],
+        benefits: [],
+        tags: o.badge ? [o.badge] : [],
+      }))
+    : allOpportunities;
   const [cardOffset, setCardOffset] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [selectedOpportunity, setSelectedOpportunity] = useState<OpportunityItem | null>(null);
@@ -358,11 +383,11 @@ export function TechPulseOpportunities() {
 
   // Filter opportunities
   const filteredOpportunities = useMemo(() => {
-    let list = allOpportunities.filter((item) => item.category === activeTab);
+    let list = opportunities.filter((item) => item.category === activeTab);
 
     if (debouncedQuery.trim()) {
       const q = debouncedQuery.toLowerCase();
-      list = allOpportunities.filter((item) => {
+      list = opportunities.filter((item) => {
         const matchesCategory = item.category === activeTab;
         const matchesText =
           item.title.toLowerCase().includes(q) ||
@@ -486,7 +511,7 @@ export function TechPulseOpportunities() {
         >
           {opportunityTabs.map((tab) => {
             const active = tab.id === activeTab;
-            const count = allOpportunities.filter((o) => o.category === tab.id).length;
+            const count = opportunities.filter((o) => o.category === tab.id).length;
             return (
               <button
                 key={tab.id}

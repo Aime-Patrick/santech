@@ -5,10 +5,10 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Search, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { sanHubCatalogItems } from "@/lib/san-hub-catalog-data";
+import type { SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 import { sanHubGuideRoutes } from "@/lib/san-hub-data";
 
-function recommendPathway(query: string) {
+function recommendPathway(query: string, items: readonly SanHubCatalogItem[]) {
   const normalizedQuery = query.trim().toLowerCase();
   if (!normalizedQuery) return null;
 
@@ -20,13 +20,23 @@ function recommendPathway(query: string) {
     .sort((left, right) => right.score - left.score)[0];
 
   if (!route || route.score === 0) return null;
-  return sanHubCatalogItems.find((item) => item.id === route.candidate.itemId) ?? null;
+  return items.find((item) => item.id === route.candidate.itemId) ?? null;
 }
 
-export function SanHubGuide({ title = "Tell us what you want to make possible.", description = "Describe your next move in your own words. We’ll point you to a starting pathway.", placeholder = "Try: I want to build an AI tool" }: { title?: string; description?: string; placeholder?: string }) {
+export function SanHubGuide({
+  title = "Tell us what you want to make possible.",
+  description = "Describe your next move in your own words. We'll point you to a starting pathway.",
+  placeholder = "Try: I want to build an AI tool",
+  catalogItems = [],
+}: {
+  title?: string;
+  description?: string;
+  placeholder?: string;
+  catalogItems?: readonly SanHubCatalogItem[];
+}) {
   const [query, setQuery] = useState("");
   const prefersReducedMotion = useReducedMotion();
-  const recommendation = useMemo(() => recommendPathway(query), [query]);
+  const recommendation = useMemo(() => recommendPathway(query, catalogItems), [query, catalogItems]);
 
   return (
     <section id="san-hub-guide" className="san-hub-graphic-section scroll-mt-40 border-y border-slate-200 px-6 py-8 sm:px-10 lg:px-16 lg:py-10">

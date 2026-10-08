@@ -9,11 +9,13 @@ import {
   ArrowUpRight, 
   CalendarDays, 
   Clock3, 
+  Newspaper,
   Pause, 
   Play 
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { techPulseArticles, type TechPulseArticle, type TechPulseCategory } from "@/lib/tech-pulse-data";
+import type { TechPulseCategory } from "@/lib/tech-pulse-data";
+import type { CmsArticle } from "@/lib/strapi";
 
 export type TechPulseTopic = {
   id: string;
@@ -33,8 +35,10 @@ const TOPICS: TechPulseTopic[] = [
 
 export function TechPulseSliderBrowser({
   initialCategory = "fellowship",
+  articles = [],
 }: {
   initialCategory?: string;
+  articles?: CmsArticle[];
 }) {
   // Determine starting category
   const defaultTopic = TOPICS.find((t) => t.category === initialCategory) ?? TOPICS[0];
@@ -44,8 +48,8 @@ export function TechPulseSliderBrowser({
 
   // Filter articles strictly for the currently selected category
   const categoryArticles = useMemo(() => {
-    return techPulseArticles.filter((article) => article.category === selectedCategory);
-  }, [selectedCategory]);
+    return articles.filter((article) => article.category === selectedCategory);
+  }, [articles, selectedCategory]);
 
   const totalInCat = categoryArticles.length;
 
@@ -83,7 +87,7 @@ export function TechPulseSliderBrowser({
   }, [nextSlide, prevSlide]);
 
   // Determine which cards to display (up to 3 cards for this category)
-  const visibleCards: TechPulseArticle[] = useMemo(() => {
+  const visibleCards: CmsArticle[] = useMemo(() => {
     if (totalInCat === 0) return [];
     if (totalInCat <= 3) return categoryArticles;
     
@@ -108,7 +112,7 @@ export function TechPulseSliderBrowser({
         <div className="flex flex-row flex-wrap gap-x-4 gap-y-1 lg:flex-col lg:gap-y-1">
           {TOPICS.map((topic, idx) => {
             const isActive = selectedCategory === topic.category;
-            const count = techPulseArticles.filter((a) => a.category === topic.category).length;
+            const count = articles.filter((a) => a.category === topic.category).length;
             return (
               <button
                 key={topic.id}
@@ -201,22 +205,34 @@ export function TechPulseSliderBrowser({
         </div>
 
         {/* Cards Grid with Category Filtered Content */}
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={`${selectedCategory}-${cardOffset}`}
-            initial={{ opacity: 0, x: 14 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -14 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className={`grid gap-4 ${
-              visibleCards.length === 1
-                ? "grid-cols-1 max-w-md"
-                : visibleCards.length === 2
-                ? "grid-cols-1 sm:grid-cols-2 max-w-3xl"
-                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            }`}
-          >
-            {visibleCards.map((article, idx) => (
+        {visibleCards.length === 0 ? (
+          <div className="flex min-h-[270px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-[#f8fafc] px-6 py-12 text-center">
+            <span className="grid size-14 place-items-center rounded-full bg-[#e8f3f8] text-brand-secondary">
+              <Newspaper className="size-6" aria-hidden="true" />
+            </span>
+            <h3 className="font-exo mt-5 text-xl font-bold tracking-[-0.03em] text-[#0a1f44]">No stories in this category yet</h3>
+            <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">New Tech Pulse stories and announcements will appear here as they are published.</p>
+            <Link href="/tech-pulse" className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+              Return to Tech Pulse <ArrowUpRight className="size-4" aria-hidden="true" />
+            </Link>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={`${selectedCategory}-${cardOffset}`}
+              initial={{ opacity: 0, x: 14 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -14 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className={`grid gap-4 ${
+                visibleCards.length === 1
+                  ? "grid-cols-1 max-w-md"
+                  : visibleCards.length === 2
+                  ? "grid-cols-1 sm:grid-cols-2 max-w-3xl"
+                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              }`}
+            >
+              {visibleCards.map((article, idx) => (
               <article
                 key={`${article.slug}-${idx}`}
                 className="group flex flex-col justify-between overflow-hidden border border-slate-200 bg-white p-3 shadow-sm transition-all hover:border-brand-secondary hover:shadow-md"
@@ -276,9 +292,10 @@ export function TechPulseSliderBrowser({
                   </span>
                 </div>
               </article>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Bottom Bar: Indicators & Full Story Links */}
         <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-3">
@@ -298,9 +315,13 @@ export function TechPulseSliderBrowser({
                 />
               ))}
             </div>
-          ) : (
+          ) : totalInCat > 0 ? (
             <span className="text-[11px] font-semibold text-slate-500">
               Showing all stories in {activeTopicObj.label}
+            </span>
+          ) : (
+            <span className="text-[11px] font-semibold text-slate-500">
+              No stories in {activeTopicObj.label} yet
             </span>
           )}
 

@@ -9,24 +9,28 @@ import { SanHubSectionMenu } from "@/components/san-hub/san-hub-section-menu";
 import { SanHubSectionReveal } from "@/components/san-hub/san-hub-section-reveal";
 import { getSanHubExploreRoute, sanHubExploreRoutes, type SanHubExploreRouteId } from "@/lib/san-hub-explore-data";
 import { sanHubCatalogItems, sanHubProgramItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
-
-const courseItems = sanHubCatalogItems.filter((item) => item.category === "Courses");
-const newLearningItems = sanHubCatalogItems.filter((item) => item.category === "Upcoming training").slice(0, 3);
-const aiLearningItems = sanHubCatalogItems.filter((item) => ["applied-ai-machine-learning", "build-with-ai", "ai-literacy-for-work"].includes(item.id));
-
-const routeItems: Record<SanHubExploreRouteId, readonly SanHubCatalogItem[]> = {
-  learn: courseItems,
-  build: sanHubCatalogItems.filter((item) => item.category === "Innovation programs"),
-  innovate: sanHubProgramItems.filter((item) => ["innovation-accelerator", "research-development", "challenges-hackathons"].includes(item.id)),
-  launch: [...sanHubCatalogItems.filter((item) => item.id === "startup-product-studio"), ...sanHubProgramItems.filter((item) => item.id === "startup-development")],
-  connect: sanHubCatalogItems.filter((item) => item.category === "Events"),
-  work: sanHubCatalogItems.filter((item) => item.category === "Apprenticeships / Internships"),
-  research: [...sanHubCatalogItems.filter((item) => item.id === "innovation-internship"), ...sanHubProgramItems.filter((item) => item.id === "research-development")],
-  commercialize: [...sanHubCatalogItems.filter((item) => item.id === "startup-product-studio"), ...sanHubProgramItems.filter((item) => item.id === "startup-development")],
-};
+import { fetchSanHubCatalogItems } from "@/lib/strapi";
 
 export function generateStaticParams() {
   return sanHubExploreRoutes.map(({ id: route }) => ({ route }));
+}
+
+/** Map a CMS item to the local SanHubCatalogItem shape */
+function mapCmsItem(i: Awaited<ReturnType<typeof fetchSanHubCatalogItems>>[number]): SanHubCatalogItem {
+  return {
+    id: i.itemId,
+    category: i.category as SanHubCatalogItem["category"],
+    focus: i.focus as SanHubCatalogItem["focus"] | undefined,
+    title: i.title,
+    provider: i.provider ?? "",
+    description: i.description,
+    image: i.image,
+    format: i.format ?? "",
+    duration: i.duration ?? "",
+    level: i.level ?? "",
+    badge: i.badge ?? undefined,
+    href: i.href ?? "#",
+  };
 }
 
 function RouteFocus({ route }: { route: NonNullable<ReturnType<typeof getSanHubExploreRoute>> }) {
@@ -75,13 +79,37 @@ export default async function SanHubExploreRoutePage({ params }: { params: Promi
   const route = getSanHubExploreRoute(routeId);
   if (!route) notFound();
 
+  // Fetch all catalog items from Strapi; fall back to hardcoded if empty
+  const cmsItems = await fetchSanHubCatalogItems();
+  const allItems: readonly SanHubCatalogItem[] =
+    cmsItems.length > 0 ? cmsItems.map(mapCmsItem) : sanHubCatalogItems;
+  const allPrograms: readonly SanHubCatalogItem[] =
+    cmsItems.length > 0
+      ? allItems.filter((i) => i.category === "Programs")
+      : sanHubProgramItems;
+
+  // Build route-specific item lists dynamically from CMS data
+  const routeItems: Record<SanHubExploreRouteId, readonly SanHubCatalogItem[]> = {
+    learn: allItems.filter((i) => i.category === "Courses"),
+    build: allItems.filter((i) => i.category === "Innovation programs"),
+    innovate: allPrograms.filter((i) => ["innovation-accelerator", "research-development", "challenges-hackathons"].includes(i.id)),
+    launch: [...allItems.filter((i) => i.id === "startup-product-studio"), ...allPrograms.filter((i) => i.id === "startup-development")],
+    connect: allItems.filter((i) => i.category === "Events"),
+    work: allItems.filter((i) => i.category === "Apprenticeships / Internships"),
+    research: [...allItems.filter((i) => i.id === "innovation-internship"), ...allPrograms.filter((i) => i.id === "research-development")],
+    commercialize: [...allItems.filter((i) => i.id === "startup-product-studio"), ...allPrograms.filter((i) => i.id === "startup-development")],
+  };
+
+  const courseItems = allItems.filter((i) => i.category === "Courses");
+  const newLearningItems = allItems.filter((i) => i.category === "Upcoming training").slice(0, 3);
+  const aiLearningItems = allItems.filter((i) => ["applied-ai-machine-learning", "build-with-ai", "ai-literacy-for-work"].includes(i.id));
   const items = routeItems[route.id];
 
   return (
     <PublicPage>
       <SanHubSectionMenu activeSection="explore" />
       {route.id === "learn" ? (
-        <SanHubSectionReveal><SanHubLearnExperience popularItems={courseItems} newItems={newLearningItems} aiItems={aiLearningItems} searchItems={sanHubCatalogItems} /></SanHubSectionReveal>
+        <SanHubSectionReveal><SanHubLearnExperience popularItems={courseItems} newItems={newLearningItems} aiItems={aiLearningItems} searchItems={allItems} /></SanHubSectionReveal>
       ) : (
         <SanHubSectionReveal>
           <section className="mx-auto w-[calc(100%-2rem)] max-w-7xl border-b border-slate-200 bg-white sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)]">

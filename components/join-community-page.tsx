@@ -373,10 +373,10 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
 
   return (
     <>
-      <section className="relative overflow-hidden px-6 py-7 sm:px-10 sm:py-9 lg:px-16 lg:py-10">
+      <section className="relative flex min-h-[calc(100svh-7rem)] items-center overflow-hidden px-6 py-7 sm:px-10 sm:py-9 lg:px-16 lg:py-10">
         <div className="mx-auto max-w-7xl">
           <div>
-            <article className="flex min-h-[520px] flex-col justify-center rounded-2xl border-t-4 border-brand-cyan bg-white p-5 shadow-[0_16px_35px_rgba(7,11,36,0.08)] sm:min-h-[560px] sm:p-6">
+            <article className="flex flex-col rounded-2xl border-t-4 border-brand-cyan bg-white p-5 shadow-[0_16px_35px_rgba(7,11,36,0.08)] sm:p-6">
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div><p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">For people</p><h2 className="font-exo mt-2 text-xl font-bold tracking-[-0.04em] text-[#07152d] sm:text-2xl">Join the SAN HUB ecosystem.</h2></div>
                 <div className="flex items-start gap-2 xl:max-w-[48rem]">
@@ -388,6 +388,12 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
               </div>
               <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">Learn, contribute, find mentorship, and build the experience needed to create useful technology.</p>
               <div className="mt-5 grid gap-2 sm:grid-cols-2">{peoplePaths.map(({ id, label, description, icon: Icon }) => <button key={id} type="button" onClick={() => openPath(id)} className="group rounded-xl border border-brand-cyan bg-white p-3.5 text-left shadow-[0_8px_20px_rgba(8,198,231,0.14)] transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(8,198,231,0.22)]"><span className="flex items-center justify-between gap-3"><span className="flex items-center gap-2 text-sm font-bold text-[#07152d]"><Icon className="size-4 text-brand-secondary" aria-hidden="true" />{label}</span><ArrowUpRight className="size-4 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></span><span className="mt-1.5 block text-xs leading-5 text-slate-500">{description}</span></button>)}</div>
+              <div className="mt-5 flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs font-semibold text-slate-500">Choose a path and start participating.</p>
+                <div className="flex flex-wrap items-center gap-2" aria-label="SAN HUB pathways">
+                  {['Learn', 'Build', 'Connect'].map((pathLabel) => <span key={pathLabel} className="inline-flex items-center gap-1.5 rounded-full bg-[#edf7fb] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]"><Check className="size-3 text-brand-secondary" aria-hidden="true" />{pathLabel}</span>)}
+                </div>
+              </div>
             </article>
           </div>
         </div>

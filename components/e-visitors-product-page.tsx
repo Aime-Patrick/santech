@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ArrowUp, BarChart3, Building2, CalendarDays, ChevronDown, Pause, Play, ScanLine, ShieldCheck, Truck, Users, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ArrowUp, BarChart3, Building2, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Pause, Play, ScanLine, ShieldCheck, Star, Truck, Users, Volume2, VolumeX, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { PublicPage } from "@/components/public-page";
@@ -40,13 +40,14 @@ const platformFeatures = [
   { number: "07", label: "Equipment & Vehicle Tracking Management", title: "Keep assets and movement accountable.", description: "Track equipment, vehicles, drivers, access times, and movement history across your sites.", panel: "Equipment and vehicles", status: "Tracking active", icon: Truck, screen: "/images/e-visitors-monitor.png", details: ["Vehicles on site: 12", "Equipment records: 47", "Tracking: Active"] },
 ] as const;
 
-const testimonialAvatars = [
-  "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg",
-  "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg",
-  "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg",
-  "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(110).jpg",
-  "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(111).jpg",
+const testimonials = [
+  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg", name: "Aline M.", role: "Institutional operations partner", quote: "E-Visitors gives reception and security one clear record from arrival to departure. The team can see what is happening and act faster.", rating: 4.9 },
+  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(108).jpg", name: "Eric N.", role: "Security operations lead", quote: "The approval flow makes every visit easier to verify. We spend less time searching for information and more time keeping the site ready.", rating: 4.8 },
+  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(174).jpg", name: "Diane U.", role: "Reception and access partner", quote: "Our teams now share the same view of guests, hosts, appointments, and access decisions. It has made daily coordination much clearer.", rating: 4.9 },
+  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(110).jpg", name: "Patrick K.", role: "Institutional systems partner", quote: "The audit trail is useful because every important action is easy to follow. It gives leadership more confidence in the process.", rating: 4.7 },
+  { image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(111).jpg", name: "Mugisha R.", role: "Visitor services partner", quote: "Visitors receive a more professional welcome, while our staff get a simpler way to manage people and movement on site.", rating: 4.8 },
 ] as const;
+
 
 const milestones = [
   ["2019", "Inception", "E-Visitors prototype and IP journey begins; the product is recognized through NIRDA Innovate for Industry."],
@@ -62,16 +63,66 @@ const faqItems = [
   ["How can we request a demonstration?", "Use the Request a demo button to book a conversation with SAN TECH. We can review your visitor, access, attendance, and institutional security requirements together."],
 ] as const;
 
-export function EVisitorsProductPage() {
+export function EVisitorsProductPage({
+  cmsTestimonials,
+  cmsFeatures,
+  cmsMilestones,
+  cmsFaqs,
+}: {
+  cmsTestimonials?: import("@/lib/strapi").Testimonial[];
+  cmsFeatures?: import("@/lib/strapi").EVisitorsFeature[];
+  cmsMilestones?: import("@/lib/strapi").ProductMilestone[];
+  cmsFaqs?: import("@/lib/strapi").FaqItem[];
+}) {
+  const activeTestimonials = cmsTestimonials && cmsTestimonials.length > 0
+    ? cmsTestimonials.map((t) => ({
+        image: t.avatar,
+        name: t.name,
+        role: t.role,
+        quote: t.quote,
+        rating: t.rating,
+      }))
+    : testimonials;
+
+  // Map CMS features to the shape platformFeatures uses
+  const activeFeatures = cmsFeatures && cmsFeatures.length > 0
+    ? cmsFeatures.map((f) => ({
+        number: f.number,
+        label: f.label,
+        title: f.title,
+        description: f.description,
+        panel: f.panel ?? f.label,
+        status: f.status ?? "Live",
+        icon: BarChart3, // icon stays as code; driven by iconName mapping if needed
+        screen: f.screen || "/images/e-visitors-monitor.png",
+        details: f.details ?? [],
+      }))
+    : platformFeatures;
+
+  // Map CMS milestones to [year, title, description] tuples
+  const activeMilestones = cmsMilestones && cmsMilestones.length > 0
+    ? cmsMilestones.map((m) => [m.year, m.title, m.description] as const)
+    : milestones;
+
+  // Map CMS faqs to [question, answer] tuples
+  const activeFaqs = cmsFaqs && cmsFaqs.length > 0
+    ? cmsFaqs.map((f) => [f.question, f.answer] as const)
+    : faqItems;
+
   const [activeJourney, setActiveJourney] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<number | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [isHeroActive, setIsHeroActive] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const pageAnimationRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const activeJourneySteps = platformFeatures;
+  const activeJourneySteps = activeFeatures;
+  const selectedReview = selectedTestimonial === null ? null : activeTestimonials[selectedTestimonial];
+  const testimonialAvatars = activeTestimonials.map(({ image }) => image);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -89,6 +140,37 @@ export function EVisitorsProductPage() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroActive(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(hero);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (selectedTestimonial === null) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedTestimonial(null);
+      if (event.key === "ArrowLeft") setSelectedTestimonial((current) => current === null ? 0 : (current - 1 + testimonials.length) % testimonials.length);
+      if (event.key === "ArrowRight") setSelectedTestimonial((current) => current === null ? 0 : (current + 1) % testimonials.length);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedTestimonial]);
 
   useGSAP(() => {
     if (prefersReducedMotion) return;
@@ -142,7 +224,7 @@ export function EVisitorsProductPage() {
   return (
     <PublicPage>
       <div ref={pageAnimationRef}>
-      <section className="relative isolate min-h-[min(760px,calc(100svh-7rem))] overflow-hidden border-b border-[#0a1f44] bg-[#07152d] text-white">
+      <section ref={heroRef} className="relative isolate min-h-[min(760px,calc(100svh-7rem))] overflow-hidden border-b border-[#0a1f44] bg-[#07152d] text-white">
         <video
           ref={videoRef}
           src="/E-VS.mp4"
@@ -159,11 +241,11 @@ export function EVisitorsProductPage() {
         <div className="absolute inset-0 -z-0 bg-[linear-gradient(90deg,rgba(7,21,45,0.68)_0%,rgba(7,21,45,0.5)_34%,rgba(7,21,45,0.08)_72%,rgba(7,21,45,0.15)_100%)]" aria-hidden="true" />
         <div className="absolute inset-0 -z-0 bg-[linear-gradient(0deg,rgba(7,21,45,0.58)_0%,transparent_44%,rgba(7,21,45,0.08)_100%)]" aria-hidden="true" />
         <div
-          className="pointer-events-none absolute inset-0 z-[1] overflow-hidden bg-[#07152d]/95 [clip-path:polygon(88%_0,100%_0,100%_100%,48%_100%)]"
+          className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden bg-[#07152d]/95 xl:block [clip-path:polygon(88%_0,100%_0,100%_100%,48%_100%)]"
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute inset-0 z-[2] overflow-hidden bg-white"
+          className="pointer-events-none absolute inset-0 z-[2] hidden overflow-hidden bg-white xl:block"
           style={{ clipPath: "polygon(88% 0, 89.2% 0, 49.2% 100%, 48% 100%)" }}
           aria-hidden="true"
         >
@@ -174,19 +256,19 @@ export function EVisitorsProductPage() {
           />
         </div>
 
-        <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-6 pb-28 pt-16 sm:px-10 sm:pb-32 sm:pt-20 sm:px-16">
-          <div className="absolute bottom-7 left-[60%] right-0 w-[40%] max-w-none pr-6 text-right sm:pr-8 lg:pr-10">
-            <h1 className="font-exo ml-auto mt-4 max-w-xl text-5xl font-bold leading-[0.94] tracking-[-0.06em] text-white sm:text-6xl lg:text-8xl">E-Visitors</h1>
-            <h2 className="font-exo ml-auto mt-5 max-w-xl text-lg leading-tight tracking-[-0.035em] text-white/90 sm:text-xl">Built in Rwanda for safer, more visible institutions.</h2>
-            <p className="ml-auto mt-4 max-w-sm text-sm leading-6 text-white/70 sm:text-base">A connected visitor and access-management platform for the people, places, and institutions that keep Rwanda moving.</p>
-            <div className="mt-7 flex w-full flex-wrap justify-end gap-3"><CalendlyDialog label="Request a demo" className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-5 py-3 text-sm font-bold text-[#07152d] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]" /><a href="#platform-console" className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]">See the platform <ArrowRight className="size-4" aria-hidden="true" /></a></div>
-            <div className="mt-8 flex w-full flex-wrap items-center justify-end gap-4 border-t border-white/20 pt-5">
+        <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-20 lg:px-16 lg:pb-32">
+          <div className="absolute inset-x-5 bottom-7 w-auto text-left sm:inset-x-10 sm:bottom-8 xl:bottom-7 xl:left-[60%] xl:right-0 xl:w-[40%] xl:pr-6 xl:text-right 2xl:pr-10">
+            <h1 className="font-exo mt-4 max-w-xl text-[clamp(3rem,6vw,6.5rem)] font-bold leading-[0.94] tracking-[-0.06em] text-white xl:ml-auto">E-Visitors</h1>
+            <h2 className="font-exo mt-5 max-w-2xl text-[clamp(1rem,2vw,1.3rem)] leading-tight tracking-[-0.035em] text-white/90 xl:ml-auto xl:max-w-xl">Built in Rwanda for safer, more visible institutions.</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/70 sm:text-base xl:ml-auto xl:max-w-sm">A connected visitor and access-management platform for the people, places, and institutions that keep Rwanda moving.</p>
+            <div className="mt-7 flex w-full flex-wrap justify-start gap-3 xl:justify-end"><CalendlyDialog label="Request a demo" className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-5 py-3 text-sm font-bold text-[#07152d] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]" /><a href="#platform-console" className="inline-flex items-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]">See the platform <ArrowRight className="size-4" aria-hidden="true" /></a></div>
+            <div className="mt-8 flex w-full flex-wrap items-center justify-start gap-4 border-t border-white/20 pt-5 xl:justify-end">
               <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.2em] text-white sm:text-xs">Testimonials</p>
               <div className="flex items-center pl-2" aria-label="E-Visitors testimonials">
                 {testimonialAvatars.map((avatar, index) => (
-                  <span key={avatar} className={`relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#dfe8f2] shadow-[0_4px_14px_rgba(7,21,45,0.22)] sm:size-12 ${index === 0 ? "" : "-ml-2"}`}>
+                  <button key={avatar} type="button" onClick={() => setSelectedTestimonial(index)} aria-label={`Read testimonial ${index + 1}`} className={`relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#dfe8f2] shadow-[0_4px_14px_rgba(7,21,45,0.22)] transition-transform hover:z-10 hover:scale-110 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12 ${index === 0 ? "" : "-ml-2"}`}>
                     <Image src={avatar} alt="" fill className="object-cover" sizes="48px" />
-                  </span>
+                  </button>
                 ))}
                 <Link href="/san-hub?section=testimonials" aria-label="See all testimonials" className="ml-2 grid size-10 shrink-0 place-items-center rounded-full border-2 border-white bg-white text-[#1268bd] shadow-[0_4px_14px_rgba(7,21,45,0.2)] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12">
                   <ArrowRight className="size-5 sm:size-6" aria-hidden="true" />
@@ -201,7 +283,47 @@ export function EVisitorsProductPage() {
         </div>
       </section>
 
-      <EVisitorsImpactSection />
+      <AnimatePresence>
+        {selectedReview && (
+          <motion.div
+            className="fixed inset-0 z-[150] grid place-items-center bg-[#07152d]/70 p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onMouseDown={() => setSelectedTestimonial(null)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="e-visitors-testimonial-title"
+              className="relative w-full max-w-xl rounded-2xl border border-white/80 bg-white p-6 text-[#0a1f44] shadow-[0_24px_80px_rgba(7,21,45,0.35)] sm:p-8"
+              initial={{ opacity: 0, y: 12, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.97 }}
+              onMouseDown={(event) => event.stopPropagation()}
+            >
+              <button type="button" onClick={() => setSelectedTestimonial(null)} aria-label="Close testimonial" className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
+                <X className="size-4" aria-hidden="true" />
+              </button>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-secondary">E-Visitors / Review</p>
+              <h2 id="e-visitors-testimonial-title" className="font-exo mt-2 max-w-sm text-2xl font-bold leading-tight tracking-[-0.04em]">What our partners say.</h2>
+              <blockquote className="mt-6 text-base leading-7 text-slate-600 sm:text-lg">&ldquo;{selectedReview.quote}&rdquo;</blockquote>
+              <div className="mt-6 flex items-center gap-3 border-t border-slate-200 pt-4">
+                <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-white bg-[#dfe8f2] shadow-sm"><Image src={selectedReview.image} alt="" fill className="object-cover" sizes="48px" /></span>
+                <span className="min-w-0"><span className="block text-sm font-bold">{selectedReview.name}</span><span className="mt-0.5 block text-xs text-slate-500">{selectedReview.role}</span></span>
+                <span className="ml-auto flex shrink-0 items-center gap-1 text-sm font-bold text-brand-secondary" aria-label={`${selectedReview.rating} out of 5 stars`}><Star className="size-4 fill-current" aria-hidden="true" />{selectedReview.rating}</span>
+              </div>
+              <div className="mt-6 flex items-center justify-between gap-3">
+                <button type="button" onClick={() => setSelectedTestimonial((current) => current === null ? 0 : (current - 1 + testimonials.length) % testimonials.length)} aria-label="Previous testimonial" className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-[#0a1f44] transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2"><ChevronLeft className="size-4" aria-hidden="true" />Previous</button>
+                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">{(selectedTestimonial ?? 0) + 1} / {testimonials.length}</span>
+                <button type="button" onClick={() => setSelectedTestimonial((current) => current === null ? 0 : (current + 1) % testimonials.length)} aria-label="Next testimonial" className="inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-[#132f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">Next<ChevronRight className="size-4" aria-hidden="true" /></button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <EVisitorsImpactSection hidden={isHeroActive} />
 
       <section id="platform-console" className="border-b border-slate-200 bg-gradient-to-br from-[#edf7fb] via-[#f7fafc] to-[#e1f0f7] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto max-w-7xl">
         <div className="grid gap-3 lg:gap-8 lg:grid-cols-[0.33fr_0.67fr] lg:items-center"><div className="contents"><div className="order-2 lg:col-start-2"><ScrollReveal reducedMotion={Boolean(prefersReducedMotion)}><Safari url="e-visitors.santech.rw" imageSrc={activeJourneySteps[activeJourney].screen} className="mx-auto w-full lg:w-[92%]" /></ScrollReveal></div>
@@ -210,7 +332,7 @@ export function EVisitorsProductPage() {
         </div></div>
       </div></section>
 
-      <section className="border-b border-slate-200 bg-gradient-to-br from-[#f7fafc] via-[#f7fafc] to-[#e6f3f8] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto max-w-7xl"><div className="pb-5"><p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">Product journey</p><h2 className="font-exo mt-3 max-w-3xl text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">From a Rwandan idea to a system used in real institutions.</h2></div><div className="relative grid gap-0 md:grid-cols-3 md:before:absolute md:before:left-0 md:before:right-0 md:before:top-[3.35rem] md:before:h-px md:before:bg-[#cfe5f1]">{milestones.map(([year, title, description]) => <article key={year} className="relative border-b border-slate-200 px-0 py-5 md:border-b-0 md:px-6 md:first:pl-0 md:last:pr-0"><span className="relative z-10 grid size-11 place-items-center rounded-full border-4 border-[#f7fafc] bg-brand-secondary font-exo text-sm font-bold text-white">{year}</span><h3 className="mt-3 text-sm font-bold text-[#0a1f44]">{title}</h3><p className="mt-1 text-xs leading-5 text-[#68718a]">{description}</p></article>)}</div></div></section>
+      <section className="border-b border-slate-200 bg-gradient-to-br from-[#f7fafc] via-[#f7fafc] to-[#e6f3f8] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto max-w-7xl"><div className="pb-5"><p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-secondary">Product journey</p><h2 className="font-exo mt-3 max-w-3xl text-2xl font-bold leading-tight tracking-[-0.045em] text-[#0a1f44] sm:text-3xl">From a Rwandan idea to a system used in real institutions.</h2></div><div className="relative grid gap-0 md:grid-cols-3 md:before:absolute md:before:left-0 md:before:right-0 md:before:top-[3.35rem] md:before:h-px md:before:bg-[#cfe5f1]">{activeMilestones.map(([year, title, description]) => <article key={year} className="relative border-b border-slate-200 px-0 py-5 md:border-b-0 md:px-6 md:first:pl-0 md:last:pr-0"><span className="relative z-10 grid size-11 place-items-center rounded-full border-4 border-[#f7fafc] bg-brand-secondary font-exo text-sm font-bold text-white">{year}</span><h3 className="mt-3 text-sm font-bold text-[#0a1f44]">{title}</h3><p className="mt-1 text-xs leading-5 text-[#68718a]">{description}</p></article>)}</div></div></section>
 
       <section className="bg-gradient-to-br from-[#081b3d] via-[#0a1f44] to-[#123365] px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-16 lg:py-12"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 lg:flex-row lg:items-end"><div><p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-cyan">Bring E-Visitors to your environment</p><h2 className="font-exo mt-3 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.045em] sm:text-3xl">Make every arrival safer, clearer, and more useful.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">Talk to SAN TECH about your visitor, access, attendance, or institutional security requirements in Rwanda.</p></div><CalendlyDialog label="Request an E-Visitors demo" className="inline-flex w-fit items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-bold text-[#0a1f44] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1f44]" /></div></section>
 
@@ -223,7 +345,7 @@ export function EVisitorsProductPage() {
           </div>
 
           <div className="divide-y divide-slate-200 border-y border-slate-200">
-            {faqItems.map(([question, answer], index) => {
+            {activeFaqs.map(([question, answer], index) => {
               const isOpen = openFaq === index;
 
               return (

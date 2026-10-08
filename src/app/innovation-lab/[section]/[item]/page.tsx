@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
 import { Safari } from "@/components/ui/safari";
 import { getInnovationItem, innovationItems, type InnovationSection } from "@/lib/innovation-data";
@@ -13,7 +13,9 @@ const sectionLabels: Record<InnovationSection, string> = {
 };
 
 export function generateStaticParams() {
-  return sections.flatMap((section) => innovationItems[section].map((item) => ({ section, item: item.id })));
+  return sections.flatMap((section) => innovationItems[section]
+    .filter((item) => !(section === "product" && item.id === "e-visitors"))
+    .map((item) => ({ section, item: item.id })));
 }
 
 export default async function InnovationDetailPage({ params }: { params: Promise<{ section: string; item: string }> }) {
@@ -21,6 +23,8 @@ export default async function InnovationDetailPage({ params }: { params: Promise
   if (!sections.includes(section as InnovationSection)) notFound();
 
   const innovationSection = section as InnovationSection;
+  if (innovationSection === "product" && itemId === "e-visitors") redirect("/e-visitors");
+
   const item = getInnovationItem(innovationSection, itemId);
   if (!item) notFound();
 

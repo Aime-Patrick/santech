@@ -190,10 +190,12 @@ export function IdentityPanel() {
   );
 }
 
-export function MissionPanel() {
-  const [selectedValue, setSelectedValue] = useState<string>(values[0].label);
+export function MissionPanel({ cmsValues }: { cmsValues?: import("@/lib/strapi").CompanyValue[] }) {
+  const activeValues: readonly { label: string; description: string }[] =
+    cmsValues && cmsValues.length > 0 ? cmsValues : values;
+  const [selectedValue, setSelectedValue] = useState<string>(activeValues[0].label);
   const prefersReducedMotion = useReducedMotion();
-  const activeValue = values.find((value) => value.label === selectedValue) ?? values[0];
+  const activeValue = activeValues.find((value) => value.label === selectedValue) ?? activeValues[0];
 
   return (
     <div className="grid items-start gap-6 overflow-visible min-[1020px]:grid-cols-[0.9fr_1.1fr] min-[1020px]:gap-7">
@@ -231,7 +233,7 @@ export function MissionPanel() {
           </motion.div>
         </AnimatePresence>
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3" role="list" aria-label="SAN TECH core values">
-          {values.map((value) => { const selected = selectedValue === value.label; return <button key={value.label} type="button" onClick={() => setSelectedValue(value.label)} aria-pressed={selected} className={`group min-h-14 rounded-xl border px-3 py-2 text-left transition-[transform,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 ${selected ? "border-[#0a1f44] bg-[#0a1f44] text-white shadow-[0_10px_20px_rgba(10,31,68,0.16)]" : "border-slate-200 bg-[#f8faff] text-[#0a1f44] hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:bg-white"}`}><span className="text-xs font-bold leading-4">{value.label}</span></button>; })}
+          {activeValues.map((value) => { const selected = selectedValue === value.label; return <button key={value.label} type="button" onClick={() => setSelectedValue(value.label)} aria-pressed={selected} className={`group min-h-14 rounded-xl border px-3 py-2 text-left transition-[transform,background-color,border-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 ${selected ? "border-[#0a1f44] bg-[#0a1f44] text-white shadow-[0_10px_20px_rgba(10,31,68,0.16)]" : "border-slate-200 bg-[#f8faff] text-[#0a1f44] hover:-translate-y-0.5 hover:border-brand-secondary/50 hover:bg-white"}`}><span className="text-xs font-bold leading-4">{value.label}</span></button>; })}
         </div>
       </div>
     </div>
@@ -302,11 +304,12 @@ function RecognitionCarousel({ items, prefersReducedMotion, onSelect }: { items:
   );
 }
 
-export function RecognitionPanel() {
+export function RecognitionPanel({ items }: { items?: readonly RecognitionItem[] }) {
+  const recognitions = items && items.length > 0 ? items : recognitionItems;
   const [selectedRecognition, setSelectedRecognition] = useState<RecognitionItem | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
-  const orderedRecognitions = [...recognitionItems].sort((a, b) => {
+  const orderedRecognitions = [...recognitions].sort((a, b) => {
     const yearA = a.year ? Number(a.year) : -1;
     const yearB = b.year ? Number(b.year) : -1;
     return yearB - yearA;
@@ -440,7 +443,16 @@ export function RecognitionPanel() {
   );
 }
 
-export function FocusPanel() {
+export function FocusPanel({ cmsAreas }: { cmsAreas?: import("@/lib/strapi").FocusArea[] }) {
+  const activeFocusAreas: readonly (readonly [string, string])[] =
+    cmsAreas && cmsAreas.length > 0
+      ? cmsAreas.map((a) => [a.label, a.description] as const)
+      : focusAreas;
+  const activeFocusIcons: readonly LucideIcon[] =
+    cmsAreas && cmsAreas.length > 0
+      ? cmsAreas.map((_a) => Code2) // icon stays as code fallback
+      : focusIcons;
+
   const [selectedArea, setSelectedArea] = useState<{ area: string; description: string; Icon: LucideIcon } | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const focusRotations = [-6, 4, -3, 5, -5, 3, -4, 6, -2, 4, -5, 2] as const;
@@ -458,7 +470,7 @@ export function FocusPanel() {
     <div className="focus-bubble-section relative min-h-0 overflow-hidden p-0">
       <BubbleMenu
         logo={<span className="font-exo text-xs font-black uppercase tracking-[0.16em]">Our focus</span>}
-        items={focusAreas.map(([area], index) => ({
+        items={activeFocusAreas.map(([area], index) => ({
           label: area,
           href: `#focus-${index + 1}`,
           ariaLabel: `View ${area} capability details`,
@@ -475,8 +487,8 @@ export function FocusPanel() {
         staggerDelay={0.08}
         className="focus-bubble-menu"
         onItemClick={(_, index) => {
-          const [area, description] = focusAreas[index];
-          const Icon = focusIcons[index] ?? Code2;
+          const [area, description] = activeFocusAreas[index];
+          const Icon = activeFocusIcons[index] ?? Code2;
           setSelectedArea({ area, description, Icon });
         }}
       />

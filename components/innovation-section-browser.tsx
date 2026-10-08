@@ -2,13 +2,20 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { innovationItems, type InnovationSection } from "@/lib/innovation-data";
+import { innovationItems, type InnovationSection, type InnovationItem } from "@/lib/innovation-data";
 import { SplitFeaturePanel } from "@/components/split-feature-panel";
 
 export type { InnovationSection } from "@/lib/innovation-data";
 
-export function InnovationSectionBrowser({ section }: { section: InnovationSection }) {
-  const items = innovationItems[section];
+export function InnovationSectionBrowser({
+  section,
+  cmsItems,
+}: {
+  section: InnovationSection;
+  cmsItems?: readonly InnovationItem[];
+}) {
+  // Use CMS items when provided, otherwise fall back to hardcoded
+  const items = cmsItems && cmsItems.length > 0 ? cmsItems : innovationItems[section];
   const isCompactListing = section === "services" || section === "solutions";
   const [selectedId, setSelectedId] = useState(items[0].id);
   const selected = items.find((item) => item.id === selectedId) ?? items[0];
@@ -33,7 +40,7 @@ export function InnovationSectionBrowser({ section }: { section: InnovationSecti
 
       <AnimatePresence mode="wait">
         <motion.div key={selected.id} initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}>
-          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} showFeatureDescriptions={!isEVisitorsProduct} media={selected.media} detailHref={`/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
+          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} showFeatureDescriptions={!isEVisitorsProduct} media={selected.media} detailHref={isEVisitorsProduct ? "/e-visitors" : `/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
         </motion.div>
       </AnimatePresence>
     </div>

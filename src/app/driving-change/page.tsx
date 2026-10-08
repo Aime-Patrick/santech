@@ -1,6 +1,7 @@
 import { PublicPage } from "@/components/public-page";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 import { DrivingChangeSliderBrowser } from "@/components/driving-change-slider-browser";
+import { fetchDrivingChangeStories } from "@/lib/strapi";
 
 const changeMenu = [
   { key: "impact", label: "Impact in action", href: "/driving-change?type=impact" },
@@ -16,6 +17,9 @@ export default async function DrivingChangePage({
   const rawKey = params.type || params.view || "impact";
   const activeSection: "impact" | "career" = rawKey === "career" ? "career" : "impact";
 
+  // Fetch all stories from Strapi (filtering by section is optional — client can filter too)
+  const stories = await fetchDrivingChangeStories();
+
   return (
     <PublicPage>
       <StickyPageMenu
@@ -25,7 +29,7 @@ export default async function DrivingChangePage({
       />
       <section className="border-t border-slate-200 px-3 pb-8 pt-2 sm:px-8 lg:px-12 lg:pb-10 lg:pt-3">
         <div className="mx-auto max-w-[1600px] border border-slate-200 bg-white p-4 sm:p-6 lg:p-7 shadow-xs">
-          <DrivingChangeSliderBrowser key={activeSection} sectionKey={activeSection} />
+          <DrivingChangeSliderBrowser key={activeSection} sectionKey={activeSection} stories={stories} />
         </div>
       </section>
     </PublicPage>

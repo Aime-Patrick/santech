@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LeadershipBrowser } from "@/components/leadership-browser";
 import { SplitFeaturePanel, type CoreFeature, type SplitFeatureFact, type SplitFeatureMedia, type SplitFeatureTimelineItem } from "@/components/split-feature-panel";
-import { CertificatePanel, CompanyProfilePanel, FocusPanel, IdentityPanel, JourneyPanel, MissionPanel, RecognitionPanel } from "@/components/legacy-sections";
+import { CertificatePanel, CompanyProfilePanel, FocusPanel, IdentityPanel, MissionPanel, RecognitionPanel } from "@/components/legacy-sections";
 
 export type SharedContentItem = {
   id: string;
@@ -20,7 +20,34 @@ export type SharedContentItem = {
   content?: "leadership" | "identity" | "mission" | "focus" | "profile" | "journey" | "recognition" | "certificate";
 };
 
-export function SharedContentBrowser({ items, initialItemId, initialLeadershipView = "executive", syncUrl = false, showSidebar = true, combinedPanel = false }: { items: readonly SharedContentItem[]; initialItemId?: string; initialLeadershipView?: "executive" | "team" | "organization"; syncUrl?: boolean; showSidebar?: boolean; combinedPanel?: boolean }) {
+import type { Recognition as CmsRecognition, TeamMember as CmsTeamMember, JourneyStage as CmsJourneyStage, CompanyValue as CmsCompanyValue, FocusArea as CmsAreaType } from "@/lib/strapi";
+import { JourneyPanel } from "@/components/journey-panel";
+
+export function SharedContentBrowser({
+  items,
+  initialItemId,
+  initialLeadershipView = "executive",
+  syncUrl = false,
+  showSidebar = true,
+  combinedPanel = false,
+  cmsRecognitions,
+  cmsTeamMembers,
+  cmsJourneyStages,
+  cmsCompanyValues,
+  cmsFocusAreas,
+}: {
+  items: readonly SharedContentItem[];
+  initialItemId?: string;
+  initialLeadershipView?: "executive" | "team" | "organization";
+  syncUrl?: boolean;
+  showSidebar?: boolean;
+  combinedPanel?: boolean;
+  cmsRecognitions?: CmsRecognition[];
+  cmsTeamMembers?: CmsTeamMember[];
+  cmsJourneyStages?: CmsJourneyStage[];
+  cmsCompanyValues?: CmsCompanyValue[];
+  cmsFocusAreas?: CmsAreaType[];
+}) {
   const [firstItem] = items;
   const [selectedId, setSelectedId] = useState(initialItemId ?? firstItem.id);
   const router = useRouter();
@@ -65,7 +92,7 @@ export function SharedContentBrowser({ items, initialItemId, initialLeadershipVi
 
       <AnimatePresence mode="wait">
         <motion.div key={selected.id} initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}>
-          {selected.content === "leadership" ? <LeadershipBrowser key={initialLeadershipView} initialView={initialLeadershipView} /> : selected.content === "identity" ? <IdentityPanel /> : selected.content === "mission" ? <MissionPanel /> : selected.content === "focus" ? <FocusPanel /> : selected.content === "profile" ? <CompanyProfilePanel /> : selected.content === "journey" ? <JourneyPanel /> : selected.content === "recognition" ? <RecognitionPanel /> : selected.content === "certificate" ? <CertificatePanel /> : <SplitFeaturePanel title={selected.title} description={selected.description} details={timeline ? [] : selected.details} facts={selected.facts} timeline={timeline} coreFeatures={selected.coreFeatures} media={selected.media} combined={combinedPanel} />}
+          {selected.content === "leadership" ? <LeadershipBrowser key={initialLeadershipView} initialView={initialLeadershipView} members={cmsTeamMembers && cmsTeamMembers.length > 0 ? cmsTeamMembers.map((m) => ({ name: m.name, position: m.position, department: m.department ?? "", expertise: m.expertise ?? "", bio: m.bio ?? "", image: m.photo, profile: m.linkedIn ?? "https://www.linkedin.com/company/santechinnovate" })) : undefined} /> : selected.content === "identity" ? <IdentityPanel /> : selected.content === "mission" ? <MissionPanel cmsValues={cmsCompanyValues} /> : selected.content === "focus" ? <FocusPanel cmsAreas={cmsFocusAreas} /> : selected.content === "profile" ? <CompanyProfilePanel /> : selected.content === "journey" ? <JourneyPanel cmsStages={cmsJourneyStages} /> : selected.content === "recognition" ? <RecognitionPanel items={cmsRecognitions && cmsRecognitions.length > 0 ? cmsRecognitions.map((r) => ({ year: r.year, title: r.title, description: r.description, image: r.image || undefined, imageAlt: r.imageAlt || undefined, badge: r.badge || undefined })) : undefined} /> : selected.content === "certificate" ? <CertificatePanel /> : <SplitFeaturePanel title={selected.title} description={selected.description} details={timeline ? [] : selected.details} facts={selected.facts} timeline={timeline} coreFeatures={selected.coreFeatures} media={selected.media} combined={combinedPanel} />}
         </motion.div>
       </AnimatePresence>
     </div>

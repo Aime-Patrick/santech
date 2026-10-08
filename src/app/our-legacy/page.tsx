@@ -2,6 +2,7 @@
 import { SharedContentBrowser, type SharedContentItem } from "@/components/shared-content-browser";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { fetchRecognitions, fetchTeamMembers, fetchJourneyStages, fetchCompanyValues, fetchFocusAreas } from "@/lib/strapi";
 
 const legacyMenu = [
   { key: "who-we-are", label: "Who we are", href: "/our-legacy" },
@@ -88,13 +89,21 @@ export default async function OurLegacyPage({ searchParams }: { searchParams: Pr
   const leadershipView = params.view === "organization" ? "organization" : params.view === "team" ? "team" : "executive";
   const isLeadership = selectedSection === "leadership";
 
+  const [cmsRecognitions, cmsTeamMembers, cmsJourneyStages, cmsCompanyValues, cmsFocusAreas] = await Promise.all([
+    fetchRecognitions(),
+    fetchTeamMembers(),
+    fetchJourneyStages(),
+    fetchCompanyValues(),
+    fetchFocusAreas(),
+  ]);
+
   return (
     <PublicPage>
       <StickyPageMenu items={legacyMenu} activeKey={selectedSection} ariaLabel="Our Legacy sections" />
       <section className={`border-t border-slate-200 px-6 pb-5 pt-2 sm:px-10 ${isLeadership ? "lg:px-16 lg:pb-5 lg:pt-4" : "min-[1020px]:px-12 min-[1020px]:pb-3 min-[1020px]:pt-2"}`}>
         <div className={`relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 ${isLeadership ? "lg:px-10 lg:py-12" : "min-[1020px]:px-8 min-[1020px]:py-6"}`}>
           <div className="relative z-10">
-            <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl />
+            <SharedContentBrowser items={legacyItems} initialItemId={selectedSection} initialLeadershipView={leadershipView} syncUrl cmsRecognitions={cmsRecognitions} cmsTeamMembers={cmsTeamMembers} cmsJourneyStages={cmsJourneyStages} cmsCompanyValues={cmsCompanyValues} cmsFocusAreas={cmsFocusAreas} />
           </div>
           <BorderBeam
             size={120}

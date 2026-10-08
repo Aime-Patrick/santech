@@ -17,17 +17,18 @@ import {
 import { createPortal } from "react-dom";
 import {
   drivingChangeSections,
-  drivingChangeStories,
   type DrivingChangeMenuKey,
-  type DrivingChangeStory,
 } from "@/lib/driving-change-data";
+import type { DrivingChangeStory as CmsDrivingChangeStory } from "@/lib/strapi";
 
 const CARDS_PER_VIEW = 3;
 
 export function DrivingChangeSliderBrowser({
   sectionKey = "impact",
+  stories = [],
 }: {
   sectionKey?: DrivingChangeMenuKey;
+  stories?: CmsDrivingChangeStory[];
 }) {
   const currentSection = useMemo(() => {
     return (
@@ -42,7 +43,7 @@ export function DrivingChangeSliderBrowser({
   );
   const [cardOffset, setCardOffset] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [activeStoryModal, setActiveStoryModal] = useState<DrivingChangeStory | null>(null);
+  const [activeStoryModal, setActiveStoryModal] = useState<CmsDrivingChangeStory | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -72,10 +73,10 @@ export function DrivingChangeSliderBrowser({
 
   // Filter stories for current section and active category
   const filteredStories = useMemo(() => {
-    return drivingChangeStories.filter(
+    return stories.filter(
       (item) => item.sectionKey === sectionKey && item.category === selectedCategory
     );
-  }, [sectionKey, selectedCategory]);
+  }, [sectionKey, selectedCategory, stories]);
 
   const totalCards = filteredStories.length;
 
@@ -103,7 +104,7 @@ export function DrivingChangeSliderBrowser({
     if (totalCards === 0) return [];
     if (totalCards <= CARDS_PER_VIEW) return filteredStories;
 
-    const cards: DrivingChangeStory[] = [];
+    const cards: CmsDrivingChangeStory[] = [];
     for (let i = 0; i < CARDS_PER_VIEW; i++) {
       cards.push(filteredStories[(cardOffset + i) % totalCards]);
     }
