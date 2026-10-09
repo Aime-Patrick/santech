@@ -45,7 +45,7 @@ export function StickyPageMenu({
   const translations = translationKey ? pageMenuCopy[language][translationKey] : null;
 
   return (
-    <div className="sticky top-[104px] z-40 bg-white/95 px-3 pt-2 backdrop-blur-sm sm:px-6 2xl:px-8">
+    <div className="notranslate sticky top-[104px] z-40 bg-white/95 px-3 pt-2 backdrop-blur-sm sm:px-6 2xl:px-8" translate="no">
       <div className="mx-auto max-w-[1600px]">
         <nav aria-label={ariaLabel} className="mb-3 flex flex-wrap items-center justify-start gap-x-7 gap-y-1 py-1 sm:gap-x-8">
           {items.map((item) => (

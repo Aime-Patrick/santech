@@ -56,6 +56,100 @@ body {
   font-optical-sizing: auto;
 }
 
+.google-translate-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Keep Google's legacy banner and branding out of the layout. The language
+   select itself is styled to match the SAN TECH header. */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+body > .skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
+  font-family: var(--font-exo, "Exo"), "Exo", sans-serif !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+
+.goog-te-gadget > span,
+.goog-logo-link {
+  display: none !important;
+}
+
+.santech-google-translate select.goog-te-combo {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  margin: 0 !important;
+  border: 1px solid #dbe3ec;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+  font-family: var(--font-exo, "Exo"), "Exo", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600;
+  outline: none;
+  padding: 0 8px;
+}
+
+.santech-google-translate select.goog-te-combo:focus {
+  border-color: #00a3e0;
+  box-shadow: 0 0 0 2px rgb(0 163 224 / 15%);
+}
+
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight,
+.goog-te-spinner-pos,
+.goog-te-spinner,
+.goog-te-spinner-animation,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+#goog-gt-vt,
+.goog-te-balloon-frame,
+.goog-te-menu-frame,
+.goog-te-ftab,
+.goog-te-menu-value,
+body > div[id^="goog-"] {
+  display: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body > iframe[id^=":"],
+body > iframe.goog-te-banner-frame,
+body > iframe.goog-te-menu-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+img[src*="translate.googleapis.com"],
+img[src*="translate.google.com"],
+img[src*="translate.googleusercontent.com"] {
+  visibility: hidden !important;
+}
+
 h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, .font-exo {
   font-family: var(--font-exo, "Exo"), "Exo", sans-serif !important;
   font-optical-sizing: auto;

@@ -38,12 +38,18 @@ export type InnovationMedia = {
   images?: string[];
 };
 
+export type InnovationModule = {
+  module: string;
+  functions: string;
+};
+
 export type InnovationItem = {
   id: string;
   label: string;
   title: string;
   description: string;
   subItems?: string[];
+  modules?: readonly InnovationModule[];
   coreFeatures: InnovationFeature[];
   media: InnovationMedia;
 };
@@ -81,6 +87,36 @@ const productItems: InnovationItem[] = [
     },
   },
   {
+    id: "san-hrmis",
+    label: "SAN HRMIS",
+    title: "One clear system for the people behind the work.",
+    description: "SAN HRMIS is an integrated Human Resource Management Information System designed to digitize and automate the complete employee lifecycle—from workforce planning, recruitment and onboarding to attendance, payroll, performance, training, career development and separation—while providing employees, HR teams and management with secure self-service, workflow automation, analytics and decision-support capabilities.",
+    modules: [
+      { module: "HR Dashboard", functions: "Workforce overview, headcount, attendance, payroll, leave, alerts, and KPIs" },
+      { module: "Employee Management", functions: "Employee profiles, personal details, qualifications, IDs, contacts, and dependants" },
+      { module: "Organization Management", functions: "Departments, branches, positions, job descriptions, and reporting structures" },
+      { module: "Recruitment & Applicant Tracking", functions: "Vacancies, applications, CVs, shortlisting, interviews, scoring, and selection" },
+      { module: "Onboarding", functions: "Offer letters, contracts, onboarding checklists, documents, and induction" },
+      { module: "Attendance & Time Management", functions: "Check-in/out, biometric integration, shifts, overtime, lateness, and absenteeism" },
+      { module: "Leave Management", functions: "Annual, sick, maternity/paternity, compassionate, unpaid leave, and approvals" },
+      { module: "Payroll Management", functions: "Salary structures, allowances, deductions, PAYE, RSSB, payslips, and reports" },
+      { module: "Performance Management", functions: "KPIs, objectives, appraisals, evaluations, 360° feedback, and performance history" },
+      { module: "Training & Development", functions: "Training plans, skills gaps, courses, certifications, and training budgets" },
+      { module: "Career & Succession Management", functions: "Career paths, promotions, transfers, and succession planning" },
+      { module: "Employee Self-Service (ESS)", functions: "Leave requests, payslips, profile updates, attendance, performance, and documents" },
+      { module: "Claims & Benefits", functions: "Medical, transport, allowances, reimbursements, loans, and benefits" },
+      { module: "Contracts Management", functions: "Employment contracts, expiry reminders, renewals, and amendments" },
+      { module: "Discipline & Employee Relations", functions: "Warnings, cases, investigations, grievances, and disciplinary records" },
+      { module: "Asset Management", functions: "Laptops, phones, IDs, vehicles, and equipment assigned to employees" },
+      { module: "Document Management", functions: "Contracts, certificates, IDs, policies, appraisals, and HR files" },
+      { module: "HR Analytics & Reports", functions: "Workforce analytics, turnover, payroll, attendance, performance, and diversity" },
+      { module: "HR Workflow & Approvals", functions: "Configurable approval chains for leave, recruitment, payroll, claims, and more" },
+      { module: "Security & Audit", functions: "RBAC, permissions, audit trails, login history, and data protection" },
+    ],
+    coreFeatures: [],
+    media: { kind: "image", src: "/images/second-image.jpeg", alt: "SAN HRMIS workforce management platform" },
+  },
+  {
     id: "san-track",
     label: "SAN TRACK",
     title: "See operations as they move.",
@@ -104,7 +140,7 @@ const productItems: InnovationItem[] = [
       { label: "Secure access", description: "Give the right people access to the right knowledge while protecting sensitive records.", icon: LockKeyhole },
       { label: "Institutional workflows", description: "Move requests, reviews, and approvals through clear digital steps.", icon: Workflow },
     ],
-    media: { kind: "image", src: "/images/team.jpg", alt: "SAN TECH team working with knowledge systems" },
+    media: { kind: "image", src: "/images/second-image.jpeg", alt: "SAN TECH team working with knowledge systems" },
   },
   {
     id: "revixsan",
@@ -130,7 +166,7 @@ const productItems: InnovationItem[] = [
       { label: "Virtual collaboration", description: "Bring people together around shared work, ideas, and activities from different places.", icon: Network },
       { label: "Digital storytelling", description: "Use connected media and interaction to make important ideas easier to understand and remember.", icon: Globe2 },
     ],
-    media: { kind: "image", src: "/images/summit.jpg", alt: "SAN TECH innovation experience" },
+    media: { kind: "image", src: "/images/summit.jpeg", alt: "SAN TECH innovation experience" },
   },
 ];
 
@@ -154,7 +190,7 @@ const serviceItems: InnovationItem[] = [
     { label: "Delivery model", description: "Move from discovery and requirements through design, development, deployment, training, and support.", icon: Code2 },
     { label: "Built for growth", description: "Create technology that fits real operational needs and can grow with the organization.", icon: Workflow },
   ],
-  media: { kind: "image" as const, src: "/images/team.jpg", alt: `SAN TECH ${String(label)} team` },
+  media: { kind: "image" as const, src: "/images/second-image.jpeg", alt: `SAN TECH ${String(label)} team` },
 }));
 
 const solutionItems: InnovationItem[] = [

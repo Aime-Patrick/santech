@@ -461,7 +461,8 @@ export type SanHubCatalogItem = {
 };
 
 export async function fetchSanHubCatalogItems(
-  category?: string
+  category?: string,
+  options: { fresh?: boolean } = {}
 ): Promise<SanHubCatalogItem[]> {
   const params = new URLSearchParams();
   params.set("sort[0]", "sortOrder:asc");
@@ -470,7 +471,7 @@ export async function fetchSanHubCatalogItems(
   if (category) params.set("filters[category][$eq]", category);
 
   const url = `${STRAPI_URL}/api/san-hub-catalog-items?${params.toString()}`;
-  const res = await safeFetch(url, { next: { revalidate: 60 } });
+  const res = await safeFetch(url, options.fresh ? { cache: "no-store" } : { next: { revalidate: 60 } });
   if (!res || !res.ok) {
     reportStrapiResponseFailure("fetchSanHubCatalogItems", res);
     return [];
@@ -722,7 +723,7 @@ export type EVisitorsFeature = {
   title: string;
   description: string;
   panel: string | null;
-  status: string | null;
+  displayStatus: string | null;
   iconName: string;
   screen: string;
   details: string[];
@@ -732,7 +733,7 @@ export async function fetchEVisitorsFeatures(): Promise<EVisitorsFeature[]> {
   const url = `${STRAPI_URL}/api/e-visitors-features?sort[0]=sortOrder:asc&populate[screen][fields][0]=url&pagination[pageSize]=20`;
   const res = await safeFetch(url, { next: { revalidate: 300 } });
   if (!res || !res.ok) { reportStrapiResponseFailure("fetchEVisitorsFeatures", res); return []; }
-  const json: { data: Array<{ id: number; number: string; label: string; title: string; description: string; panel: string | null; status: string | null; iconName: string; screen: { url: string } | null; details: string[] | null }> } = await res!.json();
+  const json: { data: Array<{ id: number; number: string; label: string; title: string; description: string; panel: string | null; displayStatus: string | null; iconName: string; screen: { url: string } | null; details: string[] | null }> } = await res!.json();
   return (json.data ?? []).map((item) => ({
     id: item.id,
     number: item.number,
@@ -740,7 +741,7 @@ export async function fetchEVisitorsFeatures(): Promise<EVisitorsFeature[]> {
     title: item.title,
     description: item.description,
     panel: item.panel,
-    status: item.status,
+    displayStatus: item.displayStatus,
     iconName: item.iconName ?? "BarChart3",
     screen: item.screen?.url ? resolveMediaUrl(item.screen.url) : "",
     details: item.details ?? [],

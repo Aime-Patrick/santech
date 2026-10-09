@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
+import { Building2, ChevronRight, Cpu, GraduationCap, MonitorCheck, PanelsTopLeft, Pause, Play, Rocket, Volume2, VolumeX, X } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { AnimatePresence, animate, motion, useAnimationFrame, useInView, useReducedMotion } from "motion/react";
 import { useMotionValue, useTransform } from "motion/react";
@@ -38,13 +38,53 @@ export type PartnerBrand = {
 
 const storyCopyClass = "max-w-none text-[15px] leading-[1.45] tracking-[0.005em] text-justify text-slate-600 sm:text-[16px] min-[1440px]:text-[17px] 2xl:text-[18px]";
 
-function ecosystemEmoji(item: string) {
-  if (item.startsWith("SAN TECH")) return "⚙️";
-  if (item.startsWith("SAN HUB")) return "🎓";
-  if (item.startsWith("E-VISITORS")) return "🪪";
-  if (item.startsWith("Tech Forward")) return "🚀";
-  if (item.startsWith("SAN CITY")) return "🏙️";
-  return "🧩";
+function ecosystemIcon(item: string) {
+  if (item.startsWith("SAN TECH")) return Cpu;
+  if (item.startsWith("SAN HUB")) return GraduationCap;
+  if (item.startsWith("E-VISITORS")) return MonitorCheck;
+  if (item.startsWith("Tech Forward")) return Rocket;
+  if (item.startsWith("SAN CITY")) return Building2;
+  return PanelsTopLeft;
+}
+
+function splitEcosystemItem(item: string) {
+  const [label, ...descriptionParts] = item.split(/\s+[—–-]\s+/u);
+  return { label, description: descriptionParts.join(" — ") };
+}
+
+function EcosystemSlideCards({
+  items,
+  onSelect,
+}: {
+  items: string[];
+  onSelect: (item: string) => void;
+}) {
+  return (
+    <div className="mt-5 grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3" aria-label="SAN TECH ecosystem products">
+      {items.map((item) => {
+        const { label } = splitEcosystemItem(item);
+        const Icon = ecosystemIcon(item);
+
+        return (
+          <button
+            key={item}
+            type="button"
+            onClick={() => onSelect(item)}
+            aria-haspopup="dialog"
+            className="group flex min-w-0 items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand-cyan hover:bg-white hover:shadow-[0_8px_18px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset sm:px-3.5"
+          >
+            <span className="grid size-8 shrink-0 place-items-center rounded-full border border-slate-200 bg-slate-50 text-[#0a1f44] shadow-sm" aria-hidden="true">
+              <Icon className="size-4" strokeWidth={1.8} />
+            </span>
+            <span className="min-w-0 flex-1 text-[13px] font-bold leading-5 text-[#0a1f44] sm:text-[14px] min-[1440px]:text-[15px] 2xl:text-[15px]">
+              {label}
+            </span>
+            <ChevronRight className="size-3.5 shrink-0 text-brand-secondary transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 const legacyStorySlides: StorySlide[] = [
@@ -362,7 +402,6 @@ export const partnerBrands: PartnerBrand[] = [
   { label: "H&M Group", src: "/H&M-Logo.png", href: "https://handmgroup.rw/" },
   { label: "Eva Wellness Spa", src: "/eva_spa.jpg", href: "https://www.evawellnessspa.com/" },
   { label: "BNR", src: "/bnr-logo.webp", href: "https://www.bnr.rw/", showLabel: true },
-  { label: "MINICOM", src: "/Coat_of_arms_of_Rwanda.svg", href: "https://minicom.gov.rw/", government: true },
 ];
 
 function PartnerMark({ partner }: { partner: PartnerBrand }) {
@@ -475,6 +514,7 @@ export function SantechHomeStage({
   const [storyPlaying, setStoryPlaying] = useState(true);
   const [storyHovered, setStoryHovered] = useState(false);
   const [videoPlaying, setVideoPlaying] = useState(true);
+  const [videoReady, setVideoReady] = useState(false);
   const [muted, setMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const slideArrowRef = useRef<HTMLSpanElement>(null);
@@ -580,17 +620,26 @@ export function SantechHomeStage({
           <div className="home-stage__grid grid min-h-0 gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.68fr)] lg:gap-4">
             <div className="home-stage__video relative flex aspect-[16/10] min-h-0 flex-col overflow-hidden bg-[#111735] sm:aspect-video lg:h-full lg:aspect-auto">
               <div className="relative min-h-0 flex-1 overflow-hidden">
+                <Image
+                  src="/images/image-when-video-loadings.png"
+                  alt=""
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                  className={`object-cover transition-opacity duration-500 ${videoReady ? "opacity-0" : "opacity-100"}`}
+                  aria-hidden="true"
+                />
                 <video
                   ref={videoRef}
                   src="/images/santech_final_video.mp4"
-                  poster="/images/image-when-video-loadings.png"
-                  className="size-full object-cover"
+                  className={`relative size-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
                   autoPlay
                   muted
                   loop
                   playsInline
-                  preload="auto"
-                  onPlay={() => setVideoPlaying(true)}
+                  preload="metadata"
+                  onCanPlay={() => setVideoReady(true)}
+                  onPlay={() => { setVideoReady(true); setVideoPlaying(true); }}
                   onPause={() => setVideoPlaying(false)}
                   aria-label="E-Visitors visitor management platform"
                 />
@@ -697,14 +746,17 @@ export function SantechHomeStage({
                     </div>
                   )}
 
-                  {activeStory.items && (
-                    <div className={`${isEcosystemStory ? "mt-5 gap-3 border-0 py-0" : isStakeholderStory ? "mt-4 gap-x-6 gap-y-2.5 border-y border-slate-200 py-3" : "mt-3 gap-x-3 gap-y-1.5 border-y border-slate-200 py-2"} grid grid-cols-1 sm:grid-cols-2`}>
+                  {activeStory.items && isEcosystemStory && (
+                    <EcosystemSlideCards
+                      items={activeStory.items}
+                      onSelect={(item) => { setStoryPlaying(false); setEcosystemDialogItem(item); }}
+                    />
+                  )}
+
+                  {activeStory.items && !isEcosystemStory && (
+                    <div className={`${isStakeholderStory ? "mt-4 gap-x-6 gap-y-2.5 border-y border-slate-200 py-3" : "mt-3 gap-x-3 gap-y-1.5 border-y border-slate-200 py-2"} grid grid-cols-1 sm:grid-cols-2`}>
                       {activeStory.items.map((item) => (
-                        isEcosystemStory ? (() => { const [label] = item.split(/\s+[—–-]\s+/); return <button key={item} type="button" onClick={() => { setStoryPlaying(false); setEcosystemDialogItem(item); }} aria-haspopup="dialog" className="group flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand-cyan hover:bg-white hover:shadow-[0_8px_18px_rgba(10,31,68,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-white text-base leading-none shadow-sm" aria-hidden="true">
-                          {ecosystemEmoji(item)}</span>
-                          <span className="flex-1 text-[13px] font-bold leading-5 text-[#0a1f44] sm:text-[14px] min-[1440px]:text-[15px] 2xl:text-[15px]">{label}</span>
-                          <ChevronRight className="size-3.5 shrink-0 text-brand-secondary transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                          </button>; })() : <p key={item} className={`${isStakeholderStory ? "text-[13px] leading-[1.35] sm:text-[14px] min-[1440px]:text-[15px] 2xl:text-[15px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
+                        <p key={item} className={`${isStakeholderStory ? "text-[13px] leading-[1.35] sm:text-[14px] min-[1440px]:text-[15px] 2xl:text-[15px]" : "text-[10px] leading-[1.25]"} min-w-0 text-left text-slate-600`}><span className="mr-1 text-brand-cyan" aria-hidden="true">+</span>{item}</p>
                       ))}
                     </div>
                   )}
@@ -741,7 +793,7 @@ export function SantechHomeStage({
 
       <AnimatePresence>
         {isEcosystemDialogOpen && ecosystemDialogItem && (() => {
-          const [label, ...descriptionParts] = ecosystemDialogItem.split(/\s+[—–-]\s+/);
+          const { label, description } = splitEcosystemItem(ecosystemDialogItem);
           return (
             <motion.div
               className="fixed inset-0 z-[100] flex items-center justify-center bg-[#07152d]/60 p-4 backdrop-blur-sm sm:p-6"
@@ -768,7 +820,7 @@ export function SantechHomeStage({
                   </div>
                   <button type="button" onClick={() => setEcosystemDialogItem(null)} aria-label="Close ecosystem detail" className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-brand-secondary hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><X className="size-4" /></button>
                 </div>
-                <p className="mt-5 text-sm leading-6 text-slate-600 sm:text-base">{descriptionParts.join(" — ")}</p>
+                <p className="mt-5 text-sm leading-6 text-slate-600 sm:text-base">{description}</p>
               </motion.div>
             </motion.div>
           );

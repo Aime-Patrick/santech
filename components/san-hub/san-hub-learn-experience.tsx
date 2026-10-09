@@ -32,7 +32,7 @@ const featuredSlides: readonly FeaturedSlide[] = [
     description: "Courses, guided practice, and real projects for people ready to build.",
     cta: "Explore courses",
     href: "#new-and-popular",
-    image: "/images/team.jpg",
+    image: "/images/second-image.jpeg",
     theme: "night",
   },
   {
@@ -68,7 +68,7 @@ const trendingSearches = [
 ] as const;
 
 const learnerStories = [
-  { name: "Aline M.", role: "SAN HUB learner", quote: "SAN HUB helped me move from learning concepts to building something people could actually use.", image: "/images/team.jpg" },
+  { name: "Aline M.", role: "SAN HUB learner", quote: "SAN HUB helped me move from learning concepts to building something people could actually use.", image: "/images/second-image.jpeg" },
   { name: "Eric N.", role: "Innovation participant", quote: "The practical projects and mentorship gave our team the confidence to take an idea further.", image: "/images/graduates.jpg" },
   { name: "Diane U.", role: "Community partner", quote: "SAN HUB creates a useful bridge between technology skills, opportunity, and the needs of our community.", image: "/images/fieldwork.jpg" },
   { name: "Mugisha T.", role: "SAN HUB builder", quote: "The practical sessions helped me turn a difficult problem into a clear plan I could start building.", image: "/images/summit.jpg" },

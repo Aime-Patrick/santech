@@ -9,6 +9,7 @@ import {
   fetchTechnologyCategories,
 } from "@/lib/strapi";
 import type { InnovationItem } from "@/lib/innovation-data";
+import { innovationItems } from "@/lib/innovation-data";
 import type { TechnologyCategory } from "@/lib/technology-data";
 
 export type ExploreSection = InnovationSection | "technologies" | "programming-languages";
@@ -37,7 +38,7 @@ function mapCmsInnovationItem(
     })),
     media: {
       kind: item.mediaKind,
-      src: item.mediaImage || "/images/team.jpg",
+      src: item.mediaImage || "/images/second-image.jpeg",
       images: item.mediaImages.length > 0 ? item.mediaImages : undefined,
       alt: item.mediaAlt,
     },
@@ -57,7 +58,7 @@ function mapCmsServiceItem(
       { label: "Delivery model", description: "Move from discovery and requirements through design, development, deployment, training, and support." },
       { label: "Built for growth", description: "Create technology that fits real operational needs and can grow with the organization." },
     ],
-    media: { kind: "image", src: "/images/team.jpg", alt: `SAN TECH ${item.label} team` },
+    media: { kind: "image", src: "/images/second-image.jpeg", alt: `SAN TECH ${item.label} team` },
   };
 }
 
@@ -98,7 +99,15 @@ export default async function InnovationLabPage({ section }: { section: ExploreS
 
   // Map CMS → InnovationItem shape. Pass undefined when CMS is empty so
   // the client component handles its own fallback to hardcoded data (with icons).
-  const products = cmsProducts.length > 0 ? cmsProducts.map(mapCmsInnovationItem) : undefined;
+  const cmsProductItems = cmsProducts.map(mapCmsInnovationItem);
+  const localProducts = innovationItems.product;
+  const localSanHrmIs = localProducts.find((item) => item.id === "san-hrmis");
+  const products = cmsProducts.length > 0
+    ? [
+        ...cmsProductItems.map((item) => item.id === "san-hrmis" && localSanHrmIs ? { ...item, modules: localSanHrmIs.modules } : item),
+        ...localProducts.filter((fallback) => !cmsProductItems.some((item) => item.id === fallback.id)),
+      ]
+    : undefined;
   const services = cmsServices.length > 0 ? cmsServices.map(mapCmsServiceItem) : undefined;
   const solutions = cmsSolutions.length > 0 ? cmsSolutions.map(mapCmsSolutionItem) : undefined;
   const techCategories = cmsTechCategories.length > 0 ? cmsTechCategories.map(mapCmsTechCategory) : undefined;

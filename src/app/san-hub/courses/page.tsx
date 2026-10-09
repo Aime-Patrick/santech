@@ -5,7 +5,7 @@ import { fetchSanHubCatalogItems } from "@/lib/strapi";
 import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 
 export default async function SanHubCoursesPage() {
-  const cmsItems = await fetchSanHubCatalogItems("Courses");
+  const cmsItems = await fetchSanHubCatalogItems("Courses", { fresh: true });
 
   const courseItems: readonly SanHubCatalogItem[] = cmsItems.length > 0
     ? cmsItems.map((i) => ({

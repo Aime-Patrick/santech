@@ -5,20 +5,8 @@ const strapiUrl = new URL(
 );
 
 const nextConfig = {
-  // Standalone output bundles everything needed to run the app
-  // without node_modules — required for cPanel Node.js App deployment
-  output: 'standalone',
-
-  // The cPanel host has an older GLIBC version and cannot run Next's native
-  // SWC binary reliably. Keep static generation within one worker when Next
-  // falls back to its WASM bindings.
-  experimental: {
-    cpus: 1,
-    staticGenerationMaxConcurrency: 1,
-    workerThreads: false,
-  },
-
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

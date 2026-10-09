@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from "react"
+import { LazyVideo } from "@/components/lazy-video"
 
 const SAFARI_WIDTH = 1203
 const SAFARI_HEIGHT = 753
@@ -53,14 +54,13 @@ export function Safari({
             height: `${HEIGHT_PCT}%`,
           }}
         >
-          <video
+          <LazyVideo
             className="block size-full object-cover"
             src={videoSrc}
             autoPlay
             loop
             muted
             playsInline
-            preload="metadata"
           />
         </div>
       )}
@@ -80,6 +80,8 @@ export function Safari({
             src={imageSrc}
             alt=""
             className="block size-full object-cover object-top"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       )}

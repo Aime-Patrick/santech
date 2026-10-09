@@ -285,7 +285,7 @@ export function EVisitorsProductPage({
           title: f.title,
           description: f.description,
           panel: f.panel ?? f.label,
-          status: f.status ?? "Live",
+          status: f.displayStatus ?? "Live",
           icon: BarChart3, // icon stays as code; driven by iconName mapping if needed
           screen: f.screen || "/images/e-visitors-monitor.png",
           details: f.details ?? [],
@@ -474,9 +474,9 @@ export function EVisitorsProductPage({
             />
           </div>
 
-          <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-20 lg:px-16 lg:pb-32">
+          <div className="relative z-10 mx-auto flex min-h-[min(760px,calc(100svh-7rem))] max-w-none items-center px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-20 lg:px-16 lg:pb-32 xl:pb-48 xl:pt-20">
             <div className="absolute inset-x-5 bottom-7 w-auto text-left sm:inset-x-10 sm:bottom-8 xl:bottom-7 xl:left-[60%] xl:right-0 xl:w-[40%] xl:pr-6 xl:text-right 2xl:pr-10">
-              <h1 className="font-exo mt-4 max-w-xl text-[clamp(3rem,6vw,6.5rem)] xl:text-[clamp(2.5rem,3.2vw,3.5rem)] font-bold leading-[0.94] tracking-[-0.06em] text-white xl:ml-auto">
+              <h1 className="font-exo mt-4 max-w-xl text-[clamp(3rem,6vw,6.5rem)] lg:text-[clamp(2.5rem,3.2vw,3.5rem)] sm:text-[clamp(2.5rem,3.2vw,3.5rem)]  xl:text-[clamp(2.5rem,3.2vw,3.5rem)] font-bold leading-[0.94] tracking-[-0.06em] text-white xl:ml-auto">
                 E-Visitors
               </h1>
               <h2 className="font-exo mt-5 max-w-2xl text-[clamp(1rem,2vw,1.3rem)] xl:text-[clamp(0.9rem,1vw,1.2rem)] leading-tight tracking-[-0.035em] text-white/90 xl:ml-auto xl:max-w-xl">

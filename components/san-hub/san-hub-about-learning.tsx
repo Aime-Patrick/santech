@@ -53,7 +53,7 @@ export function SanHubAboutLearning({ items = [] }: { items?: readonly SanHubCat
   const newItems = items.filter((item) => item.category === "Upcoming training").slice(0, 2);
   const aiItems = items.filter((item) => ["applied-ai-machine-learning", "build-with-ai", "ai-literacy-for-work"].includes(item.id));
   return (
-    <section className="mt-10 border-t border-slate-200 pt-7">
+    <section>
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">SAN HUB / Learning</p>

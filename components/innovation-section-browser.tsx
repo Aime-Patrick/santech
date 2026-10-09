@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { innovationItems, type InnovationSection, type InnovationItem } from "@/lib/innovation-data";
 import { SplitFeaturePanel } from "@/components/split-feature-panel";
+import { SanHrmIsModuleTable } from "@/components/san-hrmis-module-table";
 
 export type { InnovationSection } from "@/lib/innovation-data";
 
@@ -14,13 +15,18 @@ export function InnovationSectionBrowser({
   section: InnovationSection;
   cmsItems?: readonly InnovationItem[];
 }) {
-  // Use CMS items when provided, otherwise fall back to hardcoded
-  const items = cmsItems && cmsItems.length > 0 ? cmsItems : innovationItems[section];
+  // Keep locally defined products available while CMS records are being updated.
+  // This also makes newly introduced products visible when the CMS still returns
+  // an older product list.
+  const items = cmsItems && cmsItems.length > 0
+    ? [...cmsItems, ...innovationItems[section].filter((fallback) => !cmsItems.some((item) => item.id === fallback.id))]
+    : innovationItems[section];
   const isCompactListing = section === "services" || section === "solutions";
   const [selectedId, setSelectedId] = useState(items[0].id);
   const selected = items.find((item) => item.id === selectedId) ?? items[0];
   const prefersReducedMotion = useReducedMotion();
   const isEVisitorsProduct = section === "product" && selected.id === "e-visitors";
+  const isSanHrmIsProduct = section === "product" && selected.id === "san-hrmis";
 
   return (
     <div className={`grid gap-8 lg:items-start lg:gap-7 ${isCompactListing ? "lg:grid-cols-[215px_minmax(0,1fr)]" : "lg:grid-cols-[185px_minmax(0,1fr)]"}`}>
@@ -40,7 +46,11 @@ export function InnovationSectionBrowser({
 
       <AnimatePresence mode="wait">
         <motion.div key={selected.id} initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: "easeOut" }}>
-          <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} showFeatureDescriptions={!isEVisitorsProduct} media={selected.media} detailHref={isEVisitorsProduct ? "/e-visitors" : `/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
+          {isSanHrmIsProduct ? (
+            <SanHrmIsModuleTable modules={selected.modules ?? []} description={selected.description} />
+          ) : (
+            <SplitFeaturePanel title={selected.title} description={selected.description} subItems={selected.subItems} coreFeatures={selected.coreFeatures} showFeatureDescriptions={!isEVisitorsProduct} media={selected.media} detailHref={isEVisitorsProduct ? "/e-visitors" : `/innovation-lab/${section}/${selected.id}`} browser={section === "product" ? "safari" : "computer"} browserUrl={`${selected.id}.santech.rw`} />
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

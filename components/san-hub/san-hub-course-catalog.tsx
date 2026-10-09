@@ -201,7 +201,7 @@ export function SanHubCourseCatalog({ items }: CourseCatalogProps) {
                   <span className="text-slate-300" aria-hidden="true">·</span>
                   <span className="shrink-0 text-xs font-bold text-slate-500">{filteredItems.length} {filteredItems.length === 1 ? "course" : "courses"} available</span>
                 </div>
-                <div className="flex shrink-0 items-center gap-1.5">
+                <div className="hidden shrink-0 items-center gap-1.5">
                   {pageCount > 1 && <>
                     <button type="button" onClick={() => setIsAutoPlaying((value) => !value)} aria-label={isAutoPlaying ? "Pause course carousel" : "Play course carousel"} className="hidden size-7 place-items-center rounded border border-slate-200 text-slate-600 transition-colors hover:border-[#0a1f44] hover:text-[#0a1f44] sm:grid">{isAutoPlaying ? "Ⅱ" : "▶"}</button>
                     <button type="button" onClick={() => goToPage(currentPage - 1, -1)} disabled={currentPage === 0} aria-label="Previous courses" className="grid size-7 place-items-center rounded border border-slate-200 bg-white text-[#0a1f44] shadow-2xs transition-colors hover:border-[#0a1f44] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-35"><ArrowLeft className="size-3.5" /></button>
@@ -218,11 +218,18 @@ export function SanHubCourseCatalog({ items }: CourseCatalogProps) {
                     </motion.div>
                   </AnimatePresence>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-3">
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-3">
                     <div className="flex items-center gap-1" aria-label={`Page ${currentPage + 1} of ${pageCount}`}>
                       {Array.from({ length: pageCount }, (_, index) => <button key={index} type="button" onClick={() => goToPage(index, index >= currentPage ? 1 : -1)} aria-label={`Show course page ${index + 1}`} aria-current={currentPage === index ? "page" : undefined} className={`h-1.5 rounded-full transition-all ${currentPage === index ? "w-8 bg-[#0a1f44]" : "w-1.5 bg-slate-300 hover:bg-slate-400"}`} />)}
                     </div>
-                    {query && <button type="button" onClick={clearSearch} className="text-xs font-bold text-brand-secondary hover:underline">Clear search</button>}
+                    <div className="flex items-center gap-3">
+                      {query && <button type="button" onClick={clearSearch} className="text-xs font-bold text-brand-secondary hover:underline">Clear search</button>}
+                      {pageCount > 1 && <div className="flex items-center gap-1.5" aria-label="Course pagination controls">
+                        <button type="button" onClick={() => goToPage(currentPage - 1, -1)} disabled={currentPage === 0} aria-label="Previous courses" className="grid size-7 place-items-center rounded border border-slate-200 bg-white text-[#0a1f44] shadow-2xs transition-colors hover:border-[#0a1f44] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-35"><ArrowLeft className="size-3.5" /></button>
+                        <button type="button" onClick={() => setIsAutoPlaying((value) => !value)} aria-label={isAutoPlaying ? "Pause course carousel" : "Play course carousel"} className="grid size-7 place-items-center rounded border border-[#0a1f44] bg-[#0a1f44] text-xs font-bold text-white transition-colors hover:bg-brand-secondary">{isAutoPlaying ? "Ⅱ" : "▶"}</button>
+                        <button type="button" onClick={() => goToPage(currentPage + 1, 1)} disabled={currentPage === pageCount - 1} aria-label="Next courses" className="grid size-7 place-items-center rounded border border-slate-200 bg-white text-[#0a1f44] shadow-2xs transition-colors hover:border-[#0a1f44] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-35"><ArrowRight className="size-3.5" /></button>
+                      </div>}
+                    </div>
                   </div>
                 </>
               ) : (

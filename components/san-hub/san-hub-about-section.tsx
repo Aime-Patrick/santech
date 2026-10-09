@@ -12,9 +12,9 @@ const aboutSteps = [
 
 export function SanHubAboutSection({ items = [] }: { items?: readonly SanHubCatalogItem[] }) {
   return (
-    <section id="san-hub-about" className="san-hub-graphic-section scroll-mt-40 border-b border-slate-200 px-6 pb-14 pt-4 sm:px-10 sm:pb-14 sm:pt-5 lg:px-16 lg:pb-20 lg:pt-6">
-      <div className="mx-auto max-w-[1500px] rounded-2xl bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-        <SanHubAboutHero />
+    <section id="san-hub-about" className="san-hub-graphic-section ">
+      <SanHubAboutHero />
+      <div className="mx-auto bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
         <SanHubAboutLearning items={items} />
 
         <div className="mt-12 grid border-y border-slate-200 sm:grid-cols-3">

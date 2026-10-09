@@ -13,6 +13,7 @@ import {
   Radio,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { navigation } from "@/lib/site-data";
@@ -20,6 +21,14 @@ import { languageOptions, manualHeaderCopy, type SupportedLanguage } from "@/lib
 import santechLogo from "@/src/assets/santech.png";
 
 type Language = SupportedLanguage;
+
+declare global {
+  interface Window {
+    googleTranslateElementInit?: () => void;
+    santechApplyGoogleLanguage?: (language: Language) => void;
+    santechResetGoogleLanguage?: () => void;
+  }
+}
 
 function CommunityCta({ mobile = false, onClick, label }: { mobile?: boolean; onClick?: () => void; label: string }) {
   const prefersReducedMotion = useReducedMotion();
@@ -64,6 +73,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [googleTranslateRequested, setGoogleTranslateRequested] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -77,7 +87,10 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
   useEffect(() => {
     const savedLang = localStorage.getItem("santech_lang") as Language | null;
     if (savedLang && languageOptions.some((option) => option.code === savedLang)) {
-      const stateTimer = window.setTimeout(() => setLanguage(savedLang), 0);
+      const stateTimer = window.setTimeout(() => {
+        setLanguage(savedLang);
+        if (savedLang !== "en") setGoogleTranslateRequested(true);
+      }, 0);
       return () => window.clearTimeout(stateTimer);
     }
   }, []);
@@ -86,6 +99,13 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
     setLanguage(newLang);
     setLangDropdownOpen(false);
     localStorage.setItem("santech_lang", newLang);
+    if (newLang === "en") {
+      setGoogleTranslateRequested(false);
+      window.santechResetGoogleLanguage?.();
+    } else {
+      setGoogleTranslateRequested(true);
+      window.santechApplyGoogleLanguage?.(newLang);
+    }
     window.dispatchEvent(new CustomEvent("santech-language-change", { detail: { lang: newLang } }));
   }
 
@@ -106,6 +126,12 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
   }, []);
 
   useEffect(() => {
+    if (langDropdownOpen) {
+      window.googleTranslateElementInit?.();
+    }
+  }, [langDropdownOpen]);
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -121,7 +147,15 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
   }
 
   return (
-    <header data-landing={landing || undefined} className="fixed inset-x-0 top-0 z-[100] transition-all">
+    <header data-landing={landing || undefined} className="notranslate fixed inset-x-0 top-0 z-[100] transition-all" translate="no">
+      {googleTranslateRequested && (
+        <Script
+          id="google-translate-script"
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
+      )}
+      <div id="google_translate_element" className="google-translate-hidden" translate="yes" aria-hidden="true" />
       <div className="relative overflow-hidden bg-[#0a1f44] text-white">
         <div className="mx-auto flex min-h-9 min-w-0 max-w-[1600px] items-center justify-between gap-2 px-4 py-1 text-[10px] font-semibold sm:px-6 sm:text-xs 2xl:px-8">
           <a href="tel:+250780309833" className="inline-flex min-w-0 flex-1 items-center gap-1.5 transition-colors hover:text-[#00A3E0] xl:flex-none xl:gap-2">
@@ -202,14 +236,13 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                   <ChevronDown className={`size-3 text-slate-400 transition-transform duration-200 ${langDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
 
-                <AnimatePresence>
-                  {langDropdownOpen && (
+                <AnimatePresence initial={false}>
                     <motion.div
-                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 4, scale: 0.96 }}
+                      initial={false}
+                      animate={langDropdownOpen ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 z-[120] mt-1.5 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl"
+                      aria-hidden={!langDropdownOpen}
+                      className={`absolute right-0 z-[120] mt-1.5 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl ${langDropdownOpen ? "pointer-events-auto visible" : "pointer-events-none invisible"}`}
                     >
                       {languageOptions.map(({ code, label, flag }) => (
                         <button
@@ -225,7 +258,6 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                         </button>
                       ))}
                     </motion.div>
-                  )}
                 </AnimatePresence>
               </div>
 
@@ -249,14 +281,13 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                 <ChevronDown className={`size-3 transition-transform ${langDropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
-              <AnimatePresence>
-                {langDropdownOpen && (
+              <AnimatePresence initial={false}>
                   <motion.div
-                    initial={{ opacity: 0, y: 5, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 3, scale: 0.96 }}
+                    initial={false}
+                    animate={langDropdownOpen ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 5, scale: 0.96 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full z-[130] mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl"
+                    aria-hidden={!langDropdownOpen}
+                    className={`absolute right-0 top-full z-[130] mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl ${langDropdownOpen ? "pointer-events-auto visible" : "pointer-events-none invisible"}`}
                   >
                     {languageOptions.map(({ code, label, flag }) => (
                       <button
@@ -272,7 +303,6 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
                       </button>
                     ))}
                   </motion.div>
-                )}
               </AnimatePresence>
             </div>
             <button

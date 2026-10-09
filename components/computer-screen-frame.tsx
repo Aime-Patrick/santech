@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { LazyVideo } from "@/components/lazy-video";
 
 export type ComputerScreenFrameProps = {
   kind: "image" | "video";
@@ -28,9 +29,9 @@ export function ComputerScreenFrame({ kind, src, alt, label = "SAN TECH / SYSTEM
 
           <div className={`relative overflow-hidden bg-[#dce8f2] ${compact ? "aspect-[16/9]" : "aspect-[16/10]"}`}>
             {kind === "video" ? (
-              <video src={src} className={`size-full ${fit === "contain" ? "object-contain" : "object-cover"}`} autoPlay muted loop playsInline preload="metadata" aria-label={alt} />
+              <LazyVideo src={src} className={`size-full ${fit === "contain" ? "object-contain" : "object-cover"}`} autoPlay muted loop playsInline aria-label={alt} />
             ) : (
-              <Image src={src} alt={alt} fill priority={priority} sizes="(max-width: 1024px) 100vw, 680px" className={fit === "contain" ? "object-contain" : "object-cover"} />
+              <Image src={src} alt={alt} fill priority={priority} loading={priority ? "eager" : "lazy"} sizes="(max-width: 1024px) 100vw, 680px" className={fit === "contain" ? "object-contain" : "object-cover"} />
             )}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0a1f44]/25 to-transparent" aria-hidden="true" />
           </div>

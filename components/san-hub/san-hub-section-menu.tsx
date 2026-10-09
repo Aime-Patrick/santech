@@ -38,7 +38,7 @@ export function SanHubSectionMenu({ activeSection }: { activeSection: SanHubSect
 
   const t = pageMenuCopy[language].sanHub;
   return (
-    <nav aria-label="SAN HUB page sections" className="sticky top-[104px] z-40 border-y border-white/10 bg-[#07152d] px-2 text-white shadow-[0_8px_20px_rgba(7,21,45,0.14)] sm:px-4 lg:px-8 2xl:px-16">
+    <nav aria-label="SAN HUB page sections" className="notranslate sticky top-[104px] z-40 border-y border-white/10 bg-[#07152d] px-2 text-white shadow-[0_8px_20px_rgba(7,21,45,0.14)] sm:px-4 lg:px-8 2xl:px-16" translate="no">
       <div className="mx-auto flex w-full max-w-[1500px] items-center gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex min-w-max items-center gap-0.5 sm:gap-1 lg:gap-2 2xl:gap-5">
           {menuItems.map((item) => {
