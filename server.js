@@ -13,5 +13,9 @@ process.env.PORT = process.env.PORT || "3000";
 process.env.HOSTNAME = "0.0.0.0";
 
 // Boot the standalone Next.js server. The generated server is also ESM because
-// this project declares "type": "module".
-await import("./.next/standalone/server.js");
+// this project declares "type": "module". Keep this import free of top-level
+// await because LiteSpeed's lsnode loader uses synchronous require().
+import("./.next/standalone/server.js").catch((error) => {
+  console.error("Failed to start the Next.js standalone server", error);
+  process.exitCode = 1;
+});
