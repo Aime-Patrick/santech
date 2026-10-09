@@ -31,7 +31,27 @@ git pull origin main
 echo ""
 echo "→ Installing dependencies..."
 cd "$FRONTEND_DIR"
-npm install
+
+# Fail early if cPanel is pointed at an incomplete upload or the wrong folder.
+for required_file in \
+  package.json \
+  package-lock.json \
+  tsconfig.json \
+  next.config.mjs \
+  components/public-page.tsx \
+  components/connect-dialog.tsx \
+  components/calendly-dialog.tsx \
+  lib/strapi.ts; do
+  if [[ ! -f "$required_file" ]]; then
+    echo "ERROR: Missing $required_file"
+    echo "The frontend must be built from the full santech-f repository root: $FRONTEND_DIR"
+    exit 1
+  fi
+done
+
+# Install the exact lockfile versions and keep Next.js' Linux optional SWC
+# packages available on the cPanel host.
+npm ci --include=optional
 
 # 3. Build Next.js (standalone mode)
 echo ""
