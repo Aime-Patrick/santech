@@ -17,7 +17,7 @@ const identity = [
   ["Co-founder & COO/CFO", "Claudine Niyonzima"],
   ["Head office", "Kigali, Rwanda"],
   ["Core philosophy", "Turning Ideas into Impact"],
-  ["Stamp motto", "Innovate Â· Empower Â· Deliver"],
+  ["Stamp motto", "Innovate · Empower · Deliver"],
 ] as const;
 
 const values = [
