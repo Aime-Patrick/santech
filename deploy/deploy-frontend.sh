@@ -51,7 +51,7 @@ done
 
 # Install the exact lockfile versions and keep Next.js' Linux optional SWC
 # packages available on the cPanel host.
-npm ci --include=optional
+npm ci --include=dev --include=optional
 
 # 3. Build Next.js (standalone mode)
 echo ""
