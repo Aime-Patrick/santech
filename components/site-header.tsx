@@ -167,9 +167,9 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
             <MapPin className="size-3 shrink-0 sm:size-3.5" />
             <span className="truncate">Plot 48, KN 1 Road, Sofaru Building, 3rd Floor, Muhima-Kigali-Rwanda</span>
           </span>
-          <a href="mailto:info@santechinnovate.com" className="hidden items-center gap-2 transition-colors hover:text-[#00A3E0] xl:inline-flex">
+          <a href="mailto:info@santechconnect.com" className="hidden items-center gap-2 transition-colors hover:text-[#00A3E0] xl:inline-flex">
             <Mail className="size-4" />
-            <span className="truncate">info@santechinnovate.com</span>
+            <span className="truncate">info@santechconnect.com</span>
           </a>
           <Link href="https://zeno.fm/radio/san-tech/" target="_blank" className="hidden items-center gap-2 2xl:inline-flex">
             <Radio className="size-4" />
