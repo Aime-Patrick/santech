@@ -10,11 +10,6 @@ export const languageOptions: { code: SupportedLanguage; label: string; flag: st
   { code: "br", label: "Bamanankan", flag: "ml" },
 ];
 
-// ─── Tier 1 UI string translations ───────────────────────────────────────────
-// Short labels, buttons, section eyebrows, form labels, empty states.
-// Kinyarwanda terms follow the official ICT terminology from
-// "Inkoranyamuga y'ikoranabuhanga" (Rwanda Heritage Authority, 2026)
-// and Microsoft's approved Kinyarwanda terminology.
 
 export type UiCopy = {
   // Shared buttons
@@ -170,10 +165,6 @@ export const uiCopy: Record<SupportedLanguage, UiCopy> = {
   },
 
   rw: {
-    // Kinyarwanda — using official ICT terminology from Inkoranyamuga y'ikoranabuhanga
-    // + Microsoft approved terms (mudasobwa=computer, porogaramu=software,
-    // interineti/murandasi=internet, urubuga=website, amakuru=data,
-    // imeyili=email, gushakisha=search, kwinjira=sign in)
     readStory: "Soma inkuru",
     viewDetails: "Reba ibisobanuro",
     close: "Funga",
