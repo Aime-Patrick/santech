@@ -18,18 +18,22 @@ const SKIP_UNAVAILABLE_LOCAL_STRAPI =
 const LOG_STRAPI_FAILURES =
   process.env.STRAPI_LOG_FAILURES === "true" || !IS_LOCAL_STRAPI;
 
+const STRAPI_TIMEOUT_MS = Number(process.env.STRAPI_TIMEOUT_MS || 3000);
+
 // ─── Safe fetch helper ───────────────────────────────────────────────────────
 // Wraps every Strapi call so a network error (ECONNREFUSED, timeout, etc.)
-// never crashes the Next.js build — it just returns null.
+// never crashes the Next.js build or hangs the page — it returns null
+// so the page can immediately render with hardcoded fallback data.
 
 async function safeFetch(url: string, init?: RequestInit): Promise<Response | null> {
   if (SKIP_UNAVAILABLE_LOCAL_STRAPI) return null;
 
   try {
-    return await fetch(url, init);
+    const signal = init?.signal ?? AbortSignal.timeout(STRAPI_TIMEOUT_MS);
+    return await fetch(url, { ...init, signal });
   } catch {
     if (LOG_STRAPI_FAILURES) {
-      console.warn(`[strapi] fetch failed (Strapi unreachable): ${url}`);
+      console.warn(`[strapi] fetch failed (Strapi unreachable or timed out): ${url}`);
     }
     return null;
   }

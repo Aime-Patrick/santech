@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useUiCopy } from "@/lib/use-ui-copy";
 import Image from "next/image";
@@ -268,8 +268,12 @@ export function EVisitorsProductPage({
 }) {
   const activeTestimonials =
     cmsTestimonials && cmsTestimonials.length > 0
-      ? cmsTestimonials.map((t) => ({
-          image: t.avatar,
+      ? cmsTestimonials.map((t, index) => ({
+          image:
+            t.avatar && t.avatar.trim() !== ""
+              ? t.avatar
+              : testimonials[index % testimonials.length]?.image ||
+                "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(104).jpg",
           name: t.name,
           role: t.role,
           quote: t.quote,
@@ -323,7 +327,6 @@ export function EVisitorsProductPage({
     selectedTestimonial === null
       ? null
       : activeTestimonials[selectedTestimonial];
-  const testimonialAvatars = activeTestimonials.map(({ image }) => image);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -525,21 +528,27 @@ export function EVisitorsProductPage({
                   className="flex items-center pl-2"
                   aria-label="E-Visitors testimonials"
                 >
-                  {testimonialAvatars.map((avatar, index) => (
+                  {activeTestimonials.map((testimonial, index) => (
                     <button
-                      key={avatar}
+                      key={`${testimonial.name}-${index}`}
                       type="button"
                       onClick={() => setSelectedTestimonial(index)}
                       aria-label={`Read testimonial ${index + 1}`}
                       className={`relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#dfe8f2] shadow-[0_4px_14px_rgba(7,21,45,0.22)] transition-transform hover:z-10 hover:scale-110 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12 ${index === 0 ? "" : "-ml-2"}`}
                     >
-                      <Image
-                        src={avatar}
-                        alt=""
-                        fill
-                        className="object-cover"
-                        sizes="48px"
-                      />
+                      {testimonial.image ? (
+                        <Image
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          fill
+                          className="object-cover"
+                          sizes="48px"
+                        />
+                      ) : (
+                        <span className="grid size-full place-items-center text-xs font-bold text-slate-600">
+                          {testimonial.name.slice(0, 2)}
+                        </span>
+                      )}
                     </button>
                   ))}
                   <Link
@@ -638,13 +647,19 @@ export function EVisitorsProductPage({
                 </blockquote>
                 <div className="mt-6 flex items-center gap-3 border-t border-slate-200 pt-4">
                   <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-white bg-[#dfe8f2] shadow-sm">
-                    <Image
-                      src={selectedReview.image}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="48px"
-                    />
+                    {selectedReview.image ? (
+                      <Image
+                        src={selectedReview.image}
+                        alt={selectedReview.name}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    ) : (
+                      <span className="grid size-full place-items-center text-xs font-bold text-slate-600">
+                        {selectedReview.name.slice(0, 2)}
+                      </span>
+                    )}
                   </span>
                   <span className="min-w-0">
                     <span className="block text-sm font-bold">
