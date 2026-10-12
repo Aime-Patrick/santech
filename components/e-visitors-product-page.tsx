@@ -274,7 +274,7 @@ export function EVisitorsProductPage({
             t.avatar && t.avatar.trim() !== ""
               ? t.avatar
               : testimonials[index % testimonials.length]?.image ||
-                "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(104).jpg",
+                "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(1).jpg",
           name: t.name,
           role: t.role,
           quote: t.quote,

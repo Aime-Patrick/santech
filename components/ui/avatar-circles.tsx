@@ -48,7 +48,7 @@ const AvatarCircles = ({
         );
       })}
       <a
-        className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-black text-center text-xs font-medium text-white transition-colors hover:bg-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] dark:border-gray-800 dark:bg-white dark:text-black"
+        className="relative z-20 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-white text-center text-xs font-bold text-[#07152d] transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d]"
         href={href}
         aria-label={`See ${numPeople ?? 0} more testimonials`}
       >
