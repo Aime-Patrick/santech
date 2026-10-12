@@ -31,6 +31,7 @@ import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { PublicPage } from "@/components/public-page";
 import { EVisitorsImpactSection } from "@/components/e-visitors-impact-section";
+import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { Safari } from "@/components/ui/safari";
 import { CalendlyDialog } from "@/components/calendly-dialog";
 
@@ -524,44 +525,13 @@ export function EVisitorsProductPage({
                 <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.2em] text-white sm:text-xs">
                   {t.testimonials}
                 </p>
-                <div
-                  className="flex items-center pl-2"
-                  aria-label="E-Visitors testimonials"
-                >
-                  {activeTestimonials.map((testimonial, index) => (
-                    <button
-                      key={`${testimonial.name}-${index}`}
-                      type="button"
-                      onClick={() => setSelectedTestimonial(index)}
-                      aria-label={`Read testimonial ${index + 1}`}
-                      className={`relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#dfe8f2] shadow-[0_4px_14px_rgba(7,21,45,0.22)] transition-transform hover:z-10 hover:scale-110 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12 ${index === 0 ? "" : "-ml-2"}`}
-                    >
-                      {testimonial.image ? (
-                        <Image
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          fill
-                          className="object-cover"
-                          sizes="48px"
-                        />
-                      ) : (
-                        <span className="grid size-full place-items-center text-xs font-bold text-slate-600">
-                          {testimonial.name.slice(0, 2)}
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                  <Link
-                    href="/san-hub?section=testimonials"
-                    aria-label="See all testimonials"
-                    className="ml-2 grid size-10 shrink-0 place-items-center rounded-full border-2 border-white bg-white text-[#1268bd] shadow-[0_4px_14px_rgba(7,21,45,0.2)] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-[#07152d] sm:size-12"
-                  >
-                    <ArrowRight
-                      className="size-5 sm:size-6"
-                      aria-hidden="true"
-                    />
-                  </Link>
-                </div>
+                <AvatarCircles
+                  className="pl-2"
+                  avatarUrls={activeTestimonials.slice(0, 4).map((testimonial) => testimonial.image)}
+                  numPeople={Math.max(activeTestimonials.length - 4, 1)}
+                  href="/san-hub?section=testimonials"
+                  onAvatarClick={(index) => setSelectedTestimonial(index)}
+                />
               </div>
             </div>
           </div>

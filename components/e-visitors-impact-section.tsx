@@ -86,7 +86,7 @@ function EVisitorsPartnerMarquee({ partners, direction }: { partners: readonly P
     <div className="overflow-hidden" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} style={{ maskImage: "linear-gradient(to right, transparent, black 7%, black 93%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 7%, black 93%, transparent)" }}>
       <motion.div
         style={{ x }}
-        className={`flex w-max select-none whitespace-nowrap ${loopWidth ? "" : "invisible"}`}
+        className="flex w-max select-none whitespace-nowrap"
       >
         {[0, 1, 2, 3].map((group) => (
           <div ref={group === 0 ? firstGroupRef : undefined} key={group} className="flex shrink-0 items-center gap-3 pr-3 sm:gap-4 sm:pr-4">
