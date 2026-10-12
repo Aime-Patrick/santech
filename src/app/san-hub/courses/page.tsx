@@ -3,6 +3,15 @@ import { SanHubCourseCatalog } from "@/components/san-hub/san-hub-course-catalog
 import { SanHubSectionMenu } from "@/components/san-hub/san-hub-section-menu";
 import { fetchSanHubCatalogItems } from "@/lib/strapi";
 import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import { createPageMetadata } from "@/lib/seo";
+
+export function generateMetadata() {
+  return createPageMetadata({
+    title: "SAN HUB Courses",
+    description: "Build practical technology skills through SAN HUB courses and project-based learning.",
+    path: "/san-hub/courses",
+  });
+}
 
 export default async function SanHubCoursesPage() {
   const cmsItems = await fetchSanHubCatalogItems("Courses", { fresh: true });

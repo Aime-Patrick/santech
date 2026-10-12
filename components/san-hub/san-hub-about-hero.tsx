@@ -22,7 +22,7 @@ const aboutHeroSlides: readonly AboutHeroSlide[] = [
     description: "Focused pathways and project-based learning.",
     cta: "See learning pathways",
     href: "/san-hub/courses",
-    image: "/images/mmkk.jpeg",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(132).jpg",
   },
   {
     eyebrow: "Trending programs",
@@ -30,7 +30,7 @@ const aboutHeroSlides: readonly AboutHeroSlide[] = [
     description: "Practical programs for testing and building solutions.",
     cta: "Explore programs",
     href: "/san-hub?section=programs",
-    image: "/images/second-image.jpeg",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(178).jpg",
   },
   {
     eyebrow: "Featured courses",
@@ -38,7 +38,7 @@ const aboutHeroSlides: readonly AboutHeroSlide[] = [
     description: "Courses, mentorship, and community for practical digital skills.",
     cta: "Explore courses",
     href: "/san-hub/courses",
-    image: "/images/mmkk.jpeg",
+    image: "/images/techforwardlive2026-photo-download-1of1/Highlights/CEPSTUDIO(154).jpg",
   },
 ] as const;
 
@@ -70,12 +70,20 @@ export function SanHubAboutHero() {
       <div className="relative isolate min-h-[400px] overflow-hidden text-white sm:min-h-[380px] lg:min-h-[500px]">
         <motion.div
           key={activeSlide.image}
-          initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.02 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: prefersReducedMotion ? 0.01 : 0.45, ease: "easeOut" }}
           className="absolute inset-0"
         >
-          <Image src={activeSlide.image} alt="" fill loading={activeIndex === 0 ? "eager" : "lazy"} sizes="(min-width: 1024px) 80vw, 100vw" className="object-cover" />
+          <Image
+            src={activeSlide.image}
+            alt=""
+            fill
+            quality={90}
+            loading={activeIndex === 0 ? "eager" : "lazy"}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
         </motion.div>
         <motion.div
           key={activeSlide.title}

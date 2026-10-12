@@ -10,6 +10,7 @@ import { CompanyProfilePdf } from "@/components/company-profile-pdf";
 import { CertificatePanel as CertificatePanelContent } from "@/components/certificate-panel";
 import { getInlinePdfUrl } from "@/lib/pdf-utils";
 import { useUiCopy } from "@/lib/use-ui-copy";
+import type { LegacyContent } from "@/lib/strapi";
 
 const identity = [
   ["Founded", "1 August 2019"],
@@ -173,32 +174,39 @@ const recognitionItems: readonly RecognitionItem[] = [
   },
 ];
 
-export function IdentityPanel() {
+export function IdentityPanel({ cmsContent }: { cmsContent?: LegacyContent | null }) {
   const t = useUiCopy();
+  const activeIdentity = cmsContent?.identityFacts.length ? cmsContent.identityFacts : identity.map(([label, value]) => ({ label, value }));
   return (
     <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.whoWeAre}</p>
-        <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH is a technological company focused on digital transformation and innovation. We develop smart digital products and integrated technology solutions while building the human talent and innovation ecosystem needed to create and deploy them.</p>
-        <p className="mt-5 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH connects people, ideas and technology â€” helping organizations solve real problems while helping the next generation develop the skills and products needed to create new innovative solutions.</p>
+        <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">{cmsContent?.whoWeAreBody ?? "SAN TECH is a technological company focused on digital transformation and innovation. We develop smart digital products and integrated technology solutions while building the human talent and innovation ecosystem needed to create and deploy them."}</p>
+        <p className="mt-5 max-w-xl text-justify text-base leading-7 text-[#68718a]">{cmsContent?.whoWeAreSecondaryBody ?? "SAN TECH connects people, ideas and technology — helping organizations solve real problems while helping the next generation develop the skills and products needed to create new innovative solutions."}</p>
       </div>
       <aside className="border-l border-slate-300 pl-6 lg:pl-10">
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">{t.coreIdentity}</p>
         <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-          {identity.map(([label, value]) => <div key={label} className="border-t border-slate-200 pt-3"><p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7c879d]">{label}</p><p className="mt-2 text-sm font-bold leading-5 text-[#0a1f44]">{value}</p></div>)}
+          {activeIdentity.map(({ label, value }) => <div key={label} className="border-t border-slate-200 pt-3"><p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7c879d]">{label}</p><p className="mt-2 text-sm font-bold leading-5 text-[#0a1f44]">{value}</p></div>)}
         </div>
       </aside>
     </div>
   );
 }
 
-export function MissionPanel({ cmsValues }: { cmsValues?: import("@/lib/strapi").CompanyValue[] }) {
+export function MissionPanel({ cmsValues, cmsContent }: { cmsValues?: import("@/lib/strapi").CompanyValue[]; cmsContent?: LegacyContent | null }) {
   const activeValues: readonly { label: string; description: string }[] =
     cmsValues && cmsValues.length > 0 ? cmsValues : values;
   const [selectedValue, setSelectedValue] = useState<string>(activeValues[0].label);
   const prefersReducedMotion = useReducedMotion();
   const t = useUiCopy();
   const activeValue = activeValues.find((value) => value.label === selectedValue) ?? activeValues[0];
+  const missionTitle = cmsContent?.missionTitle ?? t.mission;
+  const missionTagline = cmsContent?.missionTagline ?? t.buildUsefulCapability;
+  const missionDescription = cmsContent?.missionDescription ?? "To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.";
+  const visionTitle = cmsContent?.visionTitle ?? t.vision;
+  const visionTagline = cmsContent?.visionTagline ?? t.widenWhatIsPossible;
+  const visionDescription = cmsContent?.visionDescription ?? "To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.";
 
   return (
     <div className="grid items-start gap-6 overflow-visible min-[1020px]:grid-cols-[0.9fr_1.1fr] min-[1020px]:gap-7">
@@ -212,16 +220,16 @@ export function MissionPanel({ cmsValues }: { cmsValues?: import("@/lib/strapi")
           <article className="relative rounded-2xl border border-[#bdeaf3] bg-[#f2fcfe] p-4 shadow-[0_8px_22px_rgba(8,198,231,0.08)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-brand-secondary shadow-sm"><Target className="size-5" aria-hidden="true" /></span>
-              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{t.mission}</p><p className="text-xs font-bold text-[#0a1f44]">{t.buildUsefulCapability}</p></div>
+              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{missionTitle}</p><p className="text-xs font-bold text-[#0a1f44]">{missionTagline}</p></div>
             </div>
-            <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">To create and deliver innovative, secure, affordable, and sustainable technology solutions while developing the people and ecosystems that make innovation happen.</p>
+            <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">{missionDescription}</p>
           </article>
           <article className="relative rounded-2xl border border-[#d4def0] bg-[#f8faff] p-4 shadow-[0_8px_22px_rgba(10,31,68,0.06)]">
             <div className="flex items-center gap-3">
               <span className="grid size-9 place-items-center rounded-xl bg-white text-[#0a1f44] shadow-sm"><Eye className="size-5" aria-hidden="true" /></span>
-              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{t.vision}</p><p className="text-xs font-bold text-[#0a1f44]">{t.widenWhatIsPossible}</p></div>
+              <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-secondary">{visionTitle}</p><p className="text-xs font-bold text-[#0a1f44]">{visionTagline}</p></div>
             </div>
-            <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">To be a leading African technology and innovation hub transforming ideas into smart solutions that improve lives and drive economic growth.</p>
+            <p className="mt-3 text-[14px] leading-6.5 text-[#526989]">{visionDescription}</p>
           </article>
         </div>
       </div>
@@ -553,14 +561,14 @@ export function FocusPanel({ cmsAreas }: { cmsAreas?: import("@/lib/strapi").Foc
   );
 }
 
-export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE (1).pdf" }: { pdfUrl?: string }) {
+export function CompanyProfilePanel({ pdfUrl = "/images/SAN TECH COMPANY PROFILE (1).pdf", cmsContent }: { pdfUrl?: string; cmsContent?: LegacyContent | null }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-8">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-brand-secondary">Company profile</p>
-        <h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">Turning Ideas into Impact.</h1>
-        <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">SAN TECH stands for Smart Applications and Networking Technology. Founded in Rwanda in 2019, with a branch in Bamako, Mali, we develop practical digital solutions, technology products, and technical capacity for organizations, businesses, institutions, and communities.</p>
+        <h1 className="font-exo mt-4 max-w-xl text-xl font-normal leading-[1.18] tracking-[-0.035em] text-[#303755] sm:text-2xl lg:text-[2rem]">{cmsContent?.profileTitle ?? "Turning Ideas into Impact."}</h1>
+        <p className="mt-6 max-w-xl text-justify text-base leading-7 text-[#68718a]">{cmsContent?.profileDescription ?? "SAN TECH stands for Smart Applications and Networking Technology. Founded in Rwanda in 2019, with a branch in Bamako, Mali, we develop practical digital solutions, technology products, and technical capacity for organizations, businesses, institutions, and communities."}</p>
       </div>
       <div className="border-l border-slate-300 pl-4 lg:pl-6">
         <div>

@@ -3,8 +3,10 @@ import { ArrowLeft, BarChart3 } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { PublicPage } from "@/components/public-page";
 import { Safari } from "@/components/ui/safari";
-import { getInnovationItem, innovationItems, type InnovationSection } from "@/lib/innovation-data";
+import { getInnovationItem, innovationItems, type InnovationSection, type InnovationItem } from "@/lib/innovation-data";
 import { SanHrmIsModuleTable } from "@/components/san-hrmis-module-table";
+import { fetchInnovationProducts, fetchInnovationServices, fetchInnovationSolutions } from "@/lib/strapi";
+import { createPageMetadata } from "@/lib/seo";
 
 const sections: InnovationSection[] = ["product", "services", "solutions"];
 const sectionLabels: Record<InnovationSection, string> = {
@@ -13,8 +15,94 @@ const sectionLabels: Record<InnovationSection, string> = {
   solutions: "Solutions & technologies",
 };
 
-export function generateStaticParams() {
-  return sections.flatMap((section) => innovationItems[section]
+function mapProduct(item: Awaited<ReturnType<typeof fetchInnovationProducts>>[number], fallback?: InnovationItem): InnovationItem {
+  return {
+    id: item.productId,
+    label: item.label,
+    title: item.title,
+    description: item.description || fallback?.description || "",
+    modules: item.modules.length > 0 ? item.modules : fallback?.modules,
+    coreFeatures: item.coreFeatures.length > 0 ? item.coreFeatures.map((feature) => ({ label: feature.label, description: feature.description })) : fallback?.coreFeatures ?? [],
+    media: {
+      kind: item.mediaKind,
+      src: item.detailImage || item.mediaImage || fallback?.media.src || "/images/second-image.jpeg",
+      images: item.detailImages.length > 0 ? item.detailImages : item.mediaImages.length > 0 ? item.mediaImages : fallback?.media.images,
+      alt: item.mediaAlt || fallback?.media.alt || item.label,
+    },
+  };
+}
+
+function mapService(item: Awaited<ReturnType<typeof fetchInnovationServices>>[number], fallback?: InnovationItem): InnovationItem {
+  return {
+    id: item.serviceId,
+    label: item.label,
+    title: item.label,
+    description: item.description,
+    coreFeatures: item.coreFeatures.length > 0 ? item.coreFeatures.map((feature) => ({ label: feature.label, description: feature.description })) : fallback?.coreFeatures ?? [],
+    media: {
+      kind: item.mediaKind,
+      src: item.mediaImage || fallback?.media.src || "/images/second-image.jpeg",
+      images: item.mediaImages.length > 0 ? item.mediaImages : fallback?.media.images,
+      alt: item.mediaAlt || fallback?.media.alt || `SAN TECH ${item.label} team`,
+    },
+  };
+}
+
+function mapSolution(item: Awaited<ReturnType<typeof fetchInnovationSolutions>>[number], fallback?: InnovationItem): InnovationItem {
+  return {
+    id: item.solutionId,
+    label: item.label,
+    title: item.label,
+    description: item.description,
+    subItems: item.subItems.length > 0 ? item.subItems : fallback?.subItems,
+    coreFeatures: item.coreFeatures.map((feature) => ({ label: feature.label, description: feature.description })),
+    media: {
+      kind: item.mediaKind,
+      src: item.mediaImage || fallback?.media.src || "/images/summit.jpg",
+      images: item.mediaImages.length > 0 ? item.mediaImages : fallback?.media.images,
+      alt: item.mediaAlt || fallback?.media.alt || `SAN TECH ${item.label} solution`,
+    },
+  };
+}
+
+async function fetchCmsItems() {
+  const [products, services, solutions] = await Promise.all([
+    fetchInnovationProducts(),
+    fetchInnovationServices(),
+    fetchInnovationSolutions(),
+  ]);
+
+  return {
+    product: products.map((item) => mapProduct(item, getInnovationItem("product", item.productId))),
+    services: services.map((item) => mapService(item, getInnovationItem("services", item.serviceId))),
+    solutions: solutions.map((item) => mapSolution(item, getInnovationItem("solutions", item.solutionId))),
+  };
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ section: string; item: string }> }) {
+  const { section, item: itemId } = await params;
+  const innovationSection = sections.includes(section as InnovationSection) ? section as InnovationSection : "product";
+  const cmsItems = await fetchCmsItems();
+  const cmsItem = cmsItems[innovationSection === "product" ? "product" : innovationSection].find((candidate) => candidate.id === itemId);
+  const item = cmsItem ?? getInnovationItem(innovationSection, itemId);
+
+  return createPageMetadata({
+    title: item?.label || "Explore solution",
+    description: item?.description || "Explore SAN TECH technology and innovation solutions.",
+    path: `/innovation-lab/${section}/${itemId}`,
+    image: item?.media.src,
+  });
+}
+
+export async function generateStaticParams() {
+  const cmsItems = await fetchCmsItems();
+  const itemsBySection: Record<InnovationSection, InnovationItem[]> = {
+    product: [...innovationItems.product, ...cmsItems.product.filter((item) => !innovationItems.product.some((fallback) => fallback.id === item.id))],
+    services: [...innovationItems.services, ...cmsItems.services.filter((item) => !innovationItems.services.some((fallback) => fallback.id === item.id))],
+    solutions: [...innovationItems.solutions, ...cmsItems.solutions.filter((item) => !innovationItems.solutions.some((fallback) => fallback.id === item.id))],
+  };
+
+  return sections.flatMap((section) => itemsBySection[section]
     .filter((item) => !(section === "product" && item.id === "e-visitors"))
     .map((item) => ({ section, item: item.id })));
 }
@@ -26,7 +114,9 @@ export default async function InnovationDetailPage({ params }: { params: Promise
   const innovationSection = section as InnovationSection;
   if (innovationSection === "product" && itemId === "e-visitors") redirect("/e-visitors");
 
-  const item = getInnovationItem(innovationSection, itemId);
+  const cmsItems = await fetchCmsItems();
+  const cmsItem = cmsItems[innovationSection === "product" ? "product" : innovationSection].find((candidate) => candidate.id === itemId);
+  const item = cmsItem ?? getInnovationItem(innovationSection, itemId);
   if (!item) notFound();
   const isSanHrmIs = innovationSection === "product" && item.id === "san-hrmis";
 

@@ -3,7 +3,7 @@
 import { ArrowLeft, ArrowUpRight, Bookmark, Maximize2, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
-type LibraryBook = {
+export type LibraryBook = {
   id: string;
   title: string;
   coverTitle: string;
@@ -14,16 +14,18 @@ type LibraryBook = {
   pages: string;
   accent: string;
   coverInk: string;
+  readerUrl?: string | null;
 };
 
 type SanHubDigitalLibraryProps = {
   /** Replace this with the published SAN BOOK reader URL when it is available. */
   src?: string;
+  books?: readonly LibraryBook[];
 };
 
 const defaultLibrarySource = "/innovation-lab/product/san-book";
 
-const libraryBooks: LibraryBook[] = [
+const fallbackLibraryBooks: LibraryBook[] = [
   {
     id: "san-book",
     title: "SAN BOOK",
@@ -74,8 +76,9 @@ const libraryBooks: LibraryBook[] = [
   },
 ];
 
-export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigitalLibraryProps) {
+export function SanHubDigitalLibrary({ src = defaultLibrarySource, books }: SanHubDigitalLibraryProps) {
   const [activeBook, setActiveBook] = useState<LibraryBook | null>(null);
+  const visibleLibraryBooks = books && books.length > 0 ? books : fallbackLibraryBooks;
 
   return (
     <section id="san-hub-digital-library" className="san-hub-graphic-section scroll-mt-40 border-b border-[#0a1f44]/10 px-4 py-7 sm:px-6 lg:px-8 lg:py-9">
@@ -83,26 +86,26 @@ export function SanHubDigitalLibrary({ src = defaultLibrarySource }: SanHubDigit
         {activeBook ? (
           <BookReader book={activeBook} src={src} onBack={() => setActiveBook(null)} />
         ) : (
-          <BookShelf onOpen={setActiveBook} />
+          <BookShelf books={visibleLibraryBooks} onOpen={setActiveBook} />
         )}
       </div>
     </section>
   );
 }
 
-function BookShelf({ onOpen }: { onOpen: (book: LibraryBook) => void }) {
+function BookShelf({ books, onOpen }: { books: readonly LibraryBook[]; onOpen: (book: LibraryBook) => void }) {
   const [activeCategory, setActiveCategory] = useState("All books");
   const [query, setQuery] = useState("");
-  const categories = useMemo(() => ["All books", ...new Set(libraryBooks.map((book) => book.category))], []);
+  const categories = useMemo(() => ["All books", ...new Set(books.map((book) => book.category))], [books]);
   const visibleBooks = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
     if (normalizedQuery) {
-      return libraryBooks.filter((book) => `${book.title} ${book.category} ${book.description}`.toLowerCase().includes(normalizedQuery));
+      return books.filter((book) => `${book.title} ${book.category} ${book.description}`.toLowerCase().includes(normalizedQuery));
     }
 
-    return activeCategory === "All books" ? libraryBooks : libraryBooks.filter((book) => book.category === activeCategory);
-  }, [activeCategory, query]);
+    return activeCategory === "All books" ? books : books.filter((book) => book.category === activeCategory);
+  }, [activeCategory, books, query]);
 
   return (
     <>
@@ -195,6 +198,7 @@ function BookCover({ book, onOpen }: { book: LibraryBook; onOpen: (book: Library
 }
 
 function BookReader({ book, src, onBack }: { book: LibraryBook; src: string; onBack: () => void }) {
+  const readerSource = book.readerUrl || src;
   return (
     <>
       <div className="mb-5 grid gap-3 border-b border-[#0a1f44]/15 pb-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
@@ -203,7 +207,7 @@ function BookReader({ book, src, onBack }: { book: LibraryBook; src: string; onB
           Back to library
         </button>
         <h1 className="font-exo text-center text-2xl font-bold leading-tight tracking-[-0.05em] text-[#0a1f44] sm:text-3xl lg:text-4xl">{book.title}</h1>
-        <a href={src} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 justify-self-start text-xs font-bold text-[#0a1f44] underline-offset-4 hover:text-brand-cyan hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 sm:justify-self-end">
+        <a href={readerSource} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 justify-self-start text-xs font-bold text-[#0a1f44] underline-offset-4 hover:text-brand-cyan hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 sm:justify-self-end">
           Open in new tab
           <ArrowUpRight className="size-4" aria-hidden="true" />
         </a>
@@ -232,7 +236,7 @@ function BookReader({ book, src, onBack }: { book: LibraryBook; src: string; onB
             <span className="inline-flex items-center gap-2"><Maximize2 className="size-3.5" aria-hidden="true" /> SAN BOOK</span>
           </div>
           <div className="mt-3 overflow-hidden border border-[#0a1f44]/15 bg-white shadow-[0_8px_24px_rgba(10,31,68,0.08)]">
-            <iframe title={`${book.title} digital book`} src={src} loading="lazy" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" className="h-[500px] w-full border-0 sm:h-[560px] lg:h-[640px]" />
+            <iframe title={`${book.title} digital book`} src={readerSource} loading="lazy" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" className="h-[500px] w-full border-0 sm:h-[560px] lg:h-[640px]" />
           </div>
         </div>
       </div>

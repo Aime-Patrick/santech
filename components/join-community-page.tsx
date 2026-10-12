@@ -7,6 +7,7 @@ import { ArrowUpRight, Award, BriefcaseBusiness, Check, ChevronDown, GraduationC
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useCallback } from "react";
 import { PhoneNumberField } from "@/components/phone-number-field";
+import type { TraineeAward as CmsTraineeAward } from "@/lib/strapi";
 
 type JoinPath = "training" | "internship" | "community" | "innovation";
 
@@ -36,7 +37,16 @@ const traineeAwards = [
   },
 ] as const;
 
-type TraineeAward = (typeof traineeAwards)[number];
+type TraineeAward = {
+  id: string | number;
+  year: string;
+  title: string;
+  recipient: string;
+  image: string;
+  imageAlt: string;
+  description: string;
+  details: readonly string[];
+};
 
 function TraineeAwardCard({ award, reducedMotion, onOpen }: { award: TraineeAward; reducedMotion: boolean; onOpen: (award: TraineeAward) => void }) {
   return (
@@ -63,9 +73,9 @@ function TraineeAwardCard({ award, reducedMotion, onOpen }: { award: TraineeAwar
   );
 }
 
-function TraineeAwardMarquee({ reducedMotion, onOpen }: { reducedMotion: boolean; onOpen: (award: TraineeAward) => void }) {
+function TraineeAwardMarquee({ awards, reducedMotion, onOpen }: { awards: readonly TraineeAward[]; reducedMotion: boolean; onOpen: (award: TraineeAward) => void }) {
   const controls = useAnimationControls();
-  const row = [...traineeAwards, ...traineeAwards];
+  const row = [...awards, ...awards];
   const firstGroupRef = useRef<HTMLDivElement>(null);
   const [loopWidth, setLoopWidth] = useState(0);
 
@@ -444,11 +454,23 @@ function InnovationFields() {
   );
 }
 
-export function JoinCommunityPage({ initialPath = "community", course = "", openInitially = false }: { initialPath?: JoinPath; course?: string; openInitially?: boolean }) {
+export function JoinCommunityPage({ initialPath = "community", course = "", openInitially = false, awards = [] }: { initialPath?: JoinPath; course?: string; openInitially?: boolean; awards?: readonly CmsTraineeAward[] }) {
   const t = useUiCopy();
   const prefersReducedMotion = useReducedMotion();
   const [path, setPath] = useState<JoinPath>(initialPath);
   const [isDialogOpen, setIsDialogOpen] = useState(openInitially);
+  const displayAwards: readonly TraineeAward[] = awards.length > 0
+    ? awards.map((award) => ({
+        id: award.id,
+        year: award.year,
+        title: award.title,
+        recipient: award.name,
+        image: award.image || "/images/222003819.jpg",
+        imageAlt: `${award.title} recognition for ${award.name}`,
+        description: award.description,
+        details: ["Outstanding participation", "Practical project contribution", "Commitment to continued learning"],
+      }))
+    : traineeAwards;
   const [selectedAward, setSelectedAward] = useState<TraineeAward | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const copy = pathCopy[path];
@@ -500,7 +522,7 @@ export function JoinCommunityPage({ initialPath = "community", course = "", open
                     <h3 className="font-exo mt-1 text-base font-bold tracking-[-0.03em] text-[#07152d]">Best Performer Awarded</h3>
                     <p className="mt-1 max-w-sm text-xs leading-5 text-slate-500">Celebrating trainees who turn learning into practical contribution.</p>
                   </div>
-                  <TraineeAwardMarquee reducedMotion={Boolean(prefersReducedMotion)} onOpen={setSelectedAward} />
+                  <TraineeAwardMarquee awards={displayAwards} reducedMotion={Boolean(prefersReducedMotion)} onOpen={setSelectedAward} />
                 </div>
                 <div className="mt-4 flex flex-wrap items-center justify-end gap-2" aria-label="SAN HUB pathways">
                   {['Learn', 'Build', 'Connect'].map((pathLabel) => <span key={pathLabel} className="inline-flex items-center gap-1.5 rounded-full bg-[#edf7fb] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#0a1f44]"><Check className="size-3 text-brand-secondary" aria-hidden="true" />{pathLabel}</span>)}

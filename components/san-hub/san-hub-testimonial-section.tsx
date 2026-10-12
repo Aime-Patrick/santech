@@ -4,8 +4,9 @@ import Image from "next/image";
 import { ArrowUpRight, Star, X } from "lucide-react";
 import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import type { Testimonial } from "@/lib/strapi";
 
-const testimonials = [
+const fallbackTestimonials = [
   {
     quote: "SAN HUB helped me move from learning concepts to building something people could actually use.",
     name: "Aline M.",
@@ -38,7 +39,18 @@ const testimonials = [
   },
 ] as const;
 
-function TestimonialCard({ item, index, reducedMotion, onOpen }: { item: (typeof testimonials)[number]; index: number; reducedMotion: boolean; onOpen: (item: (typeof testimonials)[number]) => void }) {
+type DisplayTestimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  rating: string;
+  date: string;
+  source: string;
+  image: string;
+  tone: string;
+};
+
+function TestimonialCard({ item, index, reducedMotion, onOpen }: { item: DisplayTestimonial; index: number; reducedMotion: boolean; onOpen: (item: DisplayTestimonial) => void }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: reducedMotion ? 0 : 10 }}
@@ -82,8 +94,8 @@ function TestimonialCard({ item, index, reducedMotion, onOpen }: { item: (typeof
   );
 }
 
-function TestimonialMarquee({ reverse = false, reducedMotion, onOpen }: { reverse?: boolean; reducedMotion: boolean; onOpen: (item: (typeof testimonials)[number]) => void }) {
-  const baseRow = reverse ? [...testimonials].reverse() : [...testimonials];
+function TestimonialMarquee({ items, reverse = false, reducedMotion, onOpen }: { items: readonly DisplayTestimonial[]; reverse?: boolean; reducedMotion: boolean; onOpen: (item: DisplayTestimonial) => void }) {
+  const baseRow = reverse ? [...items].reverse() : [...items];
   // Repeat the content inside each moving sequence so the centered rail stays filled
   // while the next copy enters before the current copy leaves.
   const row = [...baseRow, ...baseRow];
@@ -134,9 +146,21 @@ function TestimonialMarquee({ reverse = false, reducedMotion, onOpen }: { revers
   );
 }
 
-export function SanHubTestimonialSection() {
+export function SanHubTestimonialSection({ items = [] }: { items?: readonly Testimonial[] }) {
   const prefersReducedMotion = useReducedMotion();
-  const [selectedTestimonial, setSelectedTestimonial] = useState<(typeof testimonials)[number] | null>(null);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<DisplayTestimonial | null>(null);
+  const testimonials: readonly DisplayTestimonial[] = items.length > 0
+    ? items.map((item, index) => ({
+        quote: item.quote,
+        name: item.name,
+        role: item.role,
+        rating: String(item.rating || "5.0"),
+        date: item.dateLabel ?? "SAN HUB story",
+        source: item.sourceLabel ?? "Learner story",
+        image: item.avatar || fallbackTestimonials[index % fallbackTestimonials.length].image,
+        tone: fallbackTestimonials[index % fallbackTestimonials.length].tone,
+      }))
+    : fallbackTestimonials;
 
   useEffect(() => {
     if (!selectedTestimonial) return;
@@ -161,8 +185,8 @@ export function SanHubTestimonialSection() {
         </div>
 
         <div className="mt-5 space-y-3 sm:space-y-4">
-          <TestimonialMarquee reducedMotion={reducedMotion} onOpen={setSelectedTestimonial} />
-          <TestimonialMarquee reverse reducedMotion={reducedMotion} onOpen={setSelectedTestimonial} />
+          <TestimonialMarquee items={testimonials} reducedMotion={reducedMotion} onOpen={setSelectedTestimonial} />
+          <TestimonialMarquee items={testimonials} reverse reducedMotion={reducedMotion} onOpen={setSelectedTestimonial} />
         </div>
       </div>
 

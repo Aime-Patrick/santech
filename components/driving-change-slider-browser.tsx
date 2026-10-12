@@ -18,6 +18,7 @@ import { createPortal } from "react-dom";
 import {
   drivingChangeSections,
   type DrivingChangeMenuKey,
+  type DrivingChangeSection,
 } from "@/lib/driving-change-data";
 import type { DrivingChangeStory as CmsDrivingChangeStory } from "@/lib/strapi";
 import { useUiCopy } from "@/lib/use-ui-copy";
@@ -27,17 +28,20 @@ const CARDS_PER_VIEW = 3;
 export function DrivingChangeSliderBrowser({
   sectionKey = "impact",
   stories = [],
+  sections,
 }: {
   sectionKey?: DrivingChangeMenuKey;
   stories?: CmsDrivingChangeStory[];
+  sections?: readonly DrivingChangeSection[];
 }) {
   const t = useUiCopy();
+  const availableSections = sections?.length ? sections : drivingChangeSections;
   const currentSection = useMemo(() => {
     return (
-      drivingChangeSections.find((s) => s.key === sectionKey) ||
-      drivingChangeSections[0]
+      availableSections.find((s) => s.key === sectionKey) ||
+      availableSections[0]
     );
-  }, [sectionKey]);
+  }, [availableSections, sectionKey]);
 
   // Default active category to the first one in the section
   const [selectedCategory, setSelectedCategory] = useState<string>(

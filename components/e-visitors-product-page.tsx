@@ -258,11 +258,13 @@ export function EVisitorsProductPage({
   cmsFeatures,
   cmsMilestones,
   cmsFaqs,
+  videoPoster,
 }: {
   cmsTestimonials?: import("@/lib/strapi").Testimonial[];
   cmsFeatures?: import("@/lib/strapi").EVisitorsFeature[];
   cmsMilestones?: import("@/lib/strapi").ProductMilestone[];
   cmsFaqs?: import("@/lib/strapi").FaqItem[];
+  videoPoster?: string;
 }) {
   const activeTestimonials =
     cmsTestimonials && cmsTestimonials.length > 0
@@ -311,6 +313,7 @@ export function EVisitorsProductPage({
     null,
   );
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const pageAnimationRef = useRef<HTMLDivElement>(null);
@@ -430,17 +433,32 @@ export function EVisitorsProductPage({
         <section
           className="relative isolate min-h-[min(760px,calc(100svh-7rem))] overflow-hidden border-b border-[#0a1f44] bg-[#07152d] text-white"
         >
+          <Image
+            src={videoPoster || "/images/image-when-video-loadings.png"}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className={`pointer-events-none absolute inset-0 z-0 size-full object-cover transition-opacity duration-500 ${isHeroVideoReady ? "opacity-0" : "opacity-100"}`}
+            aria-hidden="true"
+          />
           <video
             ref={videoRef}
             src="/E-VS.mp4"
-            className="absolute inset-0 size-full object-cover"
+            poster={videoPoster || "/images/image-when-video-loadings.png"}
+            className={`absolute inset-0 z-0 size-full object-cover transition-opacity duration-500 ${isHeroVideoReady ? "opacity-100" : "opacity-0"}`}
             autoPlay
             muted
             loop
             playsInline
             preload="metadata"
             aria-label="E-Visitors visitor management platform"
-            onPlay={() => setIsVideoPlaying(true)}
+            onCanPlay={() => setIsHeroVideoReady(true)}
+            onLoadedData={() => setIsHeroVideoReady(true)}
+            onPlay={() => {
+              setIsHeroVideoReady(true);
+              setIsVideoPlaying(true);
+            }}
             onPause={() => setIsVideoPlaying(false)}
           />
           <div
@@ -838,7 +856,18 @@ export function EVisitorsProductPage({
                 visitor operations.
               </p>
 
+
               <div className="relative mt-8 aspect-[16/9] w-full max-w-[520px] overflow-hidden rounded-xl bg-slate-100 lg:max-w-full">
+                <Image
+                  src="/images/rwanda.jpeg"
+                  alt="E-Visitors visitor journey from check-in to check-out"
+                  fill
+                  sizes="(min-width: 1024px) 520px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+
+              {activeFaqs.length > 9 &&<div className="relative mt-8 aspect-[16/9] w-full max-w-[520px] overflow-hidden rounded-xl bg-slate-100 lg:max-w-full">
                 <Image
                   src="/images/fqa1.jpeg"
                   alt="E-Visitors visitor journey from check-in to check-out"
@@ -846,7 +875,7 @@ export function EVisitorsProductPage({
                   sizes="(min-width: 1024px) 520px, 100vw"
                   className="object-cover"
                 />
-              </div>
+              </div>}
             </div>
 
             <div className="divide-y divide-slate-200 border-y border-slate-200">

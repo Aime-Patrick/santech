@@ -27,6 +27,7 @@ declare global {
     googleTranslateElementInit?: () => void;
     santechApplyGoogleLanguage?: (language: Language) => void;
     santechResetGoogleLanguage?: () => void;
+    santechGoogleObserver?: MutationObserver;
   }
 }
 

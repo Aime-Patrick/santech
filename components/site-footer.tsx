@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { fetchSiteSettings, type SiteSocialLink } from "@/lib/strapi";
 
-const socialLinks = [
+const fallbackSocialLinks = [
   { label: "Facebook", href: "https://www.facebook.com/santechinnovate", icon: FaFacebookF },
   { label: "YouTube", href: "https://www.youtube.com/@santechinnovate", icon: FaYoutube },
   { label: "X / Twitter", href: "https://twitter.com/santechinnovate", icon: FaXTwitter },
@@ -10,10 +10,30 @@ const socialLinks = [
   { label: "Instagram", href: "https://www.instagram.com/santechinnovate", icon: FaInstagram },
 ];
 
-export function SiteFooter() {
+const socialIcons = {
+  facebook: FaFacebookF,
+  instagram: FaInstagram,
+  linkedin: FaLinkedinIn,
+  x: FaXTwitter,
+  youtube: FaYoutube,
+  whatsapp: FaWhatsapp,
+} as const;
+
+function resolveSocialLinks(settings: Awaited<ReturnType<typeof fetchSiteSettings>>) {
+  if (!settings?.socialLinks?.length) return fallbackSocialLinks;
+
+  return settings.socialLinks
+    .filter((link): link is SiteSocialLink & { platform: keyof typeof socialIcons } => link.platform in socialIcons && Boolean(link.url))
+    .map((link) => ({ label: link.label, href: link.url, icon: socialIcons[link.platform] }));
+}
+export async function SiteFooter() {
+  const settings = await fetchSiteSettings();
+  const socialLinks = resolveSocialLinks(settings);
+  const siteName = settings?.siteName || "SAN TECH";
+
   return (
     <footer className="relative mt-auto flex min-h-[68px] shrink-0 flex-col items-center justify-center gap-1 overflow-hidden bg-[#0c1230] px-4 py-2 pb-3 text-center text-[11px] text-white sm:h-12.5 sm:min-h-0 sm:flex-row sm:justify-between sm:gap-4 sm:px-7 sm:pb-1 sm:text-left sm:text-xs">
-      <span>© 2026 SAN TECH. All rights reserved.</span>
+      <span>© {new Date().getFullYear()} {siteName}. All rights reserved.</span>
       <div className="flex items-center gap-2 sm:gap-3">
         <span className="hidden transition-colors hover:text-white sm:inline-flex">Turning Ideas into Technology, Technology into Impact.</span>
         <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />

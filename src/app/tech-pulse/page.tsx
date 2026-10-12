@@ -3,6 +3,15 @@ import { StickyPageMenu } from "@/components/sticky-page-menu";
 import { TechPulseSliderBrowser } from "@/components/tech-pulse-slider-browser";
 import { TechPulseOpportunities } from "@/components/tech-pulse-opportunities";
 import { fetchTechPulseArticles, fetchOpportunities } from "@/lib/strapi";
+import { createPageMetadata } from "@/lib/seo";
+
+export function generateMetadata() {
+  return createPageMetadata({
+    title: "Tech Pulse",
+    description: "News, announcements, opportunities, research, and stories from the SAN TECH ecosystem.",
+    path: "/tech-pulse",
+  });
+}
 
 const pulseMenu = [
   { key: "news", label: "News", href: "/tech-pulse" },

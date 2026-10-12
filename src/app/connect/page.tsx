@@ -4,6 +4,15 @@ import { ConnectDialog } from "@/components/connect-dialog";
 import { CalendlyDialog } from "@/components/calendly-dialog";
 import { fetchContactInfo } from "@/lib/strapi";
 import { ContactDetailsLabel, TurningIdeasLabel, LiveStreamLabel, ListenLiveLabel, GetDirectionsLabel } from "@/components/connect-labels";
+import { createPageMetadata } from "@/lib/seo";
+
+export function generateMetadata() {
+  return createPageMetadata({
+    title: "Connect with SAN TECH",
+    description: "Talk to SAN TECH about technology, innovation, training, visitor operations, and institutional systems.",
+    path: "/connect",
+  });
+}
 
 const FALLBACK_CONTACT = {
   phone1: "+250 783 250 033",

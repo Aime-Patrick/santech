@@ -10,11 +10,12 @@ import { CourseSectionNav } from "@/components/san-hub-course-section-nav";
 import { SanHubCourseEnrollButton } from "@/components/san-hub-course-enroll-button";
 import { SanHubCourseJourney } from "@/components/san-hub/san-hub-course-journey";
 import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import type { SanHubCatalogItem as CmsSanHubCatalogItem } from "@/lib/strapi";
 
 type CourseStat = { label: string; value: string; detail: string };
 type CourseCatalogItem = SanHubCatalogItem & { category: "Courses" };
 
-type CourseDetail = {
+export type CourseDetail = {
   subtitle: string;
   instructor: string;
   stats: readonly CourseStat[];
@@ -132,6 +133,54 @@ export function getSanHubCourse(courseId: string): SanHubCourse | undefined {
   const item = courseCatalogItems.find((catalogItem) => catalogItem.id === courseId);
   const detail = courseDetails[courseId];
   return item && detail ? { ...item, ...detail } : undefined;
+}
+
+export function getSanHubCourseFromCms(item: CmsSanHubCatalogItem): SanHubCourse {
+  const fallback = getSanHubCourse(item.itemId);
+  const cms = item.courseDetails;
+  const fallbackDetail: CourseDetail = fallback ?? {
+    subtitle: item.description,
+    instructor: item.provider ?? "SAN TECH / SAN HUB",
+    stats: [],
+    learningOutcomes: [],
+    skills: [],
+    tools: [],
+    details: [],
+    courseSeries: [],
+    testimonials: [],
+    rating: "",
+    reviewCount: "",
+  };
+
+  const courseItem: CourseCatalogItem = {
+    id: item.itemId,
+    category: "Courses",
+    focus: item.focus as CourseCatalogItem["focus"],
+    title: item.title,
+    provider: item.provider ?? "",
+    description: item.description,
+    image: item.image,
+    format: item.format ?? "",
+    duration: item.duration ?? "",
+    level: item.level ?? "",
+    badge: item.badge ?? undefined,
+    href: item.href ?? `/san-hub/course/${item.itemId}`,
+  };
+
+  return {
+    ...courseItem,
+    subtitle: cms?.subtitle ?? fallbackDetail.subtitle,
+    instructor: cms?.instructor ?? fallbackDetail.instructor,
+    stats: cms?.stats ?? fallbackDetail.stats,
+    learningOutcomes: cms?.learningOutcomes ?? fallbackDetail.learningOutcomes,
+    skills: cms?.skills ?? fallbackDetail.skills,
+    tools: cms?.tools ?? fallbackDetail.tools,
+    details: cms?.details ?? fallbackDetail.details,
+    courseSeries: cms?.courseSeries ?? fallbackDetail.courseSeries,
+    testimonials: cms?.courseTestimonials ?? fallbackDetail.testimonials,
+    rating: cms?.rating !== null && cms?.rating !== undefined ? String(cms.rating) : fallbackDetail.rating,
+    reviewCount: cms?.reviewCount ?? fallbackDetail.reviewCount,
+  };
 }
 
 function DetailIcon({ icon }: { icon: CourseDetail["details"][number]["icon"] }) {

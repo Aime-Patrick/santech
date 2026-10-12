@@ -19,6 +19,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useDebounce } from "@/lib/use-debounce";
+import { TechPulseEmptyState } from "@/components/tech-pulse-empty-state";
 
 export const opportunityTabs = [
   { id: "featured", label: "Featured" },
@@ -576,22 +577,11 @@ export function TechPulseOpportunities({ cmsOpportunities }: { cmsOpportunities?
       {/* 3. Opportunities Grid Cards */}
       <div className="mt-5" role="tabpanel" aria-label={`${activeTab} opportunities`}>
         {totalCards === 0 ? (
-          <div className="flex flex-col items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 p-10 text-center">
-            <Search className="size-8 text-slate-300" />
-            <p className="mt-2 text-sm font-bold text-[#0a1f44]">{t.noOpportunities}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Try adjusting your search query or selecting a different category tab.
-            </p>
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="mt-3 bg-[#0a1f44] px-3.5 py-1.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary"
-              >
-                Clear search filter
-              </button>
-            )}
-          </div>
+          <TechPulseEmptyState
+            title={t.noOpportunities}
+            description={t.noOpportunitiesDesc}
+            onClear={searchQuery ? () => setSearchQuery("") : undefined}
+          />
         ) : (
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

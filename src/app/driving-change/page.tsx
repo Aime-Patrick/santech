@@ -1,7 +1,16 @@
 import { PublicPage } from "@/components/public-page";
 import { StickyPageMenu } from "@/components/sticky-page-menu";
 import { DrivingChangeSliderBrowser } from "@/components/driving-change-slider-browser";
-import { fetchDrivingChangeStories } from "@/lib/strapi";
+import { fetchDrivingChangeStories, fetchDrivingChangeTopics, mapDrivingChangeTopicsToSections } from "@/lib/strapi";
+import { createPageMetadata } from "@/lib/seo";
+
+export function generateMetadata() {
+  return createPageMetadata({
+    title: "Driving Change",
+    description: "Explore SAN TECH stories of impact, practical learning, and career outreach across the ecosystem.",
+    path: "/driving-change",
+  });
+}
 
 const changeMenu = [
   { key: "impact", label: "Impact in action", href: "/driving-change?type=impact" },
@@ -18,7 +27,11 @@ export default async function DrivingChangePage({
   const activeSection: "impact" | "career" = rawKey === "career" ? "career" : "impact";
 
   // Fetch all stories from Strapi (filtering by section is optional — client can filter too)
-  const stories = await fetchDrivingChangeStories();
+  const [stories, topics] = await Promise.all([
+    fetchDrivingChangeStories(),
+    fetchDrivingChangeTopics(),
+  ]);
+  const sections = topics.length > 0 ? mapDrivingChangeTopicsToSections(topics) : undefined;
 
   return (
     <PublicPage>
@@ -30,7 +43,7 @@ export default async function DrivingChangePage({
       />
       <section className="border-t border-slate-200 px-3 pb-8 pt-2 sm:px-8 lg:px-12 lg:pb-10 lg:pt-3">
         <div className="mx-auto max-w-[1600px] border border-slate-200 bg-white p-4 sm:p-6 lg:p-7 shadow-xs">
-          <DrivingChangeSliderBrowser key={activeSection} sectionKey={activeSection} stories={stories} />
+          <DrivingChangeSliderBrowser key={activeSection} sectionKey={activeSection} stories={stories} sections={sections} />
         </div>
       </section>
     </PublicPage>

@@ -15,6 +15,7 @@ export type TechPulseArticle = {
   slug: string;
   category: TechPulseCategory;
   categoryLabel: string;
+  relatedSlugs?: string[];
   title: string;
   date: string;
   publishedAt: string;

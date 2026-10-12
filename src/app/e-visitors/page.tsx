@@ -1,12 +1,22 @@
 import { EVisitorsProductPage } from "@/components/e-visitors-product-page";
-import { fetchTestimonials, fetchEVisitorsFeatures, fetchProductMilestones, fetchFaqItems } from "@/lib/strapi";
+import { fetchTestimonials, fetchEVisitorsFeatures, fetchProductMilestones, fetchFaqItems, fetchSiteSettings } from "@/lib/strapi";
+import { createPageMetadata } from "@/lib/seo";
+
+export function generateMetadata() {
+  return createPageMetadata({
+    title: "E-Visitors",
+    description: "A connected visitor and access-management platform for safer, more visible institutions.",
+    path: "/e-visitors",
+  });
+}
 
 export default async function EVisitorsPage() {
-  const [cmsTestimonials, cmsFeatures, cmsMilestones, cmsFaqs] = await Promise.all([
+  const [cmsTestimonials, cmsFeatures, cmsMilestones, cmsFaqs, siteSettings] = await Promise.all([
     fetchTestimonials(),
     fetchEVisitorsFeatures(),
     fetchProductMilestones("e-visitors"),
     fetchFaqItems("e-visitors"),
+    fetchSiteSettings(),
   ]);
   return (
     <EVisitorsProductPage
@@ -14,6 +24,7 @@ export default async function EVisitorsPage() {
       cmsFeatures={cmsFeatures}
       cmsMilestones={cmsMilestones}
       cmsFaqs={cmsFaqs}
+      videoPoster={siteSettings?.eVisitorsVideoPoster ?? siteSettings?.homepageVideoPoster ?? undefined}
     />
   );
 }

@@ -72,7 +72,6 @@ export function SanHubImpactSection() {
             );
           })}
         </div>
-        <p className="mt-5 text-xs leading-5 text-slate-500">Figures should be presented with the applicable reporting period and updated regularly as the SAN HUB database grows.</p>
       </div>
     </section>
   );

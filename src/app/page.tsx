@@ -2,6 +2,15 @@ import { SantechHomeStage } from "@/components/santech-home-stage";
 import { SiteHeader } from "@/components/site-header";
 import { CircuitBackground } from "@/components/ui/circuit-background";
 import { fetchSiteStats, fetchPartnerBrands, fetchHomeStorySlides } from "@/lib/strapi";
+import { createPageMetadata } from "@/lib/seo";
+
+export function generateMetadata() {
+  return createPageMetadata({
+    title: "Technology. Innovation. Impact.",
+    description: "SAN TECH builds technology, skills, and innovation systems for a more connected Africa.",
+    path: "/",
+  });
+}
 
 // Hardcoded fallbacks — used when Strapi is empty or unreachable
 const FALLBACK_STATS: [number, string, string][] = [

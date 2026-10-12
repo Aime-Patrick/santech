@@ -3,12 +3,14 @@ export type DrivingChangeMenuKey = "impact" | "career";
 export type DrivingChangeSection = {
   key: DrivingChangeMenuKey;
   label: string;
-  categories: readonly {
-    id: string;
-    num: string;
-    label: string;
-    subtitle: string;
-  }[];
+  categories: readonly DrivingChangeTopic[];
+};
+
+export type DrivingChangeTopic = {
+  id: string;
+  num: string;
+  label: string;
+  subtitle: string;
 };
 
 export const drivingChangeSections: readonly DrivingChangeSection[] = [

@@ -36,10 +36,11 @@ function mapCmsInnovationItem(
       description: f.description,
       // icon is a client-side concern — not stored in CMS
     })),
+    modules: item.modules,
     media: {
       kind: item.mediaKind,
-      src: item.mediaImage || "/images/second-image.jpeg",
-      images: item.mediaImages.length > 0 ? item.mediaImages : undefined,
+      src: item.detailImage || item.mediaImage || "/images/second-image.jpeg",
+      images: item.detailImages.length > 0 ? item.detailImages : item.mediaImages.length > 0 ? item.mediaImages : undefined,
       alt: item.mediaAlt,
     },
   };
@@ -53,12 +54,12 @@ function mapCmsServiceItem(
     label: item.label,
     title: item.label,
     description: item.description,
-    coreFeatures: [
+    coreFeatures: item.coreFeatures.length > 0 ? item.coreFeatures.map((feature) => ({ label: feature.label, description: feature.description })) : [
       { label: "Main services", description: item.description },
       { label: "Delivery model", description: "Move from discovery and requirements through design, development, deployment, training, and support." },
       { label: "Built for growth", description: "Create technology that fits real operational needs and can grow with the organization." },
     ],
-    media: { kind: "image", src: "/images/second-image.jpeg", alt: `SAN TECH ${item.label} team` },
+    media: { kind: item.mediaKind, src: item.mediaImage || "/images/second-image.jpeg", images: item.mediaImages.length > 0 ? item.mediaImages : undefined, alt: item.mediaAlt },
   };
 }
 
@@ -71,8 +72,8 @@ function mapCmsSolutionItem(
     title: item.label,
     description: item.description,
     subItems: item.subItems,
-    coreFeatures: [],
-    media: { kind: "image", src: "/images/summit.jpg", alt: `SAN TECH ${item.label} solution` },
+    coreFeatures: item.coreFeatures.map((feature) => ({ label: feature.label, description: feature.description })),
+    media: { kind: item.mediaKind, src: item.mediaImage || "/images/summit.jpg", images: item.mediaImages.length > 0 ? item.mediaImages : undefined, alt: item.mediaAlt },
   };
 }
 

@@ -9,7 +9,6 @@ import {
   ArrowUpRight, 
   CalendarDays, 
   Clock3, 
-  Newspaper,
   Pause, 
   Play 
 } from "lucide-react";
@@ -17,6 +16,7 @@ import { motion, AnimatePresence } from "motion/react";
 import type { TechPulseCategory } from "@/lib/tech-pulse-data";
 import type { CmsArticle } from "@/lib/strapi";
 import { useUiCopy } from "@/lib/use-ui-copy";
+import { TechPulseEmptyState } from "@/components/tech-pulse-empty-state";
 
 export type TechPulseTopic = {
   id: string;
@@ -208,16 +208,7 @@ export function TechPulseSliderBrowser({
 
         {/* Cards Grid with Category Filtered Content */}
         {visibleCards.length === 0 ? (
-          <div className="flex min-h-[270px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-[#f8fafc] px-6 py-12 text-center">
-            <span className="grid size-14 place-items-center rounded-full bg-[#e8f3f8] text-brand-secondary">
-              <Newspaper className="size-6" aria-hidden="true" />
-            </span>
-            <h3 className="font-exo mt-5 text-xl font-bold tracking-[-0.03em] text-[#0a1f44]">{ui.noStoriesYet}</h3>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">{ui.noStoriesDesc}</p>
-            <Link href="/tech-pulse" className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#0a1f44] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2">
-              Return to Tech Pulse <ArrowUpRight className="size-4" aria-hidden="true" />
-            </Link>
-          </div>
+          <TechPulseEmptyState title={ui.noStoriesYet} description={ui.noStoriesDesc} />
         ) : (
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

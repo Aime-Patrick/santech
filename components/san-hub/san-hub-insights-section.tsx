@@ -226,11 +226,6 @@ export function SanHubInsightsSection() {
             </div>
           </div>
         </div>
-
-        <div className="mt-8 border-t border-slate-200 pt-6">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-brand-secondary">More categories coming</p>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Technology trends, cybersecurity updates, career guidance, research findings, industry analysis, opportunity alerts, funding opportunities, and technology challenges are ready for future SAN HUB publications.</p>
-        </div>
       </div>
     </section>
   );

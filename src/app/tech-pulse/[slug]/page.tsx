@@ -7,6 +7,7 @@ import { TechPulseShare } from "@/components/tech-pulse-share";
 import { TechPulseRelatedStories } from "@/components/tech-pulse-related-stories";
 import { techPulseArticles } from "@/lib/tech-pulse-data";
 import { fetchTechPulseArticleBySlug, fetchTechPulseArticles, fetchAllTechPulseSlugs } from "@/lib/strapi";
+import { createPageMetadata } from "@/lib/seo";
 
 /**
  * Pre-render all slugs that Strapi knows about.
@@ -21,6 +22,18 @@ export async function generateStaticParams() {
     // Strapi unreachable — use hardcoded fallback
   }
   return techPulseArticles.map((article) => ({ slug: article.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const article = (await fetchTechPulseArticleBySlug(slug)) ?? techPulseArticles.find((candidate) => candidate.slug === slug);
+
+  return createPageMetadata({
+    title: article?.title || "Tech Pulse story",
+    description: article?.excerpt || "Stories and announcements from the SAN TECH ecosystem.",
+    path: `/tech-pulse/${slug}`,
+    image: article?.image,
+  });
 }
 
 export default async function TechPulseArticlePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -42,13 +55,20 @@ export default async function TechPulseArticlePage({ params }: { params: Promise
     // Use the bundled stories when Strapi is unavailable during a build or request.
   }
   const availableArticles = cmsArticles.length > 0 ? cmsArticles : techPulseArticles;
-  const relatedArticles = [...availableArticles]
-    .filter((candidate) => candidate.slug !== article.slug)
-    .sort((a, b) => {
-      const categoryPriority = Number(b.category === article.category) - Number(a.category === article.category);
-      return categoryPriority || b.publishedAt.localeCompare(a.publishedAt);
-    })
-    .slice(0, 3);
+  const explicitRelated = "relatedSlugs" in article ? (article.relatedSlugs ?? []) : [];
+  const bySlug = new Map(availableArticles.map((candidate) => [candidate.slug, candidate]));
+  const relatedArticles = [
+    ...explicitRelated
+      .map((relatedSlug) => bySlug.get(relatedSlug))
+      .filter((candidate): candidate is (typeof availableArticles)[number] => Boolean(candidate)),
+    ...availableArticles
+      .filter((candidate) => candidate.slug !== article.slug && !explicitRelated.includes(candidate.slug))
+      .sort((a, b) => {
+        const categoryPriority = Number(b.category === article.category) - Number(a.category === article.category);
+        const newsPriority = Number(["news", "announcements"].includes(b.category)) - Number(["news", "announcements"].includes(a.category));
+        return categoryPriority || newsPriority || b.publishedAt.localeCompare(a.publishedAt);
+      }),
+  ].slice(0, 3);
 
   return (
     <PublicPage>
