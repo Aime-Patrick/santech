@@ -18,7 +18,7 @@ export function generateStaticParams() {
 /** Map a CMS item to the local SanHubCatalogItem shape */
 function mapCmsItem(i: Awaited<ReturnType<typeof fetchSanHubCatalogItems>>[number]): SanHubCatalogItem {
   return {
-    id: i.itemId,
+    id: i.slug,
     category: i.category as SanHubCatalogItem["category"],
     courseCategory: i.courseCategory?.name as SanHubCatalogItem["courseCategory"] | undefined,
     title: i.title,
@@ -29,7 +29,7 @@ function mapCmsItem(i: Awaited<ReturnType<typeof fetchSanHubCatalogItems>>[numbe
     duration: i.duration ?? "",
     level: i.level ?? "",
     badge: i.badge ?? undefined,
-    href: getSanHubCatalogHref({ id: i.itemId, category: i.category as SanHubCatalogItem["category"] }),
+    href: getSanHubCatalogHref({ id: i.slug, category: i.category as SanHubCatalogItem["category"] }),
   };
 }
 

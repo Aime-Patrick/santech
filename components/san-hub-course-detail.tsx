@@ -136,7 +136,7 @@ export function getSanHubCourse(courseId: string): SanHubCourse | undefined {
 }
 
 export function getSanHubCourseFromCms(item: CmsSanHubCatalogItem): SanHubCourse {
-  const fallback = getSanHubCourse(item.itemId);
+  const fallback = getSanHubCourse(item.slug);
   const cms = item.courseDetails;
   const fallbackDetail: CourseDetail = fallback ?? {
     subtitle: item.description,
@@ -153,7 +153,7 @@ export function getSanHubCourseFromCms(item: CmsSanHubCatalogItem): SanHubCourse
   };
 
   const courseItem: CourseCatalogItem = {
-    id: item.itemId,
+    id: item.slug,
     category: "Courses",
     courseCategory: item.courseCategory?.name as CourseCatalogItem["courseCategory"],
     title: item.title,
@@ -164,7 +164,7 @@ export function getSanHubCourseFromCms(item: CmsSanHubCatalogItem): SanHubCourse
     duration: item.duration ?? "",
     level: item.level ?? "",
     badge: item.badge ?? undefined,
-    href: getSanHubCatalogHref({ id: item.itemId, category: "Courses" }),
+    href: getSanHubCatalogHref({ id: item.slug, category: "Courses" }),
   };
 
   return {

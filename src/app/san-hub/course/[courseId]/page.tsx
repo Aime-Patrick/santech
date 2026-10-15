@@ -9,7 +9,7 @@ export async function generateStaticParams() {
     "full-stack-software-engineering",
     "applied-ai-machine-learning",
     "cybersecurity-defense",
-    ...cmsItems.map((item) => item.itemId),
+    ...cmsItems.map((item) => item.slug),
   ]);
   return [...courseIds].map((courseId) => ({ courseId }));
 }
@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await params;
   const cmsItems = await fetchSanHubCatalogItems("Courses");
-  const cmsItem = cmsItems.find((item) => item.itemId === courseId);
+  const cmsItem = cmsItems.find((item) => item.slug === courseId);
   const course = cmsItem ? getSanHubCourseFromCms(cmsItem) : getSanHubCourse(courseId);
 
   return createPageMetadata({
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ courseId:
 export default async function SanHubCoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await params;
   const cmsItems = await fetchSanHubCatalogItems("Courses");
-  const cmsItem = cmsItems.find((item) => item.itemId === courseId);
+  const cmsItem = cmsItems.find((item) => item.slug === courseId);
   const course = cmsItem ? getSanHubCourseFromCms(cmsItem) : getSanHubCourse(courseId);
   if (!course) notFound();
   return <SanHubCourseDetail course={course} />;

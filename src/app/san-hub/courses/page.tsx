@@ -21,7 +21,7 @@ export default async function SanHubCoursesPage() {
 
   const courseItems: readonly SanHubCatalogItem[] = cmsItems.length > 0
     ? cmsItems.map((i) => ({
-        id: i.itemId,
+        id: i.slug,
         category: "Courses" as const,
         courseCategory: i.courseCategory?.name as SanHubCatalogItem["courseCategory"] | undefined,
         title: i.title,
@@ -32,7 +32,7 @@ export default async function SanHubCoursesPage() {
         duration: i.duration ?? "",
         level: i.level ?? "",
         badge: i.badge ?? undefined,
-        href: getSanHubCatalogHref({ id: i.itemId, category: "Courses" }),
+        href: getSanHubCatalogHref({ id: i.slug, category: "Courses" }),
       }))
     : sanHubCatalogItems.filter((item) => item.category === "Courses");
 

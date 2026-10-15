@@ -38,7 +38,7 @@ export default async function SanHubPage({ searchParams }: { searchParams: Promi
   ]);
   const catalogItems: readonly SanHubCatalogItem[] = cmsItems.length > 0
     ? cmsItems.map((i) => ({
-        id: i.itemId,
+        id: i.slug,
         category: i.category as SanHubCatalogItem["category"],
         courseCategory: i.courseCategory?.name as SanHubCatalogItem["courseCategory"] | undefined,
         title: i.title,
@@ -49,7 +49,7 @@ export default async function SanHubPage({ searchParams }: { searchParams: Promi
         duration: i.duration ?? "",
         level: i.level ?? "",
         badge: i.badge ?? undefined,
-        href: getSanHubCatalogHref({ id: i.itemId, category: i.category as SanHubCatalogItem["category"] }),
+        href: getSanHubCatalogHref({ id: i.slug, category: i.category as SanHubCatalogItem["category"] }),
       }))
     : sanHubProgramItems;
 

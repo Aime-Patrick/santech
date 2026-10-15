@@ -496,7 +496,8 @@ function normalizeCourseRelations(items: StrapiCourseRelation[] | null | undefin
 
 export type SanHubCatalogItem = {
   id: number;
-  itemId: string;
+  documentId: string;
+  slug: string;
   category: string;
   courseCategory: { name: string; slug: string } | null;
   title: string;
@@ -538,7 +539,8 @@ export async function fetchSanHubCatalogItems(
   const json: {
     data: Array<{
       id: number;
-      itemId: string;
+      documentId: string;
+      slug: string;
       category: string;
       courseCategory: { name: string; slug: string } | null;
       title: string;
@@ -565,7 +567,8 @@ export async function fetchSanHubCatalogItems(
 
   return (json.data ?? []).map((item) => ({
     id: item.id,
-    itemId: item.itemId,
+    documentId: item.documentId,
+    slug: item.slug,
     category: item.category,
     courseCategory: item.courseCategory,
     title: item.title,
