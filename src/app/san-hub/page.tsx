@@ -10,7 +10,7 @@ import { SanHubSectionReveal } from "@/components/san-hub/san-hub-section-reveal
 import { SanHubTractionSection } from "@/components/san-hub/san-hub-traction-section";
 import { SanHubTestimonialSection } from "@/components/san-hub/san-hub-testimonial-section";
 import { fetchSanHubCatalogItems, fetchSanHubBooks, fetchTestimonials } from "@/lib/strapi";
-import { sanHubProgramItems } from "@/lib/san-hub-catalog-data";
+import { getSanHubCatalogHref, sanHubProgramItems } from "@/lib/san-hub-catalog-data";
 import type { SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 import { createPageMetadata } from "@/lib/seo";
 
@@ -49,7 +49,7 @@ export default async function SanHubPage({ searchParams }: { searchParams: Promi
         duration: i.duration ?? "",
         level: i.level ?? "",
         badge: i.badge ?? undefined,
-        href: i.href ?? "#",
+        href: getSanHubCatalogHref({ id: i.itemId, category: i.category as SanHubCatalogItem["category"] }),
       }))
     : sanHubProgramItems;
 

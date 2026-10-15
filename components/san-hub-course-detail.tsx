@@ -9,7 +9,7 @@ import { PublicPage } from "@/components/public-page";
 import { CourseSectionNav } from "@/components/san-hub-course-section-nav";
 import { SanHubCourseEnrollButton } from "@/components/san-hub-course-enroll-button";
 import { SanHubCourseJourney } from "@/components/san-hub/san-hub-course-journey";
-import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import { getSanHubCatalogHref, sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 import type { SanHubCatalogItem as CmsSanHubCatalogItem } from "@/lib/strapi";
 
 type CourseStat = { label: string; value: string; detail: string };
@@ -164,7 +164,7 @@ export function getSanHubCourseFromCms(item: CmsSanHubCatalogItem): SanHubCourse
     duration: item.duration ?? "",
     level: item.level ?? "",
     badge: item.badge ?? undefined,
-    href: item.href ?? `/san-hub/course/${item.itemId}`,
+    href: getSanHubCatalogHref({ id: item.itemId, category: "Courses" }),
   };
 
   return {

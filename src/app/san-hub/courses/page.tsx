@@ -2,7 +2,7 @@ import { PublicPage } from "@/components/public-page";
 import { SanHubCourseCatalog } from "@/components/san-hub/san-hub-course-catalog";
 import { SanHubSectionMenu } from "@/components/san-hub/san-hub-section-menu";
 import { fetchSanHubCatalogItems } from "@/lib/strapi";
-import { sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import { getSanHubCatalogHref, sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 import { createPageMetadata } from "@/lib/seo";
 
 export function generateMetadata() {
@@ -29,7 +29,7 @@ export default async function SanHubCoursesPage() {
         duration: i.duration ?? "",
         level: i.level ?? "",
         badge: i.badge ?? undefined,
-        href: i.href ?? "#",
+        href: getSanHubCatalogHref({ id: i.itemId, category: "Courses" }),
       }))
     : sanHubCatalogItems.filter((item) => item.category === "Courses");
 

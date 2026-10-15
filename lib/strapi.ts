@@ -494,7 +494,6 @@ export type SanHubCatalogItem = {
   duration: string | null;
   level: string | null;
   badge: string | null;
-  href: string | null;
   courseDetails: SanHubCourseDetails | null;
 };
 
@@ -529,7 +528,6 @@ export async function fetchSanHubCatalogItems(
       duration: string | null;
       level: string | null;
       badge: string | null;
-      href: string | null;
       subtitle: string | null;
       instructor: string | null;
       stats: SanHubCourseDetails["stats"];
@@ -557,7 +555,6 @@ export async function fetchSanHubCatalogItems(
     duration: item.duration,
     level: item.level,
     badge: item.badge,
-    href: item.href,
     courseDetails: item.category === "Courses"
       ? {
           subtitle: item.subtitle,

@@ -21,6 +21,30 @@ export const sanHubCourseFocusAreas = [
 
 export type SanHubCourseFocus = (typeof sanHubCourseFocusAreas)[number];
 
+/** Build the internal destination for a CMS catalog item without storing a manual URL. */
+export function getSanHubCatalogHref(item: Pick<SanHubCatalogItem, "id" | "category">): string {
+  if (item.category === "Courses") return `/san-hub/course/${item.id}`;
+
+  if (item.category === "Programs") {
+    const programRoutes: Record<string, string> = {
+      devbreak: "/san-hub/explore/build",
+      "capacity-building": "/san-hub/courses",
+      "research-development": "/san-hub/explore/research",
+      apprenticeship: "/san-hub/explore/work",
+    };
+    return programRoutes[item.id] ?? "/san-hub";
+  }
+
+  const categoryRoutes: Partial<Record<SanHubCategory, string>> = {
+    "Upcoming training": "/connect?topic=upcoming-training",
+    "Innovation programs": "/innovation-lab",
+    "Apprenticeships / Internships": "/join-the-community?role=Intern",
+    "Upskilling programs": "/connect?topic=upskilling",
+    Events: "/tech-pulse",
+  };
+  return categoryRoutes[item.category] ?? "/san-hub";
+}
+
 export type SanHubCatalogItem = {
   id: string;
   category: SanHubCategory;

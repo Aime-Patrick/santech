@@ -8,7 +8,7 @@ import { SanHubLearnExperience } from "@/components/san-hub/san-hub-learn-experi
 import { SanHubSectionMenu } from "@/components/san-hub/san-hub-section-menu";
 import { SanHubSectionReveal } from "@/components/san-hub/san-hub-section-reveal";
 import { getSanHubExploreRoute, sanHubExploreRoutes, type SanHubExploreRouteId } from "@/lib/san-hub-explore-data";
-import { sanHubCatalogItems, sanHubProgramItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import { getSanHubCatalogHref, sanHubCatalogItems, sanHubProgramItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 import { fetchSanHubCatalogItems } from "@/lib/strapi";
 
 export function generateStaticParams() {
@@ -29,7 +29,7 @@ function mapCmsItem(i: Awaited<ReturnType<typeof fetchSanHubCatalogItems>>[numbe
     duration: i.duration ?? "",
     level: i.level ?? "",
     badge: i.badge ?? undefined,
-    href: i.href ?? "#",
+    href: getSanHubCatalogHref({ id: i.itemId, category: i.category as SanHubCatalogItem["category"] }),
   };
 }
 
