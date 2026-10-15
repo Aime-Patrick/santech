@@ -40,7 +40,7 @@ export default async function SanHubPage({ searchParams }: { searchParams: Promi
     ? cmsItems.map((i) => ({
         id: i.itemId,
         category: i.category as SanHubCatalogItem["category"],
-        focus: i.focus as SanHubCatalogItem["focus"] | undefined,
+        courseCategory: i.courseCategory?.name as SanHubCatalogItem["courseCategory"] | undefined,
         title: i.title,
         provider: i.provider ?? "",
         description: i.description,

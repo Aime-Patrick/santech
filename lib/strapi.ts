@@ -481,11 +481,24 @@ export type SanHubCourseDetails = {
   reviewCount: string | null;
 };
 
+type StrapiCourseListItem = { value?: string | null } | string;
+type StrapiCourseRelation = { name?: string | null } | string;
+
+function normalizeCourseList(items: StrapiCourseListItem[] | null | undefined): string[] | null {
+  if (!items) return null;
+  return items.map((item) => typeof item === "string" ? item : item.value ?? "").filter(Boolean);
+}
+
+function normalizeCourseRelations(items: StrapiCourseRelation[] | null | undefined): string[] | null {
+  if (!items) return null;
+  return items.map((item) => typeof item === "string" ? item : item.name ?? "").filter(Boolean);
+}
+
 export type SanHubCatalogItem = {
   id: number;
   itemId: string;
   category: string;
-  focus: string | null;
+  courseCategory: { name: string; slug: string } | null;
   title: string;
   provider: string | null;
   description: string;
@@ -504,6 +517,14 @@ export async function fetchSanHubCatalogItems(
   const params = new URLSearchParams();
   params.set("sort[0]", "sortOrder:asc");
   params.set("populate[image][fields][0]", "url");
+  params.set("populate[courseCategory]", "true");
+  params.set("populate[stats]", "true");
+  params.set("populate[learningOutcomes]", "true");
+  params.set("populate[skills]", "true");
+  params.set("populate[tools]", "true");
+  params.set("populate[details]", "true");
+  params.set("populate[courseSeries]", "true");
+  params.set("populate[courseTestimonials]", "true");
   params.set("pagination[pageSize]", "100");
   if (category) params.set("filters[category][$eq]", category);
 
@@ -519,7 +540,7 @@ export async function fetchSanHubCatalogItems(
       id: number;
       itemId: string;
       category: string;
-      focus: string | null;
+      courseCategory: { name: string; slug: string } | null;
       title: string;
       provider: string | null;
       description: string;
@@ -531,9 +552,9 @@ export async function fetchSanHubCatalogItems(
       subtitle: string | null;
       instructor: string | null;
       stats: SanHubCourseDetails["stats"];
-      learningOutcomes: string[] | null;
-      skills: string[] | null;
-      tools: string[] | null;
+      learningOutcomes: StrapiCourseListItem[] | null;
+      skills: StrapiCourseRelation[] | null;
+      tools: StrapiCourseRelation[] | null;
       details: SanHubCourseDetails["details"];
       courseSeries: SanHubCourseDetails["courseSeries"];
       courseTestimonials: SanHubCourseDetails["courseTestimonials"];
@@ -546,7 +567,7 @@ export async function fetchSanHubCatalogItems(
     id: item.id,
     itemId: item.itemId,
     category: item.category,
-    focus: item.focus,
+    courseCategory: item.courseCategory,
     title: item.title,
     provider: item.provider,
     description: item.description,
@@ -560,9 +581,9 @@ export async function fetchSanHubCatalogItems(
           subtitle: item.subtitle,
           instructor: item.instructor,
           stats: item.stats,
-          learningOutcomes: item.learningOutcomes,
-          skills: item.skills,
-          tools: item.tools,
+          learningOutcomes: normalizeCourseList(item.learningOutcomes),
+          skills: normalizeCourseRelations(item.skills),
+          tools: normalizeCourseRelations(item.tools),
           details: item.details,
           courseSeries: item.courseSeries,
           courseTestimonials: item.courseTestimonials,
@@ -1491,5 +1512,45 @@ export async function fetchStandards(): Promise<Standard[]> {
     image: item.image?.url ? resolveMediaUrl(item.image.url) : "",
     imageAlt: item.imageAlt,
     url: item.url,
+  }));
+}
+
+export type SanHubCourseCategory = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  sortOrder: number;
+};
+
+export async function fetchSanHubCourseCategories(): Promise<SanHubCourseCategory[]> {
+  const params = new URLSearchParams();
+  params.set("sort[0]", "sortOrder:asc");
+  params.set("filters[isActive][$eq]", "true");
+  params.set("pagination[pageSize]", "100");
+
+  const url = `${STRAPI_URL}/api/course-categories?${params.toString()}`;
+  const res = await safeFetch(url, { next: { revalidate: 60 } });
+  if (!res || !res.ok) {
+    reportStrapiResponseFailure("fetchSanHubCourseCategories", res);
+    return [];
+  }
+
+  const json: {
+    data: Array<{
+      id: number;
+      name: string;
+      slug: string;
+      description: string | null;
+      sortOrder: number;
+    }>;
+  } = await res.json();
+
+  return (json.data ?? []).map((item) => ({
+    id: item.id,
+    name: item.name,
+    slug: item.slug,
+    description: item.description,
+    sortOrder: item.sortOrder ?? 0,
   }));
 }

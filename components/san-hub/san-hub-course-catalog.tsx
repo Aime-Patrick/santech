@@ -17,10 +17,11 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { BorderBeam } from "@/components/ui/border-beam";
 import { PhoneNumberField } from "@/components/phone-number-field";
-import { sanHubCourseFocusAreas, type SanHubCatalogItem, type SanHubCourseFocus } from "@/lib/san-hub-catalog-data";
+import { sanHubCourseCategories, type SanHubCatalogItem, type SanHubCourseCategory } from "@/lib/san-hub-catalog-data";
 
 type CourseCatalogProps = {
   items: readonly SanHubCatalogItem[];
+  categories?: readonly string[];
 };
 
 function normalize(value: string) {
@@ -73,7 +74,7 @@ function CourseCard({ item, index, onEnroll }: { item: SanHubCatalogItem; index:
       <div>
         <Link href={item.href} className="relative block aspect-[16/10] w-full overflow-hidden bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-inset">
           <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 280px, (min-width: 640px) 340px, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-105" />
-          <span className="absolute left-2.5 top-2.5 bg-[#0a1f44] px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-white">{item.focus ?? item.category}</span>
+          <span className="absolute left-2.5 top-2.5 bg-[#0a1f44] px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-white">{item.courseCategory ?? item.category}</span>
         </Link>
 
         <div className="mt-2.5 flex items-center justify-between gap-2 text-[10px] font-semibold text-slate-500">
@@ -102,9 +103,9 @@ function CourseCard({ item, index, onEnroll }: { item: SanHubCatalogItem; index:
   );
 }
 
-export function SanHubCourseCatalog({ items }: CourseCatalogProps) {
+export function SanHubCourseCatalog({ items, categories = sanHubCourseCategories }: CourseCatalogProps) {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<"all" | SanHubCourseFocus>("all");
+  const [category, setCategory] = useState<"all" | SanHubCourseCategory>("all");
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
   const [selectedItem, setSelectedItem] = useState<SanHubCatalogItem | null>(null);
@@ -114,19 +115,19 @@ export function SanHubCourseCatalog({ items }: CourseCatalogProps) {
   const categoryOptions = useMemo(() => {
     return [
       { id: "all" as const, label: "All courses", count: items.length },
-      ...sanHubCourseFocusAreas.map((id) => ({
+      ...categories.map((id) => ({
         id,
         label: id,
-        count: items.filter((item) => item.focus === id).length,
+        count: items.filter((item) => item.courseCategory === id).length,
       })),
     ];
-  }, [items]);
+  }, [categories, items]);
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = normalize(query);
     return items.filter((item) => {
-      const matchesCategory = category === "all" || item.focus === category;
-      const searchable = normalize(`${item.title} ${item.category} ${item.provider} ${item.description} ${item.format} ${item.level}`);
+      const matchesCategory = category === "all" || item.courseCategory === category;
+      const searchable = normalize(`${item.title} ${item.category} ${item.courseCategory ?? ""} ${item.provider} ${item.description} ${item.format} ${item.level}`);
       return matchesCategory && (!normalizedQuery || searchable.includes(normalizedQuery));
     });
   }, [category, items, query]);
@@ -145,7 +146,7 @@ export function SanHubCourseCatalog({ items }: CourseCatalogProps) {
     return () => window.clearInterval(timer);
   }, [isAutoPlaying, pageCount, prefersReducedMotion]);
 
-  function selectCategory(nextCategory: "all" | SanHubCourseFocus) {
+  function selectCategory(nextCategory: "all" | SanHubCourseCategory) {
     setCategory(nextCategory);
     setCurrentPage(0);
   }

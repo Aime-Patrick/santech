@@ -155,7 +155,7 @@ export function getSanHubCourseFromCms(item: CmsSanHubCatalogItem): SanHubCourse
   const courseItem: CourseCatalogItem = {
     id: item.itemId,
     category: "Courses",
-    focus: item.focus as CourseCatalogItem["focus"],
+    courseCategory: item.courseCategory?.name as CourseCatalogItem["courseCategory"],
     title: item.title,
     provider: item.provider ?? "",
     description: item.description,

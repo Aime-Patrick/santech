@@ -1,8 +1,8 @@
 import { PublicPage } from "@/components/public-page";
 import { SanHubCourseCatalog } from "@/components/san-hub/san-hub-course-catalog";
 import { SanHubSectionMenu } from "@/components/san-hub/san-hub-section-menu";
-import { fetchSanHubCatalogItems } from "@/lib/strapi";
-import { getSanHubCatalogHref, sanHubCatalogItems, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
+import { fetchSanHubCatalogItems, fetchSanHubCourseCategories } from "@/lib/strapi";
+import { getSanHubCatalogHref, sanHubCatalogItems, sanHubCourseCategories, type SanHubCatalogItem } from "@/lib/san-hub-catalog-data";
 import { createPageMetadata } from "@/lib/seo";
 
 export function generateMetadata() {
@@ -14,13 +14,16 @@ export function generateMetadata() {
 }
 
 export default async function SanHubCoursesPage() {
-  const cmsItems = await fetchSanHubCatalogItems("Courses", { fresh: true });
+  const [cmsItems, cmsCategories] = await Promise.all([
+    fetchSanHubCatalogItems("Courses", { fresh: true }),
+    fetchSanHubCourseCategories(),
+  ]);
 
   const courseItems: readonly SanHubCatalogItem[] = cmsItems.length > 0
     ? cmsItems.map((i) => ({
         id: i.itemId,
         category: "Courses" as const,
-        focus: i.focus as SanHubCatalogItem["focus"] | undefined,
+        courseCategory: i.courseCategory?.name as SanHubCatalogItem["courseCategory"] | undefined,
         title: i.title,
         provider: i.provider ?? "",
         description: i.description,
@@ -36,7 +39,7 @@ export default async function SanHubCoursesPage() {
   return (
     <PublicPage>
       <SanHubSectionMenu activeSection="courses" />
-      <SanHubCourseCatalog items={courseItems} />
+      <SanHubCourseCatalog items={courseItems} categories={cmsCategories.length > 0 ? cmsCategories.map((item) => item.name) : sanHubCourseCategories} />
     </PublicPage>
   );
 }
