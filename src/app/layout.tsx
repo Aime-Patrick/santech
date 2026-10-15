@@ -43,6 +43,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={exo.variable} data-scroll-behavior="smooth">
       <body className={exo.className}>
+        <Script id="santech-language-scale-init" strategy="beforeInteractive">
+          {`try {
+            var savedLanguage = window.localStorage && window.localStorage.getItem("santech_lang");
+            if (savedLanguage && savedLanguage !== "en") {
+              document.documentElement.dataset.santechLanguage = savedLanguage;
+            }
+          } catch (_) {}`}
+        </Script>
         {children}
         <Script id="google-translate-init" strategy="afterInteractive">
           {`window.googleTranslateElementInit = function () {

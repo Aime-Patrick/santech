@@ -83,6 +83,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
 
   useEffect(() => {
     document.documentElement.lang = language === "ch" ? "zh-CN" : language;
+    document.documentElement.dataset.santechLanguage = language;
   }, [language]);
 
   useEffect(() => {

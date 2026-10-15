@@ -45,6 +45,24 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-exo, "Exo"), "Exo", sans-serif !important;
+  --santech-language-scale: 1;
+}
+
+/* Translated copy can be considerably longer than the English source. Keep
+   the original English scale, but compact the rem-based type and spacing for
+   translated pages so headings, cards, and navigation have room to wrap. */
+html[data-santech-language="rw"] {
+  --santech-language-scale: 0.9;
+  font-size: 90%;
+}
+
+html[data-santech-language="fr"],
+html[data-santech-language="sw"],
+html[data-santech-language="ch"],
+html[data-santech-language="hi"],
+html[data-santech-language="br"] {
+  --santech-language-scale: 0.92;
+  font-size: 92%;
 }
 
 body {
@@ -52,7 +70,7 @@ body {
   background: var(--ink);
   color: var(--foreground);
   font-family: var(--font-exo, "Exo"), "Exo", sans-serif !important;
-  font-size: 14px;
+  font-size: calc(14px * var(--santech-language-scale));
   font-optical-sizing: auto;
 }
 
@@ -155,7 +173,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, .fon
   font-optical-sizing: auto;
 }
 
-.text-xs { font-size: 14px; line-height: 1.25rem; }
+.text-xs { font-size: calc(14px * var(--santech-language-scale)); line-height: 1.25rem; }
 a { text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
 
