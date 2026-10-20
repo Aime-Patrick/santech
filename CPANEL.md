@@ -12,7 +12,7 @@ In **cPanel -> Setup Node.js App**, create an application with:
 | Application mode | Production |
 | Application root | santech-f |
 | Application URL | the SAN TECH domain |
-| Application startup file | server.js |
+| Application startup file | server.cjs |
 
 Do not change the domain DNS away from Vercel until the new app has built and passed the checks below.
 
